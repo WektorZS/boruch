@@ -95,6 +95,19 @@ export const ui: Record<
     rights: string
     sizes: string
     backToTop: string
+    scroll: string
+    process: string
+    related: string
+    allPhotos: string
+    step: string
+    openPhoto: string
+    phoneLabel: string
+    emailLabel: string
+    priceLabel: string
+    navigation: string
+    compact: string
+    medium: string
+    large: string
   }
 > = {
   pl: {
@@ -121,6 +134,19 @@ export const ui: Record<
     rights: "Boruch Myjnia Szczecin",
     sizes: "Dopłaty za wielkość auta",
     backToTop: "Do góry",
+    scroll: "Przewiń",
+    process: "Przebieg usługi",
+    related: "Zobacz również",
+    allPhotos: "Zobacz galerię",
+    step: "Etap",
+    openPhoto: "Powiększ zdjęcie",
+    phoneLabel: "Telefon",
+    emailLabel: "E-mail",
+    priceLabel: "Cena",
+    navigation: "Nawigacja",
+    compact: "Kompakt",
+    medium: "Kombi, sedan",
+    large: "SUV, minivan",
   },
   en: {
     nav: { home: "Home", about: "About Us", services: "Services", pricing: "Pricing", gallery: "Gallery", contact: "Contact" },
@@ -146,6 +172,19 @@ export const ui: Record<
     rights: "Boruch Myjnia Szczecin",
     sizes: "Vehicle size surcharges",
     backToTop: "Back to top",
+    scroll: "Scroll",
+    process: "Process",
+    related: "See also",
+    allPhotos: "View gallery",
+    step: "Step",
+    openPhoto: "Enlarge photo",
+    phoneLabel: "Phone",
+    emailLabel: "E-mail",
+    priceLabel: "Price",
+    navigation: "Navigation",
+    compact: "Compact",
+    medium: "Estate, sedan",
+    large: "SUV, minivan",
   },
   de: {
     nav: { home: "Startseite", about: "Über uns", services: "Angebote", pricing: "Preise", gallery: "Galerie", contact: "Kontakt" },
@@ -171,6 +210,19 @@ export const ui: Record<
     rights: "Boruch Myjnia Szczecin",
     sizes: "Aufpreis nach Fahrzeuggröße",
     backToTop: "Nach oben",
+    scroll: "Scrollen",
+    process: "Ablauf",
+    related: "Siehe auch",
+    allPhotos: "Zur Galerie",
+    step: "Schritt",
+    openPhoto: "Foto vergrößern",
+    phoneLabel: "Telefon",
+    emailLabel: "E-Mail",
+    priceLabel: "Preis",
+    navigation: "Navigation",
+    compact: "Kompakt",
+    medium: "Kombi, Limousine",
+    large: "SUV, Minivan",
   },
   uk: {
     nav: { home: "Головна", about: "Про нас", services: "Послуги", pricing: "Ціни", gallery: "Галерея", contact: "Контакти" },
@@ -196,6 +248,19 @@ export const ui: Record<
     rights: "Boruch Myjnia Szczecin",
     sizes: "Доплата за розмір авто",
     backToTop: "Нагору",
+    scroll: "Гортайте",
+    process: "Процес",
+    related: "Дивіться також",
+    allPhotos: "Переглянути галерею",
+    step: "Етап",
+    openPhoto: "Збільшити фото",
+    phoneLabel: "Телефон",
+    emailLabel: "E-mail",
+    priceLabel: "Ціна",
+    navigation: "Навігація",
+    compact: "Компакт",
+    medium: "Універсал, седан",
+    large: "SUV, мінівен",
   },
 }
 

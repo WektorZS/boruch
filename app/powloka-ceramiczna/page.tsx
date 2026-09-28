@@ -1,15 +1,7 @@
-import type { Metadata } from "next"
-import { getServiceBySlug } from "@/lib/services-data"
-import { ServiceDetail } from "@/components/service-detail"
+import { ServicePage, serviceMetadata } from "@/components/boruch/templates/service-page"
 
-const service = getServiceBySlug("powloka-ceramiczna")!
-
-export const metadata: Metadata = {
-  title: service.metaTitle,
-  description: service.intro[0],
-  alternates: { canonical: "/powloka-ceramiczna" },
-}
+export const metadata = serviceMetadata("powloka-ceramiczna")
 
 export default function Page() {
-  return <ServiceDetail service={service} />
+  return <ServicePage slug="powloka-ceramiczna" />
 }

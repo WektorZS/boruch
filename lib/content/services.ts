@@ -71,6 +71,35 @@ export function serviceSummary(locale: Locale, slug: ServiceSlug) {
   return null
 }
 
+/** Source group title ("Myjnia" / "DETAILING") the service belongs to on that locale's services page. */
+export function serviceGroupTitle(locale: Locale, slug: ServiceSlug) {
+  const effective = slug === "polerowanie" ? "korekta-lakieru" : slug
+  const group = sources[locale].services.groups.find((g) => g.items.some((i) => i.slug === effective))
+  return group?.title ?? ""
+}
+
+/**
+ * Canonical price for a service in a locale, read from that locale's own pricing page.
+ * Packages: [0] interior, [1] exterior, [2] complete. Other: [0] leather, [1] upholstery, [2] waxing.
+ * Everything else has no confirmed individual price and returns null ("Wycena indywidualna").
+ */
+const priceSource: Partial<Record<ServiceSlug, ["packages" | "other", number]>> = {
+  "czyszczenie-wnetrza": ["packages", 0],
+  "mycie-zewnatrz": ["packages", 1],
+  komplet: ["packages", 2],
+  "czyszczenie-skor": ["other", 0],
+  "pranie-tapicerki": ["other", 1],
+  woskowanie: ["other", 2],
+}
+
+export function servicePrice(locale: Locale, slug: ServiceSlug): string | null {
+  const ref = priceSource[slug]
+  if (!ref) return null
+  const pricing = sources[locale].pricing
+  const raw = ref[0] === "packages" ? pricing.packages[ref[1]]?.price : pricing.other[ref[1]]?.price
+  return raw ? raw.replace(/\*$/, "").trim() : null
+}
+
 export function formatIndex(n: number) {
   return String(n).padStart(2, "0")
 }

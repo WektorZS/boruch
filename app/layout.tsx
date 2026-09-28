@@ -1,21 +1,27 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
-import { PlChrome } from '@/components/pl-chrome'
+import { JetBrains_Mono, Roboto_Flex } from 'next/font/google'
+import { MotionObserver } from '@/components/boruch/motion-observer'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' })
+const flex = Roboto_Flex({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  axes: ['wdth'],
+  variable: '--font-flex',
+  display: 'swap',
+})
+const mono = JetBrains_Mono({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  variable: '--font-mono-tech',
+  display: 'swap',
+})
 
 const OG_IMAGE = '/images/home/szczecin-myjnia-banner.png'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://boruchmyjnia.pl'),
   title: {
-    // Exact title format verified live on boruchmyjnia.pl's homepage <title>.
     default: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
     template: `%s | BORUCH Myjnia ${siteConfig.city}`,
   },
@@ -69,7 +75,7 @@ const localBusinessJsonLd = {
   url: 'https://boruchmyjnia.pl',
   telephone: siteConfig.phone,
   email: siteConfig.email,
-  priceRange: '100–1500 zł',
+  priceRange: 'od 110 zł',
   founder: { '@type': 'Person', name: siteConfig.owner },
   address: {
     '@type': 'PostalAddress',
@@ -83,30 +89,24 @@ const localBusinessJsonLd = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light',
-  themeColor: '#f9fafb',
+  colorScheme: 'dark',
+  themeColor: '#080808',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${spaceGrotesk.variable} bg-background`}>
-      <body className="flex min-h-screen flex-col antialiased">
+    <html lang="pl" className={`${flex.variable} ${mono.variable} bg-background`} suppressHydrationWarning>
+      <head>
+        {/* Marks JS as available before first paint so reveal styles never hide content for no-JS visitors. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body className="antialiased">
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
         />
-        <PlChrome>
-          <SiteHeader />
-        </PlChrome>
-        <main className="flex-1">{children}</main>
-        <PlChrome>
-          <SiteFooter />
-        </PlChrome>
+        {children}
+        <MotionObserver />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
