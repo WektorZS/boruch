@@ -1,11 +1,10 @@
 import { sources, ui, type Locale } from "@/lib/content"
 import { cn } from "@/lib/utils"
 
-/** Splits source price strings like "od 110zł*" into prefix / amount / currency for typographic setting. */
 export function PriceTag({ value, className, size = "lg" }: { value: string; className?: string; size?: "lg" | "md" }) {
   const match = value.match(/^(\D*?)\s*([\d][\d\s.,]*)\s*(zł|PLN)?\s*(\*)?$/i)
   if (!match) {
-    return <span className={cn("font-display font-semibold uppercase [font-stretch:115%] [font-variation-settings:'wdth'_115]", className)}>{value}</span>
+    return <span className={cn("font-display font-semibold [font-stretch:108%] [font-variation-settings:'wdth'_108]", className)}>{value}</span>
   }
   const [, prefix, amount, currency, star] = match
   return (
@@ -13,8 +12,8 @@ export function PriceTag({ value, className, size = "lg" }: { value: string; cla
       {prefix && <span className="type-label text-ash">{prefix}</span>}
       <span
         className={cn(
-          "font-display font-bold leading-none tracking-[-0.03em] [font-stretch:130%] [font-variation-settings:'wdth'_130]",
-          size === "lg" ? "text-[clamp(2.75rem,5vw,4.5rem)]" : "text-[clamp(1.5rem,2.4vw,2.25rem)]",
+          "font-display font-semibold leading-none tracking-[-0.035em] [font-stretch:112%] [font-variation-settings:'wdth'_112]",
+          size === "lg" ? "text-[clamp(2.5rem,4vw,3.75rem)]" : "text-[clamp(1.4rem,2.2vw,2rem)]",
         )}
       >
         {amount.trim()}
@@ -25,7 +24,6 @@ export function PriceTag({ value, className, size = "lg" }: { value: string; cla
   )
 }
 
-/** Wash packages from the locale's pricing page, set as large rows with a clear hierarchy. */
 export function PricingPackages({ locale, headingId }: { locale: Locale; headingId?: string }) {
   const pricing = sources[locale].pricing
   const t = ui[locale]
@@ -35,7 +33,7 @@ export function PricingPackages({ locale, headingId }: { locale: Locale; heading
 
   return (
     <div className="flex flex-col">
-      <ol aria-labelledby={headingId} className="border-t border-line-strong">
+      <ol aria-labelledby={headingId} className="grid gap-px bg-line-strong lg:grid-cols-3">
         {order.map((idx, position) => {
           const pkg = pricing.packages[idx]
           if (!pkg) return null
@@ -45,22 +43,22 @@ export function PricingPackages({ locale, headingId }: { locale: Locale; heading
               key={pkg.title}
               data-reveal=""
               className={cn(
-                "relative grid gap-6 border-b border-line py-10 lg:grid-cols-12 lg:gap-8 lg:py-14",
-                featured && "bg-linear-to-r from-wine-deep/70 via-ink-warm/40 to-transparent",
+                "relative flex min-h-full flex-col gap-8 bg-ink-2 p-6 sm:p-8 lg:p-9",
+                featured && "bg-linear-to-br from-wine via-wine-deep to-ink-warm",
               )}
             >
-              {featured && <span aria-hidden="true" className="absolute inset-y-0 left-0 w-px bg-brand" />}
-              <span className={cn("type-index text-xs text-ash lg:col-span-1", featured && "pl-5 text-highlight lg:pl-5")}>
+              {featured && <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />}
+              <span className={cn("type-index text-xs text-ash", featured && "text-bone")}>
                 {String(position + 1).padStart(2, "0")}
               </span>
-              <div className={cn("flex flex-col gap-3 lg:col-span-4", featured && "pl-5 lg:pl-0")}>
+              <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center gap-3">
                   <h3 className="type-h2">{pkg.title}</h3>
                   {pkg.popular && <span className="type-label bg-brand px-2 py-1 text-bone">{pkg.popular}</span>}
                 </div>
                 <p className="text-pretty leading-relaxed text-ash">{pkg.tagline}</p>
               </div>
-              <div className={cn("flex flex-col gap-4 lg:col-span-4", featured && "pl-5 lg:pl-0")}>
+              <div className="flex flex-1 flex-col gap-4 border-t border-line pt-6">
                 {pkg.includedLabel && <p className="type-label text-ash">{pkg.includedLabel}</p>}
                 <ul className="flex flex-col gap-2">
                   {pkg.items.map((item) => (
@@ -72,7 +70,7 @@ export function PricingPackages({ locale, headingId }: { locale: Locale; heading
                 </ul>
                 {pkg.discount && <p className="text-sm leading-relaxed text-bone/70">{pkg.discount}</p>}
               </div>
-              <div className={cn("flex flex-col gap-2 lg:col-span-3 lg:items-end lg:text-right", featured && "pl-5 lg:pl-0 lg:pr-6")}>
+              <div className="flex flex-col gap-2 border-t border-line pt-6">
                 {pkg.price && <PriceTag value={pkg.price} />}
                 {pkg.note && <p className="type-label text-ash">{pkg.note}</p>}
               </div>
@@ -82,8 +80,8 @@ export function PricingPackages({ locale, headingId }: { locale: Locale; heading
       </ol>
 
       <div data-reveal="" className="grid gap-8 border-b border-line py-10 lg:grid-cols-12 lg:gap-8">
-        <p className="type-label text-bone lg:col-span-3 lg:col-start-2">{t.sizes}</p>
-        <dl className="grid grid-cols-3 gap-4 lg:col-span-5">
+        <p className="type-label text-bone lg:col-span-3">{t.sizes}</p>
+        <dl className="grid grid-cols-3 gap-4 lg:col-span-6">
           {[
             { label: t.compact, value: "+0" },
             { label: t.medium, value: "+10" },
@@ -92,7 +90,7 @@ export function PricingPackages({ locale, headingId }: { locale: Locale; heading
             <div key={row.label} className="flex flex-col gap-2 border-l border-line pl-4">
               <dt className="type-label text-ash">{row.label}</dt>
               <dd className="flex items-baseline gap-1.5">
-                <span className="font-display text-3xl font-bold tracking-[-0.03em] [font-stretch:130%] [font-variation-settings:'wdth'_130]">{row.value}</span>
+                <span className="font-display text-3xl font-semibold tracking-[-0.03em] [font-stretch:108%] [font-variation-settings:'wdth'_108]">{row.value}</span>
                 <span className="type-label text-bone">{currency}</span>
               </dd>
             </div>

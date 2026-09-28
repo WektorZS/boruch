@@ -64,7 +64,7 @@ export function ServiceBrowser({ items, labels }: ServiceBrowserProps) {
                   </span>
                   <span
                     className={cn(
-                      "font-display text-[clamp(1.35rem,2.1vw,2.1rem)] font-bold uppercase leading-none tracking-[-0.02em] [font-stretch:122%] [font-variation-settings:'wdth'_122]",
+                      "font-display text-[clamp(1.2rem,1.7vw,1.65rem)] font-semibold leading-tight tracking-[-0.02em] [font-stretch:108%] [font-variation-settings:'wdth'_108]",
                       "text-bone/40 transition-[color,transform] duration-500 ease-(--ease-out) group-hover:text-bone/80 group-data-[active=true]:translate-x-2 group-data-[active=true]:text-bone",
                     )}
                   >
@@ -121,7 +121,7 @@ export function ServiceBrowser({ items, labels }: ServiceBrowserProps) {
                 <span
                   key={current.slug}
                   className={cn(
-                    "font-display text-2xl font-bold uppercase [font-stretch:120%] [font-variation-settings:'wdth'_120] animate-in fade-in-0 duration-500",
+                    "font-display text-xl font-semibold [font-stretch:108%] [font-variation-settings:'wdth'_108] animate-in fade-in-0 duration-500",
                     current.priced ? "text-bone" : "text-bone/70",
                   )}
                 >
@@ -138,7 +138,7 @@ export function ServiceBrowser({ items, labels }: ServiceBrowserProps) {
       </div>
 
       {/* Mobile & tablet: swipeable photographic index */}
-      <div className="lg:hidden">
+      <div className="max-w-full overflow-hidden lg:hidden">
         <ol className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-(--gutter) pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item) => (
             <li key={item.slug} className="w-[80vw] shrink-0 snap-start sm:w-[44vw]">
@@ -164,7 +164,7 @@ export function ServiceBrowser({ items, labels }: ServiceBrowserProps) {
                     <span className="type-label text-bone">{item.category}</span>
                   </div>
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-                    <span className="font-display text-2xl font-bold uppercase leading-none tracking-[-0.02em] [font-stretch:120%] [font-variation-settings:'wdth'_120]">
+                    <span className="font-display text-2xl font-semibold leading-none tracking-[-0.025em] [font-stretch:108%] [font-variation-settings:'wdth'_108]">
                       {item.title}
                     </span>
                     <ArrowRight className="size-5 shrink-0 text-bone" aria-hidden="true" />

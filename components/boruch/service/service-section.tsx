@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { RevealText } from "../reveal-text"
 import { StepList } from "./step-list"
 import { routes, ui } from "@/lib/content"
 import { servicePrice, type Service } from "@/lib/content/services"
@@ -23,11 +22,7 @@ function ListSection({ section, id }: { section: Section; id: string }) {
     <section aria-labelledby={id} className="section-md border-t border-line">
       <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-5">
-          <RevealText
-            id={id}
-            text={section.heading}
-            className="type-h2 text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]"
-          />
+          <h2 id={id} data-reveal="" className="type-h2 max-w-[14ch] text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2>
         </div>
         <div className="lg:col-span-7">
           {section.kind === "process" && section.steps ? (
@@ -91,21 +86,21 @@ function PriceSection({ service, section, id }: ServiceSectionProps) {
       <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-6">
           <p className="eyebrow">{t.priceLabel}</p>
-          <RevealText id={id} text={section.heading} className="type-h2 text-balance" />
+          <h2 id={id} data-reveal="" className="type-h2 text-balance">{section.heading}</h2>
         </div>
         <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
           <p
             className={
               price
-                ? "type-display [font-stretch:115%] [font-variation-settings:'wdth'_115]"
-                : "type-h1 text-balance text-bone/90 [font-stretch:110%] [font-variation-settings:'wdth'_110]"
+                ? "type-h1 [font-stretch:108%] [font-variation-settings:'wdth'_108]"
+                : "type-h2 text-balance text-bone/90"
             }
           >
             {price ?? t.individualQuote}
           </p>
           {linkText && (
             <Link href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone">
-              <span className="type-h3 link-draw">{linkText}</span>
+              <span className="type-label link-draw">{linkText}</span>
               <ArrowRight className="arrow-shift size-5" aria-hidden="true" />
             </Link>
           )}
@@ -124,7 +119,7 @@ function SummarySection({ section, id }: { section: Section; id: string }) {
         <h2 id={id} className="eyebrow">
           {section.heading}
         </h2>
-        <p data-reveal="" className="type-h1 max-w-6xl text-balance normal-case leading-[1.02]">
+        <p data-reveal="" className="type-h2 max-w-4xl text-balance">
           {first}
         </p>
         {rest.length > 0 && (

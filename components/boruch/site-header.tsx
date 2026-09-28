@@ -204,7 +204,7 @@ export function SiteHeader({
                   <span className="type-index w-7 text-xs text-ash group-aria-[current=page]:text-highlight">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="font-display text-[clamp(1.75rem,7vw,3rem)] font-bold uppercase leading-none tracking-[-0.02em] text-bone/85 [font-stretch:125%] [font-variation-settings:'wdth'_125] transition-colors group-hover:text-bone group-aria-[current=page]:text-bone">
+                  <span className="font-display text-[clamp(1.75rem,7vw,3rem)] font-semibold leading-none tracking-[-0.025em] text-bone/85 [font-stretch:108%] [font-variation-settings:'wdth'_108] transition-colors group-hover:text-bone group-aria-[current=page]:text-bone">
                     {item.label}
                   </span>
                 </Link>

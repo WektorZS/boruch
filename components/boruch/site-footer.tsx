@@ -97,13 +97,11 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
         </div>
       </div>
 
-      <div className="shell-wide relative mt-(--section-md)">
-        <p
-          aria-hidden="true"
-          className="select-none whitespace-nowrap font-display text-[17.2vw] font-extrabold uppercase leading-[0.78] tracking-[-0.045em] text-bone [font-stretch:151%] [font-variation-settings:'wdth'_151] min-[1680px]:text-[17rem]"
-        >
+      <div className="shell-wide relative mt-(--section-md) flex items-end justify-between gap-6 border-t border-line py-8">
+        <p aria-hidden="true" className="font-display text-[clamp(3.75rem,9vw,8.5rem)] font-semibold uppercase leading-none tracking-[-0.045em] text-bone [font-stretch:125%] [font-variation-settings:'wdth'_125]">
           Boruch
         </p>
+        <p className="type-label hidden max-w-48 text-right text-ash sm:block">{src.address.brand.join(" ")}</p>
       </div>
 
       <div className="shell-wide relative flex flex-col gap-3 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
@@ -111,7 +109,7 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
           © {year} {t.rights}
         </p>
         <p className="type-label text-ash">
-          {src.address.lines[0]} · PAZIM {src.address.lines[2]} · {src.address.lines[3]}
+          {src.address.lines[0]} - PAZIM {src.address.lines[2]} - {src.address.lines[3]}
         </p>
         <a href="#top" className="type-label link-draw w-fit text-bone">
           {t.backToTop}

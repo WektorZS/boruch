@@ -6,17 +6,11 @@ import { Photo, photoSrc, photoSrcSet } from "./photo"
 import { photos, type PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
-/** Nine-cell editorial rhythm on a 12-column grid: large/small, portrait/panoramic, offsets. */
 const rhythm = [
-  "col-span-2 md:col-span-7 aspect-[4/5]",
-  "col-span-2 md:col-span-5 aspect-[4/5] md:mt-28",
-  "col-span-2 md:col-span-12 aspect-[16/10] lg:aspect-[21/9]",
+  "col-span-2 md:col-span-8 aspect-[16/10]",
   "col-span-1 md:col-span-4 aspect-[3/4]",
-  "col-span-1 md:col-span-4 aspect-[3/4] md:mt-16",
-  "col-span-2 md:col-span-4 aspect-[4/3] md:aspect-[3/4] md:mt-32",
-  "col-span-1 md:col-span-5 aspect-[3/4]",
-  "col-span-1 md:col-span-7 aspect-[3/4] md:aspect-[4/3] md:self-end",
-  "col-span-2 md:col-span-8 md:col-start-3 aspect-[16/10]",
+  "col-span-1 md:col-span-4 aspect-[3/4]",
+  "col-span-2 md:col-span-8 aspect-[16/10]",
 ]
 
 interface GalleryLabels {
@@ -64,7 +58,7 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
 
   return (
     <>
-      <ul className="grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-6 lg:gap-8">
+      <ul className="grid grid-cols-2 gap-2 md:grid-cols-12 md:gap-3">
         {ids.map((id, i) => (
           <li key={id} data-reveal="mask" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("frame", rhythm[i % rhythm.length])}>
             <button

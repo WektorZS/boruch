@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react"
 import { SiteShell } from "../site-shell"
 import { PageIntro } from "../page-intro"
 import { PriceTag, PricingPackages } from "../pricing-packages"
-import { RevealText } from "../reveal-text"
+import { SectionHeading } from "../section-heading"
 import { BookingCta } from "../booking-cta"
 import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
 import { formatIndex, type ServiceSlug } from "@/lib/content/services"
@@ -49,19 +49,18 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="packages-title" className="section-lg">
         <div className="shell-wide flex flex-col gap-10 lg:gap-14">
-          <RevealText id="packages-title" text={pricing.packagesTitle} className="type-display" />
+          <SectionHeading id="packages-title" eyebrow={t.pricing} title={pricing.packagesTitle} />
           <PricingPackages locale={locale} headingId="packages-title" />
         </div>
       </section>
 
-      <section aria-labelledby="other-title" className="section-lg border-t border-line">
+      <section aria-labelledby="other-title" className="section-lg border-t border-line bg-ink-2">
         <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
-            <RevealText
-              id="other-title"
-              text={pricing.otherTitle}
-              className="type-display lg:sticky lg:top-[calc(var(--header-h)+2rem)]"
-            />
+            <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+              <p className="eyebrow mb-6">{t.nav.services}</p>
+              <h2 id="other-title" data-reveal="" className="type-h2 max-w-[12ch] text-balance">{pricing.otherTitle}</h2>
+            </div>
           </div>
           <div className="flex flex-col gap-8 lg:col-span-8">
             <ul className="border-t border-line-strong">
@@ -71,7 +70,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
                 const content = (
                   <>
                     <span className="type-index text-xs text-ash">{formatIndex(i + 1)}</span>
-                    <span className="flex-1 text-pretty text-lg leading-snug text-bone md:text-2xl md:leading-snug">{row.name}</span>
+                    <span className="type-h3 flex-1 text-pretty">{row.name}</span>
                     <PriceTag value={row.price} size="md" className="shrink-0 text-right" />
                     {href && <ArrowRight className="arrow-shift hidden size-5 shrink-0 text-ash sm:block" aria-hidden="true" />}
                   </>
@@ -101,7 +100,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       <div className="shell-wide section-md border-t border-line">
         <Link href={routes[locale].services} className="group flex w-fit items-center gap-4 text-bone">
-          <span className="type-h3 link-draw">{t.allServices}</span>
+          <span className="type-label link-draw">{t.allServices}</span>
           <ArrowRight className="arrow-shift size-5" aria-hidden="true" />
         </Link>
       </div>

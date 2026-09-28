@@ -7,11 +7,6 @@ import { LocationSection } from "../location-section"
 import { BookingCta } from "../booking-cta"
 import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
 
-/**
- * The full /o-nas story, told as a narrative progression.
- * Paragraph roles follow the source order: opening line, love of cars, why the wash exists,
- * the team bond, the invitation — then the author's signature.
- */
 export function AboutPage({ locale }: { locale: Locale }) {
   const about = sources[locale].about
   const t = ui[locale]
@@ -35,27 +30,27 @@ export function AboutPage({ locale }: { locale: Locale }) {
       <PageIntro eyebrow={about.teamTitle ?? t.nav.about} title={about.h1} photo="p62" photoPosition="50% 55%" />
 
       {opening && (
-        <section aria-label={about.teamTitle ?? t.nav.about} className="section-xl">
-          <div className="shell-wide flex flex-col gap-16 lg:gap-24">
-            <p data-reveal="" className="type-display max-w-6xl text-balance normal-case leading-[0.98]">
-              {opening}
-            </p>
-
-            <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-              <div data-reveal="mask" className="frame aspect-[580/1066] max-h-[80svh] w-full sm:w-2/3 lg:col-span-4 lg:w-full">
+        <section aria-label={about.teamTitle ?? t.nav.about} className="surface-bone section-lg">
+          <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
+            <div className="flex flex-col gap-10 lg:col-span-6">
+              <p className="eyebrow text-ink/55">{about.teamTitle ?? t.nav.about}</p>
+              <p data-reveal="" className="type-h2 max-w-[18ch] text-balance text-ink">
+                {opening}
+              </p>
+              {origin && (
+                <p data-reveal="" className="type-lead max-w-2xl text-pretty text-ink/70">
+                  {origin}
+                </p>
+              )}
+              {love && (
+                <p data-reveal="" className="type-h3 max-w-xl border-l-2 border-brand pl-5 text-pretty text-red-dark">
+                  {love}
+                </p>
+              )}
+            </div>
+            <div className="lg:col-span-5 lg:col-start-8">
+              <div data-reveal="mask" className="frame aspect-[4/5] w-full">
                 <Photo id="team" sizes="(min-width: 1024px) 33vw, 66vw" position="50% 55%" />
-              </div>
-              <div className="flex flex-col justify-end gap-10 lg:col-span-7 lg:col-start-6">
-                {love && (
-                  <p data-reveal="" className="type-h1 text-balance normal-case text-highlight">
-                    {love}
-                  </p>
-                )}
-                {origin && (
-                  <p data-reveal="" className="type-lead max-w-2xl text-pretty text-bone/85">
-                    {origin}
-                  </p>
-                )}
               </div>
             </div>
           </div>
@@ -65,15 +60,16 @@ export function AboutPage({ locale }: { locale: Locale }) {
       <FeatureBand locale={locale} photo="p20" />
 
       {bond.length > 0 && (
-        <section aria-label={about.features.join(", ")} className="section-xl">
+        <section aria-label={about.features.join(", ")} className="section-lg bg-ink-2">
           <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
-            <div className="flex flex-col gap-8 lg:col-span-8">
+            <p className="eyebrow lg:col-span-3">{about.features.join(" / ")}</p>
+            <div className="grid gap-8 lg:col-span-8 lg:col-start-5 lg:grid-cols-2">
               {bond.map((para, i) => (
                 <p
                   key={i}
                   data-reveal=""
                   style={{ "--d": i } as React.CSSProperties}
-                  className="type-h2 text-pretty normal-case leading-[1.12] tracking-[-0.012em]"
+                  className="type-lead border-t border-line pt-6 text-pretty text-bone/80"
                 >
                   {para}
                 </p>
@@ -86,7 +82,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
       <PhotoTriptych ids={["p55", "p07", "p44"]} />
 
       {invitation && (
-        <section aria-label={about.author} className="section-lg">
+        <section aria-label={about.author} className="surface-wine section-lg">
           <div className="shell-wide flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <p data-reveal="" className="type-lead max-w-2xl text-pretty text-bone">
               {invitation}

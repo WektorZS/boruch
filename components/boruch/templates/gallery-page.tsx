@@ -26,7 +26,7 @@ export function GalleryPage({ locale }: { locale: Locale }) {
         eyebrow={t.nav.gallery}
         title={src.gallery.h1}
         sub={src.gallery.sub}
-        meta={`${t.photo} 01 — ${galleryOrder.length}`}
+        meta={`${t.photo} 01 - ${galleryOrder.length}`}
       />
       <section aria-label={src.gallery.sub} className="section-md">
         <div className="shell-wide">

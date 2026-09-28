@@ -1,10 +1,9 @@
 import { Photo } from "../photo"
-import { RevealText } from "../reveal-text"
+import { SectionHeading } from "../section-heading"
 import { StepList } from "./step-list"
 import { ui } from "@/lib/content"
 import type { Service } from "@/lib/content/services"
 
-/** Source process steps, split around a full-bleed photographic break. */
 export function ServiceProcess({ service }: { service: Service }) {
   const t = ui.pl
   const { steps, processTitle } = service.source
@@ -17,16 +16,15 @@ export function ServiceProcess({ service }: { service: Service }) {
   return (
     <section aria-labelledby="process-title" className="border-t border-line">
       <div className="shell-wide section-lg">
-        <div className="mb-12 flex flex-col gap-6 lg:mb-16">
-          <p className="eyebrow">{t.process}</p>
-          <RevealText id="process-title" text={processTitle ?? t.process} className="type-display max-w-5xl" />
+        <div className="mb-12 lg:mb-16">
+          <SectionHeading id="process-title" eyebrow={t.process} title={processTitle ?? t.process} />
         </div>
         <StepList steps={before} stepLabel={t.step} />
       </div>
 
       {after.length > 0 && (
         <>
-          <div data-reveal="mask" className="frame aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/8]">
+          <div data-reveal="mask" className="frame aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2/1]">
             <Photo id={service.frames[1]} sizes="100vw" />
           </div>
           <div className="shell-wide section-lg">

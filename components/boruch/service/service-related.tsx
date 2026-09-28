@@ -34,11 +34,11 @@ export function ServiceRelated({ service }: { service: Service }) {
                 </span>
                 <span className="relative flex items-center justify-between">
                   <span className="type-label text-ash">
-                    {formatIndex(s.index)} — {s.category === "myjnia" ? "Myjnia" : "Detailing"}
+                    {formatIndex(s.index)} - {s.category === "myjnia" ? "Myjnia" : "Detailing"}
                   </span>
                   <ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" />
                 </span>
-                <span className="type-h1 relative text-balance">{s.navTitle}</span>
+                <span className="type-h2 relative max-w-[14ch] text-balance">{s.navTitle}</span>
               </Link>
             </li>
           ))}

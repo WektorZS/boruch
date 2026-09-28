@@ -29,7 +29,7 @@ export function SiteShell({ locale, page, alternates, children }: SiteShellProps
       </a>
       <SiteHeader
         homeHref={routes[locale].home}
-        homeLabel={`BORUCH Myjnia — ${t.nav.home}`}
+        homeLabel={`BORUCH Myjnia - ${t.nav.home}`}
         nav={navOrder.map((key) => ({ key, label: t.nav[key], href: routes[locale][key], active: key === page }))}
         languages={localeOrder.map((code) => ({
           code,

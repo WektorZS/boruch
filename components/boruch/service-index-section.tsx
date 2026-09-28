@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { RevealText } from "./reveal-text"
+import { SectionHeading } from "./section-heading"
 import { photoSrc, photoSrcSet } from "./photo"
 import { ServiceBrowser, type BrowserItem } from "./service-browser"
 import { routes, sources, ui, type Locale } from "@/lib/content"
@@ -37,15 +37,18 @@ export function ServiceIndexSection({ locale, withHeader = true }: { locale: Loc
   return (
     <section aria-labelledby={withHeader ? "service-index-title" : undefined} className="section-lg border-t border-line">
       {withHeader && (
-        <div className="shell-wide mb-12 flex flex-col gap-8 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex flex-col gap-6">
-            <p className="eyebrow">{t.nav.services}</p>
-            <RevealText id="service-index-title" text={groups.map((g) => g.title).join(" / ")} className="type-display" />
-          </div>
-          <Link href={routes[locale].services} className="type-label group flex w-fit items-center gap-3 text-bone">
-            <span className="link-draw">{t.allServices}</span>
-            <ArrowRight className="arrow-shift size-4" aria-hidden="true" />
-          </Link>
+        <div className="shell-wide mb-12 lg:mb-16">
+          <SectionHeading
+            id="service-index-title"
+            eyebrow={t.nav.services}
+            title={groups.map((g) => g.title).join(" / ")}
+            action={
+              <Link href={routes[locale].services} className="type-label group flex w-fit items-center gap-3 text-bone">
+                <span className="link-draw">{t.allServices}</span>
+                <ArrowRight className="arrow-shift size-4" aria-hidden="true" />
+              </Link>
+            }
+          />
         </div>
       )}
       <ServiceBrowser items={browserItems(locale)} labels={{ viewService: t.viewService, priceLabel: t.priceLabel, of: t.of }} />

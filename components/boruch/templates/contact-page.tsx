@@ -31,10 +31,10 @@ export function ContactPage({ locale }: { locale: Locale }) {
           <a
             href={contact.phoneHref}
             data-reveal=""
-            className="group flex min-h-64 flex-col justify-between gap-10 bg-background p-6 transition-colors hover:bg-ink-warm lg:p-8"
+            className="group flex min-h-56 flex-col justify-between gap-10 bg-ink-2 p-6 transition-colors hover:bg-ink-warm lg:p-8"
           >
             <span className="type-label text-ash">{t.phoneLabel}</span>
-            <span className="type-h1 whitespace-nowrap text-[clamp(1.9rem,3.4vw,3.25rem)] transition-colors group-hover:text-highlight">
+            <span className="type-h3 whitespace-nowrap transition-colors group-hover:text-highlight">
               {contact.phone}
             </span>
           </a>
@@ -42,10 +42,10 @@ export function ContactPage({ locale }: { locale: Locale }) {
             href={`mailto:${contact.email}`}
             data-reveal=""
             style={{ "--d": 1 } as React.CSSProperties}
-            className="group flex min-h-64 flex-col justify-between gap-10 bg-background p-6 transition-colors hover:bg-ink-warm lg:p-8"
+            className="group flex min-h-56 flex-col justify-between gap-10 bg-ink-2 p-6 transition-colors hover:bg-ink-warm lg:p-8"
           >
             <span className="type-label text-ash">{t.emailLabel}</span>
-            <span className="type-h2 break-all normal-case transition-colors group-hover:text-highlight">{contact.email}</span>
+            <span className="type-h3 break-all transition-colors group-hover:text-highlight">{contact.email}</span>
           </a>
           <a
             href={contact.bookingUrl}
@@ -53,7 +53,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
             rel="noopener noreferrer"
             data-reveal=""
             style={{ "--d": 2 } as React.CSSProperties}
-            className="group flex min-h-64 flex-col justify-between gap-10 bg-brand p-6 text-bone transition-colors hover:bg-red-dark lg:p-8"
+            className="group flex min-h-56 flex-col justify-between gap-10 bg-wine p-6 text-bone transition-colors hover:bg-red-dark lg:p-8"
           >
             <span className="type-label flex items-center justify-between text-bone">
               Booksy
@@ -74,7 +74,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
           <div className="relative aspect-[4/3] lg:col-span-7 lg:aspect-[16/11]">
             <iframe
               src={MAP_EMBED}
-              title={`${t.openMap} — ${src.address.lines.join(", ")}`}
+              title={`${t.openMap} - ${src.address.lines.join(", ")}`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="absolute inset-0 h-full w-full border-0 opacity-85 [filter:grayscale(1)_invert(0.92)_contrast(0.9)]"

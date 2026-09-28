@@ -9,7 +9,7 @@ export function ServiceIntro({ service }: { service: Service }) {
       <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
         <div className="flex flex-col gap-10 lg:col-span-7 lg:pt-8">
           <p className="eyebrow">{service.navTitle}</p>
-          <p data-reveal="" className="type-h2 max-w-3xl text-pretty normal-case leading-[1.12] tracking-[-0.012em]">
+          <p data-reveal="" className="type-lead max-w-3xl text-pretty text-bone/90">
             {first}
           </p>
           <div className="flex max-w-2xl flex-col gap-5 lg:ml-[16%]">
@@ -18,7 +18,7 @@ export function ServiceIntro({ service }: { service: Service }) {
                 key={i}
                 data-reveal=""
                 style={{ "--d": i + 1 } as React.CSSProperties}
-                className="type-body text-pretty text-bone/75 md:text-lg md:leading-relaxed"
+                className="type-body text-pretty text-bone/70"
               >
                 {para}
               </p>

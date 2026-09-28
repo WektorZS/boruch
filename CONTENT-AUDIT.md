@@ -2,19 +2,42 @@
 
 Stan na 28.09.2026.
 
-## Zakres tej aktualizacji
+## Audyt wejściowy
 
-- Przebudowano strony `/uslugi`, `/cennik`, `/galeria`, `/o-nas` i `/kontakt` na wspólnym systemie wizualnym BORUCH.
-- Wszystkie podstawowe strony EN, DE i UA korzystają z tych samych szablonów, nagłówka, stopki, animacji, galerii i CTA co polska wersja.
-- Zachowano statyczny eksport Next.js oraz istniejące adresy URL.
-- Uzupełniono sitemapę o wszystkie podstawowe podstrony językowe.
+- Typografia była zbyt kampanijna. Bardzo duże, szerokie i często wersalikowe nagłówki pojawiały się w prawie każdej sekcji, przez co znikała hierarchia.
+- Większość podstron korzystała z podobnego schematu: mała etykieta, ogromny tytuł, cienka linia i fotografia. Strony miały inny tekst, ale ten sam rytm.
+- Czerń dominowała niemal bez przerwy. Brakowało jasnej powierzchni redakcyjnej i spokojnych przejść tonalnych.
+- Lista usług była efektowna, ale na desktopie zbyt mocno opierała się na stanie aktywnym i dużej typografii. Katalog usług nie miał wystarczająco czytelnej hierarchii treści.
+- Cennik był poprawny informacyjnie, ale pakiety nie tworzyły szybkiego porównania. Użytkownik musiał czytać długie wiersze zamiast trzech wyraźnych ofert.
+- Galeria miała zbyt wiele różnych przesunięć i proporcji. Fotografie konkurowały ze sobą zamiast tworzyć uporządkowane portfolio.
+- Strona `O nas` używała tekstów źródłowych jako kolejnych dużych manifestów. Brakowało spokojniejszego tempa i kontrastu między opowieścią a zdjęciami.
+- `/booksy` pozostawało w starszym systemie komponentów i wizualnie odstawało od reszty serwisu.
+
+## Kierunek wizualny
+
+- Zachowano czarną, grafitową i bordową bazę BORUCH oraz kontrolowaną czerwień dla działań i sygnałów.
+- Dodano jasną powierzchnię redakcyjną w kolorze złamanej bieli. Jest używana tylko tam, gdzie pomaga oddzielić opowieść lub komunikat marki.
+- Ograniczono maksymalną skalę nagłówków. Duży krój pozostał w hero i podpisie marki, ale nie powtarza się mechanicznie w każdej sekcji.
+- Wprowadzono wyraźne role dla H1, H2, H3, leadu, tekstu głównego, etykiet i numeracji.
+- Zmniejszono liczbę przypadkowych offsetów. Układ opiera się na spójnej siatce 12 kolumn, stałych odstępach i kontrolowanych proporcjach zdjęć.
+- Fotografie są większe, spokojniejsze i częściej pełnią konkretną rolę: otwarcie strony, dokumentacja realizacji, portret zespołu lub tło wezwania do działania.
+- Ruch został ograniczony do wejścia hero, łagodnych odsłonięć sekcji, masek zdjęć, przejść galerii i informacji zwrotnej na przyciskach.
+
+## Zakres przebudowy
+
+- Przebudowano stronę główną, hero, sekcję marki, katalog usług, realizacje, pakiety, sekcję zespołu, lokalizację i końcowe CTA.
+- Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
+- Ujednolicono wszystkie polskie strony szczegółowych usług.
+- Wszystkie podstawowe strony EN, DE i UA korzystają z tych samych szablonów, nagłówka, stopki, animacji, galerii i CTA co wersja polska.
+- Dodano wspólny komponent nagłówka sekcji, który utrzymuje stałą hierarchię bez narzucania identycznego układu każdej podstronie.
+- Zachowano statyczny eksport Next.js oraz wszystkie istniejące adresy URL.
 
 ## Źródła treści
 
 - Treści stron pochodzą z plików `lib/content/generated/pl.ts`, `en.ts`, `de.ts` i `uk.ts`.
 - Polskie strony szczegółowych usług korzystają z `lib/content/generated/services-pl.ts`.
-- Treści źródłowe nie zostały skrócone ani zastąpione nowym tekstem marketingowym.
-- Dane powtarzalne, w tym kontakt, Booksy, routing, języki i ceny usług, pozostają scentralizowane.
+- Treści źródłowe nie zostały skrócone, parafrazowane ani zastąpione nowym tekstem marketingowym.
+- Dane kontaktowe, Booksy, routing, języki i ceny pozostają scentralizowane.
 
 ## Cennik
 
@@ -43,40 +66,38 @@ Stan na 28.09.2026.
 | DE | `/de` | `/de/angebote` | `/de/preise` | `/de/galerie` | `/de/uber-uns` | `/de/kontakt` |
 | UA | `/uk` | `/uk/послуги` | `/uk/ціни` | `/uk/галерея` | `/uk/про-нас` | `/uk/контакти` |
 
-- Fizyczne katalogi ukraińskich tras pozostają zakodowane procentowo.
+- Fizyczne pliki ukraińskich tras w eksporcie pozostają zakodowane procentowo.
 - Linki widoczne w przeglądarce zachowują właściwe ukraińskie adresy.
-- Każda podstawowa strona ma jeden nagłówek H1 oraz właściwy kontekst językowy dla PL, EN, DE i UA.
+- Każda podstawowa strona ma jeden H1 i właściwy kontekst językowy.
 
-## SEO
+## SEO i architektura
 
 - Kanoniczna domena to `https://boruchmyjnia.pl`.
-- Każda podstawowa strona korzysta ze wspólnego generatora metadanych i własnego tytułu oraz opisu.
+- Każda podstawowa strona ma własny tytuł, opis i canonical.
 - Podstawowe odpowiedniki językowe mają `pl-PL`, `en`, `de`, `uk` oraz `x-default`.
 - `x-default` prowadzi do polskiej wersji.
 - Szczegółowe polskie strony usług nie otrzymały fałszywych odpowiedników językowych.
-- `sitemap.xml` obejmuje podstawowe strony wszystkich czterech języków, `/booksy` oraz szczegółowe polskie usługi.
-- `robots.txt` wskazuje produkcyjną sitemapę i nie blokuje indeksowania.
+- Zachowano dane strukturalne firmy, breadcrumbs i dane usług.
+- Zachowano `output: "export"`. Produkcyjny katalog `out/` nie wymaga serwera Node.js, API, middleware, SSR, ISR ani funkcji Vercel.
 
-## UI, dostępność i ruch
+## Mobile, dostępność i ruch
 
-- Wszystkie przebudowane strony korzystają z jednego systemu kolorów, typografii, odstępów, przycisków i fotografii.
-- Poprawiono zawijanie długich niemieckich i ukraińskich słów bez poziomego przewijania.
-- Menu mobilne przenosi fokus na przycisk zamknięcia, zamyka się klawiszem Escape i oddaje fokus przyciskowi menu.
-- Galeria ma dialogowy lightbox, sterowanie klawiaturą, przyciski poprzedniego i następnego zdjęcia oraz zamykanie klawiszem Escape.
-- Elementy z `data-reveal` są obsługiwane przez jeden `IntersectionObserver`.
+- Menu mobilne działa jako pełnoekranowy panel, obsługuje Escape, przenosi fokus na przycisk zamknięcia i oddaje go po zamknięciu.
+- Karty usług na telefonie mają własne zdjęcia, opis i cenę. Nie wymagają hovera.
+- Galeria ma powtarzalny rytm czterech zdjęć, małe odstępy i dialogowy lightbox ze sterowaniem klawiaturą oraz gestem przesunięcia.
+- Elementy z `data-reveal` obsługuje jeden `IntersectionObserver`.
 - Dla `prefers-reduced-motion: reduce` animacje i przejścia są skracane, a treści pozostają widoczne.
+- Długie niemieckie i ukraińskie nagłówki mieszczą się bez poziomego przewijania.
 
 ## Weryfikacja
 
 - Sprawdzono 24 podstawowe trasy PL, EN, DE i UA.
-- Sprawdzono H1, canonical, hreflang, aktywny system UI i brak poziomego przepełnienia.
-- Sprawdzono szerokości 360, 390, 430, 768, 1024, 1440 i 1920 px.
-- Łącznie wykonano 63 testy układu dla głównych szablonów i wersji językowych.
-- Sprawdzono animacje po przewinięciu, menu mobilne oraz lightbox galerii.
+- Na każdej trasie potwierdzono jeden H1, jeden canonical, pięć wpisów hreflang, właściwy język i brak poziomego przepełnienia.
+- Wykonano 56 kontroli responsywnych dla ośmiu szablonów przy szerokościach 360, 390, 430, 768, 1024, 1440 i 1920 px.
+- Wizualnie sprawdzono hero, listę usług, cennik, galerię, stronę `O nas`, szczegółową usługę, menu mobilne i lightbox.
 - `tsc --noEmit` kończy się bez błędów.
-- `pnpm build` kończy się poprawnie i generuje 42 statyczne wpisy w katalogu `out/`.
-- Sitemapa zawiera 37 publicznych adresów produkcyjnych i nie zawiera domeny podglądowej Vercel.
-- Produkcyjny katalog `out/` nie wymaga serwera Node.js.
+- `pnpm build` kończy się poprawnie i generuje 42 statyczne wpisy.
+- `git diff --check` kończy się bez błędów formatowania.
 
 ## Otwarte kwestie właścicielskie
 
