@@ -4,15 +4,28 @@ import { ArrowUpRight } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { CtaBand } from "@/components/cta-band"
 import { priceGroups, priceDisclaimer } from "@/lib/pricing-data"
+import { breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "Cennik",
   description: "Cennik usług myjni ręcznej i detailingu BORUCH Myjnia w Szczecinie — mycie, wnętrze, powłoki, folia PPF.",
+  alternates: { canonical: "/cennik" },
 }
 
 export default function CennikPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Cennik", path: "/cennik" },
+            ]),
+          ),
+        }}
+      />
       <PageHero
         eyebrow="Cennik"
         title="Przejrzyste ceny bez niespodzianek"

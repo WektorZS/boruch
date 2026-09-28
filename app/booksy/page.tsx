@@ -2,16 +2,29 @@ import type { Metadata } from "next"
 import { Calendar, ExternalLink, Phone } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
-import { siteConfig } from "@/lib/site-config"
+import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "Booksy — rezerwacja online",
   description: "Zarezerwuj wizytę w BORUCH Myjnia online przez Booksy — wybierz usługę i wolny termin.",
+  alternates: { canonical: "/booksy" },
 }
 
 export default function BooksyPage() {
   return (
-    <PageHero
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Booksy", path: "/booksy" },
+            ]),
+          ),
+        }}
+      />
+      <PageHero
       eyebrow="Rezerwacja online"
       title="Umów wizytę na Booksy"
       description="Wybierz usługę i wolny termin bezpośrednio w systemie Booksy — bez telefonowania i bez czekania na odpowiedź."
@@ -37,5 +50,6 @@ export default function BooksyPage() {
         </Button>
       </div>
     </PageHero>
+    </>
   )
 }

@@ -7,6 +7,7 @@ const service = getServiceBySlug("przyciemnianie-szyb-i-lamp")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/przyciemnianie-szyb-i-lamp" },
 }
 
 export default function Page() {

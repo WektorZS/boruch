@@ -7,6 +7,7 @@ const service = getServiceBySlug("komplet")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/komplet" },
 }
 
 export default function Page() {

@@ -7,6 +7,7 @@ const service = getServiceBySlug("pranie-tapicerki")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/pranie-tapicerki" },
 }
 
 export default function Page() {

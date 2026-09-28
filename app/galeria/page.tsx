@@ -3,15 +3,28 @@ import { PageHero } from "@/components/page-hero"
 import { GalleryGrid } from "@/components/gallery-grid"
 import { CtaBand } from "@/components/cta-band"
 import { galleryImages } from "@/lib/gallery-data"
+import { breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "Galeria",
   description: "Zobacz realizacje BORUCH Myjnia — mycie ręczne, detailing i pielęgnację samochodów w Szczecinie.",
+  alternates: { canonical: "/galeria" },
 }
 
 export default function GaleriaPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Galeria", path: "/galeria" },
+            ]),
+          ),
+        }}
+      />
       <PageHero
         eyebrow="Galeria"
         title="Efekty naszej pracy"

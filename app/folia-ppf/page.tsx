@@ -7,6 +7,7 @@ const service = getServiceBySlug("folia-ppf")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/folia-ppf" },
 }
 
 export default function Page() {

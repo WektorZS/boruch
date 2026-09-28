@@ -3,10 +3,12 @@ import { PageHero } from "@/components/page-hero"
 import { ServiceIndex } from "@/components/service-index"
 import { CtaBand } from "@/components/cta-band"
 import { services } from "@/lib/services-data"
+import { breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "Usługi",
   description: "Pełna lista usług myjni ręcznej i studia detailingowego BORUCH Myjnia w Szczecinie.",
+  alternates: { canonical: "/uslugi" },
 }
 
 export default function UslugiPage() {
@@ -17,6 +19,17 @@ export default function UslugiPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Usługi", path: "/uslugi" },
+            ]),
+          ),
+        }}
+      />
       <PageHero
         eyebrow="Usługi"
         title="Wszystko, czego potrzebuje Twoje auto"

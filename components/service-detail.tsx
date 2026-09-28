@@ -6,7 +6,7 @@ import { services, carSizeSurcharge } from "@/lib/services-data"
 import { Button } from "@/components/ui/button"
 import { CtaBand } from "@/components/cta-band"
 import { ServiceIndex, formatServicePrice } from "@/components/service-index"
-import { siteConfig } from "@/lib/site-config"
+import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
 export function ServiceDetail({ service }: { service: Service }) {
   const sameCategory = services.filter((s) => s.slug !== service.slug && s.category === service.category)
@@ -14,6 +14,18 @@ export function ServiceDetail({ service }: { service: Service }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Usługi", path: "/uslugi" },
+              { name: service.title, path: `/${service.slug}` },
+            ]),
+          ),
+        }}
+      />
       <section className="bg-foreground text-background">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-16 lg:px-8 lg:pb-24">
           <div>

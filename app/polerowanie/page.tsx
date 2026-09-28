@@ -7,6 +7,7 @@ const service = getServiceBySlug("polerowanie")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/polerowanie" },
 }
 
 export default function Page() {

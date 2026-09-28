@@ -3,16 +3,28 @@ import Image from "next/image"
 import { MapPin, Phone, Mail } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { CtaBand } from "@/components/cta-band"
-import { siteConfig } from "@/lib/site-config"
+import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "O nas",
   description: "Poznaj BORUCH Myjnia — ręczną myjnię samochodową i studio detailingowe w centrum Szczecina.",
+  alternates: { canonical: "/o-nas" },
 }
 
 export default function ONasPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "O nas", path: "/o-nas" },
+            ]),
+          ),
+        }}
+      />
       <PageHero
         eyebrow="O nas"
         title="Dbamy o każdy detal Twojego auta"

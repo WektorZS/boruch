@@ -7,6 +7,7 @@ const service = getServiceBySlug("mycie-zewnatrz")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/mycie-zewnatrz" },
 }
 
 export default function Page() {

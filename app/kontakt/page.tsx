@@ -3,16 +3,28 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
-import { siteConfig } from "@/lib/site-config"
+import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {
   title: "Kontakt",
   description: "Kontakt do BORUCH Myjnia w Szczecinie — telefon, e-mail, adres i rezerwacja online przez Booksy.",
+  alternates: { canonical: "/kontakt" },
 }
 
 export default function KontaktPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Strona główna", path: "/" },
+              { name: "Kontakt", path: "/kontakt" },
+            ]),
+          ),
+        }}
+      />
       <PageHero
         eyebrow="Kontakt"
         title="Zapraszamy do naszej hali"

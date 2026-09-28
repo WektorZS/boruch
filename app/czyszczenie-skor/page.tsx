@@ -7,6 +7,7 @@ const service = getServiceBySlug("czyszczenie-skor")!
 export const metadata: Metadata = {
   title: service.metaTitle,
   description: service.intro[0],
+  alternates: { canonical: "/czyszczenie-skor" },
 }
 
 export default function Page() {
