@@ -593,7 +593,7 @@ export const services: Service[] = [
     icon: "palette",
     tagline: "Nowoczesny wygląd i ochrona w jednym",
     priceFrom: "350 zł",
-    heroImage: "/images/gallery/gallery-12.png",
+    heroImage: "/images/home/hero-2-car-wrapping.jpg",
     intro: [
       "Zmiana koloru auta folią + dechroming to kompleksowy sposób na całkowitą transformację wizualną Twojego pojazdu — szybko, efektownie i bez ingerencji w oryginalny lakier.",
       "Zmiana koloru polega na precyzyjnym oklejeniu całej karoserii wysokiej jakości folią winylową (mat, połysk, satyna, perła, carbon). Dechroming to oklejenie chromowanych elementów — listew, oznaczeń, grilla, końcówek wydechu — folią czarną matową, błyszczącą lub satynową, dla efektu „Black Pack”.",

@@ -5,10 +5,10 @@ import { siteConfig, myjniaNav, detailingNav } from "@/lib/site-config"
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-foreground text-background">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+    <footer className="border-t border-background/10 bg-foreground text-background">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr_1fr] lg:px-8">
         <div>
-          <Logo className="[&_span]:text-background" />
+          <Logo inverted />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-background/70">{siteConfig.description}</p>
         </div>
 
@@ -68,7 +68,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-background/10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-background/50 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-background/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
             © {new Date().getFullYear()} {siteConfig.legalName}. Wszystkie prawa zastrzeżone.
           </p>

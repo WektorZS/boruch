@@ -18,7 +18,7 @@ export default function GaleriaPage() {
         description="Kilka zdjęć z naszej hali w Szczecinie — realizacje mycia ręcznego, czyszczenia wnętrz i detailingu."
       />
 
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:py-20">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <GalleryGrid images={galleryImages} />
       </section>
 

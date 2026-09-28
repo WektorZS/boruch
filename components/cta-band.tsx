@@ -1,33 +1,38 @@
 import Link from "next/link"
-import { Calendar, Phone } from "lucide-react"
+import { ArrowRight, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/site-config"
 
 export function CtaBand() {
   return (
-    <section className="border-t border-border bg-primary text-primary-foreground">
-      <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div>
-          <h2 className="font-heading text-2xl font-bold sm:text-3xl">Umów wizytę w BORUCH Myjnia</h2>
-          <p className="mt-2 max-w-md text-sm leading-relaxed text-primary-foreground/80">
+    <section className="bg-foreground text-background">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-20 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8 lg:py-24">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-accent">Rezerwacja</p>
+          <h2 className="mt-5 text-balance font-heading text-3xl font-bold leading-tight sm:text-5xl">
+            Umów wizytę w BORUCH Myjnia
+          </h2>
+          <p className="mt-4 text-pretty text-base leading-relaxed text-background/65">
             {siteConfig.address.line1}, {siteConfig.address.line2} — {siteConfig.city}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button
+            render={<Link href="/booksy" />}
+            size="lg"
+            className="h-12 rounded-none bg-accent px-6 text-accent-foreground hover:bg-accent/90"
+          >
+            Zarezerwuj online
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
           <Button
             render={<a href={siteConfig.phoneHref} />}
-            variant="secondary"
-            className="rounded-none border border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+            size="lg"
+            variant="outline"
+            className="h-12 rounded-none border-background/25 bg-transparent px-6 text-background hover:bg-background/10 hover:text-background"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {siteConfig.phone}
-          </Button>
-          <Button
-            render={<Link href="/booksy" />}
-            className="rounded-none bg-accent text-accent-foreground hover:bg-accent/90"
-          >
-            <Calendar className="h-4 w-4" aria-hidden="true" />
-            Zarezerwuj online
           </Button>
         </div>
       </div>

@@ -10,14 +10,23 @@ export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDicti
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-border bg-foreground text-background">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+      <section className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col justify-end overflow-hidden bg-foreground text-background">
+        <Image
+          src="/images/home/hero-1-myjnia-reczna.jpg"
+          alt="BORUCH hand car wash & detailing, Szczecin"
+          fill
+          sizes="100vw"
+          className="-z-10 object-cover lg:left-[35%] lg:w-[65%]"
+          priority
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-foreground via-foreground/80 to-foreground/20 lg:bg-gradient-to-r lg:from-foreground lg:from-35% lg:via-foreground/60 lg:to-transparent"
+          aria-hidden="true"
+        />
+        <div className="mx-auto w-full max-w-7xl px-4 pb-14 pt-40 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
           <div>
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-              <span className="h-px w-6 bg-accent" aria-hidden="true" />
-              {dict.hero.eyebrow}
-            </p>
-            <h1 className="mt-5 max-w-xl text-balance font-heading text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
+            <p className="eyebrow text-accent">{dict.hero.eyebrow}</p>
+            <h1 className="mt-6 max-w-3xl text-balance font-heading text-5xl font-bold leading-[0.98] sm:text-7xl lg:text-8xl">
               {dict.hero.title}
             </h1>
             <p className="mt-3 text-lg font-semibold text-background/85">{dict.hero.subtitle}</p>
@@ -46,19 +55,6 @@ export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDicti
             <div className="mt-10 flex items-center gap-3 text-sm text-background/70">
               <MapPin className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
               {siteConfig.address.line1}, {siteConfig.address.line2}
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden border border-background/15 sm:aspect-[5/6]">
-              <Image
-                src="/images/home/hero-1-myjnia-reczna.jpg"
-                alt="BORUCH hand car wash, Szczecin"
-                fill
-                sizes="(min-width: 1024px) 45vw, 90vw"
-                className="object-cover"
-                priority
-              />
             </div>
           </div>
         </div>

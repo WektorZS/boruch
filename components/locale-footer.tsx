@@ -9,7 +9,7 @@ export function LocaleFooter({ locale, dict }: { locale: Locale; dict: LocaleDic
     <footer className="border-t border-border bg-foreground text-background">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr]">
         <div>
-          <Logo className="[&_span]:text-background" />
+          <Logo inverted />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-background/70">{dict.metaDescription}</p>
         </div>
 

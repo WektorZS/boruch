@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { PlChrome } from '@/components/pl-chrome'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 
@@ -69,9 +70,13 @@ export default function RootLayout({
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
         />
-        <SiteHeader />
+        <PlChrome>
+          <SiteHeader />
+        </PlChrome>
         <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <PlChrome>
+          <SiteFooter />
+        </PlChrome>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

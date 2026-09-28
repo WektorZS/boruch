@@ -12,14 +12,16 @@ export function PageHero({
   children?: ReactNode
 }) {
   return (
-    <section className="border-b border-border bg-foreground text-background">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">{eyebrow}</p>
-        <h1 className="mt-3 max-w-2xl text-balance font-heading text-4xl font-bold leading-[1.05] sm:text-5xl">
+    <section className="bg-foreground text-background">
+      <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
+        <p className="eyebrow text-accent">{eyebrow}</p>
+        <h1 className="mt-6 max-w-3xl text-balance font-heading text-4xl font-bold leading-[1.02] sm:text-6xl">
           {title}
         </h1>
         {description && (
-          <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-background/75">{description}</p>
+          <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-background/70 sm:text-lg">
+            {description}
+          </p>
         )}
         {children}
       </div>

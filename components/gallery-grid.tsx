@@ -10,13 +10,14 @@ export function GalleryGrid({ images }: { images: GalleryImage[] }) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {images.map((image, index) => (
           <button
             key={image.src}
             type="button"
             onClick={() => setActive(index)}
-            className="group relative aspect-[3/4] overflow-hidden border border-border"
+            aria-label={`Powiększ zdjęcie: ${image.alt}`}
+            className={`group relative overflow-hidden bg-secondary ${index === 0 ? "col-span-2 row-span-2 aspect-square sm:aspect-auto" : "aspect-[3/4]"}`}
           >
             <Image
               src={image.src || "/placeholder.svg"}
