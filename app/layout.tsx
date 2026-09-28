@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   generator: 'v0.app',
   keywords: ['myjnia Szczecin', 'detailing Szczecin', 'powłoka ceramiczna', 'folia PPF', 'pranie tapicerki'],
+  alternates: {
+    canonical: '/',
+    languages: { 'pl-PL': '/', en: '/en', de: '/de', uk: '/uk' },
+  },
   openGraph: {
     title: `${siteConfig.legalName} — ${siteConfig.tagline}`,
     description: siteConfig.description,
@@ -26,6 +30,25 @@ export const metadata: Metadata = {
     locale: 'pl_PL',
     type: 'website',
   },
+}
+
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoWash',
+  name: siteConfig.legalName,
+  image: 'https://boruchmyjnia.pl/images/home/szczecin-myjnia-banner.png',
+  url: 'https://boruchmyjnia.pl',
+  telephone: siteConfig.phone,
+  email: siteConfig.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${siteConfig.address.line1}, ${siteConfig.address.line2}`,
+    addressLocality: siteConfig.address.city,
+    postalCode: siteConfig.address.postalCode,
+    addressCountry: 'PL',
+  },
+  areaServed: siteConfig.city,
+  sameAs: [siteConfig.bookingUrl],
 }
 
 export const viewport: Viewport = {
@@ -41,6 +64,11 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${inter.variable} ${spaceGrotesk.variable} bg-background`}>
       <body className="flex min-h-screen flex-col antialiased">
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+        />
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

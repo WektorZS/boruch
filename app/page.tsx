@@ -27,22 +27,22 @@ export default function Home() {
               {siteConfig.description}
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
-              <Button asChild size="lg" className="rounded-none bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href="/booksy">
-                  <Calendar className="h-4 w-4" aria-hidden="true" />
-                  Zarezerwuj online
-                </Link>
+              <Button
+                render={<Link href="/booksy" />}
+                size="lg"
+                className="rounded-none bg-accent text-accent-foreground hover:bg-accent/90"
+              >
+                <Calendar className="h-4 w-4" aria-hidden="true" />
+                Zarezerwuj online
               </Button>
               <Button
-                asChild
+                render={<a href={siteConfig.phoneHref} />}
                 size="lg"
                 variant="secondary"
                 className="rounded-none border border-background/25 bg-transparent text-background hover:bg-background/10"
               >
-                <a href={siteConfig.phoneHref}>
-                  <Phone className="h-4 w-4" aria-hidden="true" />
-                  {siteConfig.phone}
-                </a>
+                <Phone className="h-4 w-4" aria-hidden="true" />
+                {siteConfig.phone}
               </Button>
             </div>
             <div className="mt-10 flex items-center gap-3 text-sm text-background/70">
@@ -141,11 +141,9 @@ export default function Home() {
               podziemnym parkingu PAZIM przy Placu Rodła 8. Łączymy dokładność ręcznego mycia z pełną gamą usług
               detailingowych: od powłok ceramicznych i folii PPF, po korektę lakieru i zmianę koloru.
             </p>
-            <Button asChild className="mt-7 rounded-none">
-              <Link href="/o-nas">
-                Poznaj nas
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+            <Button render={<Link href="/o-nas" />} className="mt-7 rounded-none">
+              Poznaj nas
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
         </div>

@@ -15,20 +15,19 @@ export function CtaBand() {
         </div>
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
           <Button
-            asChild
+            render={<a href={siteConfig.phoneHref} />}
             variant="secondary"
             className="rounded-none border border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
           >
-            <a href={siteConfig.phoneHref}>
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {siteConfig.phone}
-            </a>
+            <Phone className="h-4 w-4" aria-hidden="true" />
+            {siteConfig.phone}
           </Button>
-          <Button asChild className="rounded-none bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/booksy">
-              <Calendar className="h-4 w-4" aria-hidden="true" />
-              Zarezerwuj online
-            </Link>
+          <Button
+            render={<Link href="/booksy" />}
+            className="rounded-none bg-accent text-accent-foreground hover:bg-accent/90"
+          >
+            <Calendar className="h-4 w-4" aria-hidden="true" />
+            Zarezerwuj online
           </Button>
         </div>
       </div>

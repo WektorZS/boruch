@@ -6,6 +6,7 @@ import { ChevronDown, Menu, Phone, X } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { siteConfig, primaryNav, myjniaNav, detailingNav } from "@/lib/site-config"
+import { locales } from "@/lib/translations"
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -86,6 +87,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <div className="flex items-center gap-1 border border-border px-1 py-1 text-xs font-semibold uppercase">
+            <span className="px-2 py-1 text-primary">PL</span>
+            {locales.map((l) => (
+              <Link key={l.code} href={l.href} className="px-2 py-1 text-foreground/60 hover:text-primary">
+                {l.label}
+              </Link>
+            ))}
+          </div>
           <a
             href={siteConfig.phoneHref}
             className="flex items-center gap-1.5 text-sm font-semibold text-foreground transition-colors hover:text-primary"
@@ -93,8 +102,8 @@ export function SiteHeader() {
             <Phone className="h-4 w-4" aria-hidden="true" />
             {siteConfig.phone}
           </a>
-          <Button asChild className="rounded-none">
-            <Link href="/booksy">Umów wizytę</Link>
+          <Button render={<Link href="/booksy" />} className="rounded-none">
+            Umów wizytę
           </Button>
         </div>
 
@@ -175,6 +184,20 @@ export function SiteHeader() {
             ))}
           </nav>
 
+          <div className="mt-4 flex items-center gap-1 border border-border px-1 py-1 text-xs font-semibold uppercase">
+            <span className="flex-1 px-2 py-1.5 text-center text-primary">PL</span>
+            {locales.map((l) => (
+              <Link
+                key={l.code}
+                href={l.href}
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 px-2 py-1.5 text-center text-foreground/60"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
+
           <div className="mt-4 flex flex-col gap-3">
             <a
               href={siteConfig.phoneHref}
@@ -183,10 +206,11 @@ export function SiteHeader() {
               <Phone className="h-4 w-4" aria-hidden="true" />
               {siteConfig.phone}
             </a>
-            <Button asChild className="rounded-none">
-              <Link href="/booksy" onClick={() => setMobileOpen(false)}>
-                Umów wizytę
-              </Link>
+            <Button
+              render={<Link href="/booksy" onClick={() => setMobileOpen(false)} />}
+              className="rounded-none"
+            >
+              Umów wizytę
             </Button>
           </div>
         </div>

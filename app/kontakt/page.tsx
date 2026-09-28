@@ -67,8 +67,8 @@ export default function KontaktPage() {
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 Umów wizytę bez telefonowania — przez system Booksy.
               </p>
-              <Button asChild className="mt-3 rounded-none" size="sm">
-                <Link href="/booksy">Zarezerwuj na Booksy</Link>
+              <Button render={<Link href="/booksy" />} className="mt-3 rounded-none" size="sm">
+                Zarezerwuj na Booksy
               </Button>
             </div>
           </div>
