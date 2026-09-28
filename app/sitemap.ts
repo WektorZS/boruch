@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next"
 import { myjniaNav, detailingNav } from "@/lib/site-config"
 
+export const dynamic = "force-static"
+
 const BASE_URL = "https://boruchmyjnia.pl"
 
 export default function sitemap(): MetadataRoute.Sitemap {
