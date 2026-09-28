@@ -15,7 +15,16 @@ const routes = localeRoutes[locale]
 export const metadata: Metadata = {
   title: dict.pages.contact.title,
   description: dict.pages.contact.description,
-  alternates: { canonical: routes.contact },
+  alternates: {
+    canonical: routes.contact,
+    languages: {
+      "pl-PL": "/kontakt",
+      en: "/en/contact",
+      de: "/de/kontakt",
+      uk: "/uk/контакти",
+      "x-default": "/kontakt",
+    },
+  },
 }
 
 export default function EnglishContactPage() {

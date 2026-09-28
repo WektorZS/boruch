@@ -8,7 +8,16 @@ import { breadcrumbJsonLd } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Usługi",
   description: "Pełna lista usług myjni ręcznej i studia detailingowego BORUCH Myjnia w Szczecinie.",
-  alternates: { canonical: "/uslugi" },
+  alternates: {
+    canonical: "/uslugi",
+    languages: {
+      "pl-PL": "/uslugi",
+      en: "/en/services",
+      de: "/de/angebote",
+      uk: "/uk/послуги",
+      "x-default": "/uslugi",
+    },
+  },
 }
 
 export default function UslugiPage() {

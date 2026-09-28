@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.owner }],
   alternates: {
     canonical: '/',
-    languages: { 'pl-PL': '/', en: '/en', de: '/de', uk: '/uk' },
+    languages: { 'pl-PL': '/', en: '/en', de: '/de', uk: '/uk', 'x-default': '/' },
   },
   openGraph: {
     title: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',

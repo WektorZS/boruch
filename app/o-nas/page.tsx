@@ -8,7 +8,16 @@ import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "O nas",
   description: "Poznaj BORUCH Myjnia — ręczną myjnię samochodową i studio detailingowe w centrum Szczecina.",
-  alternates: { canonical: "/o-nas" },
+  alternates: {
+    canonical: "/o-nas",
+    languages: {
+      "pl-PL": "/o-nas",
+      en: "/en/about-us",
+      de: "/de/uber-uns",
+      uk: "/uk/про-нас",
+      "x-default": "/o-nas",
+    },
+  },
 }
 
 export default function ONasPage() {

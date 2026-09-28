@@ -15,7 +15,16 @@ const routes = localeRoutes[locale]
 export const metadata: Metadata = {
   title: dict.pages.about.title,
   description: dict.pages.about.description,
-  alternates: { canonical: routes.about },
+  alternates: {
+    canonical: routes.about,
+    languages: {
+      "pl-PL": "/o-nas",
+      en: "/en/about-us",
+      de: "/de/uber-uns",
+      uk: "/uk/про-нас",
+      "x-default": "/o-nas",
+    },
+  },
 }
 
 export default function UkrainianAboutPage() {

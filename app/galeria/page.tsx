@@ -8,7 +8,16 @@ import { breadcrumbJsonLd } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Galeria",
   description: "Zobacz realizacje BORUCH Myjnia — mycie ręczne, detailing i pielęgnację samochodów w Szczecinie.",
-  alternates: { canonical: "/galeria" },
+  alternates: {
+    canonical: "/galeria",
+    languages: {
+      "pl-PL": "/galeria",
+      en: "/en/gallery",
+      de: "/de/galerie",
+      uk: "/uk/галерея",
+      "x-default": "/galeria",
+    },
+  },
 }
 
 export default function GaleriaPage() {

@@ -14,7 +14,16 @@ const routes = localeRoutes[locale]
 export const metadata: Metadata = {
   title: dict.pages.services.title,
   description: dict.pages.services.description,
-  alternates: { canonical: routes.services },
+  alternates: {
+    canonical: routes.services,
+    languages: {
+      "pl-PL": "/uslugi",
+      en: "/en/services",
+      de: "/de/angebote",
+      uk: "/uk/послуги",
+      "x-default": "/uslugi",
+    },
+  },
 }
 
 export default function GermanServicesPage() {

@@ -9,7 +9,16 @@ import { breadcrumbJsonLd } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Cennik",
   description: "Cennik usług myjni ręcznej i detailingu BORUCH Myjnia w Szczecinie — mycie, wnętrze, powłoki, folia PPF.",
-  alternates: { canonical: "/cennik" },
+  alternates: {
+    canonical: "/cennik",
+    languages: {
+      "pl-PL": "/cennik",
+      en: "/en/pricing",
+      de: "/de/preise",
+      uk: "/uk/ціни",
+      "x-default": "/cennik",
+    },
+  },
 }
 
 export default function CennikPage() {

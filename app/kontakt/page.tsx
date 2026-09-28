@@ -8,7 +8,16 @@ import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 export const metadata: Metadata = {
   title: "Kontakt",
   description: "Kontakt do BORUCH Myjnia w Szczecinie — telefon, e-mail, adres i rezerwacja online przez Booksy.",
-  alternates: { canonical: "/kontakt" },
+  alternates: {
+    canonical: "/kontakt",
+    languages: {
+      "pl-PL": "/kontakt",
+      en: "/en/contact",
+      de: "/de/kontakt",
+      uk: "/uk/контакти",
+      "x-default": "/kontakt",
+    },
+  },
 }
 
 export default function KontaktPage() {

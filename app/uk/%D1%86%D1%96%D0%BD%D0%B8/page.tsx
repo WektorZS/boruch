@@ -14,7 +14,16 @@ const routes = localeRoutes[locale]
 export const metadata: Metadata = {
   title: dict.pages.pricing.title,
   description: dict.pages.pricing.description,
-  alternates: { canonical: routes.pricing },
+  alternates: {
+    canonical: routes.pricing,
+    languages: {
+      "pl-PL": "/cennik",
+      en: "/en/pricing",
+      de: "/de/preise",
+      uk: "/uk/ціни",
+      "x-default": "/cennik",
+    },
+  },
 }
 
 export default function UkrainianPricingPage() {

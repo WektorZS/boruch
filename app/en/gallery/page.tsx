@@ -15,7 +15,16 @@ const routes = localeRoutes[locale]
 export const metadata: Metadata = {
   title: dict.pages.gallery.title,
   description: dict.pages.gallery.description,
-  alternates: { canonical: routes.gallery },
+  alternates: {
+    canonical: routes.gallery,
+    languages: {
+      "pl-PL": "/galeria",
+      en: "/en/gallery",
+      de: "/de/galerie",
+      uk: "/uk/галерея",
+      "x-default": "/galeria",
+    },
+  },
 }
 
 export default function EnglishGalleryPage() {

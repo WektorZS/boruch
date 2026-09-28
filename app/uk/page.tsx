@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: dict.metaDescription,
   alternates: {
     canonical: "/uk",
-    languages: { "pl-PL": "/", en: "/en", de: "/de", uk: "/uk" },
+    languages: { "pl-PL": "/", en: "/en", de: "/de", uk: "/uk", "x-default": "/" },
   },
 }
 
