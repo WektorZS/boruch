@@ -461,6 +461,12 @@
 .lines.words > .line {
   display: inline-block;
   vertical-align: top;
+  max-width: 100%;
+}
+.lines.words > .line > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 .js .lines[data-reveal] {
   opacity: 1;

@@ -1,16 +1,17 @@
 import type { MetadataRoute } from "next"
 import { myjniaNav, detailingNav } from "@/lib/site-config"
+import { localeOrder, routes } from "@/lib/content"
 
 export const dynamic = "force-static"
 
 const BASE_URL = "https://boruchmyjnia.pl"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["/", "/o-nas", "/uslugi", "/cennik", "/galeria", "/kontakt", "/booksy", "/en", "/de", "/uk"]
+  const coreRoutes = localeOrder.flatMap((locale) => Object.values(routes[locale]))
 
   const serviceRoutes = [...myjniaNav, ...detailingNav].map((item) => item.href)
 
-  const allRoutes = [...staticRoutes, ...serviceRoutes]
+  const allRoutes = Array.from(new Set([...coreRoutes, "/booksy", ...serviceRoutes]))
 
   return allRoutes.map((route) => ({
     url: `${BASE_URL}${route}`,

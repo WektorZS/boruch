@@ -21,9 +21,9 @@ export function PageIntro({ eyebrow, title, sub, meta, photo, photoPosition, chi
   return (
     <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+2.5rem)] lg:pt-[calc(var(--header-h)+3.5rem)]">
       <div className="shell-wide flex flex-col gap-10 lg:gap-14">
-        <div className="enter-fade flex items-center justify-between gap-6" style={{ "--i": 0 } as React.CSSProperties}>
+        <div className="enter-fade flex flex-wrap items-center justify-between gap-4 sm:gap-6" style={{ "--i": 0 } as React.CSSProperties}>
           <p className="eyebrow">{eyebrow}</p>
-          {meta && <p className="type-label text-ash">{meta}</p>}
+          {meta && <p className="type-label ml-auto max-w-[70%] text-right text-ash">{meta}</p>}
         </div>
 
         <h1 id="page-title" className="type-h1 max-w-6xl text-balance lg:text-[clamp(3rem,5.6vw,6rem)]">

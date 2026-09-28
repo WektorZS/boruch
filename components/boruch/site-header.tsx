@@ -68,12 +68,13 @@ export function SiteHeader({
     if (!open) return
     const previous = document.body.style.overflow
     document.body.style.overflow = "hidden"
-    closeRef.current?.focus()
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus({ preventScroll: true }), 0)
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close()
     }
     window.addEventListener("keydown", onKey)
     return () => {
+      window.clearTimeout(focusTimer)
       document.body.style.overflow = previous
       window.removeEventListener("keydown", onKey)
     }

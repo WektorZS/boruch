@@ -27,9 +27,9 @@ export function HomeStatement({ locale }: { locale: Locale }) {
           >
             <span className="type-index text-xs text-highlight lg:col-span-1">{String(i + 2).padStart(2, "0")}</span>
             <span className="type-label text-ash lg:col-span-3">{claim.kicker}</span>
-            <span className={`flex flex-col gap-2 lg:col-span-8 ${i % 2 === 1 ? "lg:items-end lg:text-right" : ""}`}>
-              <RevealText as="span" text={claim.title} className="type-display block" />
-              <span data-reveal="" style={{ "--d": 2 } as React.CSSProperties} className="type-h3 uppercase text-ash">
+            <span className={`flex min-w-0 flex-col gap-2 lg:col-span-8 ${i % 2 === 1 ? "lg:items-end lg:text-right" : ""}`}>
+              <RevealText as="span" text={claim.title} className="type-display block max-w-full break-words" />
+              <span data-reveal="" style={{ "--d": 2 } as React.CSSProperties} className="type-h3 max-w-full break-words uppercase text-ash">
                 {claim.sub}
               </span>
             </span>

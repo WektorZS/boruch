@@ -30,8 +30,8 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-6">
-          <div className="flex flex-col gap-4">
+        <div className="grid min-w-0 grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-6">
+          <div className="min-w-0 flex flex-col gap-4">
             <p className="type-label text-ash">{src.address.locationLabel}</p>
             <address className="flex flex-col gap-1 not-italic leading-relaxed text-bone/85">
               {src.address.lines.map((line) => (
@@ -45,7 +45,7 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
             </a>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="min-w-0 flex flex-col gap-4">
             <p className="type-label text-ash">{src.address.contactLabel}</p>
             <a href={contact.phoneHref} className="link-draw w-fit text-bone/85 hover:text-bone">
               {contact.phone}
@@ -55,7 +55,7 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
             </a>
             <div className="mt-2 flex flex-col gap-2">
               <p className="type-label text-ash">{t.follow}</p>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
                 <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="type-label link-draw text-bone">
                   Instagram
                 </a>

@@ -38,11 +38,11 @@ export function ServicesPage({ locale }: { locale: Locale }) {
       {src.services.groups.map((group, g) => (
         <section key={group.title} aria-labelledby={`group-${g}`} className="section-lg">
           <div className="shell-wide flex flex-col gap-10 lg:gap-14">
-            <div className="flex items-end justify-between gap-6 border-b border-line-strong pb-6">
-              <h2 id={`group-${g}`} className="type-campaign text-[clamp(3rem,11vw,11rem)]">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line-strong pb-6 sm:gap-6">
+              <h2 id={`group-${g}`} className="type-campaign min-w-0 max-w-full break-words text-[clamp(3rem,11vw,11rem)]">
                 {group.title}
               </h2>
-              <p className="type-label pb-2 text-ash">{formatIndex(group.items.length)}</p>
+              <p className="type-label shrink-0 pb-2 text-ash">{formatIndex(group.items.length)}</p>
             </div>
             <ol>
               {group.items.map((item) => {
