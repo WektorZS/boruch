@@ -10,37 +10,67 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' })
 
+const OG_IMAGE = '/images/home/szczecin-myjnia-banner.png'
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://boruchmyjnia.pl'),
   title: {
-    default: `${siteConfig.legalName} — ${siteConfig.tagline} | ${siteConfig.city}`,
-    template: `%s | ${siteConfig.name}`,
+    // Exact title format verified live on boruchmyjnia.pl's homepage <title>.
+    default: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
+    template: `%s | BORUCH Myjnia ${siteConfig.city}`,
   },
   description: siteConfig.description,
   generator: 'v0.app',
-  keywords: ['myjnia Szczecin', 'detailing Szczecin', 'powłoka ceramiczna', 'folia PPF', 'pranie tapicerki'],
+  keywords: [
+    'myjnia Szczecin',
+    'myjnia ręczna Szczecin',
+    'detailing Szczecin',
+    'powłoka ceramiczna Szczecin',
+    'folia PPF Szczecin',
+    'pranie tapicerki Szczecin',
+    'korekta lakieru Szczecin',
+    'PAZIM Plac Rodła',
+  ],
+  authors: [{ name: siteConfig.owner }],
   alternates: {
     canonical: '/',
     languages: { 'pl-PL': '/', en: '/en', de: '/de', uk: '/uk' },
   },
   openGraph: {
-    title: `${siteConfig.legalName} — ${siteConfig.tagline}`,
+    title: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
     description: siteConfig.description,
     url: 'https://boruchmyjnia.pl',
     siteName: siteConfig.name,
     locale: 'pl_PL',
     type: 'website',
+    images: [{ url: OG_IMAGE, width: 1200, height: 900, alt: siteConfig.legalName }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
+    description: siteConfig.description,
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
 }
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoWash',
+  '@id': 'https://boruchmyjnia.pl/#business',
   name: siteConfig.legalName,
-  image: 'https://boruchmyjnia.pl/images/home/szczecin-myjnia-banner.png',
+  alternateName: siteConfig.name,
+  description: siteConfig.description,
+  image: `https://boruchmyjnia.pl${OG_IMAGE}`,
   url: 'https://boruchmyjnia.pl',
   telephone: siteConfig.phone,
   email: siteConfig.email,
+  priceRange: '100–1500 zł',
+  founder: { '@type': 'Person', name: siteConfig.owner },
   address: {
     '@type': 'PostalAddress',
     streetAddress: `${siteConfig.address.line1}, ${siteConfig.address.line2}`,
