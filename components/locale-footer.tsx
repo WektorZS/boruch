@@ -2,9 +2,10 @@ import Link from "next/link"
 import { Mail, MapPin, Phone } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { siteConfig } from "@/lib/site-config"
-import type { Locale, LocaleDictionary } from "@/lib/translations"
+import { localeRoutes, type Locale, type LocaleDictionary } from "@/lib/translations"
 
 export function LocaleFooter({ locale, dict }: { locale: Locale; dict: LocaleDictionary }) {
+  const routes = localeRoutes[locale]
   return (
     <footer className="border-t border-border bg-foreground text-background">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr]">
@@ -19,17 +20,17 @@ export function LocaleFooter({ locale, dict }: { locale: Locale; dict: LocaleDic
           </p>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link href="/uslugi" className="text-sm text-background/80 hover:text-background">
+              <Link href={routes.services} className="text-sm text-background/80 hover:text-background">
                 {dict.servicesCta}
               </Link>
             </li>
             <li>
-              <Link href="/cennik" className="text-sm text-background/80 hover:text-background">
+              <Link href={routes.pricing} className="text-sm text-background/80 hover:text-background">
                 {dict.pricingCta}
               </Link>
             </li>
             <li>
-              <Link href="/galeria" className="text-sm text-background/80 hover:text-background">
+              <Link href={routes.gallery} className="text-sm text-background/80 hover:text-background">
                 {dict.nav.gallery}
               </Link>
             </li>
@@ -72,7 +73,6 @@ export function LocaleFooter({ locale, dict }: { locale: Locale; dict: LocaleDic
           <p>
             © {new Date().getFullYear()} {siteConfig.legalName}
           </p>
-          <p>{dict.fullServicesNote}</p>
         </div>
       </div>
     </footer>

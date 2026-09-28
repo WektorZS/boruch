@@ -3,10 +3,11 @@ import Link from "next/link"
 import { ArrowRight, Check, Mail, MapPin, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/site-config"
-import type { Locale, LocaleDictionary } from "@/lib/translations"
+import { localeRoutes, type Locale, type LocaleDictionary } from "@/lib/translations"
 
 export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDictionary }) {
   const packages = [dict.packages.interior, dict.packages.exterior]
+  const routes = localeRoutes[locale]
 
   return (
     <>
@@ -43,7 +44,7 @@ export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDicti
                 {dict.nav.book}
               </Button>
               <Button
-                render={<Link href="/uslugi" />}
+                render={<Link href={routes.services} />}
                 size="lg"
                 variant="secondary"
                 className="rounded-none border border-background/25 bg-transparent text-background hover:bg-background/10"
@@ -140,7 +141,7 @@ export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDicti
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 {siteConfig.phone}
               </Button>
-              <Button render={<Link href="/kontakt" />} size="lg" variant="outline" className="rounded-none">
+              <Button render={<Link href={routes.contact} />} size="lg" variant="outline" className="rounded-none">
                 {dict.nav.contact}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Button>
@@ -177,12 +178,11 @@ export function LocaleHome({ locale, dict }: { locale: Locale; dict: LocaleDicti
         </div>
 
         <p className="mt-10 border-t border-border pt-6 text-sm leading-relaxed text-muted-foreground">
-          {dict.fullServicesNote}{" "}
-          <Link href="/uslugi" className="font-semibold text-primary hover:underline">
+          <Link href={routes.services} className="font-semibold text-primary hover:underline">
             {dict.servicesCta}
           </Link>{" "}
           ·{" "}
-          <Link href="/cennik" className="font-semibold text-primary hover:underline">
+          <Link href={routes.pricing} className="font-semibold text-primary hover:underline">
             {dict.pricingCta}
           </Link>
         </p>

@@ -6,18 +6,19 @@ import { Menu, Phone, X } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/site-config"
-import { locales, type Locale, type LocaleDictionary } from "@/lib/translations"
+import { locales, localeRoutes, type Locale, type LocaleDictionary } from "@/lib/translations"
 
 export function LocaleHeader({ locale, dict }: { locale: Locale; dict: LocaleDictionary }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const routes = localeRoutes[locale]
 
   const links = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: "/o-nas", label: dict.nav.about },
-    { href: "/uslugi", label: dict.nav.services },
-    { href: "/cennik", label: dict.nav.pricing },
-    { href: "/galeria", label: dict.nav.gallery },
-    { href: "/kontakt", label: dict.nav.contact },
+    { href: routes.home, label: dict.nav.home },
+    { href: routes.about, label: dict.nav.about },
+    { href: routes.services, label: dict.nav.services },
+    { href: routes.pricing, label: dict.nav.pricing },
+    { href: routes.gallery, label: dict.nav.gallery },
+    { href: routes.contact, label: dict.nav.contact },
   ]
 
   return (
