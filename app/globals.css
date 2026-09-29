@@ -604,12 +604,12 @@
 }
 .home-hero-title {
   font-family: var(--font-display);
-  font-stretch: 70%;
-  font-variation-settings: 'wdth' 70;
-  font-size: clamp(3.35rem, 6.2vw, 5.9rem);
+  font-stretch: 78%;
+  font-variation-settings: 'wdth' 78;
+  font-size: clamp(3.1rem, 5.4vw, 5.2rem);
   font-weight: 900;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
 }
 .home-hero-copy {
@@ -618,19 +618,11 @@
 .home-signature {
   font-family: var(--font-signature), 'Segoe Script', 'Brush Script MT', cursive;
   font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
   letter-spacing: 0;
   transform: rotate(-1.5deg);
   transform-origin: left center;
-}
-.home-more-cue {
-  animation: home-more-cue 1.8s var(--ease-in-out) infinite;
-}
-@keyframes home-more-cue {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(0.2rem); }
-}
-.group\/more[open] .home-more-cue {
-  animation: none;
 }
 @keyframes home-hero-copy-in {
   from {
@@ -644,12 +636,12 @@
 }
 .home-section-title {
   font-family: var(--font-display);
-  font-stretch: 72%;
-  font-variation-settings: 'wdth' 72;
-  font-size: clamp(2.45rem, 4.15vw, 4.55rem);
+  font-stretch: 82%;
+  font-variation-settings: 'wdth' 82;
+  font-size: clamp(2.25rem, 3.6vw, 4rem);
   font-weight: 880;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  line-height: 1.04;
+  letter-spacing: -0.018em;
   text-transform: uppercase;
 }
 .home-kicker {
@@ -745,10 +737,10 @@
 
 @media (max-width: 639px) {
   .home-hero-title {
-    font-size: clamp(3.05rem, 15.5vw, 4.85rem);
+    font-size: clamp(2.85rem, 13.5vw, 4.2rem);
   }
   .home-section-title {
-    font-size: clamp(2.15rem, 9.5vw, 3.8rem);
+    font-size: clamp(2rem, 8.6vw, 3.2rem);
   }
 }
 

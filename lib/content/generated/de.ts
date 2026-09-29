@@ -133,9 +133,9 @@ export const deSource: LocaleSource = {
           "Hauptwäsche von Hand",
           "Anwendung eines hydrophoben Beschichtungsmittels",
           "Gründliches Trocknen",
-          "Reinigung der Felgen",
           "Reinigung von Gummimatten",
-          "Glanzer für Reifen"
+          "Glanzer für Reifen",
+          "Reinigung der Felgen"
         ],
         "includedLabel": "Was ist im Paket enthalten?",
         "price": "ab 110PLN*",

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Quote, Phone, ShieldCheck, Sparkles, Star } from "lucide-react"
+import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { servicePrice, serviceSummary, services } from "@/lib/content/services"
+import { servicePrice, serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
@@ -28,39 +28,45 @@ const reviewControls: Record<Locale, { previous: string; next: string; select: s
   uk: { previous: "Попередній відгук", next: "Наступний відгук", select: "Показати відгук" },
 }
 
-const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string; count: string; open: string; more: string; less: string }> = {
+const packageSaleCopy: Record<Locale, { title: string; without: string; save: string }> = {
+  pl: { title: "W komplecie taniej", without: "Cena bez pakietu", save: "20 zł taniej" },
+  en: { title: "Better value as a package", without: "Price without the package", save: "Save PLN 20" },
+  de: { title: "Im Paket günstiger", without: "Preis ohne Paket", save: "20 PLN günstiger" },
+  uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", save: "На 20 PLN дешевше" },
+}
+
+const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string }> = {
   pl: {
     myjnia: "Ręczne mycie oraz kompleksowa pielęgnacja wnętrza i karoserii.",
     detailing: "Ochrona, korekta i zmiana wyglądu samochodu wykonana z pełną precyzją.",
-    count: "usług",
-    open: "Rozwiń kategorię",
-    more: "Rozwiń więcej usług",
-    less: "Pokaż mniej usług",
   },
   en: {
     myjnia: "Hand washing and complete care for the interior and bodywork.",
     detailing: "Protection, correction and visual transformation carried out with precision.",
-    count: "services",
-    open: "Expand category",
-    more: "Show more services",
-    less: "Show fewer services",
   },
   de: {
     myjnia: "Handwäsche und komplette Pflege von Innenraum und Karosserie.",
     detailing: "Schutz, Korrektur und optische Veränderung mit höchster Präzision.",
-    count: "Leistungen",
-    open: "Kategorie öffnen",
-    more: "Weitere Leistungen anzeigen",
-    less: "Weniger Leistungen anzeigen",
   },
   uk: {
     myjnia: "Ручне миття та комплексний догляд за салоном і кузовом.",
     detailing: "Захист, корекція та зміна вигляду автомобіля з повною точністю.",
-    count: "послуг",
-    open: "Розгорнути категорію",
-    more: "Показати більше послуг",
-    less: "Показати менше послуг",
   },
+}
+
+const serviceIcons: Record<ServiceSlug, typeof Car> = {
+  "mycie-zewnatrz": Droplets,
+  "czyszczenie-wnetrza": BrushCleaning,
+  komplet: Car,
+  "pranie-tapicerki": Armchair,
+  "czyszczenie-skor": SprayCan,
+  woskowanie: SunMedium,
+  polerowanie: WandSparkles,
+  "korekta-lakieru": Sparkles,
+  "powloka-ceramiczna": ShieldCheck,
+  "folia-ppf": Layers,
+  "przyciemnianie-szyb-i-lamp": PanelTop,
+  "zmiana-koloru-dechroming": Paintbrush,
 }
 
 const homeCopy = {
@@ -282,11 +288,6 @@ const homeCopy = {
   contactBooksy: string
 }>
 
-function shortServiceText(text: string) {
-  const end = text.indexOf(".")
-  return end === -1 ? text : text.slice(0, end + 1)
-}
-
 export function HomePage({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
@@ -322,7 +323,7 @@ function HomeHeader({ locale }: { locale: Locale }) {
         <Link href={routes[locale].home} aria-label={`BORUCH Myjnia - ${t.nav.home}`} className="group flex shrink-0 items-center gap-3">
           <span className="grid size-12 place-items-center bg-brand font-display text-[2rem] font-black leading-none transition-colors group-hover:bg-[#a91720]">B</span>
           <span className="flex flex-col">
-            <span className="font-display text-[1.55rem] font-black uppercase leading-none tracking-[-.03em]">Boruch</span>
+            <span className="font-display text-[1.55rem] font-black uppercase leading-none tracking-[-.015em]">Boruch</span>
             <span className="mt-1 text-[.58rem] font-semibold uppercase tracking-[.22em] text-white/48">Myjnia / detailing</span>
           </span>
         </Link>
@@ -363,7 +364,7 @@ function HomeHeader({ locale }: { locale: Locale }) {
               <ul className="flex flex-col">
                 {navOrder.map((key) => (
                   <li key={key} className="border-b border-white/10">
-                    <Link href={routes[locale][key]} className="flex items-center justify-between py-5 font-display text-3xl font-black uppercase tracking-[-.02em]">
+                    <Link href={routes[locale][key]} className="flex items-center justify-between py-5 font-display text-2xl font-black uppercase tracking-[-.005em]">
                       {t.nav[key]}<ArrowRight className="size-5 text-brand" aria-hidden="true" />
                     </Link>
                   </li>
@@ -464,7 +465,7 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
 
           <div className="flex items-stretch border border-white/14 bg-[#0b0b0c]/86 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md">
-            <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[-.04em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
+            <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
             <span className="flex min-w-0 flex-col justify-center divide-y divide-white/10">
               <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
                 <span className="min-w-0 flex-1">
@@ -545,29 +546,12 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       return {
         slug: service.slug,
         title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-        text: shortServiceText(summary?.text ?? service.source.intro[0]),
         price: servicePrice(locale, service.slug) ?? t.individualQuote,
-        photo: service.hero,
+        icon: serviceIcons[service.slug],
         href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
       }
     }),
   }))
-  type ServiceItem = (typeof groups)[number]["items"][number]
-  const renderServiceItem = (item: ServiceItem) => (
-    <Link key={item.slug} href={item.href} className="group/item grid min-h-40 grid-cols-[6.5rem_1fr_auto] items-center gap-5 bg-[#0a0a0b] p-5 transition-colors hover:bg-[#151516] sm:grid-cols-[8rem_1fr_auto] sm:p-6">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black/30">
-        <Photo id={item.photo} sizes="128px" className="opacity-72 transition duration-700 group-hover/item:scale-105 group-hover/item:opacity-100" />
-      </div>
-      <span className="min-w-0">
-        <strong className="block font-display text-[clamp(1.25rem,2vw,1.8rem)] font-black uppercase leading-[1.04] tracking-[-.025em]">{item.title}</strong>
-        <span className="mt-2 hidden max-w-md text-xs leading-relaxed text-white/44 sm:block">{item.text}</span>
-        <span className="mt-3 block text-[.6rem] font-bold uppercase tracking-[.12em] text-white/68">{item.price}</span>
-      </span>
-      <span className="grid size-10 place-items-center border border-white/15 text-white/55 transition-colors group-hover/item:border-brand group-hover/item:bg-brand group-hover/item:text-white">
-        <ArrowUpRight className="size-4" aria-hidden="true" />
-      </span>
-    </Link>
-  )
 
   return (
     <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
@@ -575,7 +559,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="home-section-title mt-6 max-w-[11ch]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+            <h2 id="services-title" data-reveal="" className="mt-6 max-w-[16ch] font-display text-[clamp(2.45rem,4.2vw,4.15rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
           </div>
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
@@ -585,45 +569,33 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-14 grid border-y border-white/12 lg:grid-cols-2">
+        <div className="mt-14 grid gap-px border-y border-white/12 bg-white/10 lg:grid-cols-2">
           {groups.map((group) => (
-            <details key={group.category} open className="group/service border-b border-white/12 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
-              <summary className="grid cursor-pointer list-none gap-7 px-5 py-8 sm:grid-cols-[1fr_auto] sm:items-center sm:px-7 lg:min-h-52 lg:grid-cols-1 lg:content-between lg:px-8 lg:py-9 xl:grid-cols-[1fr_auto] xl:items-center [&::-webkit-details-marker]:hidden">
-                <span>
-                  <span className="flex items-center gap-4">
-                    <h3 className="font-display text-[clamp(2.8rem,6vw,5.6rem)] font-black uppercase leading-[.95] tracking-[-.045em]">{group.title}</h3>
-                    <span className="rounded-full border border-white/14 px-3 py-1 text-[.58rem] font-bold uppercase tracking-[.14em] text-white/42">{group.items.length} {serviceGroupCopy[locale].count}</span>
-                  </span>
-                  <span className="mt-4 block max-w-xl text-sm leading-relaxed text-white/48">{group.description}</span>
-                </span>
-                <span className="flex items-center gap-4 justify-self-start sm:justify-self-end">
-                  <span className="text-[.58rem] font-bold uppercase tracking-[.15em] text-white/38 transition-colors group-open/service:text-white/65">{serviceGroupCopy[locale].open}</span>
-                  <span className="relative grid size-12 place-items-center border border-white/15 transition-colors group-open/service:border-brand group-open/service:bg-brand">
-                    <span className="absolute h-px w-4 bg-current" />
-                    <span className="absolute h-4 w-px bg-current transition-transform duration-300 group-open/service:rotate-90 group-open/service:opacity-0" />
-                  </span>
-                </span>
-              </summary>
+            <article key={group.category} className="flex flex-col bg-[#0a0a0b]">
+              <header className="min-h-44 bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.12),transparent_42%)] px-6 py-8 sm:px-8 lg:px-9">
+                <span className="mb-5 block h-px w-10 bg-brand" aria-hidden="true" />
+                <h3 className="font-display text-[clamp(2.2rem,3.4vw,3.35rem)] font-black uppercase leading-[1.04] tracking-[-.015em]">{group.title}</h3>
+                <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/48">{group.description}</p>
+              </header>
 
-              <div className="grid gap-px bg-white/10">
-                {group.items.slice(0, 2).map(renderServiceItem)}
-                {group.items.length > 2 && (
-                  <details className="group/more flex flex-col bg-[#0a0a0b]">
-                    <summary className="relative order-2 flex min-h-28 cursor-pointer list-none items-end justify-center overflow-hidden pb-6 pt-12 [&::-webkit-details-marker]:hidden">
-                      <span className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-white/[.035] to-transparent opacity-80" aria-hidden="true" />
-                      <span className="relative inline-flex min-h-11 items-center gap-3 border border-white/15 bg-[#111112] px-5 text-[.62rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:border-brand group-open/more:border-brand group-open/more:bg-brand">
-                        <span className="group-open/more:hidden">{serviceGroupCopy[locale].more}</span>
-                        <span className="hidden group-open/more:inline">{serviceGroupCopy[locale].less}</span>
-                        <ChevronDown className="home-more-cue size-4 text-brand transition-transform duration-300 group-open/more:rotate-180 group-open/more:text-white" aria-hidden="true" />
+              <div className="grid grow gap-px bg-white/10 xl:grid-cols-2">
+                {group.items.map((item, itemIndex) => {
+                  const Icon = item.icon
+                  return (
+                    <Link key={item.slug} href={item.href} className={cn("group/item grid min-h-32 grid-cols-[3rem_1fr_auto] items-center gap-4 bg-[#0d0d0e] p-5 transition-colors hover:bg-[#171718] sm:p-6", itemIndex === group.items.length - 1 && group.items.length % 2 === 1 && "xl:col-span-2")}>
+                      <span className="grid size-11 place-items-center border border-white/12 bg-white/[.025] text-brand transition-colors group-hover/item:border-brand group-hover/item:bg-brand group-hover/item:text-white">
+                        <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                       </span>
-                    </summary>
-                    <div className="order-1 grid gap-px border-t border-white/10 bg-white/10">
-                      {group.items.slice(2).map(renderServiceItem)}
-                    </div>
-                  </details>
-                )}
+                      <span className="min-w-0">
+                        <strong className="block font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.13] tracking-0">{item.title}</strong>
+                        <span className="mt-2 block text-[.58rem] font-bold uppercase tracking-[.12em] text-white/52">{item.price}</span>
+                      </span>
+                      <ArrowUpRight className="size-4 text-white/35 transition-colors group-hover/item:text-brand" aria-hidden="true" />
+                    </Link>
+                  )
+                })}
               </div>
-            </details>
+            </article>
           ))}
         </div>
       </div>
@@ -684,7 +656,11 @@ function WorkShowcase({ locale }: { locale: Locale }) {
 function Packages({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const packageOrder = [1, 2, 0]
+  const packageOrder = [
+    { index: 1, icon: Droplets },
+    { index: 2, icon: Car },
+    { index: 0, icon: Armchair },
+  ]
 
   return (
     <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#101011] py-24 lg:py-32">
@@ -692,37 +668,51 @@ function Packages({ locale }: { locale: Locale }) {
         <div className="grid gap-8 border-b border-white/12 pb-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker">{t.pricing}</p>
-            <h2 id="packages-title" data-reveal="" className="home-section-title mt-6">{src.home.packagesTitle}</h2>
+            <h2 id="packages-title" data-reveal="" className="mt-6 font-display text-[clamp(2.45rem,4.1vw,4.05rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.home.packagesTitle}</h2>
           </div>
           <Link href={routes[locale].pricing} className="inline-flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.16em] lg:col-span-4 lg:col-start-9 lg:justify-self-end">
             {src.home.moreLink}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-3 lg:grid-cols-3">
-          {packageOrder.map((index) => {
+        <div className="mt-10 grid gap-px border-y border-white/10 bg-white/10 lg:grid-cols-3">
+          {packageOrder.map(({ index, icon: PackageIcon }) => {
             const pkg = src.pricing.packages[index]
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[34rem] flex-col border border-white/10 bg-[#0a0a0b] p-7 sm:p-8", featured && "border-brand/65 bg-[#151516] lg:-translate-y-3")}>
-                {featured && <span className="absolute inset-x-0 top-0 h-1 bg-brand" aria-hidden="true" />}
+              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[32rem] flex-col overflow-hidden bg-[#0a0a0b] p-7 sm:p-8", featured && "bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.16),transparent_38%),#151516]")}>
+                {featured && <span className="absolute inset-x-0 top-0 h-0.5 bg-brand" aria-hidden="true" />}
                 <div>
-                  {pkg.popular && <span className="mb-5 inline-block bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span>}
-                  <h3 className="font-display text-[clamp(2.15rem,3.5vw,3.5rem)] font-black uppercase leading-[1.02] tracking-[-.04em]">{pkg.title}</h3>
-                  <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">{pkg.tagline}</p>
+                  <div className="mb-7 flex items-center justify-between gap-5">
+                    {pkg.popular ? <span className="bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
+                    <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/35 bg-brand/10")}>
+                      <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
+                    </span>
+                  </div>
+                  <h3 className="max-w-[13ch] font-display text-[clamp(1.85rem,2.6vw,2.55rem)] font-black uppercase leading-[1.08] tracking-[-.012em]">{pkg.title}</h3>
+                  <p className="mt-4 min-h-10 max-w-sm text-sm leading-relaxed text-white/48">{pkg.tagline}</p>
                 </div>
-                <div className="mt-8 border-t border-white/10 pt-6">
+                <div className="mt-7 border-t border-white/10 pt-6">
                   {pkg.includedLabel && <p className="mb-4 text-[.58rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
                   <ul className="space-y-2.5 text-sm leading-relaxed text-white/68">
-                    {pkg.items.slice(0, 5).map((item) => <li key={item} className="flex gap-3"><span className="mt-[.7em] h-px w-3 shrink-0 bg-brand" />{item}</li>)}
+                    {pkg.items.map((item) => <li key={item} className="flex gap-3"><span className="mt-[.7em] h-px w-3 shrink-0 bg-brand" />{item}</li>)}
                   </ul>
                   {pkg.discount && <p className="mt-5 text-sm leading-relaxed text-white/46">{pkg.discount}</p>}
                 </div>
-                <div className="mt-auto border-t border-white/10 pt-7">
-                  <span className="block whitespace-nowrap font-display text-[clamp(2.8rem,4.5vw,4.4rem)] font-black uppercase leading-none tracking-[-.045em]">{pkg.price}</span>
+                <div className="mt-auto pt-8">
+                  {featured && (
+                    <div className="mb-4 border-l-2 border-brand pl-4">
+                      <strong className="block text-[.62rem] font-bold uppercase tracking-[.14em] text-[#ef6267]">{packageSaleCopy[locale].title}</strong>
+                      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[.62rem] font-semibold tracking-[.04em]">
+                        <span className="text-white/44">{packageSaleCopy[locale].without} <s className="text-white/60 decoration-brand decoration-2">240 zł</s></span>
+                        <span className="text-white/82">{packageSaleCopy[locale].save}</span>
+                      </div>
+                    </div>
+                  )}
+                  <span className="block whitespace-nowrap font-display text-[clamp(2.2rem,3vw,2.85rem)] font-black uppercase leading-[1.04] tracking-[.005em]">{pkg.price}</span>
                   {pkg.note && <span className="mt-3 block text-[.58rem] font-bold uppercase tracking-[.13em] text-white/38">{pkg.note}</span>}
-                  <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className={cn("home-button mt-7 w-full", featured ? "home-button-red" : "home-button-dark")}>{t.book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+                  <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className={cn("home-button mt-6 w-full", featured ? "home-button-red" : "home-button-dark")}>{t.book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
                 </div>
               </article>
             )
@@ -757,14 +747,14 @@ function TeamStory({ locale }: { locale: Locale }) {
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-8 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
             <p className="home-kicker">{t.nav.about}</p>
-            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.2rem,3.5vw,3.5rem)] font-light leading-[1.08] tracking-[-.04em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
+            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.05rem,3vw,3.1rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
 
             <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
               {storyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
 
-            <p className="home-signature relative mt-9 text-[clamp(3.8rem,5.5vw,5.75rem)] leading-[1.2] text-white">{src.home.author}</p>
+            <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
               <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
@@ -898,7 +888,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.3rem,2vw,1.8rem)] font-black uppercase leading-[1.08] tracking-[-.025em] transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.2rem,1.75vw,1.6rem)] font-black uppercase leading-[1.15] tracking-0 transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span>{question}</span>
                 <span className="grid size-10 shrink-0 place-items-center border border-white/15 text-brand transition-transform group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
@@ -926,13 +916,13 @@ function Location({ locale }: { locale: Locale }) {
           <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
           <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(6rem,10vw,9rem)] font-black leading-[.72] tracking-[-.07em] text-[#ee343e] drop-shadow-[0_12px_32px_rgba(218,38,48,.2)]">-2</strong>
+          <strong className="font-display text-[clamp(5rem,8vw,7.25rem)] font-black leading-[.8] tracking-[-.03em] text-[#ee343e] drop-shadow-[0_12px_32px_rgba(218,38,48,.2)]">-2</strong>
           </div>
           <div className="relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(135deg,#121213_0%,#101011_68%,#1c0b0e_100%)] p-8 sm:p-10 lg:min-h-80">
           <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-brand/[.07] blur-[70px]" aria-hidden="true" />
           <div>
             <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[11ch] font-display text-[clamp(2.4rem,3.8vw,4rem)] font-black uppercase leading-[.98] tracking-[-.04em]">{slide.title} {slide.sub}</h2>
+            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[12ch] font-display text-[clamp(2.2rem,3.3vw,3.35rem)] font-black uppercase leading-[1.05] tracking-[-.015em]">{slide.title} {slide.sub}</h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
           </div>
           <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">
@@ -990,33 +980,62 @@ function ContactSection({ locale }: { locale: Locale }) {
 
 function HomeFooter({ locale }: { locale: Locale }) {
   const t = ui[locale]
+  const src = sources[locale]
+  const copy = homeCopy[locale]
+  const footerServices = src.services.groups.flatMap((group) => group.items).slice(0, 6)
 
   return (
     <footer className="bg-[#050505]">
-      <div className="home-shell grid gap-12 py-16 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <Link href={routes[locale].home} className="font-display text-6xl font-black uppercase tracking-[-.05em]">Boruch<span className="text-brand">.</span></Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/38">{sources[locale].meta.home.description}</p>
+      <div className="border-y border-white/10 bg-[radial-gradient(circle_at_82%_20%,rgba(225,38,46,.13),transparent_30%),#101011]">
+        <div className="home-shell grid gap-9 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
+          <div className="lg:col-span-7">
+            <p className="home-kicker">{copy.contactLabel}</p>
+            <h2 className="mt-6 max-w-[15ch] font-display text-[clamp(2.35rem,3.7vw,3.5rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{copy.contactTitle}</h2>
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45">{src.home.contactText}</p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:col-start-9 lg:justify-end">
+            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">{t.booksy}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+            <a href={contact.phoneHref} className="home-button home-button-dark"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
+          </div>
         </div>
-        <nav aria-label={t.navigation} className="md:col-span-3 md:col-start-6">
-          <ul className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm text-white/58">
+      </div>
+
+      <div className="home-shell grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-4">
+          <Link href={routes[locale].home} className="font-display text-5xl font-black uppercase tracking-[-.02em]">Boruch<span className="text-brand">.</span></Link>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/38">{src.meta.home.description}</p>
+          <a href={contact.mapUrl} target="_blank" rel="noopener noreferrer" className="mt-7 flex max-w-xs items-start gap-3 border-l border-brand pl-4 text-sm leading-relaxed text-white/58 transition-colors hover:text-white">
+            <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+            <span>{src.address.lines.slice(0, 3).join(", ")}</span>
+          </a>
+        </div>
+        <nav aria-label={t.navigation} className="lg:col-span-2">
+          <p className="mb-5 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.navigation}</p>
+          <ul className="grid gap-3 text-sm text-white/58">
             {navOrder.map((key) => <li key={key}><Link href={routes[locale][key]} className="transition-colors hover:text-white">{t.nav[key]}</Link></li>)}
           </ul>
         </nav>
-        <div className="flex flex-col gap-3 text-sm text-white/58 md:col-span-3 md:col-start-10">
+        <nav aria-label={t.nav.services} className="lg:col-span-3">
+          <p className="mb-5 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.nav.services}</p>
+          <ul className="grid gap-3 text-sm text-white/58">
+            {footerServices.map((item) => <li key={item.title}><Link href={routes[locale].services} className="transition-colors hover:text-white">{item.title}</Link></li>)}
+          </ul>
+        </nav>
+        <div className="flex flex-col gap-3 text-sm text-white/58 lg:col-span-3">
+          <p className="mb-2 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.nav.contact}</p>
           <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
           <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
-          <div className="mt-3 flex gap-5">
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">Instagram</a>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">Facebook</a>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Instagram</a>
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Facebook</a>
           </div>
-          <a href="#top" className="mt-4 inline-flex items-center gap-2 text-[.6rem] font-bold uppercase tracking-[.15em] text-white">{t.backToTop}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
         </div>
       </div>
       <div className="border-t border-white/8">
         <div className="home-shell flex flex-col gap-4 py-5 text-[.58rem] font-semibold uppercase tracking-[.14em] text-white/28 sm:flex-row sm:items-center sm:justify-between">
           <span>© {new Date().getFullYear()} BORUCH</span>
           <span>Szczecin / Plac Rodła 8 / PAZIM</span>
+          <a href="#top" className="inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white">{t.backToTop}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
         </div>
       </div>
     </footer>

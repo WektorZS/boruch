@@ -133,9 +133,9 @@ export const enSource: LocaleSource = {
           "Main Wash by Hand",
           "Application of Hydrophobic Coating",
           "Thorough Drying",
-          "Wheel Washing",
+          "Cleaning Rubber Floor Mats",
           "Tire Glossing",
-          "Cleaning Rubber Floor Mats"
+          "Wheel Washing"
         ],
         "includedLabel": "What’s included in the package?",
         "price": "from 110PLN*",

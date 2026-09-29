@@ -135,9 +135,9 @@ export const plSource: LocaleSource = {
           "Ręczne mycie zasadnicze",
           "Aplikacja powłoki hydrofobowej",
           "Dokładne suszenie",
-          "Mycie felg",
+          "Mycie gumowych dywaników",
           "Nabłyszczanie opon",
-          "Mycie gumowych dywaników"
+          "Mycie felg"
         ],
         "includedLabel": "Co wchodzi w skład zestawu?",
         "price": "od 110zł*",
