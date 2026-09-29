@@ -829,8 +829,7 @@ function Location({ locale }: { locale: Locale }) {
 
   return (
     <section aria-labelledby="location-title" className="bg-[#080809] py-16 lg:py-20">
-      <div className="home-shell relative grid overflow-hidden border border-white/10 border-t-brand/45 shadow-[0_32px_90px_rgba(0,0,0,.28)] lg:grid-cols-[.42fr_.83fr_.95fr]">
-        <span className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-brand via-brand/45 to-transparent" aria-hidden="true" />
+      <div className="home-shell relative grid overflow-hidden border border-white/10 shadow-[0_32px_90px_rgba(0,0,0,.28)] lg:grid-cols-[.42fr_.83fr_.95fr]">
         <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
           <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
@@ -854,11 +853,10 @@ function Location({ locale }: { locale: Locale }) {
             src={mapEmbedUrl}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)] transition-[filter,opacity,transform] duration-700 group-hover:scale-[1.02] group-hover:opacity-100 group-hover:[filter:grayscale(.35)_invert(.9)_sepia(.18)_hue-rotate(305deg)_contrast(.98)]"
+            className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
           />
-          <div className="pointer-events-none absolute inset-0 bg-[#8d141b]/12 mix-blend-color" aria-hidden="true" />
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-brand/[.06]" aria-hidden="true" />
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-4 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.6rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/42 via-transparent to-transparent" aria-hidden="true" />
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.6rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
             {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
         </div>
