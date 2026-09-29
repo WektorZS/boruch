@@ -15,7 +15,7 @@ Stan na 29.09.2026.
 
 ## Kierunek wizualny
 
-- Cały interfejs opiera się na czerni, antracycie, ciemnym bordo i kontrolowanej czerwieni. Nie ma jasnych sekcji ani mocnych białych powierzchni.
+- Tła sekcji wykorzystują wyłącznie czerń i ciemny grafit. Bordo oraz czerwień pełnią rolę koloru głównego w przyciskach, liniach, ikonach i wybranych fragmentach tekstu.
 - Poszczególne bloki rozdzielają delikatne różnice tonalne, cienkie obramowania i fotografie, dzięki czemu strona pozostaje ciemna bez zlewania się sekcji.
 - Wprowadzono zwężoną, mocną typografię inspirowaną branżą motoryzacyjną. Największe nagłówki pozostają w hero, a pozostałe poziomy mają wyraźną hierarchię.
 - Numeracja została usunięta z kart usług, pakietów, sekcji i nagłówków. Zostaje wyłącznie tam, gdzie przekazuje kolejność, czyli w etapach usługi i liczniku zdjęć w podglądzie galerii.
@@ -26,7 +26,7 @@ Stan na 29.09.2026.
 ## Zakres przebudowy
 
 - Strona główna została napisana od zera i nie korzysta ze wspólnego nagłówka ani stopki podstron.
-- Nowy home ma asymetryczne hero, własną nawigację, sekcję konkretnych korzyści, wierszowy indeks usług, pełną siatkę realizacji, trzy porównywalne pakiety, krótką opowieść o zespole, moduł lokalizacji PAZIM -2, końcową rezerwację i uproszczoną stopkę.
+- Nowy home ma poszerzone asymetryczne hero, własną nawigację, sekcję konkretnych korzyści, wierszowy indeks usług, pełną siatkę realizacji, trzy porównywalne pakiety, krótką opowieść o zespole, opinie klientów, FAQ, moduł lokalizacji PAZIM -2, formularz kontaktowy i uproszczoną stopkę.
 - Usunięto powtórzony manifest o zespole, dekoracyjny moduł -2 z hero oraz ogólne hasła, które nie pomagały wybrać usługi.
 - Zachowano treści źródłowe, fotografie BORUCH, ceny, dane kontaktowe, Booksy i wszystkie odnośniki.
 - Strona główna nie używa numeracji dekoracyjnej. Wartość -2 oznacza rzeczywisty poziom parkingu PAZIM.
@@ -34,11 +34,13 @@ Stan na 29.09.2026.
 - Ujednolicono wszystkie polskie strony szczegółowych usług.
 - Wszystkie podstawowe strony EN, DE i UA korzystają z tych samych szablonów, nagłówka, stopki, animacji, galerii i CTA co wersja polska.
 - Sekcje każdej podstrony zostały zebrane w jednym pliku szablonu, aby późniejsza edycja wyglądu i kolejności nie wymagała przechodzenia między wieloma komponentami.
-- Zachowano statyczny eksport Next.js oraz wszystkie istniejące adresy URL.
+- Zachowano statyczny eksport Next.js oraz wszystkie istniejące adresy URL. Formularz korzysta z osobnej funkcji Vercel, więc same strony nadal pozostają statyczne.
 
 ## Organizacja plików do edycji
 
 - Strona główna: `components/home-page.tsx`.
+- Interaktywna obsługa formularza strony głównej: `components/home-contact-form.tsx`.
+- Bezpieczna wysyłka formularza przez Resend: `api/contact.ts`.
 - Usługi: `components/services-page.tsx`.
 - Cennik: `components/pricing-page.tsx`.
 - Galeria: `components/gallery-page.tsx`.
@@ -46,7 +48,7 @@ Stan na 29.09.2026.
 - Kontakt: `components/contact-page.tsx`.
 - Wszystkie polskie strony pojedynczych usług: `components/service-page.tsx`.
 - Booksy: `app/booksy/page.tsx`.
-- Osobno pozostały tylko elementy wspólne dla całej witryny oraz interaktywny moduł galerii, który wymaga granicy klienta w Next.js.
+- Osobno pozostały tylko elementy wspólne dla całej witryny oraz moduły interaktywne, które wymagają granicy klienta w Next.js. Układ i treść wszystkich sekcji strony głównej nadal znajdują się w jednym pliku `components/home-page.tsx`.
 - Usunięto poprzedni, nieużywany zestaw komponentów oraz stare pliki danych, które pozostały po wcześniejszej wersji witryny.
 - Aktualna struktura odpowiada układowi projektu `golet`: trasy w `app`, kompletne strony i elementy wspólne w `components`, a dane w `lib`.
 
@@ -54,7 +56,7 @@ Stan na 29.09.2026.
 
 - Treści stron pochodzą z plików `lib/content/generated/pl.ts`, `en.ts`, `de.ts` i `uk.ts`.
 - Polskie strony szczegółowych usług korzystają z `lib/content/generated/services-pl.ts`.
-- Treści źródłowe nie zostały skrócone, parafrazowane ani zastąpione nowym tekstem marketingowym.
+- Treści źródłowe pozostają podstawą stron. Na stronie głównej dopisano krótkie, konkretne treści do opinii, FAQ i formularza.
 - Dane kontaktowe, Booksy, routing, języki i ceny pozostają scentralizowane.
 
 ## Cennik
@@ -73,7 +75,15 @@ Stan na 29.09.2026.
 - Telefon: +48 534 095 265.
 - E-mail: bruchkarol@gmail.com.
 - Wszystkie przyciski rezerwacji prowadzą do jednego adresu Booksy z `lib/content/index.ts`.
-- Nie dodano nowych godzin otwarcia, ocen, nagród, certyfikatów, gwarancji ani statystyk firmy.
+- Sekcja opinii prezentuje aktualną ocenę 4,9 na Booksy oraz trzy krótkie cytaty z publicznych opinii klientów. Dane sprawdzono 29.09.2026.
+
+## Formularz i Resend
+
+- Formularz działa z czystego frontendu i wysyła dane do funkcji Vercel pod `/api/contact`.
+- Klucz Resend nigdy nie trafia do kodu przeglądarki ani statycznego katalogu `out`.
+- Endpoint sprawdza origin, typ i rozmiar żądania, waliduje każde pole, ogranicza długość danych, stosuje honeypot, minimalny czas wypełnienia, podstawowy limit żądań i klucz idempotencji Resend.
+- Wiadomość jest wysyłana wyłącznie na adres z `CONTACT_NOTIFICATION_EMAIL`. Adres klienta trafia do bezpiecznego pola odpowiedzi `reply_to`.
+- Wymagane zmienne środowiskowe są opisane w `.env.example` oraz `STATIC-HOSTING.md`.
 
 ## Routing i języki
 
@@ -96,21 +106,24 @@ Stan na 29.09.2026.
 - `x-default` prowadzi do polskiej wersji.
 - Szczegółowe polskie strony usług nie otrzymały fałszywych odpowiedników językowych.
 - Zachowano dane strukturalne firmy, breadcrumbs i dane usług.
-- Zachowano `output: "export"`. Produkcyjny katalog `out/` nie wymaga serwera Node.js, API, middleware, SSR, ISR ani funkcji Vercel.
+- Zachowano `output: "export"`. Produkcyjny katalog `out/` nie wymaga stałego serwera Node.js, SSR ani ISR. Jedynym elementem wykonywanym po stronie serwera jest mała funkcja formularza, skalowana do zera przez Vercel.
 
 ## Mobile, dostępność i ruch
 
-- Menu mobilne działa jako pełnoekranowy panel, obsługuje Escape, przenosi fokus na przycisk zamknięcia i oddaje go po zamknięciu.
+- Menu mobilne działa jako pełnoekranowy panel oparty na natywnym elemencie `details`.
 - Karty usług na telefonie mają własne zdjęcia, opis i cenę. Nie wymagają hovera.
 - Galeria ma powtarzalny rytm czterech zdjęć, małe odstępy i dialogowy lightbox ze sterowaniem klawiaturą oraz gestem przesunięcia.
 - Elementy z `data-reveal` obsługuje jeden `IntersectionObserver`.
 - Dla `prefers-reduced-motion: reduce` animacje i przejścia są skracane, a treści pozostają widoczne.
 - Długie niemieckie i ukraińskie nagłówki mieszczą się bez poziomego przewijania.
+- Usunięto poziome przewijanie powodowane przez długi nagłówek sekcji na małym ekranie.
 
 ## Weryfikacja
 
 - Sprawdzono kluczowe szablony i przejścia między wersjami PL, EN, DE i UA.
 - Wizualnie sprawdzono stronę główną i cennik, w tym hero, kontrast, typografię, nawigację, sekcje treści oraz stopkę.
+- Sprawdzono nowe hero, opinie, FAQ i formularz na szerokości 1440 px oraz 390 px.
+- Potwierdzono rozwijanie odpowiedzi w FAQ.
 - Potwierdzono, że nieużywana numeracja nie wróciła do kart ani nagłówków.
 - `tsc --noEmit` kończy się bez błędów.
 - `pnpm build` kończy się poprawnie i generuje 42 statyczne wpisy.
@@ -120,3 +133,4 @@ Stan na 29.09.2026.
 
 - Grupowana pozycja dotycząca PPF, lamp, szyb i dechromingu pozostaje bez rozbijania na ceny pojedynczych usług.
 - Nowe godziny otwarcia lub inne dane biznesowe należy dodać dopiero po potwierdzeniu przez właściciela.
+- Przed uruchomieniem formularza na produkcji trzeba uzupełnić zmienne Resend w panelu Vercel i dodać regułę limitu dla ścieżki `/api/contact` w Vercel Firewall.

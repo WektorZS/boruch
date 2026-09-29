@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { ArrowDown, ArrowRight, ArrowUpRight, Car, Mail, MapPin, Menu, Phone, ShieldCheck, Sparkles } from "lucide-react"
+import { ArrowDown, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Phone, Quote, ShieldCheck, Sparkles, Star } from "lucide-react"
 import { Photo } from "./photo"
+import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceGroupTitle, servicePrice, serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
 import { cn } from "@/lib/utils"
@@ -32,7 +33,30 @@ const homeCopy = {
     teamTitle: "Za każdym autem stoi konkretna ekipa.",
     teamBody: "BORUCH powstał z pasji do czystych i zadbanych samochodów. Pracujemy dokładnie, bez pośpiechu i z pełną odpowiedzialnością za efekt.",
     routeHint: "Wjedź na parking PAZIM i zjedź na poziom -2.",
-    ctaTitle: "Umów swoje auto do BORUCH.",
+    reviewsLabel: "Opinie klientów",
+    reviewsTitle: "Efekt, do którego chce się wracać.",
+    reviewsIntro: "Najlepiej mówią o nas kierowcy, którzy odebrali od nas swoje samochody.",
+    ratingLabel: "średnia ocen na Booksy",
+    reviewsLink: "Zobacz opinie i terminy",
+    reviews: [
+      ["Karol K.", "Rzadko piszę opinie, ale tu po prostu trzeba było. Tak trzymać!"],
+      ["Artur M.", "Auto odzyskało dawny blask. Dobra robota Panowie. Polecam."],
+      ["Klient BORUCH", "Byłem już na kilku myjniach ręcznych, ale tutaj zadbali o moje auto najlepiej."],
+    ],
+    faqLabel: "Najczęstsze pytania",
+    faqTitle: "Zanim zostawisz nam auto.",
+    faqIntro: "Krótko i konkretnie. Jeśli nie znajdziesz odpowiedzi, zadzwoń lub napisz.",
+    faq: [
+      ["Czy trzeba rezerwować termin?", "Rezerwacja przez Booksy daje pewny termin. Przy prostszych usługach możesz też zadzwonić i zapytać o najbliższe wolne miejsce."],
+      ["Ile trwa usługa?", "Czas zależy od zakresu i stanu samochodu. Mycie trwa krócej, a detailing, powłoka ceramiczna lub folia PPF wymagają pozostawienia auta na dłużej."],
+      ["Czy cena zależy od wielkości auta?", "Tak. Ceny podstawowe dotyczą mniejszych aut, a dopłata za większy samochód jest opisana w cenniku. Usługi detailingowe wyceniamy po ocenie zakresu prac."],
+      ["Jak trafić do myjni?", "Wjedź na parking podziemny PAZIM przy placu Rodła 8 i zjedź na poziom -2. Na miejscu znajdziesz oznaczenia BORUCH."],
+    ],
+    contactLabel: "Kontakt i wycena",
+    contactTitle: "Opowiedz nam, czego potrzebuje Twoje auto.",
+    contactIntro: "Podaj podstawowe dane i opisz zakres prac. Odpowiemy z propozycją usługi albo poprosimy o dodatkowe zdjęcia.",
+    contactDirect: "Wolisz załatwić to od razu?",
+    contactBooksy: "Termin możesz również wybrać bezpośrednio w Booksy.",
   },
   en: {
     heroLead: "Hand car wash, detailing, ceramic coatings and PPF in central Szczecin.",
@@ -49,7 +73,30 @@ const homeCopy = {
     teamTitle: "A dedicated team stands behind every car.",
     teamBody: "BORUCH grew from a passion for clean and well-kept cars. We work carefully, without rushing, and take responsibility for the result.",
     routeHint: "Enter the PAZIM car park and drive down to level -2.",
-    ctaTitle: "Book your car at BORUCH.",
+    reviewsLabel: "Customer reviews",
+    reviewsTitle: "Results worth coming back for.",
+    reviewsIntro: "The best account of our work comes from drivers collecting their cars.",
+    ratingLabel: "average rating on Booksy",
+    reviewsLink: "See reviews and appointments",
+    reviews: [
+      ["Karol K.", "I rarely write reviews, but this place deserved one. Keep it up!"],
+      ["Artur M.", "The car regained its former shine. Great work, gentlemen. Recommended."],
+      ["BORUCH customer", "I have used several hand car washes, but my car was cared for best here."],
+    ],
+    faqLabel: "Frequently asked questions",
+    faqTitle: "Before you leave your car with us.",
+    faqIntro: "Short and specific. If your question is not here, call or write to us.",
+    faq: [
+      ["Do I need to book?", "Booking through Booksy secures your appointment. For simpler services, you can also call and ask about the nearest available time."],
+      ["How long does a service take?", "It depends on the scope and condition of the car. A wash is quicker, while detailing, ceramic coating or PPF requires more time."],
+      ["Does the price depend on car size?", "Yes. Base prices apply to smaller cars and the surcharge for larger vehicles is listed in the price list. Detailing is quoted after assessing the scope."],
+      ["How do I find the car wash?", "Enter the PAZIM underground car park at Plac Rodła 8 and drive down to level -2. BORUCH signs will guide you on site."],
+    ],
+    contactLabel: "Contact and quote",
+    contactTitle: "Tell us what your car needs.",
+    contactIntro: "Share the key details and describe the work. We will reply with a suggested service or ask for additional photos.",
+    contactDirect: "Prefer to arrange it now?",
+    contactBooksy: "You can also choose an appointment directly on Booksy.",
   },
   de: {
     heroLead: "Handwäsche, Detailing, Keramikversiegelung und PPF im Zentrum von Stettin.",
@@ -66,7 +113,30 @@ const homeCopy = {
     teamTitle: "Hinter jedem Fahrzeug steht ein konkretes Team.",
     teamBody: "BORUCH entstand aus Leidenschaft für saubere und gepflegte Fahrzeuge. Wir arbeiten gründlich, ohne Eile und mit voller Verantwortung für das Ergebnis.",
     routeHint: "Fahren Sie in die PAZIM Tiefgarage und hinunter auf Ebene -2.",
-    ctaTitle: "Buchen Sie Ihr Fahrzeug bei BORUCH.",
+    reviewsLabel: "Kundenmeinungen",
+    reviewsTitle: "Ein Ergebnis, für das man gerne wiederkommt.",
+    reviewsIntro: "Am besten berichten die Fahrer über uns, die ihr Fahrzeug bei uns abgeholt haben.",
+    ratingLabel: "durchschnittliche Bewertung bei Booksy",
+    reviewsLink: "Bewertungen und Termine ansehen",
+    reviews: [
+      ["Karol K.", "Ich schreibe selten Bewertungen, aber hier musste es einfach sein. Weiter so!"],
+      ["Artur M.", "Das Auto hat seinen früheren Glanz zurück. Tolle Arbeit. Klare Empfehlung."],
+      ["BORUCH Kunde", "Ich war schon bei mehreren Handwäschen, aber hier wurde mein Auto am besten gepflegt."],
+    ],
+    faqLabel: "Häufige Fragen",
+    faqTitle: "Bevor Sie Ihr Fahrzeug abgeben.",
+    faqIntro: "Kurz und konkret. Wenn Ihre Frage fehlt, rufen Sie uns an oder schreiben Sie uns.",
+    faq: [
+      ["Muss ich einen Termin buchen?", "Eine Buchung über Booksy sichert Ihren Termin. Bei einfacheren Leistungen können Sie auch anrufen und nach dem nächsten freien Termin fragen."],
+      ["Wie lange dauert eine Leistung?", "Das hängt vom Umfang und Zustand des Fahrzeugs ab. Eine Wäsche dauert kürzer, während Detailing, Keramikversiegelung oder PPF mehr Zeit benötigen."],
+      ["Hängt der Preis von der Fahrzeuggröße ab?", "Ja. Die Grundpreise gelten für kleinere Fahrzeuge. Zuschläge für größere Fahrzeuge stehen in der Preisliste. Detailing wird nach Prüfung des Umfangs kalkuliert."],
+      ["Wie finde ich die Waschanlage?", "Fahren Sie in die PAZIM Tiefgarage am Plac Rodła 8 und hinunter auf Ebene -2. Vor Ort weisen BORUCH Schilder den Weg."],
+    ],
+    contactLabel: "Kontakt und Angebot",
+    contactTitle: "Sagen Sie uns, was Ihr Fahrzeug benötigt.",
+    contactIntro: "Nennen Sie die wichtigsten Angaben und beschreiben Sie den Umfang. Wir antworten mit einem Vorschlag oder bitten um zusätzliche Fotos.",
+    contactDirect: "Möchten Sie es sofort erledigen?",
+    contactBooksy: "Einen Termin können Sie auch direkt über Booksy wählen.",
   },
   uk: {
     heroLead: "Ручна автомийка, детейлінг, керамічні покриття та PPF у центрі Щецина.",
@@ -83,7 +153,30 @@ const homeCopy = {
     teamTitle: "За кожним автомобілем стоїть конкретна команда.",
     teamBody: "BORUCH виріс із любові до чистих і доглянутих автомобілів. Працюємо уважно, без поспіху та відповідаємо за результат.",
     routeHint: "Заїдьте на паркінг PAZIM і спустіться на рівень -2.",
-    ctaTitle: "Запишіть своє авто до BORUCH.",
+    reviewsLabel: "Відгуки клієнтів",
+    reviewsTitle: "Результат, за яким хочеться повернутися.",
+    reviewsIntro: "Найкраще про нашу роботу розповідають водії, які забрали у нас свої автомобілі.",
+    ratingLabel: "середня оцінка на Booksy",
+    reviewsLink: "Переглянути відгуки та вільні години",
+    reviews: [
+      ["Karol K.", "Я рідко пишу відгуки, але тут просто мусив. Так тримати!"],
+      ["Artur M.", "Автомобіль повернув колишній блиск. Чудова робота. Рекомендую."],
+      ["Клієнт BORUCH", "Я був на кількох ручних мийках, але тут про моє авто подбали найкраще."],
+    ],
+    faqLabel: "Часті запитання",
+    faqTitle: "Перш ніж залишити нам авто.",
+    faqIntro: "Коротко і конкретно. Якщо тут немає відповіді, зателефонуйте або напишіть нам.",
+    faq: [
+      ["Чи потрібно бронювати час?", "Бронювання через Booksy гарантує вибраний час. Для простіших послуг можна також зателефонувати й запитати про найближче вільне місце."],
+      ["Скільки триває послуга?", "Це залежить від обсягу робіт і стану автомобіля. Миття триває менше, а детейлінг, керамічне покриття або PPF потребують більше часу."],
+      ["Чи залежить ціна від розміру авто?", "Так. Базові ціни стосуються менших авто, а доплата за більший автомобіль вказана в прайсі. Детейлінг оцінюємо після визначення обсягу робіт."],
+      ["Як знайти автомийку?", "Заїдьте на підземний паркінг PAZIM за адресою Plac Rodła 8 і спустіться на рівень -2. На місці вас скерують позначення BORUCH."],
+    ],
+    contactLabel: "Контакт і оцінка",
+    contactTitle: "Розкажіть, що потрібно вашому авто.",
+    contactIntro: "Вкажіть основні дані та опишіть обсяг робіт. Ми запропонуємо послугу або попросимо додаткові фото.",
+    contactDirect: "Хочете домовитися одразу?",
+    contactBooksy: "Вільний час також можна вибрати безпосередньо в Booksy.",
   },
 } satisfies Record<Locale, {
   heroLead: string
@@ -96,7 +189,21 @@ const homeCopy = {
   teamTitle: string
   teamBody: string
   routeHint: string
-  ctaTitle: string
+  reviewsLabel: string
+  reviewsTitle: string
+  reviewsIntro: string
+  ratingLabel: string
+  reviewsLink: string
+  reviews: [string, string][]
+  faqLabel: string
+  faqTitle: string
+  faqIntro: string
+  faq: [string, string][]
+  contactLabel: string
+  contactTitle: string
+  contactIntro: string
+  contactDirect: string
+  contactBooksy: string
 }>
 
 function shortServiceText(text: string) {
@@ -108,7 +215,7 @@ export function HomePage({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <div id="top" lang={locale === "pl" ? undefined : localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080708] text-bone">
+    <div id="top" lang={locale === "pl" ? undefined : localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080809] text-bone">
       <a href="#main" className="fixed left-4 top-4 z-80 -translate-y-24 bg-brand px-4 py-3 text-xs font-bold uppercase tracking-[.16em] transition-transform focus:translate-y-0">
         {t.skip}
       </a>
@@ -120,8 +227,10 @@ export function HomePage({ locale }: { locale: Locale }) {
         <WorkShowcase locale={locale} />
         <Packages locale={locale} />
         <TeamStory locale={locale} />
+        <Reviews locale={locale} />
+        <HomeFaq locale={locale} />
         <Location locale={locale} />
-        <FinalCall locale={locale} />
+        <ContactSection locale={locale} />
       </main>
       <HomeFooter locale={locale} />
     </div>
@@ -132,7 +241,7 @@ function HomeHeader({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#080708]/92 shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#080809]/92 shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-md">
       <div className="home-shell flex h-24 items-center gap-8">
         <Link href={routes[locale].home} aria-label={`BORUCH Myjnia - ${t.nav.home}`} className="group flex shrink-0 items-center gap-3">
           <span className="grid size-12 place-items-center bg-brand font-display text-[2rem] font-black leading-none transition-colors group-hover:bg-[#a91720]">B</span>
@@ -173,7 +282,7 @@ function HomeHeader({ locale }: { locale: Locale }) {
             <Menu className="size-5" aria-hidden="true" />
             <span className="sr-only">{t.menu}</span>
           </summary>
-          <div className="fixed inset-x-0 top-24 min-h-[calc(100svh-6rem)] border-t border-white/10 bg-[#10080a] px-5 py-8 shadow-2xl">
+          <div className="fixed inset-x-0 top-24 min-h-[calc(100svh-6rem)] border-t border-white/10 bg-[#101011] px-5 py-8 shadow-2xl">
             <nav aria-label={t.navigation}>
               <ul className="flex flex-col">
                 {navOrder.map((key) => (
@@ -210,13 +319,13 @@ function HomeHero({ locale }: { locale: Locale }) {
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
 
   return (
-    <section aria-labelledby="hero-title" className="relative isolate min-h-svh overflow-hidden bg-[#080708] pt-24">
-      <div className="home-shell grid min-h-[calc(100svh-6rem)] gap-12 py-12 lg:grid-cols-12 lg:items-center lg:gap-8 lg:py-16">
+    <section aria-labelledby="hero-title" className="relative isolate min-h-svh overflow-hidden bg-[#080809] pt-24">
+      <div className="home-hero-shell grid min-h-[calc(100svh-6rem)] gap-12 py-10 lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-14">
         <div className="relative z-10 flex flex-col items-start lg:col-span-5">
           <p className="enter-fade mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.title} - {slide.sub}
           </p>
-          <h1 id="hero-title" className="home-hero-title max-w-[7.5ch] text-balance">
+          <h1 id="hero-title" className="home-hero-title max-w-[9ch] text-balance">
             <span className="line-mask"><span className="enter-rise block">{slide.kicker}</span></span>
           </h1>
           <p className="enter-fade mt-7 max-w-lg text-pretty text-base leading-relaxed text-white/58 sm:text-lg" style={{ "--i": 2 } as React.CSSProperties}>
@@ -232,20 +341,20 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="relative min-h-[30rem] lg:col-span-7 lg:min-h-[43rem]">
-          <div className="enter-unmask absolute inset-0 overflow-hidden border border-white/10 bg-[#151112] shadow-[0_35px_100px_rgba(0,0,0,.55)]">
+        <div className="relative min-h-[31rem] lg:col-span-7 lg:min-h-[46rem]">
+          <div className="enter-unmask absolute inset-0 overflow-hidden border border-white/10 bg-[#151516] shadow-[0_35px_100px_rgba(0,0,0,.55)]">
             <Photo id="p28" priority sizes="(min-width: 1024px) 58vw, 100vw" position="54% 66%" className="opacity-92" />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/10" />
           </div>
-          <div className="absolute bottom-0 left-0 bg-[#080708] px-5 py-4 sm:px-6">
+          <div className="absolute bottom-0 left-0 bg-[#080809] px-5 py-4 sm:px-6">
             <span className="text-[.6rem] font-bold uppercase tracking-[.18em] text-white/62">Szczecin / Plac Rodła 8</span>
           </div>
-          <a href="#services" className="absolute -bottom-1 right-0 hidden items-center gap-3 border border-white/15 bg-[#080708] px-5 py-4 text-[.62rem] font-bold uppercase tracking-[.16em] text-white/55 transition-colors hover:text-white sm:flex">
+          <a href="#services" className="absolute -bottom-1 right-0 hidden items-center gap-3 border border-white/15 bg-[#080809] px-5 py-4 text-[.62rem] font-bold uppercase tracking-[.16em] text-white/55 transition-colors hover:text-white sm:flex">
             {t.scroll}<ArrowDown className="size-4 text-brand" aria-hidden="true" />
           </a>
         </div>
       </div>
-      <ul className="relative z-10 grid border-y border-white/10 bg-[#0d0b0c] sm:grid-cols-3">
+      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
         {copy.benefits.map(([title, text], index) => {
           const Icon = benefitIcons[index] ?? Car
           return (
@@ -269,7 +378,7 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0b0a0b] py-24 lg:py-32">
+    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:items-stretch">
         <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:col-span-6 lg:min-h-[44rem]">
           <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" />
@@ -311,14 +420,14 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   })
 
   return (
-    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#26080c] py-24 lg:py-32">
+    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
       <div className="home-shell grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-8">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
             <h2 id="services-title" data-reveal="" className="home-section-title mt-6 max-w-[8ch]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
             <p className="mt-7 max-w-sm text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
-            <Link href={routes[locale].services} className="home-button mt-9 border border-white/24 bg-transparent hover:bg-white hover:text-[#26080c]">
+            <Link href={routes[locale].services} className="home-button mt-9 border border-white/24 bg-transparent hover:bg-white hover:text-black">
               {t.allServices}<ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
@@ -338,7 +447,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                   <span className="mt-4 block text-[.65rem] font-bold uppercase tracking-[.12em] text-white/78">{item.price}</span>
                 </div>
                 <div className="flex items-center justify-end">
-                  <span className="grid size-11 place-items-center border border-white/20 transition-colors group-hover:border-white group-hover:bg-white group-hover:text-[#26080c]">
+                  <span className="grid size-11 place-items-center border border-white/20 transition-colors group-hover:border-white group-hover:bg-white group-hover:text-black">
                     <ArrowUpRight className="size-4" aria-hidden="true" />
                   </span>
                 </div>
@@ -357,7 +466,7 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080708] py-24 lg:py-32">
+    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-24 lg:py-32">
       <div className="home-shell mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <p className="home-kicker">{t.nav.gallery}</p>
@@ -407,7 +516,7 @@ function Packages({ locale }: { locale: Locale }) {
   const packageOrder = [1, 2, 0]
 
   return (
-    <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#100e0f] py-24 lg:py-32">
+    <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#101011] py-24 lg:py-32">
       <div className="home-shell">
         <div className="grid gap-8 border-b border-white/12 pb-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
@@ -425,7 +534,7 @@ function Packages({ locale }: { locale: Locale }) {
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[34rem] flex-col border border-white/10 bg-[#0a090a] p-7 sm:p-8", featured && "border-brand/55 bg-[#2a090d] lg:-translate-y-3")}>
+              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[34rem] flex-col border border-white/10 bg-[#0a0a0b] p-7 sm:p-8", featured && "border-brand/65 bg-[#151516] lg:-translate-y-3")}>
                 {featured && <span className="absolute inset-x-0 top-0 h-1 bg-brand" aria-hidden="true" />}
                 <div>
                   {pkg.popular && <span className="mb-5 inline-block bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span>}
@@ -460,14 +569,14 @@ function TeamStory({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="team-title" className="border-b border-white/10 bg-[#080708]">
+    <section aria-labelledby="team-title" className="border-b border-white/10 bg-[#080809]">
       <div className="grid lg:grid-cols-2">
         <figure data-reveal="mask" className="relative min-h-[32rem] overflow-hidden lg:min-h-[42rem]">
           <Photo id="team" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 62%" className="scale-[1.05]" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-7 left-7 bg-[#080708] px-4 py-3 text-[.6rem] font-bold uppercase tracking-[.16em]">{src.home.author}</figcaption>
+          <figcaption className="absolute bottom-7 left-7 bg-[#080809] px-4 py-3 text-[.6rem] font-bold uppercase tracking-[.16em]">{src.home.author}</figcaption>
         </figure>
-        <div className="flex flex-col justify-center bg-[#21090c] px-[var(--gutter)] py-20 lg:px-[clamp(4rem,7vw,8rem)]">
+        <div className="flex flex-col justify-center bg-[#111112] px-[var(--gutter)] py-20 lg:px-[clamp(4rem,7vw,8rem)]">
           <p className="home-kicker">{src.home.teamTitle ?? t.nav.about}</p>
           <h2 id="team-title" data-reveal="" className="home-section-title mt-7 max-w-[10ch]">{copy.teamTitle}</h2>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/64">{copy.teamBody}</p>
@@ -481,6 +590,81 @@ function TeamStory({ locale }: { locale: Locale }) {
   )
 }
 
+function Reviews({ locale }: { locale: Locale }) {
+  const copy = homeCopy[locale]
+
+  return (
+    <section aria-labelledby="reviews-title" className="border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
+      <div className="home-shell">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="home-kicker">{copy.reviewsLabel}</p>
+            <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.reviewsTitle}</h2>
+          </div>
+          <div className="lg:col-span-4 lg:col-start-9">
+            <p className="max-w-md text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
+          </div>
+        </div>
+
+        <div className="mt-14 grid border border-white/10 lg:grid-cols-[.72fr_2.28fr]">
+          <div className="flex min-h-64 flex-col justify-between border-b border-white/10 bg-[#111112] p-7 lg:border-b-0 lg:border-r lg:p-10">
+            <div className="flex gap-1 text-brand" aria-label="4.9 / 5">
+              {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+            </div>
+            <div>
+              <strong className="font-display text-[clamp(4.8rem,8vw,7.5rem)] font-black leading-none tracking-[-.06em]">4.9</strong>
+              <p className="mt-3 max-w-44 text-[.62rem] font-bold uppercase tracking-[.15em] text-white/40">{copy.ratingLabel}</p>
+            </div>
+            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-3 text-[.62rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-[#ef6267]">
+              {copy.reviewsLink}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
+            </a>
+          </div>
+
+          <div className="grid md:grid-cols-3">
+            {copy.reviews.map(([name, text]) => (
+              <figure key={name} data-reveal="" className="flex min-h-72 flex-col border-b border-white/10 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 lg:p-9">
+                <Quote className="size-7 text-brand" strokeWidth={1.5} aria-hidden="true" />
+                <blockquote className="mt-8 text-lg leading-relaxed text-white/76">„{text}”</blockquote>
+                <figcaption className="mt-auto pt-8 text-[.62rem] font-bold uppercase tracking-[.16em] text-white/40">{name}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HomeFaq({ locale }: { locale: Locale }) {
+  const copy = homeCopy[locale]
+
+  return (
+    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
+      <div className="home-shell grid gap-14 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <p className="home-kicker">{copy.faqLabel}</p>
+          <h2 id="faq-title" data-reveal="" className="home-section-title mt-7 max-w-[9ch]">{copy.faqTitle}</h2>
+          <p className="mt-7 max-w-sm text-base leading-relaxed text-white/48">{copy.faqIntro}</p>
+        </div>
+
+        <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
+          {copy.faq.map(([question, answer]) => (
+            <details key={question} className="group border-b border-white/12">
+              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.4rem,2.3vw,2rem)] font-black uppercase leading-none tracking-[-.025em] transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+                <span>{question}</span>
+                <span className="grid size-10 shrink-0 place-items-center border border-white/15 text-brand transition-transform group-open:rotate-180">
+                  <ChevronDown className="size-4" aria-hidden="true" />
+                </span>
+              </summary>
+              <p className="max-w-2xl pb-8 pr-12 text-base leading-relaxed text-white/52">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Location({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
@@ -488,13 +672,14 @@ function Location({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="location-title" className="bg-[#080708] py-20 lg:py-28">
+    <section aria-labelledby="location-title" className="bg-[#080809] py-20 lg:py-28">
       <div className="home-shell grid overflow-hidden border border-white/10 lg:grid-cols-[.48fr_1.52fr]">
-        <div className="flex min-h-72 flex-col justify-between bg-brand p-8 sm:p-10">
-          <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/68">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(6rem,12vw,10rem)] font-black leading-[.72] tracking-[-.07em]">-2</strong>
+        <div className="relative flex min-h-72 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10">
+          <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
+          <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/48">PAZIM / {t.level}</span>
+          <strong className="font-display text-[clamp(6rem,12vw,10rem)] font-black leading-[.72] tracking-[-.07em] text-brand">-2</strong>
         </div>
-        <div className="grid gap-12 bg-[#100e0f] p-8 sm:p-10 lg:grid-cols-2 lg:items-end lg:p-14">
+        <div className="grid gap-12 bg-[#101011] p-8 sm:p-10 lg:grid-cols-2 lg:items-end lg:p-14">
           <div>
             <p className="home-kicker">{slide.kicker}</p>
             <h2 id="location-title" data-reveal="" className="home-section-title mt-6 max-w-[10ch]">{slide.title} {slide.sub}</h2>
@@ -513,27 +698,30 @@ function Location({ locale }: { locale: Locale }) {
   )
 }
 
-function FinalCall({ locale }: { locale: Locale }) {
-  const src = sources[locale]
+function ContactSection({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="booking-title" className="overflow-hidden border-y border-white/10 bg-[#10090b]">
-      <div className="home-shell grid lg:grid-cols-12 lg:items-stretch">
-        <div className="flex flex-col justify-center py-20 lg:col-span-6 lg:pr-14">
-          <p className="home-kicker">{t.book}</p>
-          <h2 id="booking-title" data-reveal="" className="home-section-title mt-7 max-w-[9ch]">{copy.ctaTitle}</h2>
-          <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/58">{src.home.contactText}</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">{t.booksy}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
-            <a href={contact.phoneHref} className="home-button home-button-dark">{t.call} - {contact.phone}</a>
+    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-24 lg:py-32">
+      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-32">
+            <p className="home-kicker">{copy.contactLabel}</p>
+            <h2 id="contact-form-title" data-reveal="" className="home-section-title mt-7 max-w-[10ch]">{copy.contactTitle}</h2>
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/55">{copy.contactIntro}</p>
+
+            <div className="mt-10 grid gap-4 border-t border-white/10 pt-8 text-sm text-white/58">
+              <p className="flex items-start gap-3"><Clock3 className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" /><span><strong className="block text-white/86">{copy.contactDirect}</strong>{copy.contactBooksy}</span></p>
+              <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
+              <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
+              <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark mt-3 w-fit">{t.booksy}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
+            </div>
           </div>
         </div>
-        <figure data-reveal="mask" className="relative min-h-[30rem] overflow-hidden lg:col-span-6 lg:min-h-[38rem]">
-          <Photo id="p06" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" />
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-r from-[#10090b]/45 via-transparent to-transparent" />
-        </figure>
+        <div data-reveal="" className="border border-white/10 bg-[#080809] p-6 sm:p-9 lg:col-span-7 lg:p-12">
+          <HomeContactForm locale={locale} />
+        </div>
       </div>
     </section>
   )
