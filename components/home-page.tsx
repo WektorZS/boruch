@@ -547,7 +547,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                 </div>
                 <div>
                   <span className="text-[.58rem] font-bold uppercase tracking-[.18em] text-white/45">{item.category}</span>
-                  <h3 className="mt-2 font-display text-[clamp(1.65rem,3vw,2.75rem)] font-black uppercase leading-none tracking-[-.03em] transition-transform duration-500 group-hover:translate-x-2">{item.title}</h3>
+                  <h3 className="mt-2 font-display text-[clamp(1.55rem,2.6vw,2.45rem)] font-black uppercase leading-[1.02] tracking-[-.03em] transition-transform duration-500 group-hover:translate-x-2">{item.title}</h3>
                   <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/52">{item.text}</p>
                   <span className="mt-4 block text-[.65rem] font-bold uppercase tracking-[.12em] text-white/78">{item.price}</span>
                 </div>
@@ -643,7 +643,7 @@ function Packages({ locale }: { locale: Locale }) {
                 {featured && <span className="absolute inset-x-0 top-0 h-1 bg-brand" aria-hidden="true" />}
                 <div>
                   {pkg.popular && <span className="mb-5 inline-block bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span>}
-                  <h3 className="font-display text-[clamp(2.4rem,4vw,4rem)] font-black uppercase leading-[.9] tracking-[-.04em]">{pkg.title}</h3>
+                  <h3 className="font-display text-[clamp(2.15rem,3.5vw,3.5rem)] font-black uppercase leading-[1.02] tracking-[-.04em]">{pkg.title}</h3>
                   <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">{pkg.tagline}</p>
                 </div>
                 <div className="mt-8 border-t border-white/10 pt-6">
@@ -672,23 +672,49 @@ function TeamStory({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
+  const storyParagraphs = [
+    src.home.teamParas.slice(0, 3).join(" "),
+    src.home.teamParas.slice(3, 5).join(" "),
+    src.home.teamParas.slice(5).join(" "),
+  ].filter(Boolean)
 
   return (
-    <section aria-labelledby="team-title" className="border-b border-white/10 bg-[#080809]">
-      <div className="grid lg:grid-cols-2">
-        <figure data-reveal="mask" className="relative min-h-[32rem] overflow-hidden lg:min-h-[42rem]">
-          <Photo id="team" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 62%" className="scale-[1.05]" />
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-7 left-7 bg-[#080809] px-4 py-3 text-[.6rem] font-bold uppercase tracking-[.16em]">{src.home.author}</figcaption>
-        </figure>
-        <div className="flex flex-col justify-center bg-[#111112] px-[var(--gutter)] py-20 lg:px-[clamp(4rem,7vw,8rem)]">
-          <p className="home-kicker">{src.home.teamTitle ?? t.nav.about}</p>
-          <h2 id="team-title" data-reveal="" className="home-section-title mt-7 max-w-[10ch]">{copy.teamTitle}</h2>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/64">{copy.teamBody}</p>
-          <p className="mt-6 flex items-center gap-4 text-sm font-semibold uppercase tracking-[.12em] text-white/44"><span className="h-px w-10 bg-brand" />{src.home.author} / BORUCH</p>
-          <Link href={routes[locale].about} className="home-button home-button-dark mt-10 w-fit border-white/18">
-            {t.nav.about}<ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
+    <section aria-labelledby="team-title" className="border-b border-white/10 bg-[#080809] py-20 lg:py-28">
+      <div className="home-shell">
+        <div className="grid overflow-hidden border border-white/10 bg-[#111112] lg:grid-cols-[.9fr_1.1fr]">
+          <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:min-h-[48rem]">
+            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
+            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
+            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH / Szczecin</figcaption>
+          </figure>
+
+          <div className="relative flex flex-col justify-center overflow-hidden p-8 sm:p-12 lg:p-[clamp(3rem,5vw,5.5rem)]">
+            <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
+            <p className="home-kicker">{t.nav.about}</p>
+            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.2rem,3.5vw,3.5rem)] font-light leading-[1.08] tracking-[-.04em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
+            <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
+
+            <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
+              {storyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+
+            <p className="home-signature relative mt-9 text-[clamp(3.8rem,5.5vw,5.75rem)] leading-[1.2] text-white">{src.home.author}</p>
+
+            <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
+              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+                <span className="font-sans text-lg font-black lowercase" aria-hidden="true">f</span>
+              </a>
+              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+                <span className="text-[.62rem] font-black uppercase tracking-[-.02em]" aria-hidden="true">IG</span>
+              </a>
+              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+                <MapPin className="size-4" aria-hidden="true" />
+              </a>
+              <Link href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.62rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
+                {t.nav.about}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -806,7 +832,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.4rem,2.3vw,2rem)] font-black uppercase leading-none tracking-[-.025em] transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.3rem,2vw,1.8rem)] font-black uppercase leading-[1.08] tracking-[-.025em] transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span>{question}</span>
                 <span className="grid size-10 shrink-0 place-items-center border border-white/15 text-brand transition-transform group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
@@ -840,7 +866,7 @@ function Location({ locale }: { locale: Locale }) {
           <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-brand/[.07] blur-[70px]" aria-hidden="true" />
           <div>
             <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[10ch] font-display text-[clamp(2.8rem,4.5vw,4.8rem)] font-black uppercase leading-[.86] tracking-[-.045em]">{slide.title} {slide.sub}</h2>
+            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[11ch] font-display text-[clamp(2.4rem,3.8vw,4rem)] font-black uppercase leading-[.98] tracking-[-.04em]">{slide.title} {slide.sub}</h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
           </div>
           <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">
