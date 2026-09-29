@@ -1178,7 +1178,7 @@ function HomeFooter({ locale }: { locale: Locale }) {
         <div className="lg:col-span-4">
           <Link href={routes[locale].home} className="font-display text-5xl font-black uppercase tracking-[-.02em]">Boruch<span className="text-brand">.</span></Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/38">{src.meta.home.description}</p>
-          <a href={contact.mapUrl} target="_blank" rel="noopener noreferrer" className="mt-7 flex max-w-xs items-start gap-3 border-l border-brand pl-4 text-sm leading-relaxed text-white/58 transition-colors hover:text-white">
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="mt-7 flex max-w-xs items-start gap-3 border-l border-brand pl-4 text-sm leading-relaxed text-white/58 transition-colors hover:text-white">
             <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
             <span>{src.address.lines.slice(0, 3).join(", ")}</span>
           </a>

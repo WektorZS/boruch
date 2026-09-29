@@ -161,8 +161,29 @@ function pageFromPathname(pathname: string, locale: Locale): PageKey {
 }
 
 function LanguageFlag({ locale }: { locale: Locale }) {
-  const flags: Record<Locale, string> = { pl: "🇵🇱", en: "🇬🇧", de: "🇩🇪", uk: "🇺🇦" }
-  return <span className="text-base leading-none" aria-hidden="true">{flags[locale]}</span>
+  const flagClass = "h-3.5 w-[1.35rem] shrink-0 overflow-hidden ring-1 ring-white/15"
+
+  if (locale === "pl") {
+    return <svg viewBox="0 0 32 20" className={flagClass} aria-hidden="true"><path fill="#fff" d="M0 0h32v10H0z" /><path fill="#dc143c" d="M0 10h32v10H0z" /></svg>
+  }
+
+  if (locale === "en") {
+    return (
+      <svg viewBox="0 0 60 36" className={flagClass} aria-hidden="true">
+        <path fill="#012169" d="M0 0h60v36H0z" />
+        <path stroke="#fff" strokeWidth="8" d="m0 0 60 36M60 0 0 36" />
+        <path stroke="#c8102e" strokeWidth="4" d="m0 0 60 36M60 0 0 36" />
+        <path stroke="#fff" strokeWidth="12" d="M30 0v36M0 18h60" />
+        <path stroke="#c8102e" strokeWidth="7" d="M30 0v36M0 18h60" />
+      </svg>
+    )
+  }
+
+  if (locale === "de") {
+    return <svg viewBox="0 0 30 18" className={flagClass} aria-hidden="true"><path fill="#000" d="M0 0h30v6H0z" /><path fill="#dd0000" d="M0 6h30v6H0z" /><path fill="#ffce00" d="M0 12h30v6H0z" /></svg>
+  }
+
+  return <svg viewBox="0 0 30 18" className={flagClass} aria-hidden="true"><path fill="#0057b7" d="M0 0h30v9H0z" /><path fill="#ffd700" d="M0 9h30v9H0z" /></svg>
 }
 
 function WhatsAppIcon({ className = "size-5" }: { className?: string }) {
