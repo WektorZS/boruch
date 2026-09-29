@@ -1,4 +1,4 @@
-import { GalleryPage } from "@/components/boruch/templates/gallery-page"
+import { GalleryPage } from "@/components/gallery-page"
 import { pageMetadata } from "@/lib/content"
 
 export const metadata = pageMetadata("en", "gallery")

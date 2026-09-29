@@ -1,4 +1,4 @@
-import { ServicesPage } from "@/components/boruch/templates/services-page"
+import { ServicesPage } from "@/components/services-page"
 import { pageMetadata } from "@/lib/content"
 
 export const metadata = pageMetadata("uk", "services")

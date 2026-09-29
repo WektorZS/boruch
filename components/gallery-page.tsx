@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react"
-import { SiteShell } from "../site-shell"
-import { Photo } from "../photo"
-import { GalleryPortfolio } from "../gallery-portfolio"
+import { SiteShell } from "./site-shell"
+import { Photo } from "./photo"
+import { GalleryPortfolio } from "./gallery-portfolio"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 import { galleryOrder } from "@/lib/photos"
 

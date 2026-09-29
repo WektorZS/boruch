@@ -34,15 +34,17 @@ Stan na 29.09.2026.
 
 ## Organizacja plików do edycji
 
-- Strona główna: `components/boruch/templates/home-page.tsx`.
-- Usługi: `components/boruch/templates/services-page.tsx`.
-- Cennik: `components/boruch/templates/pricing-page.tsx`.
-- Galeria: `components/boruch/templates/gallery-page.tsx`.
-- O nas: `components/boruch/templates/about-page.tsx`.
-- Kontakt: `components/boruch/templates/contact-page.tsx`.
-- Wszystkie polskie strony pojedynczych usług: `components/boruch/templates/service-page.tsx`.
+- Strona główna: `components/home-page.tsx`.
+- Usługi: `components/services-page.tsx`.
+- Cennik: `components/pricing-page.tsx`.
+- Galeria: `components/gallery-page.tsx`.
+- O nas: `components/about-page.tsx`.
+- Kontakt: `components/contact-page.tsx`.
+- Wszystkie polskie strony pojedynczych usług: `components/service-page.tsx`.
 - Booksy: `app/booksy/page.tsx`.
 - Osobno pozostały tylko elementy wspólne dla całej witryny oraz interaktywne moduły galerii i katalogu usług, które wymagają granicy klienta w Next.js.
+- Usunięto poprzedni, nieużywany zestaw komponentów oraz stare pliki danych, które pozostały po wcześniejszej wersji witryny.
+- Aktualna struktura odpowiada układowi projektu `golet`: trasy w `app`, kompletne strony i elementy wspólne w `components`, a dane w `lib`.
 
 ## Źródła treści
 

@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react"
-import { SiteShell } from "../site-shell"
-import { Photo } from "../photo"
+import { SiteShell } from "./site-shell"
+import { Photo } from "./photo"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 import type { PhotoId } from "@/lib/photos"
 

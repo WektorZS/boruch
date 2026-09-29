@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono, Roboto_Flex } from 'next/font/google'
-import { MotionObserver } from '@/components/boruch/motion-observer'
+import { MotionObserver } from '@/components/motion-observer'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { ArrowUpRight } from "lucide-react"
-import { SiteShell } from "@/components/boruch/site-shell"
-import { Photo } from "@/components/boruch/photo"
+import { SiteShell } from "@/components/site-shell"
+import { Photo } from "@/components/photo"
 import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
 export const metadata: Metadata = {

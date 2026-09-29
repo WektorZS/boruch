@@ -1,33 +1,40 @@
-# boruch
+# BORUCH
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+Strona internetowa BORUCH Myjnia i Detailing w Szczecinie.
 
-## Built with v0
+## Najważniejsze pliki do edycji
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+- Strona główna: `components/home-page.tsx`
+- Usługi: `components/services-page.tsx`
+- Cennik: `components/pricing-page.tsx`
+- Galeria: `components/gallery-page.tsx`
+- O nas: `components/about-page.tsx`
+- Kontakt: `components/contact-page.tsx`
+- Wszystkie strony pojedynczych usług: `components/service-page.tsx`
+- Booksy: `app/booksy/page.tsx`
+- Style całej witryny: `app/globals.css`
+- Treści i tłumaczenia: `lib/content`
+- Lista zdjęć: `lib/photos.ts`
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_VPzn8zJC9t1V7aW7JKfBzEy7bMBE)
+## Organizacja projektu
 
-## Getting Started
+- `app` zawiera trasy strony, metadane oraz pliki techniczne Next.js.
+- `components` zawiera kompletne podstrony i wspólne elementy witryny.
+- `components/ui` zawiera małe, uniwersalne elementy interfejsu.
+- `lib/content` zawiera treści polskie, angielskie, niemieckie i ukraińskie.
+- `public` zawiera zdjęcia, ikony i pozostałe pliki statyczne.
 
-First, run the development server:
+Pliki `gallery-portfolio.tsx`, `service-browser.tsx`, `site-header.tsx` i `motion-observer.tsx` pozostają osobno, ponieważ zawierają interakcje wykonywane w przeglądarce. Pozostałe sekcje każdej podstrony znajdują się w jednym pliku danej strony.
+
+## Uruchomienie
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Wersja produkcyjna:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+```bash
+pnpm build
+```

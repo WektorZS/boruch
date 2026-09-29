@@ -1,4 +1,4 @@
-import { ServicePage, serviceMetadata } from "@/components/boruch/templates/service-page"
+import { ServicePage, serviceMetadata } from "@/components/service-page"
 
 export const metadata = serviceMetadata("zmiana-koloru-dechroming")
 

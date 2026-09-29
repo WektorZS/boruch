@@ -1,4 +1,4 @@
-import { PricingPage } from "@/components/boruch/templates/pricing-page"
+import { PricingPage } from "@/components/pricing-page"
 import { pageMetadata } from "@/lib/content"
 
 export const metadata = pageMetadata("en", "pricing")

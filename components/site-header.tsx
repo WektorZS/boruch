@@ -1,195 +1,267 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { ChevronDown, Menu, Phone, X } from "lucide-react"
-import { Logo } from "@/components/logo"
-import { Button } from "@/components/ui/button"
-import { siteConfig, primaryNav, myjniaNav, detailingNav } from "@/lib/site-config"
-import { locales } from "@/lib/translations"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const navLink = "whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors hover:text-foreground"
+export interface HeaderNavItem {
+  key: string
+  label: string
+  href: string
+  active: boolean
+}
 
-export function SiteHeader() {
-  const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href))
-  const closeMenu = () => setMobileOpen(false)
+export interface HeaderLanguage {
+  code: string
+  short: string
+  name: string
+  href: string
+  htmlLang: string
+  active: boolean
+}
+
+interface SiteHeaderProps {
+  homeHref: string
+  homeLabel: string
+  nav: HeaderNavItem[]
+  languages: HeaderLanguage[]
+  labels: { book: string; menu: string; close: string; language: string; navigation: string; level: string }
+  bookingUrl: string
+  phone: string
+  phoneHref: string
+  address: string[]
+}
+
+export function SiteHeader({
+  homeHref,
+  homeLabel,
+  nav,
+  languages,
+  labels,
+  bookingUrl,
+  phone,
+  phoneHref,
+  address,
+}: SiteHeaderProps) {
+  const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen] = useState(false)
+  const sentinel = useRef<HTMLDivElement>(null)
+  const toggleRef = useRef<HTMLButtonElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const el = sentinel.current
+    if (!el) return
+    const observer = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting))
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const close = useCallback(() => {
+    setOpen(false)
+    toggleRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus({ preventScroll: true }), 0)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close()
+    }
+    window.addEventListener("keydown", onKey)
+    return () => {
+      window.clearTimeout(focusTimer)
+      document.body.style.overflow = previous
+      window.removeEventListener("keydown", onKey)
+    }
+  }, [open, close])
+
+  const menuNav = nav
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
-        <Logo />
+    <>
+      <div ref={sentinel} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-20 w-px" />
 
-        <nav aria-label="Główna" className="hidden items-center lg:flex">
-          <Link href="/o-nas" className={cn(navLink, isActive("/o-nas") ? "text-foreground" : "text-muted-foreground")}>
-            O nas
-          </Link>
+      <header
+        data-scrolled={scrolled}
+        className={cn(
+          "group/header fixed inset-x-0 top-0 z-(--z-header) transition-[background-color,border-color,backdrop-filter] duration-500 ease-(--ease-out)",
+          "border-b border-transparent bg-linear-to-b from-ink/70 to-transparent",
+          "data-[scrolled=true]:border-line data-[scrolled=true]:bg-ink/88 data-[scrolled=true]:bg-none data-[scrolled=true]:backdrop-blur-md",
+        )}
+      >
+        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-6 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+          <Wordmark href={homeHref} label={homeLabel} />
 
-          <div className="group relative">
-            <Link
-              href="/uslugi"
-              className={cn(
-                navLink,
-                "flex items-center gap-1",
-                isActive("/uslugi") ? "text-foreground" : "text-muted-foreground",
-              )}
-            >
-              Usługi
-              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" aria-hidden="true" />
-            </Link>
-            <div className="invisible absolute left-1/2 top-full grid w-[560px] -translate-x-1/2 grid-cols-2 gap-8 border border-border bg-popover p-7 opacity-0 shadow-2xl shadow-foreground/10 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-              {[
-                { label: "Myjnia", items: myjniaNav },
-                { label: "Detailing", items: detailingNav },
-              ].map((col) => (
-                <div key={col.label}>
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
-                    {col.label}
-                  </p>
-                  <ul className="flex flex-col gap-2.5">
-                    {col.items.map((item) => (
-                      <li key={item.href}>
-                        <Link href={item.href} className="text-sm text-foreground/80 transition-colors hover:text-foreground">
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {primaryNav.slice(3).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(navLink, isActive(item.href) ? "text-foreground" : "text-muted-foreground")}
-            >
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-5 lg:flex">
-          <div className="flex items-center text-[11px] font-semibold uppercase tracking-wider" aria-label="Język">
-            <span className="px-1.5 py-1 text-foreground" aria-current="true">
-              PL
-            </span>
-            {locales.map((l) => (
-              <Link key={l.code} href={l.href} className="px-1.5 py-1 text-muted-foreground hover:text-foreground">
-                {l.label}
-              </Link>
-            ))}
-          </div>
-          <a
-            href={siteConfig.phoneHref}
-            className="hidden items-center gap-2 whitespace-nowrap text-sm font-semibold text-foreground xl:flex"
-          >
-            <Phone className="h-4 w-4" aria-hidden="true" />
-            {siteConfig.phone}
-          </a>
-          <Button render={<Link href="/booksy" />} className="h-10 whitespace-nowrap rounded-none px-5">
-            Zarezerwuj online
-          </Button>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setMobileOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
-          aria-label={mobileOpen ? "Zamknij menu" : "Otwórz menu"}
-          aria-expanded={mobileOpen}
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {mobileOpen && (
-        <div className="max-h-[calc(100svh-4rem)] overflow-y-auto border-t border-border bg-background px-4 pb-8 pt-2 sm:px-6 lg:hidden">
-          <nav aria-label="Główna" className="flex flex-col">
-            <Link href="/" onClick={closeMenu} className="border-b border-border py-4 font-heading text-lg font-semibold">
-              Strona główna
-            </Link>
-            <Link href="/o-nas" onClick={closeMenu} className="border-b border-border py-4 font-heading text-lg font-semibold">
-              O nas
-            </Link>
-            <button
-              type="button"
-              onClick={() => setMobileServicesOpen((v) => !v)}
-              className="flex items-center justify-between border-b border-border py-4 text-left font-heading text-lg font-semibold"
-              aria-expanded={mobileServicesOpen}
-            >
-              Usługi
-              <ChevronDown
-                className={cn("h-5 w-5 transition-transform", mobileServicesOpen && "rotate-180")}
-                aria-hidden="true"
-              />
-            </button>
-            {mobileServicesOpen && (
-              <div className="grid gap-6 border-b border-border py-5">
-                {[
-                  { label: "Myjnia", items: myjniaNav },
-                  { label: "Detailing", items: detailingNav },
-                ].map((col) => (
-                  <div key={col.label}>
-                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
-                      {col.label}
-                    </p>
-                    <ul className="flex flex-col gap-3">
-                      {col.items.map((item) => (
-                        <li key={item.href}>
-                          <Link href={item.href} onClick={closeMenu} className="text-sm text-foreground/85">
-                            {item.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+          <nav aria-label={labels.navigation} className="hidden xl:block">
+            <ul className="flex items-center gap-9">
+              {nav
+                .filter((item) => item.key !== "home")
+                .map((item) => (
+                  <li key={item.key}>
+                    <Link
+                      href={item.href}
+                      aria-current={item.active ? "page" : undefined}
+                      className="type-label link-draw text-bone/80 transition-colors hover:text-bone aria-[current=page]:text-bone"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
                 ))}
-              </div>
-            )}
-            {primaryNav.slice(3).map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeMenu}
-                className="border-b border-border py-4 font-heading text-lg font-semibold"
-              >
-                {item.title}
-              </Link>
-            ))}
+            </ul>
           </nav>
 
-          <div className="mt-6 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider">
-            <span className="flex-1 bg-foreground py-2 text-center text-background">PL</span>
-            {locales.map((l) => (
-              <Link
-                key={l.code}
-                href={l.href}
-                onClick={closeMenu}
-                className="flex-1 border border-border py-2 text-center text-muted-foreground"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
+          <div className="flex items-center gap-6">
+            <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
+              {languages.map((lang) => (
+                <li key={lang.code}>
+                  <Link
+                    href={lang.href}
+                    hrefLang={lang.htmlLang}
+                    lang={lang.htmlLang}
+                    aria-label={lang.name}
+                    aria-current={lang.active ? "true" : undefined}
+                    className="type-label relative flex h-8 min-w-8 items-center justify-center px-1.5 text-ash transition-colors hover:text-bone aria-[current=true]:text-bone"
+                  >
+                    {lang.short}
+                    {lang.active && <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 h-px w-3 -translate-x-1/2 bg-brand" />}
+                  </Link>
+                </li>
+              ))}
+            </ul>
 
-          <div className="mt-6 flex flex-col gap-3">
-            <Button render={<Link href="/booksy" onClick={closeMenu} />} size="lg" className="h-12 rounded-none">
-              Zarezerwuj online
-            </Button>
-            <Button render={<a href={siteConfig.phoneHref} />} size="lg" variant="outline" className="h-12 rounded-none">
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {siteConfig.phone}
-            </Button>
+            <a
+              href={bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary group hidden min-h-10 px-4 sm:inline-flex"
+            >
+              {labels.book}
+              <ArrowUpRight className="arrow-lift size-3.5" aria-hidden="true" />
+            </a>
+
+            <button
+              ref={toggleRef}
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-expanded={open}
+              aria-controls="site-menu"
+              className="group flex h-10 items-center gap-3 xl:hidden"
+            >
+              <span className="type-label text-bone">{labels.menu}</span>
+              <span aria-hidden="true" className="flex w-6 flex-col items-end gap-1.5">
+                <span className="h-px w-6 bg-bone transition-all duration-300 group-hover:w-4" />
+                <span className="h-px w-4 bg-brand transition-all duration-300 group-hover:w-6" />
+              </span>
+            </button>
           </div>
         </div>
-      )}
-    </header>
+      </header>
+
+      <div
+        id="site-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label={labels.menu}
+        inert={!open}
+        data-open={open}
+        className={cn(
+          "group/menu fixed inset-0 z-(--z-menu) flex flex-col bg-ink xl:hidden",
+          "invisible opacity-0 transition-[opacity,visibility] duration-500 ease-(--ease-out) data-[open=true]:visible data-[open=true]:opacity-100",
+        )}
+      >
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-wine-deep/70 to-transparent" />
+
+        <div className="shell-wide relative flex h-(--header-h-compact) items-center justify-between border-b border-line">
+          <Wordmark href={homeHref} label={homeLabel} />
+          <button ref={closeRef} type="button" onClick={close} className="group flex h-10 items-center gap-3">
+            <span className="type-label text-bone">{labels.close}</span>
+            <span aria-hidden="true" className="relative size-6">
+              <span className="absolute left-0 top-1/2 h-px w-6 rotate-45 bg-bone transition-colors group-hover:bg-brand" />
+              <span className="absolute left-0 top-1/2 h-px w-6 -rotate-45 bg-bone transition-colors group-hover:bg-brand" />
+            </span>
+          </button>
+        </div>
+
+        <nav aria-label={labels.navigation} className="shell-wide relative flex-1 overflow-y-auto py-8">
+          <ol className="flex flex-col">
+            {menuNav.map((item, i) => (
+              <li key={item.key} className="overflow-hidden border-b border-line">
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={item.active ? "page" : undefined}
+                  style={{ transitionDelay: open ? `${120 + i * 55}ms` : "0ms" }}
+                  className={cn(
+                    "group flex items-baseline gap-5 py-4 transition-transform duration-700 ease-(--ease-out)",
+                    "translate-y-full group-data-[open=true]/menu:translate-y-0",
+                  )}
+                >
+                  <span className="type-index w-7 text-xs text-ash group-aria-[current=page]:text-highlight">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-display text-[clamp(1.75rem,7vw,3rem)] font-semibold leading-none tracking-[-0.025em] text-bone/85 [font-stretch:108%] [font-variation-settings:'wdth'_108] transition-colors group-hover:text-bone group-aria-[current=page]:text-bone">
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div className="shell-wide relative flex flex-col gap-6 border-t border-line py-6">
+          <ul aria-label={labels.language} className="flex gap-2">
+            {languages.map((lang) => (
+              <li key={lang.code}>
+                <Link
+                  href={lang.href}
+                  hrefLang={lang.htmlLang}
+                  lang={lang.htmlLang}
+                  aria-label={lang.name}
+                  aria-current={lang.active ? "true" : undefined}
+                  onClick={() => setOpen(false)}
+                  className="type-label flex h-10 min-w-12 items-center justify-center border border-line px-3 text-ash transition-colors hover:border-line-strong hover:text-bone aria-[current=true]:border-brand aria-[current=true]:text-bone"
+                >
+                  {lang.short}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-1">
+              <a href={phoneHref} className="font-display text-xl font-semibold [font-stretch:115%] [font-variation-settings:'wdth'_115]">
+                {phone}
+              </a>
+              <p className="type-label text-ash">{address.join(" · ")}</p>
+            </div>
+            <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group w-full sm:w-auto">
+              {labels.book}
+              <ArrowUpRight className="arrow-lift size-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function Wordmark({ href, label, className }: { href: string; label: string; className?: string }) {
+  return (
+    <Link href={href} aria-label={label} className={cn("group flex items-center gap-3.5", className)}>
+      <span
+        aria-hidden="true"
+        className="font-display text-[1.35rem] font-extrabold uppercase leading-none tracking-[-0.03em] [font-stretch:151%] [font-variation-settings:'wdth'_151]"
+      >
+        Boruch
+      </span>
+      <span aria-hidden="true" className="h-7 w-px bg-line-strong transition-colors duration-300 group-hover:bg-brand" />
+      <span aria-hidden="true" className="type-label flex flex-col gap-0.5 text-[0.5625rem] leading-none text-ash">
+        <span>Myjnia</span>
+        <span>Detailing</span>
+      </span>
+    </Link>
   )
 }

@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react"
-import { SiteShell } from "../site-shell"
-import { Photo } from "../photo"
+import { SiteShell } from "./site-shell"
+import { Photo } from "./photo"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 
 const MAP_EMBED = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
