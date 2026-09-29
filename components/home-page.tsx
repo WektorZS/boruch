@@ -829,19 +829,21 @@ function Location({ locale }: { locale: Locale }) {
 
   return (
     <section aria-labelledby="location-title" className="bg-[#080809] py-16 lg:py-20">
-      <div className="home-shell grid overflow-hidden border border-white/10 lg:grid-cols-[.42fr_.83fr_.95fr]">
-        <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10 lg:min-h-80">
+      <div className="home-shell relative grid overflow-hidden border border-white/10 border-t-brand/45 shadow-[0_32px_90px_rgba(0,0,0,.28)] lg:grid-cols-[.42fr_.83fr_.95fr]">
+        <span className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-linear-to-r from-brand via-brand/45 to-transparent" aria-hidden="true" />
+        <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
-          <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/48">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(6rem,10vw,9rem)] font-black leading-[.72] tracking-[-.07em] text-brand">-2</strong>
+          <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
+          <strong className="font-display text-[clamp(6rem,10vw,9rem)] font-black leading-[.72] tracking-[-.07em] text-[#ee343e] drop-shadow-[0_12px_32px_rgba(218,38,48,.2)]">-2</strong>
         </div>
-        <div className="flex flex-col justify-between bg-[#101011] p-8 sm:p-10 lg:min-h-80">
+        <div className="relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(135deg,#121213_0%,#101011_68%,#1c0b0e_100%)] p-8 sm:p-10 lg:min-h-80">
+          <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-brand/[.07] blur-[70px]" aria-hidden="true" />
           <div>
-            <p className="home-kicker">{slide.kicker}</p>
+            <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
             <h2 id="location-title" data-reveal="" className="mt-6 max-w-[10ch] font-display text-[clamp(2.8rem,4.5vw,4.8rem)] font-black uppercase leading-[.86] tracking-[-.045em]">{slide.title} {slide.sub}</h2>
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/54">{copy.routeHint}</p>
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
           </div>
-          <address className="mt-8 flex items-start gap-3 border-t border-white/12 pt-5 not-italic text-sm leading-relaxed text-white/68">
+          <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">
             <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
             <span className="flex flex-col">{src.address.lines.map((line) => <span key={line}>{line}</span>)}</span>
           </address>
@@ -852,9 +854,10 @@ function Location({ locale }: { locale: Locale }) {
             src={mapEmbedUrl}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 h-full w-full border-0 opacity-80 [filter:grayscale(1)_invert(.92)_sepia(.12)_hue-rotate(310deg)_contrast(.95)] transition-[filter,opacity,transform] duration-700 group-hover:scale-[1.02] group-hover:opacity-95 group-hover:[filter:grayscale(.7)_invert(.9)_contrast(.92)]"
+            className="absolute inset-0 h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)] transition-[filter,opacity,transform] duration-700 group-hover:scale-[1.02] group-hover:opacity-100 group-hover:[filter:grayscale(.35)_invert(.9)_sepia(.18)_hue-rotate(305deg)_contrast(.98)]"
           />
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-black/5" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 bg-[#8d141b]/12 mix-blend-color" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-brand/[.06]" aria-hidden="true" />
           <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-4 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.6rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
             {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
