@@ -6,20 +6,11 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, Ma
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { serviceGroupTitle, servicePrice, serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
+import { servicePrice, serviceSummary, services } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
-
-const featuredServiceSlugs: ServiceSlug[] = [
-  "mycie-zewnatrz",
-  "czyszczenie-wnetrza",
-  "komplet",
-  "pranie-tapicerki",
-  "powloka-ceramiczna",
-  "folia-ppf",
-]
 
 const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p11", position: "54% 58%" },
@@ -35,6 +26,41 @@ const reviewControls: Record<Locale, { previous: string; next: string; select: s
   en: { previous: "Previous review", next: "Next review", select: "Show review" },
   de: { previous: "Vorherige Bewertung", next: "Nächste Bewertung", select: "Bewertung anzeigen" },
   uk: { previous: "Попередній відгук", next: "Наступний відгук", select: "Показати відгук" },
+}
+
+const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string; count: string; open: string; more: string; less: string }> = {
+  pl: {
+    myjnia: "Ręczne mycie oraz kompleksowa pielęgnacja wnętrza i karoserii.",
+    detailing: "Ochrona, korekta i zmiana wyglądu samochodu wykonana z pełną precyzją.",
+    count: "usług",
+    open: "Rozwiń kategorię",
+    more: "Rozwiń więcej usług",
+    less: "Pokaż mniej usług",
+  },
+  en: {
+    myjnia: "Hand washing and complete care for the interior and bodywork.",
+    detailing: "Protection, correction and visual transformation carried out with precision.",
+    count: "services",
+    open: "Expand category",
+    more: "Show more services",
+    less: "Show fewer services",
+  },
+  de: {
+    myjnia: "Handwäsche und komplette Pflege von Innenraum und Karosserie.",
+    detailing: "Schutz, Korrektur und optische Veränderung mit höchster Präzision.",
+    count: "Leistungen",
+    open: "Kategorie öffnen",
+    more: "Weitere Leistungen anzeigen",
+    less: "Weniger Leistungen anzeigen",
+  },
+  uk: {
+    myjnia: "Ручне миття та комплексний догляд за салоном і кузовом.",
+    detailing: "Захист, корекція та зміна вигляду автомобіля з повною точністю.",
+    count: "послуг",
+    open: "Розгорнути категорію",
+    more: "Показати більше послуг",
+    less: "Показати менше послуг",
+  },
 }
 
 const homeCopy = {
@@ -510,56 +536,96 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
-  const items = featuredServiceSlugs.map((slug) => {
-    const service = services.find((entry) => entry.slug === slug)!
-    const summary = serviceSummary(locale, slug)
-    return {
-      slug,
-      title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-      text: shortServiceText(summary?.text ?? service.source.intro[0]),
-      category: serviceGroupTitle(locale, slug),
-      price: servicePrice(locale, slug) ?? t.individualQuote,
-      photo: service.hero,
-      href: locale === "pl" ? `/${slug}` : routes[locale].services,
-    }
-  })
+  const groups = (["myjnia", "detailing"] as const).map((category, groupIndex) => ({
+    category,
+    title: src.services.groups[groupIndex]?.title ?? category,
+    description: serviceGroupCopy[locale][category],
+    items: services.filter((service) => service.category === category).map((service) => {
+      const summary = serviceSummary(locale, service.slug)
+      return {
+        slug: service.slug,
+        title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
+        text: shortServiceText(summary?.text ?? service.source.intro[0]),
+        price: servicePrice(locale, service.slug) ?? t.individualQuote,
+        photo: service.hero,
+        href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
+      }
+    }),
+  }))
+  type ServiceItem = (typeof groups)[number]["items"][number]
+  const renderServiceItem = (item: ServiceItem) => (
+    <Link key={item.slug} href={item.href} className="group/item grid min-h-40 grid-cols-[6.5rem_1fr_auto] items-center gap-5 bg-[#0a0a0b] p-5 transition-colors hover:bg-[#151516] sm:grid-cols-[8rem_1fr_auto] sm:p-6">
+      <div className="relative aspect-[4/3] overflow-hidden bg-black/30">
+        <Photo id={item.photo} sizes="128px" className="opacity-72 transition duration-700 group-hover/item:scale-105 group-hover/item:opacity-100" />
+      </div>
+      <span className="min-w-0">
+        <strong className="block font-display text-[clamp(1.25rem,2vw,1.8rem)] font-black uppercase leading-[1.04] tracking-[-.025em]">{item.title}</strong>
+        <span className="mt-2 hidden max-w-md text-xs leading-relaxed text-white/44 sm:block">{item.text}</span>
+        <span className="mt-3 block text-[.6rem] font-bold uppercase tracking-[.12em] text-white/68">{item.price}</span>
+      </span>
+      <span className="grid size-10 place-items-center border border-white/15 text-white/55 transition-colors group-hover/item:border-brand group-hover/item:bg-brand group-hover/item:text-white">
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </span>
+    </Link>
+  )
 
   return (
     <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
-      <div className="home-shell grid gap-14 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <div className="lg:sticky lg:top-8">
+      <div className="home-shell">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="home-section-title mt-6 max-w-[8ch]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
-            <p className="mt-7 max-w-sm text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
-            <Link href={routes[locale].services} className="home-button mt-9 border border-white/24 bg-transparent hover:bg-white hover:text-black">
-              {t.allServices}<ArrowRight className="size-4" aria-hidden="true" />
+            <h2 id="services-title" data-reveal="" className="home-section-title mt-6 max-w-[11ch]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+          </div>
+          <div className="lg:col-span-4 lg:col-start-9">
+            <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
+            <Link href={routes[locale].services} className="mt-6 inline-flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]">
+              {t.allServices}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
             </Link>
           </div>
         </div>
 
-        <ul className="divide-y divide-white/12 border-y border-white/12 lg:col-span-8">
-          {items.map((item) => (
-            <li key={item.slug} data-reveal="">
-              <Link href={item.href} className="home-service-row group grid gap-6 py-6 sm:grid-cols-[11rem_1fr_auto] sm:items-center lg:py-7">
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/25">
-                  <Photo id={item.photo} sizes="176px" className="opacity-76 transition duration-700 group-hover:scale-105 group-hover:opacity-100" />
-                </div>
-                <div>
-                  <span className="text-[.58rem] font-bold uppercase tracking-[.18em] text-white/45">{item.category}</span>
-                  <h3 className="mt-2 font-display text-[clamp(1.55rem,2.6vw,2.45rem)] font-black uppercase leading-[1.02] tracking-[-.03em] transition-transform duration-500 group-hover:translate-x-2">{item.title}</h3>
-                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/52">{item.text}</p>
-                  <span className="mt-4 block text-[.65rem] font-bold uppercase tracking-[.12em] text-white/78">{item.price}</span>
-                </div>
-                <div className="flex items-center justify-end">
-                  <span className="grid size-11 place-items-center border border-white/20 transition-colors group-hover:border-white group-hover:bg-white group-hover:text-black">
-                    <ArrowUpRight className="size-4" aria-hidden="true" />
+        <div className="mt-14 grid border-y border-white/12 lg:grid-cols-2">
+          {groups.map((group) => (
+            <details key={group.category} open className="group/service border-b border-white/12 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
+              <summary className="grid cursor-pointer list-none gap-7 px-5 py-8 sm:grid-cols-[1fr_auto] sm:items-center sm:px-7 lg:min-h-52 lg:grid-cols-1 lg:content-between lg:px-8 lg:py-9 xl:grid-cols-[1fr_auto] xl:items-center [&::-webkit-details-marker]:hidden">
+                <span>
+                  <span className="flex items-center gap-4">
+                    <h3 className="font-display text-[clamp(2.8rem,6vw,5.6rem)] font-black uppercase leading-[.95] tracking-[-.045em]">{group.title}</h3>
+                    <span className="rounded-full border border-white/14 px-3 py-1 text-[.58rem] font-bold uppercase tracking-[.14em] text-white/42">{group.items.length} {serviceGroupCopy[locale].count}</span>
                   </span>
-                </div>
-              </Link>
-            </li>
+                  <span className="mt-4 block max-w-xl text-sm leading-relaxed text-white/48">{group.description}</span>
+                </span>
+                <span className="flex items-center gap-4 justify-self-start sm:justify-self-end">
+                  <span className="text-[.58rem] font-bold uppercase tracking-[.15em] text-white/38 transition-colors group-open/service:text-white/65">{serviceGroupCopy[locale].open}</span>
+                  <span className="relative grid size-12 place-items-center border border-white/15 transition-colors group-open/service:border-brand group-open/service:bg-brand">
+                    <span className="absolute h-px w-4 bg-current" />
+                    <span className="absolute h-4 w-px bg-current transition-transform duration-300 group-open/service:rotate-90 group-open/service:opacity-0" />
+                  </span>
+                </span>
+              </summary>
+
+              <div className="grid gap-px bg-white/10">
+                {group.items.slice(0, 2).map(renderServiceItem)}
+                {group.items.length > 2 && (
+                  <details className="group/more flex flex-col bg-[#0a0a0b]">
+                    <summary className="relative order-2 flex min-h-28 cursor-pointer list-none items-end justify-center overflow-hidden pb-6 pt-12 [&::-webkit-details-marker]:hidden">
+                      <span className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-white/[.035] to-transparent opacity-80" aria-hidden="true" />
+                      <span className="relative inline-flex min-h-11 items-center gap-3 border border-white/15 bg-[#111112] px-5 text-[.62rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:border-brand group-open/more:border-brand group-open/more:bg-brand">
+                        <span className="group-open/more:hidden">{serviceGroupCopy[locale].more}</span>
+                        <span className="hidden group-open/more:inline">{serviceGroupCopy[locale].less}</span>
+                        <ChevronDown className="home-more-cue size-4 text-brand transition-transform duration-300 group-open/more:rotate-180 group-open/more:text-white" aria-hidden="true" />
+                      </span>
+                    </summary>
+                    <div className="order-1 grid gap-px border-t border-white/10 bg-white/10">
+                      {group.items.slice(2).map(renderServiceItem)}
+                    </div>
+                  </details>
+                )}
+              </div>
+            </details>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   )
@@ -679,16 +745,16 @@ function TeamStory({ locale }: { locale: Locale }) {
   ].filter(Boolean)
 
   return (
-    <section aria-labelledby="team-title" className="border-b border-white/10 bg-[#080809] py-20 lg:py-28">
+    <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-20 lg:py-28">
       <div className="home-shell">
-        <div className="grid overflow-hidden border border-white/10 bg-[#111112] lg:grid-cols-[.9fr_1.1fr]">
+        <div className="grid lg:grid-cols-[.9fr_1.1fr]">
           <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:min-h-[48rem]">
             <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
             <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH / Szczecin</figcaption>
           </figure>
 
-          <div className="relative flex flex-col justify-center overflow-hidden p-8 sm:p-12 lg:p-[clamp(3rem,5vw,5.5rem)]">
+          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-8 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
             <p className="home-kicker">{t.nav.about}</p>
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.2rem,3.5vw,3.5rem)] font-light leading-[1.08] tracking-[-.04em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
@@ -742,9 +808,9 @@ function Reviews({ locale }: { locale: Locale }) {
     <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
       <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
       <div className="home-shell relative">
-        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
           <p className="home-kicker">{copy.reviewsLabel}</p>
-          <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.reviewsTitle}</h2>
+          <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[18ch]">{copy.reviewsTitle}</h2>
           <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
@@ -854,9 +920,9 @@ function Location({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="location-title" className="bg-[#080809] py-16 lg:py-20">
+    <section aria-labelledby="location-title" className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-20">
       <div className="home-shell">
-        <div className="relative grid overflow-hidden border border-white/10 shadow-[0_32px_90px_rgba(0,0,0,.28)] lg:grid-cols-[.42fr_.83fr_.95fr]">
+        <div className="relative grid overflow-hidden lg:grid-cols-[.42fr_.83fr_.95fr]">
           <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
           <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
