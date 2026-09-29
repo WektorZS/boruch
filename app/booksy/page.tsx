@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { ArrowUpRight } from "lucide-react"
 import { SiteShell } from "@/components/boruch/site-shell"
-import { PageIntro } from "@/components/boruch/page-intro"
 import { Photo } from "@/components/boruch/photo"
 import { siteConfig, breadcrumbJsonLd } from "@/lib/site-config"
 
@@ -25,11 +24,17 @@ export default function BooksyPage() {
           ),
         }}
       />
-      <PageIntro
-        eyebrow="Rezerwacja online"
-        title="Umów wizytę na Booksy"
-        sub="Wybierz usługę i wolny termin bezpośrednio w systemie Booksy - bez telefonowania i bez czekania na odpowiedź."
-      />
+      <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
+        <div className="shell-wide grid gap-7 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3"><p className="eyebrow">Rezerwacja online</p></div>
+          <div className="flex min-w-0 flex-col gap-7 lg:col-span-8 lg:col-start-5">
+            <h1 id="page-title" data-reveal="" className="type-h1 max-w-[16ch] text-balance">Umów wizytę na Booksy</h1>
+            <div className="grid gap-6 border-t border-line pt-6">
+              <p className="type-lead max-w-2xl text-pretty text-bone/75">Wybierz usługę i wolny termin bezpośrednio w systemie Booksy - bez telefonowania i bez czekania na odpowiedź.</p>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="section-lg">
         <div className="shell-wide grid gap-px bg-line lg:grid-cols-12">
           <div data-reveal="mask" className="frame aspect-[4/5] lg:col-span-7 lg:aspect-auto">

@@ -1,7 +1,5 @@
 import { ArrowUpRight } from "lucide-react"
 import { SiteShell } from "../site-shell"
-import { PageIntro } from "../page-intro"
-import { LocationSection } from "../location-section"
 import { Photo } from "../photo"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 
@@ -24,7 +22,17 @@ export function ContactPage({ locale }: { locale: Locale }) {
           ),
         }}
       />
-      <PageIntro eyebrow={t.nav.contact} title={src.contact.h1} sub={src.contact.sub} />
+      <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
+        <div className="shell-wide grid gap-7 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3"><p className="eyebrow">{t.nav.contact}</p></div>
+          <div className="flex min-w-0 flex-col gap-7 lg:col-span-8 lg:col-start-5">
+            <h1 id="page-title" data-reveal="" className="type-h1 max-w-[16ch] text-balance">{src.contact.h1}</h1>
+            <div className="grid gap-6 border-t border-line pt-6">
+              <p className="type-lead max-w-2xl text-pretty text-bone/75">{src.contact.sub}</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section aria-label={src.address.contactLabel} className="section-md">
         <div className="shell-wide grid gap-px bg-line lg:grid-cols-3">
@@ -83,5 +91,40 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </div>
       </section>
     </SiteShell>
+  )
+}
+
+function LocationSection({ locale }: { locale: Locale }) {
+  const src = sources[locale]
+  const t = ui[locale]
+  const slide = src.slides[3]
+
+  return (
+    <section aria-labelledby="location-title" className="surface-wine relative overflow-hidden border-t border-line-wine">
+      <div className="shell-wide section-lg grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
+        <div className="flex flex-col gap-8 lg:col-span-7">
+          <p className="eyebrow">{slide.kicker}</p>
+          <h2 id="location-title" data-reveal="" className="type-h2 max-w-[16ch] text-balance">{slide.title} {slide.sub}</h2>
+          <div data-reveal="" className="grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
+            <address className="flex flex-col gap-1 not-italic">
+              <span className="type-label mb-2 text-ash">{src.address.locationLabel}</span>
+              {src.address.lines.map((line) => <span key={line} className="type-h3 font-medium">{line}</span>)}
+            </address>
+            <div className="flex flex-col gap-3">
+              <span className="type-label mb-1 text-ash">{src.address.contactLabel}</span>
+              <a href={contact.phoneHref} className="link-draw w-fit text-lg">{contact.phone}</a>
+              <a href={`mailto:${contact.email}`} className="link-draw w-fit break-all">{contact.email}</a>
+              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline group mt-3 w-fit">
+                {t.openMap}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div aria-hidden="true" className="relative flex min-h-64 flex-col items-center justify-center border border-line-wine bg-ink/35 p-8 lg:col-span-4 lg:col-start-9 lg:min-h-96">
+          <span className="type-label mb-2 text-ash">PAZIM - {t.level}</span>
+          <span data-reveal="" className="font-display text-[clamp(7rem,18vw,13rem)] font-semibold leading-none tracking-[-0.06em] text-bone [font-stretch:112%] [font-variation-settings:'wdth'_112]">-2</span>
+        </div>
+      </div>
+    </section>
   )
 }

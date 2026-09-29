@@ -1,6 +1,6 @@
 # Audyt treści i wdrożenia
 
-Stan na 28.09.2026.
+Stan na 29.09.2026.
 
 ## Audyt wejściowy
 
@@ -29,8 +29,20 @@ Stan na 28.09.2026.
 - Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
 - Ujednolicono wszystkie polskie strony szczegółowych usług.
 - Wszystkie podstawowe strony EN, DE i UA korzystają z tych samych szablonów, nagłówka, stopki, animacji, galerii i CTA co wersja polska.
-- Dodano wspólny komponent nagłówka sekcji, który utrzymuje stałą hierarchię bez narzucania identycznego układu każdej podstronie.
+- Sekcje każdej podstrony zostały zebrane w jednym pliku szablonu, aby późniejsza edycja wyglądu i kolejności nie wymagała przechodzenia między wieloma komponentami.
 - Zachowano statyczny eksport Next.js oraz wszystkie istniejące adresy URL.
+
+## Organizacja plików do edycji
+
+- Strona główna: `components/boruch/templates/home-page.tsx`.
+- Usługi: `components/boruch/templates/services-page.tsx`.
+- Cennik: `components/boruch/templates/pricing-page.tsx`.
+- Galeria: `components/boruch/templates/gallery-page.tsx`.
+- O nas: `components/boruch/templates/about-page.tsx`.
+- Kontakt: `components/boruch/templates/contact-page.tsx`.
+- Wszystkie polskie strony pojedynczych usług: `components/boruch/templates/service-page.tsx`.
+- Booksy: `app/booksy/page.tsx`.
+- Osobno pozostały tylko elementy wspólne dla całej witryny oraz interaktywne moduły galerii i katalogu usług, które wymagają granicy klienta w Next.js.
 
 ## Źródła treści
 
