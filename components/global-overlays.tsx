@@ -1,10 +1,10 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState, useTransition } from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { Check, Cookie, Mail, MessageCircle, Phone, ShieldCheck, X } from "lucide-react"
-import { usePathname } from "next/navigation"
-import { contact, routes, type Locale } from "@/lib/content"
+import { usePathname, useRouter } from "next/navigation"
+import { contact, localeLabels, localeOrder, routes, type Locale, type PageKey } from "@/lib/content"
 
 const COOKIE_NAME = "boruch_analytics_consent"
 const COOKIE_MAX_AGE = 31536000
@@ -24,6 +24,7 @@ const copy: Record<Locale, {
   cookieTitle: string
   cookiePrompt: string
   cookieOptionalInfo: string
+  languageLabel: string
   necessary: string
   necessaryDescription: string
   analytics: string
@@ -50,6 +51,7 @@ const copy: Record<Locale, {
     cookieTitle: "Ustawienia prywatności i cookies",
     cookiePrompt: "Wybierz, czy zgadzasz się na opcjonalną analitykę.",
     cookieOptionalInfo: "Strona działa normalnie również bez cookies analitycznych.",
+    languageLabel: "Wybierz język",
     necessary: "Tylko niezbędne",
     necessaryDescription: "Wymagane do prawidłowego działania strony i zapamiętania wyboru.",
     analytics: "Niezbędne i analityczne",
@@ -76,6 +78,7 @@ const copy: Record<Locale, {
     cookieTitle: "Privacy and cookie settings",
     cookiePrompt: "Choose whether you consent to optional analytics.",
     cookieOptionalInfo: "The website works normally without analytics cookies.",
+    languageLabel: "Choose language",
     necessary: "Essential only",
     necessaryDescription: "Required for the website to work and remember your choice.",
     analytics: "Essential and analytics",
@@ -102,6 +105,7 @@ const copy: Record<Locale, {
     cookieTitle: "Datenschutz und Cookies",
     cookiePrompt: "Wählen Sie, ob Sie optionaler Analyse zustimmen.",
     cookieOptionalInfo: "Die Website funktioniert auch ohne Analyse-Cookies.",
+    languageLabel: "Sprache wählen",
     necessary: "Nur notwendige",
     necessaryDescription: "Erforderlich für die Funktion der Website und zum Speichern Ihrer Auswahl.",
     analytics: "Notwendige und Analyse",
@@ -128,6 +132,7 @@ const copy: Record<Locale, {
     cookieTitle: "Конфіденційність і cookies",
     cookiePrompt: "Оберіть, чи погоджуєтеся ви на необов'язкову аналітику.",
     cookieOptionalInfo: "Сайт працює нормально і без аналітичних cookies.",
+    languageLabel: "Оберіть мову",
     necessary: "Лише необхідні",
     necessaryDescription: "Потрібні для роботи сайту та збереження вашого вибору.",
     analytics: "Необхідні та аналітичні",
@@ -148,6 +153,16 @@ function localeFromPathname(pathname: string): Locale {
   if (pathname === "/de" || pathname.startsWith("/de/")) return "de"
   if (pathname === "/uk" || pathname.startsWith("/uk/")) return "uk"
   return "pl"
+}
+
+function pageFromPathname(pathname: string, locale: Locale): PageKey {
+  const page = Object.entries(routes[locale]).find(([, path]) => path === pathname)?.[0]
+  return (page as PageKey | undefined) ?? "home"
+}
+
+function LanguageFlag({ locale }: { locale: Locale }) {
+  const flags: Record<Locale, string> = { pl: "🇵🇱", en: "🇬🇧", de: "🇩🇪", uk: "🇺🇦" }
+  return <span className="text-base leading-none" aria-hidden="true">{flags[locale]}</span>
 }
 
 function WhatsAppIcon({ className = "size-5" }: { className?: string }) {
@@ -251,14 +266,24 @@ function readConsent(): Consent {
   return value === "accepted" || value === "rejected" ? value : null
 }
 
-function CookieConsent({ locale }: { locale: Locale }) {
+function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string }) {
   const t = copy[locale]
+  const router = useRouter()
+  const [isChangingLanguage, startLanguageTransition] = useTransition()
   const [ready, setReady] = useState(false)
   const [consent, setConsent] = useState<Consent>(null)
   const [editing, setEditing] = useState(false)
   const [draftConsent, setDraftConsent] = useState<Exclude<Consent, null>>("rejected")
   const [showSettingsButton, setShowSettingsButton] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
+
+  const changeLanguage = (nextLocale: Locale) => {
+    if (nextLocale === locale || isChangingLanguage) return
+    const destination = routes[nextLocale][pageFromPathname(pathname, locale)]
+    startLanguageTransition(() => {
+      router.push(`${destination}${window.location.search}${window.location.hash}`, { scroll: false })
+    })
+  }
 
   useEffect(() => {
     setConsent(readConsent())
@@ -337,6 +362,29 @@ function CookieConsent({ locale }: { locale: Locale }) {
               {editing && <button type="button" onClick={() => setEditing(false)} aria-label={t.close} className="grid size-10 shrink-0 place-items-center border border-white/12 text-white/58 transition-colors hover:border-brand hover:bg-brand hover:text-white"><X className="size-5" /></button>}
             </div>
 
+            <div className="mt-5 flex flex-col gap-3 border border-white/10 bg-black/20 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-[.58rem] font-bold uppercase tracking-[.16em] text-white/45">{t.languageLabel}</span>
+              <div className="grid grid-cols-4 gap-1" role="group" aria-label={t.languageLabel}>
+                {localeOrder.map((code) => {
+                  const active = code === locale
+                  return (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => changeLanguage(code)}
+                      disabled={isChangingLanguage}
+                      aria-pressed={active}
+                      title={localeLabels[code].name}
+                      className={`flex min-h-9 min-w-14 items-center justify-center gap-2 px-2 text-[.58rem] font-bold uppercase tracking-[.1em] transition-colors disabled:cursor-wait disabled:opacity-60 ${active ? "bg-brand text-white" : "bg-white/[.045] text-white/55 hover:bg-white/10 hover:text-white"}`}
+                    >
+                      <LanguageFlag locale={code} />
+                      {localeLabels[code].short}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             {!editing && <p className="mt-5 border-l-2 border-brand pl-4 text-xs leading-relaxed text-white/44">{t.cookieOptionalInfo}</p>}
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -380,5 +428,5 @@ function CookieConsent({ locale }: { locale: Locale }) {
 export function GlobalOverlays() {
   const pathname = usePathname()
   const locale = localeFromPathname(pathname)
-  return <><FloatingContact locale={locale} /><CookieConsent locale={locale} /></>
+  return <><FloatingContact locale={locale} /><CookieConsent locale={locale} pathname={pathname} /></>
 }
