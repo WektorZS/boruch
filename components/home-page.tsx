@@ -1,9 +1,13 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowDown, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Phone, Quote, ShieldCheck, Sparkles, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Pause, Phone, Play, Quote, ShieldCheck, Sparkles, Star } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceGroupTitle, servicePrice, serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
+import type { PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
@@ -16,6 +20,20 @@ const featuredServiceSlugs: ServiceSlug[] = [
   "powloka-ceramiczna",
   "folia-ppf",
 ]
+
+const heroPhotos: Array<{ id: PhotoId; position: string }> = [
+  { id: "p11", position: "54% 58%" },
+  { id: "p52", position: "55% 60%" },
+  { id: "p43", position: "58% 55%" },
+  { id: "p46", position: "50% 50%" },
+]
+
+const sliderControls: Record<Locale, { pause: string; play: string }> = {
+  pl: { pause: "Zatrzymaj slider", play: "Wznów slider" },
+  en: { pause: "Pause slider", play: "Resume slider" },
+  de: { pause: "Slider anhalten", play: "Slider fortsetzen" },
+  uk: { pause: "Зупинити слайдер", play: "Продовжити слайдер" },
+}
 
 const homeCopy = {
   pl: {
@@ -314,24 +332,63 @@ function HomeHeader({ locale }: { locale: Locale }) {
 function HomeHero({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const slide = src.slides[0]
   const copy = homeCopy[locale]
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const slide = src.slides[activeSlide]
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (isPaused || motionQuery.matches) return
+
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % src.slides.length)
+    }, 6000)
+
+    return () => window.clearInterval(timer)
+  }, [isPaused, src.slides.length])
+
+  const showPrevious = () => {
+    setActiveSlide((current) => (current - 1 + src.slides.length) % src.slides.length)
+  }
+
+  const showNext = () => {
+    setActiveSlide((current) => (current + 1) % src.slides.length)
+  }
 
   return (
-    <section aria-labelledby="hero-title" className="relative isolate min-h-svh overflow-hidden bg-[#080809] pt-24">
-      <div className="home-hero-shell grid min-h-[calc(100svh-6rem)] gap-12 py-10 lg:grid-cols-12 lg:items-center lg:gap-10 lg:py-14">
-        <div className="relative z-10 flex flex-col items-start lg:col-span-5">
-          <p className="enter-fade mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
+    <section aria-labelledby="hero-title" className="relative isolate flex min-h-svh flex-col overflow-hidden bg-[#080809] pt-24">
+      <div className="absolute inset-0" aria-hidden="true">
+        {heroPhotos.map((photo, index) => (
+          <div
+            key={photo.id}
+            className={cn(
+              "absolute inset-0 transition-[opacity,transform] duration-[1400ms] ease-out motion-reduce:transition-none",
+              index === activeSlide ? "scale-100 opacity-100" : "scale-[1.035] opacity-0",
+            )}
+          >
+            <Photo
+              id={photo.id}
+              priority={index === 0}
+              sizes="100vw"
+              position={photo.position}
+              className="saturate-[.72] contrast-[1.06]"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,6,.96)_0%,rgba(5,5,6,.87)_32%,rgba(5,5,6,.48)_66%,rgba(5,5,6,.34)_100%)]" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-[#080809]" />
+      </div>
+
+      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-14rem)] flex-1 items-center py-14 sm:py-20 lg:min-h-[calc(100svh-13rem)]">
+        <div key={activeSlide} className="home-hero-copy flex max-w-3xl flex-col items-start">
+          <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.title} - {slide.sub}
           </p>
-          <h1 id="hero-title" className="home-hero-title max-w-[9ch] text-balance">
-            <span className="line-mask"><span className="enter-rise block">{slide.kicker}</span></span>
-          </h1>
-          <p className="enter-fade mt-7 max-w-lg text-pretty text-base leading-relaxed text-white/58 sm:text-lg" style={{ "--i": 2 } as React.CSSProperties}>
-            {copy.heroLead}
-          </p>
-          <div className="enter-fade mt-9 flex flex-wrap gap-3" style={{ "--i": 3 } as React.CSSProperties}>
+          <h1 id="hero-title" className="home-hero-title max-w-[9ch] text-balance">{slide.kicker}</h1>
+          <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{copy.heroLead}</p>
+          <div className="mt-9 flex flex-wrap gap-3">
             <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">
               {t.book}<ArrowUpRight className="size-4" aria-hidden="true" />
             </a>
@@ -341,20 +398,38 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="relative min-h-[31rem] lg:col-span-7 lg:min-h-[46rem]">
-          <div className="enter-unmask absolute inset-0 overflow-hidden border border-white/10 bg-[#151516] shadow-[0_35px_100px_rgba(0,0,0,.55)]">
-            <Photo id="p28" priority sizes="(min-width: 1024px) 58vw, 100vw" position="54% 66%" className="opacity-92" />
-            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/10" />
+        <div className="absolute inset-x-5 bottom-8 flex items-end justify-between gap-6 sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] lg:bottom-10">
+          <div className="flex items-center gap-2" role="group" aria-label={`${t.photo} ${activeSlide + 1} ${t.of} ${src.slides.length}`}>
+            {src.slides.map((item, index) => (
+              <button
+                key={`${item.title}-${item.sub}`}
+                type="button"
+                onClick={() => setActiveSlide(index)}
+                aria-label={`${t.photo} ${index + 1}`}
+                aria-current={index === activeSlide ? "true" : undefined}
+                className={cn(
+                  "h-1.5 transition-all duration-500",
+                  index === activeSlide ? "w-11 bg-brand" : "w-5 bg-white/32 hover:bg-white/70",
+                )}
+              />
+            ))}
           </div>
-          <div className="absolute bottom-0 left-0 bg-[#080809] px-5 py-4 sm:px-6">
-            <span className="text-[.6rem] font-bold uppercase tracking-[.18em] text-white/62">Szczecin / Plac Rodła 8</span>
+
+          <div className="flex items-center border border-white/15 bg-black/35 backdrop-blur-md">
+            <button type="button" onClick={showPrevious} className="grid size-11 place-items-center border-r border-white/15 text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={t.prev}>
+              <ArrowLeft className="size-4" aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => setIsPaused((current) => !current)} className="grid size-11 place-items-center border-r border-white/15 text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={isPaused ? sliderControls[locale].play : sliderControls[locale].pause}>
+              {isPaused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
+            </button>
+            <button type="button" onClick={showNext} className="grid size-11 place-items-center text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={t.next}>
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
           </div>
-          <a href="#services" className="absolute -bottom-1 right-0 hidden items-center gap-3 border border-white/15 bg-[#080809] px-5 py-4 text-[.62rem] font-bold uppercase tracking-[.16em] text-white/55 transition-colors hover:text-white sm:flex">
-            {t.scroll}<ArrowDown className="size-4 text-brand" aria-hidden="true" />
-          </a>
         </div>
       </div>
-      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+
+      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f]/92 backdrop-blur-md sm:grid-cols-3">
         {copy.benefits.map(([title, text], index) => {
           const Icon = benefitIcons[index] ?? Car
           return (
