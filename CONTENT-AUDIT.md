@@ -6,7 +6,7 @@ Stan na 29.09.2026.
 
 - Typografia była zbyt kampanijna. Bardzo duże, szerokie i często wersalikowe nagłówki pojawiały się w prawie każdej sekcji, przez co znikała hierarchia.
 - Większość podstron korzystała z podobnego schematu: mała etykieta, ogromny tytuł, cienka linia i fotografia. Strony miały inny tekst, ale ten sam rytm.
-- Czerń dominowała niemal bez przerwy. Brakowało jasnej powierzchni redakcyjnej i spokojnych przejść tonalnych.
+- Czerń dominowała niemal bez przerwy, ale bez wystarczającego zróżnicowania grafitu, bordo i głębokiej czerwieni. Sekcje zlewały się w jedną płaską powierzchnię.
 - Lista usług była efektowna, ale na desktopie zbyt mocno opierała się na stanie aktywnym i dużej typografii. Katalog usług nie miał wystarczająco czytelnej hierarchii treści.
 - Cennik był poprawny informacyjnie, ale pakiety nie tworzyły szybkiego porównania. Użytkownik musiał czytać długie wiersze zamiast trzech wyraźnych ofert.
 - Galeria miała zbyt wiele różnych przesunięć i proporcji. Fotografie konkurowały ze sobą zamiast tworzyć uporządkowane portfolio.
@@ -15,17 +15,20 @@ Stan na 29.09.2026.
 
 ## Kierunek wizualny
 
-- Zachowano czarną, grafitową i bordową bazę BORUCH oraz kontrolowaną czerwień dla działań i sygnałów.
-- Dodano jasną powierzchnię redakcyjną w kolorze złamanej bieli. Jest używana tylko tam, gdzie pomaga oddzielić opowieść lub komunikat marki.
-- Ograniczono maksymalną skalę nagłówków. Duży krój pozostał w hero i podpisie marki, ale nie powtarza się mechanicznie w każdej sekcji.
-- Wprowadzono wyraźne role dla H1, H2, H3, leadu, tekstu głównego, etykiet i numeracji.
+- Cały interfejs opiera się na czerni, antracycie, ciemnym bordo i kontrolowanej czerwieni. Nie ma jasnych sekcji ani mocnych białych powierzchni.
+- Poszczególne bloki rozdzielają delikatne różnice tonalne, cienkie obramowania i fotografie, dzięki czemu strona pozostaje ciemna bez zlewania się sekcji.
+- Wprowadzono zwężoną, mocną typografię inspirowaną branżą motoryzacyjną. Największe nagłówki pozostają w hero, a pozostałe poziomy mają wyraźną hierarchię.
+- Numeracja została usunięta z kart usług, pakietów, sekcji i nagłówków. Zostaje wyłącznie tam, gdzie przekazuje kolejność, czyli w etapach usługi i liczniku zdjęć w podglądzie galerii.
 - Zmniejszono liczbę przypadkowych offsetów. Układ opiera się na spójnej siatce 12 kolumn, stałych odstępach i kontrolowanych proporcjach zdjęć.
 - Fotografie są większe, spokojniejsze i częściej pełnią konkretną rolę: otwarcie strony, dokumentacja realizacji, portret zespołu lub tło wezwania do działania.
 - Ruch został ograniczony do wejścia hero, łagodnych odsłonięć sekcji, masek zdjęć, przejść galerii i informacji zwrotnej na przyciskach.
 
 ## Zakres przebudowy
 
-- Przebudowano stronę główną, hero, sekcję marki, katalog usług, realizacje, pakiety, sekcję zespołu, lokalizację i końcowe CTA.
+- Strona główna została napisana od zera i nie korzysta ze wspólnego nagłówka ani stopki podstron.
+- Nowy home ma asymetryczne hero, własną nawigację, manifest marki, wierszowy indeks usług, nowy układ realizacji, poziome porównanie pakietów, opowieść o zespole, moduł lokalizacji PAZIM -2, końcowe CTA i uproszczoną stopkę.
+- Zachowano treści źródłowe, fotografie BORUCH, ceny, dane kontaktowe, Booksy i wszystkie odnośniki.
+- Strona główna nie używa numeracji dekoracyjnej. Wartość -2 oznacza rzeczywisty poziom parkingu PAZIM.
 - Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
 - Ujednolicono wszystkie polskie strony szczegółowych usług.
 - Wszystkie podstawowe strony EN, DE i UA korzystają z tych samych szablonów, nagłówka, stopki, animacji, galerii i CTA co wersja polska.
@@ -42,7 +45,7 @@ Stan na 29.09.2026.
 - Kontakt: `components/contact-page.tsx`.
 - Wszystkie polskie strony pojedynczych usług: `components/service-page.tsx`.
 - Booksy: `app/booksy/page.tsx`.
-- Osobno pozostały tylko elementy wspólne dla całej witryny oraz interaktywne moduły galerii i katalogu usług, które wymagają granicy klienta w Next.js.
+- Osobno pozostały tylko elementy wspólne dla całej witryny oraz interaktywny moduł galerii, który wymaga granicy klienta w Next.js.
 - Usunięto poprzedni, nieużywany zestaw komponentów oraz stare pliki danych, które pozostały po wcześniejszej wersji witryny.
 - Aktualna struktura odpowiada układowi projektu `golet`: trasy w `app`, kompletne strony i elementy wspólne w `components`, a dane w `lib`.
 
@@ -105,10 +108,9 @@ Stan na 29.09.2026.
 
 ## Weryfikacja
 
-- Sprawdzono 24 podstawowe trasy PL, EN, DE i UA.
-- Na każdej trasie potwierdzono jeden H1, jeden canonical, pięć wpisów hreflang, właściwy język i brak poziomego przepełnienia.
-- Wykonano 56 kontroli responsywnych dla ośmiu szablonów przy szerokościach 360, 390, 430, 768, 1024, 1440 i 1920 px.
-- Wizualnie sprawdzono hero, listę usług, cennik, galerię, stronę `O nas`, szczegółową usługę, menu mobilne i lightbox.
+- Sprawdzono kluczowe szablony i przejścia między wersjami PL, EN, DE i UA.
+- Wizualnie sprawdzono stronę główną i cennik, w tym hero, kontrast, typografię, nawigację, sekcje treści oraz stopkę.
+- Potwierdzono, że nieużywana numeracja nie wróciła do kart ani nagłówków.
 - `tsc --noEmit` kończy się bez błędów.
 - `pnpm build` kończy się poprawnie i generuje 42 statyczne wpisy.
 - `git diff --check` kończy się bez błędów formatowania.

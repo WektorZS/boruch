@@ -24,7 +24,7 @@ Strona internetowa BORUCH Myjnia i Detailing w Szczecinie.
 - `lib/content` zawiera treści polskie, angielskie, niemieckie i ukraińskie.
 - `public` zawiera zdjęcia, ikony i pozostałe pliki statyczne.
 
-Pliki `gallery-portfolio.tsx`, `service-browser.tsx`, `site-header.tsx` i `motion-observer.tsx` pozostają osobno, ponieważ zawierają interakcje wykonywane w przeglądarce. Pozostałe sekcje każdej podstrony znajdują się w jednym pliku danej strony.
+Pliki `gallery-portfolio.tsx`, `site-header.tsx` i `motion-observer.tsx` pozostają osobno, ponieważ zawierają interakcje wykonywane w przeglądarce. Pozostałe sekcje każdej podstrony znajdują się w jednym pliku danej strony.
 
 ## Uruchomienie
 

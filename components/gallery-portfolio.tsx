@@ -71,12 +71,7 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
               className="group zoom-on-hover block h-full w-full cursor-zoom-in"
             >
               <Photo id={id} sizes="(min-width: 768px) 60vw, 50vw" />
-              <span
-                aria-hidden="true"
-                className="type-label absolute bottom-3 left-3 bg-ink/70 px-2 py-1 text-bone opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              <span aria-hidden="true" className="absolute inset-0 border border-transparent transition-colors duration-300 group-hover:border-brand/70 group-focus-visible:border-brand/70" />
             </button>
           </li>
         ))}

@@ -22,15 +22,13 @@ export function ContactPage({ locale }: { locale: Locale }) {
           ),
         }}
       />
-      <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
-        <div className="shell-wide grid gap-7 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3"><p className="eyebrow">{t.nav.contact}</p></div>
-          <div className="flex min-w-0 flex-col gap-7 lg:col-span-8 lg:col-start-5">
-            <h1 id="page-title" data-reveal="" className="type-h1 max-w-[16ch] text-balance">{src.contact.h1}</h1>
-            <div className="grid gap-6 border-t border-line pt-6">
-              <p className="type-lead max-w-2xl text-pretty text-bone/75">{src.contact.sub}</p>
-            </div>
-          </div>
+      <section aria-labelledby="page-title" className="relative isolate flex min-h-[560px] items-end overflow-hidden border-b border-line pt-(--header-h)">
+        <div className="enter-unmask frame absolute inset-0 border-0"><Photo id="p28" priority sizes="100vw" position="42% 70%" /></div>
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.97)_0%,rgba(7,7,7,.8)_50%,rgba(7,7,7,.42)_100%)]" />
+        <div className="shell-wide relative z-10 pb-14 lg:pb-16">
+          <p className="eyebrow mb-7">{t.nav.contact}</p>
+          <h1 id="page-title" className="type-h1 max-w-[13ch] text-balance">{src.contact.h1}</h1>
+          <p className="mt-6 max-w-xl text-pretty leading-relaxed text-bone/70">{src.contact.sub}</p>
         </div>
       </section>
 
@@ -72,59 +70,26 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <LocationSection locale={locale} />
-
-      <section aria-label={t.openMap} className="border-t border-line">
-        <div className="grid lg:grid-cols-12">
-          <div data-reveal="mask" className="frame aspect-[4/3] lg:col-span-5 lg:aspect-auto">
-            <Photo id="p28" sizes="(min-width: 1024px) 42vw, 100vw" position="42% 70%" />
+      <section aria-labelledby="location-title" className="section-lg border-t border-line bg-wine-deep/20">
+        <div className="shell-wide grid gap-3 lg:grid-cols-12">
+          <div className="flex flex-col justify-between gap-10 border border-line bg-ink-2 p-6 sm:p-8 lg:col-span-5">
+            <div><p className="eyebrow mb-6">{src.slides[3].kicker}</p><h2 id="location-title" className="type-h2 max-w-[12ch]">{src.slides[3].title} {src.slides[3].sub}</h2></div>
+            <address className="flex flex-col gap-2 border-t border-line pt-6 not-italic">
+              {src.address.lines.map((line) => <span key={line} className="text-lg font-semibold text-bone/85">{line}</span>)}
+              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline group mt-4 w-fit">{t.openMap}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a>
+            </address>
           </div>
-          <div className="relative aspect-[4/3] lg:col-span-7 lg:aspect-[16/11]">
+          <div className="relative aspect-[4/3] border border-line lg:col-span-7 lg:aspect-[16/10]">
             <iframe
               src={MAP_EMBED}
               title={`${t.openMap} - ${src.address.lines.join(", ")}`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 h-full w-full border-0 opacity-85 [filter:grayscale(1)_invert(0.92)_contrast(0.9)]"
+              className="absolute inset-0 h-full w-full border-0 opacity-75 [filter:grayscale(1)_invert(0.92)_sepia(.2)_hue-rotate(310deg)_contrast(.95)]"
             />
           </div>
         </div>
       </section>
     </SiteShell>
-  )
-}
-
-function LocationSection({ locale }: { locale: Locale }) {
-  const src = sources[locale]
-  const t = ui[locale]
-  const slide = src.slides[3]
-
-  return (
-    <section aria-labelledby="location-title" className="surface-wine relative overflow-hidden border-t border-line-wine">
-      <div className="shell-wide section-lg grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
-        <div className="flex flex-col gap-8 lg:col-span-7">
-          <p className="eyebrow">{slide.kicker}</p>
-          <h2 id="location-title" data-reveal="" className="type-h2 max-w-[16ch] text-balance">{slide.title} {slide.sub}</h2>
-          <div data-reveal="" className="grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
-            <address className="flex flex-col gap-1 not-italic">
-              <span className="type-label mb-2 text-ash">{src.address.locationLabel}</span>
-              {src.address.lines.map((line) => <span key={line} className="type-h3 font-medium">{line}</span>)}
-            </address>
-            <div className="flex flex-col gap-3">
-              <span className="type-label mb-1 text-ash">{src.address.contactLabel}</span>
-              <a href={contact.phoneHref} className="link-draw w-fit text-lg">{contact.phone}</a>
-              <a href={`mailto:${contact.email}`} className="link-draw w-fit break-all">{contact.email}</a>
-              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline group mt-3 w-fit">
-                {t.openMap}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-        </div>
-        <div aria-hidden="true" className="relative flex min-h-64 flex-col items-center justify-center border border-line-wine bg-ink/35 p-8 lg:col-span-4 lg:col-start-9 lg:min-h-96">
-          <span className="type-label mb-2 text-ash">PAZIM - {t.level}</span>
-          <span data-reveal="" className="font-display text-[clamp(7rem,18vw,13rem)] font-semibold leading-none tracking-[-0.06em] text-bone [font-stretch:112%] [font-variation-settings:'wdth'_112]">-2</span>
-        </div>
-      </div>
-    </section>
   )
 }

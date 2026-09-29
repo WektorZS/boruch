@@ -75,9 +75,12 @@ function ServiceHero({ service }: { service: Service }) {
   const group = serviceGroupTitle("pl", service.slug)
 
   return (
-    <section aria-labelledby="service-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
-      <div className="shell-wide flex flex-col gap-9 lg:gap-12">
-        <div className="enter-fade flex items-center justify-between gap-6" style={{ "--i": 0 } as React.CSSProperties}>
+    <section aria-labelledby="service-title" className="relative isolate flex min-h-[700px] items-end overflow-hidden border-b border-line pt-(--header-h)">
+      <div className="enter-unmask frame absolute inset-0 border-0"><Photo id={service.hero} priority sizes="100vw" position="50% 60%" /></div>
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.98)_0%,rgba(7,7,7,.83)_47%,rgba(7,7,7,.32)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/35" />
+      <div className="shell-wide relative z-10 pb-14 lg:pb-16">
+        <div className="enter-fade mb-8 flex items-center gap-6" style={{ "--i": 0 } as React.CSSProperties}>
           <nav aria-label="Breadcrumb">
             <ol className="type-label flex flex-wrap items-center gap-2 text-ash">
               <li><Link href={routes.pl.services} className="transition-colors hover:text-bone">{t.nav.services}</Link></li>
@@ -85,28 +88,17 @@ function ServiceHero({ service }: { service: Service }) {
               <li className="text-bone">{group}</li>
             </ol>
           </nav>
-          <p className="type-label text-ash"><span className="text-bone">{formatIndex(service.index)}</span> / {formatIndex(services.length)}</p>
         </div>
-        <h1 id="service-title" className="enter-fade type-h1 max-w-[15ch] text-balance" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
-        <div className="grid gap-8 border-t border-line pt-7 lg:grid-cols-12 lg:items-end lg:gap-8">
-          <div className="enter-fade flex flex-col gap-3 lg:col-span-6" style={{ "--i": 2 } as React.CSSProperties}>
+        <h1 id="service-title" className="enter-fade type-h1 max-w-[12ch] text-balance" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
+        <div className="mt-8 grid max-w-4xl gap-7 border-t border-line-strong pt-7 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+          <div className="enter-fade flex flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
-            <p className="type-lead text-pretty text-bone first-letter:uppercase">{service.source.tagline}</p>
+            <p className="max-w-xl text-pretty leading-relaxed text-bone/75 first-letter:uppercase">{service.source.tagline}</p>
           </div>
-          <div className="enter-fade flex flex-col gap-2 lg:col-span-2" style={{ "--i": 3 } as React.CSSProperties}>
-            <p className="type-label text-ash">{t.priceLabel}</p>
-            <p className={price ? "type-h2 [font-stretch:115%] [font-variation-settings:'wdth'_115]" : "type-h3 text-bone/90"}>{price ?? t.individualQuote}</p>
+          <div className="enter-fade flex flex-col gap-4" style={{ "--i": 3 } as React.CSSProperties}>
+            <p className="flex flex-col gap-1"><span className="type-label text-ash">{t.priceLabel}</span><span className="font-display text-2xl font-bold text-bone">{price ?? t.individualQuote}</span></p>
+            <div className="flex flex-wrap gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
           </div>
-          <div className="enter-fade flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:justify-end" style={{ "--i": 4 } as React.CSSProperties}>
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a>
-            <Link href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link>
-          </div>
-        </div>
-      </div>
-      <div className="shell-wide mt-12 lg:mt-16">
-        <div className="enter-unmask frame frame-shade relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-[2/1]">
-          <Photo id={service.hero} priority sizes="(min-width: 1680px) 1600px, 100vw" position="50% 60%" />
-          <p className="type-label absolute bottom-5 left-5 z-10 flex items-center gap-3 text-bone lg:bottom-7 lg:left-7"><span aria-hidden="true" className="size-1.5 bg-brand" />BORUCH - Szczecin - PAZIM</p>
         </div>
       </div>
     </section>
@@ -260,7 +252,7 @@ function ServiceRelated({ service }: { service: Service }) {
             <li key={item.slug} className="bg-background">
               <Link href={`/${item.slug}`} className="group relative flex min-h-80 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-[28rem] lg:p-8">
                 <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-0 transition-opacity duration-700 group-hover:opacity-45 group-focus-visible:opacity-45"><Photo id={item.hero} sizes="(min-width: 768px) 50vw, 100vw" className="scale-105 transition-transform duration-[1.4s] group-hover:scale-100" /></span>
-                <span className="relative flex items-center justify-between"><span className="type-label text-ash">{formatIndex(item.index)} - {item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
+                <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
                 <span className="type-h2 relative max-w-[14ch] text-balance">{item.navTitle}</span>
               </Link>
             </li>

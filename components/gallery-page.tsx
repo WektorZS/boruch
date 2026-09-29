@@ -23,21 +23,14 @@ export function GalleryPage({ locale }: { locale: Locale }) {
         }}
       />
 
-      <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
-        <div className="shell-wide grid gap-7 lg:grid-cols-12 lg:gap-8">
-          <div className="flex items-start justify-between gap-5 lg:col-span-3">
-            <p className="eyebrow">{t.nav.gallery}</p>
-            <div className="type-label ml-auto text-right text-ash lg:hidden">{t.photo} 01 - {galleryOrder.length}</div>
-          </div>
-          <div className="flex min-w-0 flex-col gap-7 lg:col-span-8 lg:col-start-5">
-            <h1 id="page-title" data-reveal="" className="type-h1 max-w-[16ch] text-balance">{src.gallery.h1}</h1>
-            <div className="grid gap-6 border-t border-line pt-6">
-              <p className="type-lead max-w-2xl text-pretty text-bone/75">{src.gallery.sub}</p>
-            </div>
-          </div>
-          <div className="type-label hidden text-right text-ash lg:col-span-1 lg:col-start-4 lg:row-start-1 lg:block">
-            {t.photo} 01 - {galleryOrder.length}
-          </div>
+      <section aria-labelledby="page-title" className="relative isolate flex min-h-[580px] items-end overflow-hidden border-b border-line pt-(--header-h)">
+        <div className="enter-unmask frame absolute inset-0 border-0"><Photo id="p25" priority sizes="100vw" position="50% 60%" /></div>
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.97)_0%,rgba(7,7,7,.78)_50%,rgba(7,7,7,.36)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/35" />
+        <div className="shell-wide relative z-10 pb-14 lg:pb-16">
+          <p className="eyebrow mb-7">{t.nav.gallery}</p>
+          <h1 id="page-title" className="type-h1 max-w-[13ch] text-balance">{src.gallery.h1}</h1>
+          <p className="mt-6 max-w-xl text-pretty leading-relaxed text-bone/70">{src.gallery.sub}</p>
         </div>
       </section>
 

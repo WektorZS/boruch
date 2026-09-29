@@ -88,16 +88,15 @@ export function SiteHeader({
       <header
         data-scrolled={scrolled}
         className={cn(
-          "group/header fixed inset-x-0 top-0 z-(--z-header) transition-[background-color,border-color,backdrop-filter] duration-500 ease-(--ease-out)",
-          "border-b border-transparent bg-linear-to-b from-ink/70 to-transparent",
-          "data-[scrolled=true]:border-line data-[scrolled=true]:bg-ink/88 data-[scrolled=true]:bg-none data-[scrolled=true]:backdrop-blur-md",
+          "group/header fixed inset-x-0 top-0 z-(--z-header) border-b border-line bg-ink/95 transition-[background-color,backdrop-filter] duration-300",
+          "data-[scrolled=true]:bg-ink/88 data-[scrolled=true]:backdrop-blur-xl",
         )}
       >
         <div className="shell-wide flex h-(--header-h) items-center justify-between gap-6 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
           <Wordmark href={homeHref} label={homeLabel} />
 
           <nav aria-label={labels.navigation} className="hidden xl:block">
-            <ul className="flex items-center gap-9">
+            <ul className="flex items-center gap-7">
               {nav
                 .filter((item) => item.key !== "home")
                 .map((item) => (
@@ -105,7 +104,7 @@ export function SiteHeader({
                     <Link
                       href={item.href}
                       aria-current={item.active ? "page" : undefined}
-                      className="type-label link-draw text-bone/80 transition-colors hover:text-bone aria-[current=page]:text-bone"
+                    className="type-label link-draw text-bone/65 transition-colors hover:text-bone aria-[current=page]:text-highlight"
                     >
                       {item.label}
                     </Link>
@@ -169,7 +168,7 @@ export function SiteHeader({
         inert={!open}
         data-open={open}
         className={cn(
-          "group/menu fixed inset-0 z-(--z-menu) flex flex-col bg-ink xl:hidden",
+          "group/menu fixed inset-0 z-(--z-menu) flex flex-col bg-[radial-gradient(circle_at_85%_15%,rgba(143,24,29,.24),transparent_26rem),#070707] xl:hidden",
           "invisible opacity-0 transition-[opacity,visibility] duration-500 ease-(--ease-out) data-[open=true]:visible data-[open=true]:opacity-100",
         )}
       >
@@ -187,29 +186,27 @@ export function SiteHeader({
         </div>
 
         <nav aria-label={labels.navigation} className="shell-wide relative flex-1 overflow-y-auto py-8">
-          <ol className="flex flex-col">
-            {menuNav.map((item, i) => (
+          <ul className="flex flex-col">
+            {menuNav.map((item) => (
               <li key={item.key} className="overflow-hidden border-b border-line">
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
                   aria-current={item.active ? "page" : undefined}
-                  style={{ transitionDelay: open ? `${120 + i * 55}ms` : "0ms" }}
+                  style={{ transitionDelay: open ? "120ms" : "0ms" }}
                   className={cn(
-                    "group flex items-baseline gap-5 py-4 transition-transform duration-700 ease-(--ease-out)",
+                    "group flex items-center justify-between gap-5 py-5 transition-transform duration-700 ease-(--ease-out)",
                     "translate-y-full group-data-[open=true]/menu:translate-y-0",
                   )}
                 >
-                  <span className="type-index w-7 text-xs text-ash group-aria-[current=page]:text-highlight">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="font-display text-[clamp(1.75rem,7vw,3rem)] font-semibold leading-none tracking-[-0.025em] text-bone/85 [font-stretch:108%] [font-variation-settings:'wdth'_108] transition-colors group-hover:text-bone group-aria-[current=page]:text-bone">
+                  <span className="font-display text-[clamp(2rem,9vw,3.5rem)] font-extrabold uppercase leading-none tracking-[-0.025em] text-bone/85 [font-stretch:75%] [font-variation-settings:'wdth'_75] transition-colors group-hover:text-bone group-aria-[current=page]:text-highlight">
                     {item.label}
                   </span>
+                  <span aria-hidden="true" className="h-px w-8 bg-line transition-colors group-aria-[current=page]:bg-brand" />
                 </Link>
               </li>
             ))}
-          </ol>
+          </ul>
         </nav>
 
         <div className="shell-wide relative flex flex-col gap-6 border-t border-line py-6">
@@ -235,7 +232,7 @@ export function SiteHeader({
               <a href={phoneHref} className="font-display text-xl font-semibold [font-stretch:115%] [font-variation-settings:'wdth'_115]">
                 {phone}
               </a>
-              <p className="type-label text-ash">{address.join(" · ")}</p>
+              <p className="type-label text-ash">{address.join(" - ")}</p>
             </div>
             <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group w-full sm:w-auto">
               {labels.book}
@@ -250,17 +247,16 @@ export function SiteHeader({
 
 function Wordmark({ href, label, className }: { href: string; label: string; className?: string }) {
   return (
-    <Link href={href} aria-label={label} className={cn("group flex items-center gap-3.5", className)}>
+    <Link href={href} aria-label={label} className={cn("group flex items-center gap-3", className)}>
       <span
         aria-hidden="true"
-        className="font-display text-[1.35rem] font-extrabold uppercase leading-none tracking-[-0.03em] [font-stretch:151%] [font-variation-settings:'wdth'_151]"
+        className="grid size-9 place-items-center bg-brand font-display text-2xl font-black uppercase leading-none text-bone [font-stretch:75%] [font-variation-settings:'wdth'_75]"
       >
-        Boruch
+        B
       </span>
-      <span aria-hidden="true" className="h-7 w-px bg-line-strong transition-colors duration-300 group-hover:bg-brand" />
-      <span aria-hidden="true" className="type-label flex flex-col gap-0.5 text-[0.5625rem] leading-none text-ash">
-        <span>Myjnia</span>
-        <span>Detailing</span>
+      <span aria-hidden="true" className="flex flex-col gap-0.5 leading-none">
+        <span className="font-display text-xl font-black uppercase tracking-[-0.02em] text-bone [font-stretch:80%] [font-variation-settings:'wdth'_80]">Boruch</span>
+        <span className="type-label text-[0.5rem] text-ash">Myjnia - detailing</span>
       </span>
     </Link>
   )

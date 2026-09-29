@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
-import { formatIndex, type ServiceSlug } from "@/lib/content/services"
+import type { ServiceSlug } from "@/lib/content/services"
 import { cn } from "@/lib/utils"
 
 const otherServiceSlugs: ServiceSlug[] = [
@@ -35,22 +35,15 @@ export function PricingPage({ locale }: { locale: Locale }) {
       />
 
       {/* HERO */}
-      <section aria-labelledby="page-title" className="relative isolate pt-[calc(var(--header-h)+3rem)] lg:pt-[calc(var(--header-h)+4.5rem)]">
-        <div className="shell-wide grid gap-7 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3"><p className="eyebrow">{t.nav.pricing}</p></div>
-          <div className="flex min-w-0 flex-col gap-7 lg:col-span-8 lg:col-start-5">
-            <h1 id="page-title" data-reveal="" className="type-h1 max-w-[16ch] text-balance">{pricing.h1}</h1>
-            <div className="grid gap-6 border-t border-line pt-6">
-              <p className="type-lead max-w-2xl text-pretty text-bone/75">{pricing.sub}</p>
-              <ul className="flex flex-wrap gap-x-8 gap-y-3">
-                {pricing.categories.map((category, i) => (
-                  <li key={category} className="type-label flex items-center gap-3 text-bone">
-                    <span className="text-ash">{formatIndex(i + 1)}</span>
-                    {category}
-                  </li>
-                ))}
-              </ul>
-            </div>
+      <section aria-labelledby="page-title" className="relative isolate overflow-hidden border-b border-line bg-[radial-gradient(circle_at_85%_20%,rgba(143,24,29,.22),transparent_28rem)] pt-[calc(var(--header-h)+5rem)] pb-16 lg:pt-[calc(var(--header-h)+7rem)] lg:pb-20">
+        <div className="shell-wide">
+          <div className="max-w-4xl">
+            <p className="eyebrow mb-7">{t.nav.pricing}</p>
+            <h1 id="page-title" className="enter-fade type-h1 max-w-[14ch] text-balance">{pricing.h1}</h1>
+            <p className="mt-6 max-w-2xl text-pretty leading-relaxed text-bone/70">{pricing.sub}</p>
+            <ul className="mt-8 flex flex-wrap gap-2">
+              {pricing.categories.map((category) => <li key={category} className="type-label border border-line bg-ink-2 px-3 py-2 text-bone/80">{category}</li>)}
+            </ul>
           </div>
         </div>
       </section>
@@ -73,21 +66,20 @@ export function PricingPage({ locale }: { locale: Locale }) {
             </div>
           </div>
           <div className="flex flex-col gap-8 lg:col-span-8">
-            <ul className="border-t border-line-strong">
+            <ul className="grid gap-3 sm:grid-cols-2">
               {pricing.other.map((row, i) => {
                 const slug = otherServiceSlugs[i]
                 const href = locale === "pl" && slug ? "/" + slug : null
                 const content = (
                   <>
-                    <span className="type-index text-xs text-ash">{formatIndex(i + 1)}</span>
                     <span className="type-h3 flex-1 text-pretty">{row.name}</span>
                     <PriceTag value={row.price} size="md" className="shrink-0 text-right" />
                     {href && <ArrowRight className="arrow-shift hidden size-5 shrink-0 text-ash sm:block" aria-hidden="true" />}
                   </>
                 )
-                const rowClass = "flex flex-wrap items-baseline gap-x-6 gap-y-3 py-7 sm:flex-nowrap md:px-3"
+                const rowClass = "flex h-full flex-wrap items-end gap-x-6 gap-y-5 border border-line bg-ink p-6 transition-colors hover:border-line-wine hover:bg-ink-warm sm:flex-nowrap"
                 return (
-                  <li key={row.name} data-reveal="" style={{ "--d": i % 3 } as React.CSSProperties} className="border-b border-line">
+                  <li key={row.name} data-reveal="" style={{ "--d": i % 2 } as React.CSSProperties}>
                     {href ? <Link href={href} className={"group " + rowClass + " transition-colors hover:bg-ink-warm/50"}>{content}</Link> : <div className={rowClass}>{content}</div>}
                   </li>
                 )
@@ -98,7 +90,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <div className="shell-wide section-md border-t border-line">
+      <div className="shell-wide py-10">
         <Link href={routes[locale].services} className="group flex w-fit items-center gap-4 text-bone">
           <span className="type-label link-draw">{t.allServices}</span>
           <ArrowRight className="arrow-shift size-5" aria-hidden="true" />
@@ -135,15 +127,14 @@ function PricingPackages({ locale, headingId }: { locale: Locale; headingId?: st
   const currency = locale === "pl" ? "zł" : "PLN"
   return (
     <div className="flex flex-col">
-      <ol aria-labelledby={headingId} className="grid gap-px bg-line-strong lg:grid-cols-3">
-        {order.map((idx, position) => {
+      <ol aria-labelledby={headingId} className="grid gap-3 lg:grid-cols-3">
+        {order.map((idx) => {
           const pkg = pricing.packages[idx]
           if (!pkg) return null
           const featured = Boolean(pkg.popular)
           return (
-            <li key={pkg.title} data-reveal="" className={cn("relative flex min-h-full flex-col gap-8 bg-ink-2 p-6 sm:p-8 lg:p-9", featured && "bg-linear-to-br from-wine via-wine-deep to-ink-warm")}>
+            <li key={pkg.title} data-reveal="" className={cn("relative flex min-h-full flex-col gap-8 border border-line bg-ink-2 p-6 sm:p-8", featured && "border-line-wine bg-linear-to-br from-wine via-wine-deep to-ink-warm")}>
               {featured && <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />}
-              <span className={cn("type-index text-xs text-ash", featured && "text-bone")}>{String(position + 1).padStart(2, "0")}</span>
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center gap-3">
                   <h3 className="type-h2">{pkg.title}</h3>
@@ -198,9 +189,9 @@ function PriceTag({ value, className, size = "lg" }: { value: string; className?
 
 function SectionHeading({ id, eyebrow, title }: { id: string; eyebrow: string; title: string }) {
   return (
-    <div className="grid gap-7 lg:grid-cols-12 lg:gap-8">
-      <div className="lg:col-span-3"><p className="eyebrow">{eyebrow}</p></div>
-      <div className="lg:col-span-8 lg:col-start-5"><h2 id={id} data-reveal="" className="type-h2 max-w-[16ch] text-balance">{title}</h2></div>
+    <div className="flex flex-col gap-6">
+      <p className="eyebrow">{eyebrow}</p>
+      <div className="border-t border-line-strong pt-7"><h2 id={id} data-reveal="" className="type-h2 max-w-[14ch] text-balance">{title}</h2></div>
     </div>
   )
 }
