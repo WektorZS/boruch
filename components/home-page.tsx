@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { Alex_Brush } from "next/font/google"
 import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
@@ -11,6 +12,12 @@ import type { PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
+
+const alexBrush = Alex_Brush({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+})
 
 const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p11", position: "54% 58%" },
@@ -69,6 +76,95 @@ const serviceIcons: Record<ServiceSlug, typeof Car> = {
   "zmiana-koloru-dechroming": Paintbrush,
 }
 
+type VerifiedReview = {
+  name: string
+  text: string
+  source: "Booksy" | "Google"
+}
+
+const verifiedReviews: VerifiedReview[] = [
+  {
+    name: "Sandra",
+    source: "Booksy",
+    text: "Autko doczyszczone aż miło, a nie było łatwo. Po bytowaniu sierściucha w bagażniku nie ma śladu. Polecam.",
+  },
+  {
+    name: "Kasia",
+    source: "Booksy",
+    text: "Auto wygląda jakby dopiero co wyjechało z salonu. Nawet masa psich kłaków nie przeszkodziła ekipie w super ogarnięciu Astry. Polecam serdecznie!",
+  },
+  {
+    name: "Paweł",
+    source: "Booksy",
+    text: "Auto po wizycie wygląda nawet lepiej niż jak z salonu! Nałożony wosk świetnie sprawdził się w warunkach zimowych - brud znika po zwykłym spłukaniu na myjni. Super fachowcy! Najlepsza myjnia samochodowa w Szczecinie!",
+  },
+  {
+    name: "Mariusz",
+    source: "Booksy",
+    text: "To kolejny raz kiedy wracam na mycie i sprzątanie samochodu. Za każdym razem jakość na najwyższym poziomie. Testowałem kilka innych miejsc w Szczecinie, ale tutaj dbają o każdy szczegół.",
+  },
+  {
+    name: "Dorota",
+    source: "Booksy",
+    text: "Myślałam, że mojego auta nie da się już odgruzować, ale panowie odwalili kawał dobrej roboty, serdecznie dziękuję i polecam.",
+  },
+  {
+    name: "Aneta",
+    source: "Booksy",
+    text: "Pierwszy raz korzystałam z usług tej myjni. Polecam z całego serca. Profesjonalne podejście, samochód czyściutki i pachnący. W środku wszystko dokładnie wyczyszczone. Autko jak z salonu. Dziękuję.",
+  },
+  {
+    name: "Maja Bajdek",
+    source: "Google",
+    text: "Panowie bardzo dokładni! Auto po korekcie lakieru i ceramice wygląda jak lustro. Cena adekwatna do robocizny. Najlepsza myjnia w mieście.",
+  },
+  {
+    name: "Karol Kobus",
+    source: "Google",
+    text: "Szczecin ma swoje myjnie, ale ta to inna liga. Szczególnie doceniam jakość i profesjonalizm. Regularnie tu wracam, bo widzę, że nie osiadają na laurach - zawsze czysto, zawsze dokładnie, zawsze z uśmiechem. Rzadko piszę opinie, ale tu po prostu trzeba było. Tak trzymać!",
+  },
+  {
+    name: "Wojciech Łuczyniec",
+    source: "Google",
+    text: "Oddawałem swoje auto na wiele myjni, ale na tej zaopiekowali się nim najlepiej i wszystko zrobili tak jak chciałem. Nic dla nich nie jest problemem. Najlepsza myjnia jaka tylko może być, polecam bardzo. Lampy oklejone perfekcyjnie, korekta lakieru wykonana na najwyższym poziomie. Wnętrze wygląda jak nowe z salonu i to tylko dzięki BORUCH MYJNIA!",
+  },
+  {
+    name: "Ada Majdanik",
+    source: "Google",
+    text: "Mimo ciężkiego przypadku, to co zostało zrobione z moim autem przeszło moje oczekiwania. Ponad 20-letnie auto wyglądało prawie jak nowe. Obsługa przemiła i widać, że lubią to co robią i robią to dobrze. Jestem zachwycona wynikami wizyty w tej myjni i na pewno będę tu wracać, bo naprawdę warto. Polecam każdemu, kto szuka miejsca, gdzie jego auto zostanie profesjonalnie zaopiekowane i które jest przyjazne dla portfela.",
+  },
+  {
+    name: "Michał Giermak",
+    source: "Google",
+    text: "Bardzo uczciwe podejście. Nie udało się finalnie wykonać dechromingu ze względu na specyfikę części i folia została zdjęta przed wydaniem auta. Można było to zostawić i udawać, że jest okej, a po paru miesiącach zaczęłoby się psuć, ale zostałem potraktowany profesjonalnie. Nie zostałem obciążony żadnymi opłatami, a auto zostało umyte. Bardzo doceniam takie podejście i uczciwość względem klienta, zwłaszcza że właściciel stracił na to sporo czasu i pieniędzy. Zdecydowanie polecam i skorzystam ponownie, jeśli będzie okazja.",
+  },
+  {
+    name: "Natalia Anna",
+    source: "Google",
+    text: "Pierwszy raz zostawiliśmy tam auto na pranie tapicerki i podsufitki. Prosiliśmy, żeby zająć się tylko środkiem auta, bo na następny dzień mieliśmy długo jechać autostradą i i tak byłoby brudne. Przychodzimy po odbiór, a tam auto lśni nie tylko od środka, ale i na zewnątrz, żeby lepiej było widać efekt, bez dodatkowych kosztów. Mega miła obsługa, a efekt naprawdę przerasta nasze oczekiwania. Polecam każdemu!",
+  },
+  {
+    name: "Kamil Piątek",
+    source: "Google",
+    text: "Dziś pierwszy raz skorzystałem z myjni Boruch i jestem bardzo zadowolony. W ciągu jednej kawy w kawiarni auto wróciło czyste i pachnące. Kontakt z klientem również zasługuje na pochwałę. Polecam to miejsce.",
+  },
+  {
+    name: "Dorota Młynarczyk",
+    source: "Google",
+    text: "Robią takie cuda, że szok! Mercedes wyszorowany na zewnątrz i w środku tak, że wygląda jak nowy. Bardzo polecam!",
+  },
+  {
+    name: "Karol",
+    source: "Google",
+    text: "Samochód po wyjeździe z tej myjni wygląda jakby wyjechał z fabryki. Dobre ceny. Polecam każdemu, na pewno będzie zadowolony.",
+  },
+  {
+    name: "Maja Chełkowska",
+    source: "Google",
+    text: "Bardzo profesjonalne i indywidualne podejście do każdego klienta. Pan właściciel bardzo uprzejmy. Polecam z całego serca.",
+  },
+]
+
 const homeCopy = {
   pl: {
     heroSlides: [
@@ -97,11 +193,7 @@ const homeCopy = {
     booksyReviews: "150 opinii",
     googleReviews: "79 opinii",
     googleReviewsLink: "Zobacz opinie Google",
-    reviews: [
-      ["Karol K.", "Rzadko piszę opinie, ale tu po prostu trzeba było. Tak trzymać!"],
-      ["Artur M.", "Auto odzyskało dawny blask. Dobra robota Panowie. Polecam."],
-      ["Klient BORUCH", "Byłem już na kilku myjniach ręcznych, ale tutaj zadbali o moje auto najlepiej."],
-    ],
+    reviews: verifiedReviews,
     faqLabel: "Najczęstsze pytania",
     faqTitle: "Zanim zostawisz nam auto.",
     faqIntro: "Krótko i konkretnie. Jeśli nie znajdziesz odpowiedzi, zadzwoń lub napisz.",
@@ -114,8 +206,8 @@ const homeCopy = {
     contactLabel: "Kontakt i wycena",
     contactTitle: "Opowiedz nam, czego potrzebuje Twoje auto.",
     contactIntro: "Podaj podstawowe dane i opisz zakres prac. Odpowiemy z propozycją usługi albo poprosimy o dodatkowe zdjęcia.",
-    contactDirect: "Wolisz załatwić to od razu?",
-    contactBooksy: "Termin możesz również wybrać bezpośrednio w Booksy.",
+    contactDirect: "Napisz, czego potrzebuje Twoje auto.",
+    contactBooksy: "Odpowiemy z propozycją usługi i dogodnym terminem.",
   },
   en: {
     heroSlides: [
@@ -144,11 +236,7 @@ const homeCopy = {
     booksyReviews: "150 reviews",
     googleReviews: "79 reviews",
     googleReviewsLink: "See Google reviews",
-    reviews: [
-      ["Karol K.", "I rarely write reviews, but this place deserved one. Keep it up!"],
-      ["Artur M.", "The car regained its former shine. Great work, gentlemen. Recommended."],
-      ["BORUCH customer", "I have used several hand car washes, but my car was cared for best here."],
-    ],
+    reviews: verifiedReviews,
     faqLabel: "Frequently asked questions",
     faqTitle: "Before you leave your car with us.",
     faqIntro: "Short and specific. If your question is not here, call or write to us.",
@@ -161,8 +249,8 @@ const homeCopy = {
     contactLabel: "Contact and quote",
     contactTitle: "Tell us what your car needs.",
     contactIntro: "Share the key details and describe the work. We will reply with a suggested service or ask for additional photos.",
-    contactDirect: "Prefer to arrange it now?",
-    contactBooksy: "You can also choose an appointment directly on Booksy.",
+    contactDirect: "Tell us what your car needs.",
+    contactBooksy: "We will suggest the right service and a convenient date.",
   },
   de: {
     heroSlides: [
@@ -191,11 +279,7 @@ const homeCopy = {
     booksyReviews: "150 Bewertungen",
     googleReviews: "79 Bewertungen",
     googleReviewsLink: "Google-Bewertungen ansehen",
-    reviews: [
-      ["Karol K.", "Ich schreibe selten Bewertungen, aber hier musste es einfach sein. Weiter so!"],
-      ["Artur M.", "Das Auto hat seinen früheren Glanz zurück. Tolle Arbeit. Klare Empfehlung."],
-      ["BORUCH Kunde", "Ich war schon bei mehreren Handwäschen, aber hier wurde mein Auto am besten gepflegt."],
-    ],
+    reviews: verifiedReviews,
     faqLabel: "Häufige Fragen",
     faqTitle: "Bevor Sie Ihr Fahrzeug abgeben.",
     faqIntro: "Kurz und konkret. Wenn Ihre Frage fehlt, rufen Sie uns an oder schreiben Sie uns.",
@@ -208,8 +292,8 @@ const homeCopy = {
     contactLabel: "Kontakt und Angebot",
     contactTitle: "Sagen Sie uns, was Ihr Fahrzeug benötigt.",
     contactIntro: "Nennen Sie die wichtigsten Angaben und beschreiben Sie den Umfang. Wir antworten mit einem Vorschlag oder bitten um zusätzliche Fotos.",
-    contactDirect: "Möchten Sie es sofort erledigen?",
-    contactBooksy: "Einen Termin können Sie auch direkt über Booksy wählen.",
+    contactDirect: "Beschreiben Sie, was Ihr Fahrzeug benötigt.",
+    contactBooksy: "Wir schlagen die passende Leistung und einen Termin vor.",
   },
   uk: {
     heroSlides: [
@@ -238,11 +322,7 @@ const homeCopy = {
     booksyReviews: "150 відгуків",
     googleReviews: "79 відгуків",
     googleReviewsLink: "Переглянути відгуки Google",
-    reviews: [
-      ["Karol K.", "Я рідко пишу відгуки, але тут просто мусив. Так тримати!"],
-      ["Artur M.", "Автомобіль повернув колишній блиск. Чудова робота. Рекомендую."],
-      ["Клієнт BORUCH", "Я був на кількох ручних мийках, але тут про моє авто подбали найкраще."],
-    ],
+    reviews: verifiedReviews,
     faqLabel: "Часті запитання",
     faqTitle: "Перш ніж залишити нам авто.",
     faqIntro: "Коротко і конкретно. Якщо тут немає відповіді, зателефонуйте або напишіть нам.",
@@ -255,8 +335,8 @@ const homeCopy = {
     contactLabel: "Контакт і оцінка",
     contactTitle: "Розкажіть, що потрібно вашому авто.",
     contactIntro: "Вкажіть основні дані та опишіть обсяг робіт. Ми запропонуємо послугу або попросимо додаткові фото.",
-    contactDirect: "Хочете домовитися одразу?",
-    contactBooksy: "Вільний час також можна вибрати безпосередньо в Booksy.",
+    contactDirect: "Напишіть, що потрібно вашому авто.",
+    contactBooksy: "Ми запропонуємо відповідну послугу та зручний час.",
   },
 } satisfies Record<Locale, {
   heroSlides: Array<{ label: string; title: string; text: string }>
@@ -276,7 +356,7 @@ const homeCopy = {
   booksyReviews: string
   googleReviews: string
   googleReviewsLink: string
-  reviews: [string, string][]
+  reviews: VerifiedReview[]
   faqLabel: string
   faqTitle: string
   faqIntro: string
@@ -438,8 +518,8 @@ function HomeHero({ locale }: { locale: Locale }) {
           <h1 id="hero-title" className="home-hero-title max-w-[10ch] text-balance">{slide.title}</h1>
           <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{slide.text}</p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">
-              {t.book}<ArrowUpRight className="size-4" aria-hidden="true" />
+            <a href="#wycena" className="home-button home-button-red">
+              {t.nav.contact}<ArrowRight className="size-4" aria-hidden="true" />
             </a>
             <Link href={routes[locale].services} className="home-button home-button-dark">
               {t.nav.services}<ArrowRight className="size-4" aria-hidden="true" />
@@ -516,7 +596,7 @@ function WhyBoruch({ locale }: { locale: Locale }) {
           <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
           <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 border-t border-white/12 bg-black/45 px-6 py-5 backdrop-blur-sm">
-            <span className="text-[.62rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH / Szczecin</span>
+            <span className="text-[.62rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
             <span className="h-px w-16 bg-brand" />
           </figcaption>
         </figure>
@@ -559,7 +639,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="mt-6 max-w-[16ch] font-display text-[clamp(2.45rem,4.2vw,4.15rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+            <h2 id="services-title" data-reveal="" className="mt-6 whitespace-nowrap font-display text-[clamp(2rem,7.8vw,3.8rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
           </div>
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
@@ -569,21 +649,21 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-14 grid gap-px border-y border-white/12 bg-white/10 lg:grid-cols-2">
-          {groups.map((group) => (
-            <article key={group.category} className="flex flex-col bg-[#0a0a0b]">
-              <header className="min-h-44 bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.12),transparent_42%)] px-6 py-8 sm:px-8 lg:px-9">
+        <div className="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-0">
+          {groups.map((group, groupIndex) => (
+            <article key={group.category} className={cn("flex flex-col", groupIndex === 0 ? "lg:pr-10 xl:pr-14" : "border-t border-white/10 pt-12 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 xl:pl-14")}>
+              <header className="pb-7">
                 <span className="mb-5 block h-px w-10 bg-brand" aria-hidden="true" />
                 <h3 className="font-display text-[clamp(2.2rem,3.4vw,3.35rem)] font-black uppercase leading-[1.04] tracking-[-.015em]">{group.title}</h3>
                 <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/48">{group.description}</p>
               </header>
 
-              <div className="grid grow gap-px bg-white/10 xl:grid-cols-2">
-                {group.items.map((item, itemIndex) => {
+              <div className="grid grow gap-x-8 xl:grid-cols-2">
+                {group.items.map((item) => {
                   const Icon = item.icon
                   return (
-                    <Link key={item.slug} href={item.href} className={cn("group/item grid min-h-32 grid-cols-[3rem_1fr_auto] items-center gap-4 bg-[#0d0d0e] p-5 transition-colors hover:bg-[#171718] sm:p-6", itemIndex === group.items.length - 1 && group.items.length % 2 === 1 && "xl:col-span-2")}>
-                      <span className="grid size-11 place-items-center border border-white/12 bg-white/[.025] text-brand transition-colors group-hover/item:border-brand group-hover/item:bg-brand group-hover/item:text-white">
+                    <Link key={item.slug} href={item.href} className="group/item grid min-h-28 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-5 transition-colors hover:border-brand/45">
+                      <span className="grid size-9 place-items-center text-brand transition-transform group-hover/item:-translate-y-0.5">
                         <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                       </span>
                       <span className="min-w-0">
@@ -658,14 +738,14 @@ function Packages({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const packageOrder = [
     { index: 1, icon: Droplets },
-    { index: 2, icon: Car },
     { index: 0, icon: Armchair },
+    { index: 2, icon: Car },
   ]
 
   return (
-    <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#101011] py-24 lg:py-32">
+    <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#101011] py-16 lg:py-20">
       <div className="home-shell">
-        <div className="grid gap-8 border-b border-white/12 pb-10 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-7 border-b border-white/12 pb-7 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker">{t.pricing}</p>
             <h2 id="packages-title" data-reveal="" className="mt-6 font-display text-[clamp(2.45rem,4.1vw,4.05rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.home.packagesTitle}</h2>
@@ -675,32 +755,32 @@ function Packages({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-px border-y border-white/10 bg-white/10 lg:grid-cols-3">
+        <div className="mt-8 grid border-t border-white/10 lg:grid-cols-3 lg:divide-x lg:divide-white/10">
           {packageOrder.map(({ index, icon: PackageIcon }) => {
             const pkg = src.pricing.packages[index]
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[32rem] flex-col overflow-hidden bg-[#0a0a0b] p-7 sm:p-8", featured && "bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.16),transparent_38%),#151516]")}>
+              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.14),transparent_38%),rgba(255,255,255,.025)]")}>
                 {featured && <span className="absolute inset-x-0 top-0 h-0.5 bg-brand" aria-hidden="true" />}
                 <div>
-                  <div className="mb-7 flex items-center justify-between gap-5">
+                  <div className="mb-5 flex items-center justify-between gap-5">
                     {pkg.popular ? <span className="bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
                     <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/35 bg-brand/10")}>
                       <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                     </span>
                   </div>
                   <h3 className="max-w-[13ch] font-display text-[clamp(1.85rem,2.6vw,2.55rem)] font-black uppercase leading-[1.08] tracking-[-.012em]">{pkg.title}</h3>
-                  <p className="mt-4 min-h-10 max-w-sm text-sm leading-relaxed text-white/48">{pkg.tagline}</p>
+                  <p className="mt-3 min-h-9 max-w-sm text-[.8rem] leading-relaxed text-white/48">{pkg.tagline}</p>
                 </div>
-                <div className="mt-7 border-t border-white/10 pt-6">
-                  {pkg.includedLabel && <p className="mb-4 text-[.58rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
-                  <ul className="space-y-2.5 text-sm leading-relaxed text-white/68">
-                    {pkg.items.map((item) => <li key={item} className="flex gap-3"><span className="mt-[.7em] h-px w-3 shrink-0 bg-brand" />{item}</li>)}
+                <div className="mt-5 border-t border-white/10 pt-5">
+                  {pkg.includedLabel && <p className="mb-3 text-[.55rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
+                  <ul className="grid gap-y-2 text-[.76rem] leading-snug text-white/68">
+                    {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" />{item}</li>)}
                   </ul>
-                  {pkg.discount && <p className="mt-5 text-sm leading-relaxed text-white/46">{pkg.discount}</p>}
+                  {pkg.discount && <p className="mt-4 text-[.76rem] leading-relaxed text-white/46">{pkg.discount}</p>}
                 </div>
-                <div className="mt-auto pt-8">
+                <div className="mt-auto pt-6">
                   {featured && (
                     <div className="mb-4 border-l-2 border-brand pl-4">
                       <strong className="block text-[.62rem] font-bold uppercase tracking-[.14em] text-[#ef6267]">{packageSaleCopy[locale].title}</strong>
@@ -712,7 +792,6 @@ function Packages({ locale }: { locale: Locale }) {
                   )}
                   <span className="block whitespace-nowrap font-display text-[clamp(2.2rem,3vw,2.85rem)] font-black uppercase leading-[1.04] tracking-[.005em]">{pkg.price}</span>
                   {pkg.note && <span className="mt-3 block text-[.58rem] font-bold uppercase tracking-[.13em] text-white/38">{pkg.note}</span>}
-                  <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className={cn("home-button mt-6 w-full", featured ? "home-button-red" : "home-button-dark")}>{t.book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
                 </div>
               </article>
             )
@@ -741,7 +820,7 @@ function TeamStory({ locale }: { locale: Locale }) {
           <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:min-h-[48rem]">
             <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
-            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH / Szczecin</figcaption>
+            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
           </figure>
 
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-8 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
@@ -754,7 +833,7 @@ function TeamStory({ locale }: { locale: Locale }) {
               {storyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
 
-            <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
+            <p className={cn(alexBrush.className, "home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white")}>{src.home.author}</p>
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
               <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
@@ -806,7 +885,7 @@ function Reviews({ locale }: { locale: Locale }) {
 
         <div className="mt-14 grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
           {visibleReviews.map(({ offset, review }) => {
-            const [name, text] = review
+            const { name, text, source } = review
             const isActive = offset === 0
             return (
               <figure
@@ -820,14 +899,17 @@ function Reviews({ locale }: { locale: Locale }) {
               >
                 <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
                 <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
-                <div className="relative flex gap-1 text-brand" aria-label="5 / 5">
-                  {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+                <div className="relative flex items-center justify-between gap-5">
+                  <div className="flex gap-1 text-brand" aria-label="5 / 5">
+                    {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+                  </div>
+                  <span className="text-[.58rem] font-bold uppercase tracking-[.16em] text-white/38">Opinia z {source}</span>
                 </div>
                 <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
-                <blockquote className={cn("mt-5 font-medium leading-relaxed", isActive ? "text-lg text-white/84 sm:text-xl" : "text-base text-white/64")}>„{text}”</blockquote>
+                <blockquote className={cn("mt-5 font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "line-clamp-7 text-sm text-white/64")}>„{text}”</blockquote>
                 <figcaption className="mt-auto border-t border-white/10 pt-6">
                   <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{name}</strong>
-                  <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">Booksy / BORUCH Szczecin</span>
+                  <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">{source} / BORUCH Myjnia Szczecin</span>
                 </figcaption>
               </figure>
             )
@@ -838,12 +920,10 @@ function Reviews({ locale }: { locale: Locale }) {
           <button type="button" onClick={showPreviousReview} aria-label={reviewControls[locale].previous} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
             <ArrowLeft className="size-4" aria-hidden="true" />
           </button>
-          <div className="flex items-center" role="group" aria-label={copy.reviewsLabel}>
-            {copy.reviews.map(([name], index) => (
-              <button key={name} type="button" onClick={() => setActiveReview(index)} aria-label={`${reviewControls[locale].select} ${index + 1}`} aria-current={index === activeReview ? "true" : undefined} className="group grid size-10 place-items-center">
-                <span className={cn("block h-1.5 transition-all duration-300", index === activeReview ? "w-7 bg-brand" : "w-1.5 bg-white/25 group-hover:bg-white/50")} aria-hidden="true" />
-              </button>
-            ))}
+          <div className="flex min-w-28 items-center justify-center gap-3 text-[.62rem] font-bold tabular-nums tracking-[.16em] text-white/38" aria-label={`${activeReview + 1} / ${reviewCount}`}>
+            <span className="text-white">{String(activeReview + 1).padStart(2, "0")}</span>
+            <span className="h-px w-8 bg-brand" aria-hidden="true" />
+            <span>{String(reviewCount).padStart(2, "0")}</span>
           </div>
           <button type="button" onClick={showNextReview} aria-label={reviewControls[locale].next} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
             <ArrowRight className="size-4" aria-hidden="true" />
@@ -888,7 +968,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-24 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left font-display text-[clamp(1.2rem,1.75vw,1.6rem)] font-black uppercase leading-[1.15] tracking-0 transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-semibold normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span>{question}</span>
                 <span className="grid size-10 shrink-0 place-items-center border border-white/15 text-brand transition-transform group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
@@ -932,7 +1012,7 @@ function Location({ locale }: { locale: Locale }) {
           </div>
           <div className="group relative min-h-64 overflow-hidden border-t border-white/10 bg-[#151516] lg:min-h-80 lg:border-l lg:border-t-0">
           <iframe
-            title={`${t.openMap} - BORUCH Szczecin`}
+            title={`${t.openMap} - BORUCH Myjnia Szczecin`}
             src={mapEmbedUrl}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -950,7 +1030,6 @@ function Location({ locale }: { locale: Locale }) {
 }
 
 function ContactSection({ locale }: { locale: Locale }) {
-  const t = ui[locale]
   const copy = homeCopy[locale]
 
   return (
@@ -966,7 +1045,6 @@ function ContactSection({ locale }: { locale: Locale }) {
               <p className="flex items-start gap-3"><Clock3 className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" /><span><strong className="block text-white/86">{copy.contactDirect}</strong>{copy.contactBooksy}</span></p>
               <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
               <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
-              <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark mt-3 w-fit">{t.booksy}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
             </div>
           </div>
         </div>
@@ -994,8 +1072,8 @@ function HomeFooter({ locale }: { locale: Locale }) {
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45">{src.home.contactText}</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:col-start-9 lg:justify-end">
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">{t.booksy}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
-            <a href={contact.phoneHref} className="home-button home-button-dark"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
+            <a href={contact.phoneHref} className="home-button home-button-red"><Phone className="size-4" aria-hidden="true" />{contact.phone}</a>
+            <a href={`mailto:${contact.email}`} className="home-button home-button-dark"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
           </div>
         </div>
       </div>

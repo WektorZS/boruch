@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Alex_Brush, JetBrains_Mono, Roboto_Flex } from 'next/font/google'
+import { JetBrains_Mono, Roboto_Flex } from 'next/font/google'
 import { MotionObserver } from '@/components/motion-observer'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
@@ -16,13 +16,6 @@ const mono = JetBrains_Mono({
   variable: '--font-mono-tech',
   display: 'swap',
 })
-const signature = Alex_Brush({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-signature',
-  display: 'swap',
-})
-
 const OG_IMAGE = '/images/home/szczecin-myjnia-banner.png'
 
 export const metadata: Metadata = {
@@ -101,7 +94,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl" className={`${flex.variable} ${mono.variable} ${signature.variable} bg-background`} suppressHydrationWarning>
+    <html lang="pl" className={`${flex.variable} ${mono.variable} bg-background`} suppressHydrationWarning>
       <head>
         {/* Marks JS as available before first paint so reveal styles never hide content for no-JS visitors. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

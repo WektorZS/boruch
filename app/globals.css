@@ -616,7 +616,6 @@
   animation: home-hero-copy-in 650ms var(--ease-out) both;
 }
 .home-signature {
-  font-family: var(--font-signature), 'Segoe Script', 'Brush Script MT', cursive;
   font-weight: 400;
   font-style: normal;
   font-synthesis: none;
