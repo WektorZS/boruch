@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Pause, Phone, Play, Quote, ShieldCheck, Sparkles, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Mail, MapPin, Menu, Quote, Phone, ShieldCheck, Sparkles, Star } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
@@ -28,16 +28,23 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p46", position: "50% 50%" },
 ]
 
-const sliderControls: Record<Locale, { pause: string; play: string }> = {
-  pl: { pause: "Zatrzymaj slider", play: "Wznów slider" },
-  en: { pause: "Pause slider", play: "Resume slider" },
-  de: { pause: "Slider anhalten", play: "Slider fortsetzen" },
-  uk: { pause: "Зупинити слайдер", play: "Продовжити слайдер" },
+const mapEmbedUrl = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
+
+const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
+  pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
+  en: { previous: "Previous review", next: "Next review", select: "Show review" },
+  de: { previous: "Vorherige Bewertung", next: "Nächste Bewertung", select: "Bewertung anzeigen" },
+  uk: { previous: "Попередній відгук", next: "Наступний відгук", select: "Показати відгук" },
 }
 
 const homeCopy = {
   pl: {
-    heroLead: "Myjnia ręczna, detailing, powłoki ceramiczne i folie PPF w centrum Szczecina.",
+    heroSlides: [
+      { label: "Myjnia i detailing w Szczecinie", title: "SPA dla Twojego auta", text: "Ręczna pielęgnacja, która przywraca czystość, połysk i świeżość każdego dnia." },
+      { label: "Folie ochronne i zmiana koloru", title: "Oklejanie aut", text: "Zabezpieczamy lakier folią PPF i odmieniamy wygląd samochodu bez trwałej ingerencji." },
+      { label: "Detailing bez kompromisów", title: "Profesjonalne kosmetyki", text: "Pracujemy na sprawdzonych produktach, które są bezpieczne dla lakieru i wnętrza." },
+      { label: "Plac Rodła 8 / PAZIM", title: "W centrum Szczecina", text: "Znajdziesz nas na poziomie -2 parkingu podziemnego PAZIM." },
+    ],
     whyLabel: "Dlaczego BORUCH",
     whyTitle: "Ręczna pielęgnacja auta od mycia po zabezpieczenie lakieru.",
     whyIntro: "Jedno miejsce, w którym zajmiemy się wyglądem samochodu wewnątrz i na zewnątrz.",
@@ -54,8 +61,10 @@ const homeCopy = {
     reviewsLabel: "Opinie klientów",
     reviewsTitle: "Efekt, do którego chce się wracać.",
     reviewsIntro: "Najlepiej mówią o nas kierowcy, którzy odebrali od nas swoje samochody.",
-    ratingLabel: "średnia ocen na Booksy",
     reviewsLink: "Zobacz opinie i terminy",
+    booksyReviews: "150 opinii",
+    googleReviews: "79 opinii",
+    googleReviewsLink: "Zobacz opinie Google",
     reviews: [
       ["Karol K.", "Rzadko piszę opinie, ale tu po prostu trzeba było. Tak trzymać!"],
       ["Artur M.", "Auto odzyskało dawny blask. Dobra robota Panowie. Polecam."],
@@ -77,7 +86,12 @@ const homeCopy = {
     contactBooksy: "Termin możesz również wybrać bezpośrednio w Booksy.",
   },
   en: {
-    heroLead: "Hand car wash, detailing, ceramic coatings and PPF in central Szczecin.",
+    heroSlides: [
+      { label: "Car wash and detailing in Szczecin", title: "A spa for your car", text: "Hands-on care that restores cleanliness, shine and freshness every day." },
+      { label: "Protective films and colour change", title: "Vehicle wrapping", text: "We protect paint with PPF and transform your car without permanent modification." },
+      { label: "Detailing without compromise", title: "Professional products", text: "We use proven products that are safe for your paintwork and interior." },
+      { label: "Plac Rodła 8 / PAZIM", title: "Central Szczecin", text: "You will find us on level -2 of the PAZIM underground car park." },
+    ],
     whyLabel: "Why BORUCH",
     whyTitle: "Hands-on car care from washing to paint protection.",
     whyIntro: "One place for complete exterior and interior car care.",
@@ -94,8 +108,10 @@ const homeCopy = {
     reviewsLabel: "Customer reviews",
     reviewsTitle: "Results worth coming back for.",
     reviewsIntro: "The best account of our work comes from drivers collecting their cars.",
-    ratingLabel: "average rating on Booksy",
     reviewsLink: "See reviews and appointments",
+    booksyReviews: "150 reviews",
+    googleReviews: "79 reviews",
+    googleReviewsLink: "See Google reviews",
     reviews: [
       ["Karol K.", "I rarely write reviews, but this place deserved one. Keep it up!"],
       ["Artur M.", "The car regained its former shine. Great work, gentlemen. Recommended."],
@@ -117,7 +133,12 @@ const homeCopy = {
     contactBooksy: "You can also choose an appointment directly on Booksy.",
   },
   de: {
-    heroLead: "Handwäsche, Detailing, Keramikversiegelung und PPF im Zentrum von Stettin.",
+    heroSlides: [
+      { label: "Autowäsche und Detailing in Stettin", title: "Wellness für Ihr Auto", text: "Sorgfältige Handarbeit für Sauberkeit, Glanz und Frische im Alltag." },
+      { label: "Schutzfolien und Farbwechsel", title: "Fahrzeugfolierung", text: "Wir schützen den Lack mit PPF und verändern die Optik ohne dauerhaften Eingriff." },
+      { label: "Detailing ohne Kompromisse", title: "Professionelle Produkte", text: "Wir arbeiten mit bewährten Produkten, die Lack und Innenraum schonen." },
+      { label: "Plac Rodła 8 / PAZIM", title: "Im Zentrum von Stettin", text: "Sie finden uns auf Ebene -2 der PAZIM Tiefgarage." },
+    ],
     whyLabel: "Warum BORUCH",
     whyTitle: "Manuelle Fahrzeugpflege von der Wäsche bis zum Lackschutz.",
     whyIntro: "Ein Ort für die komplette Pflege des Fahrzeugs innen und außen.",
@@ -134,8 +155,10 @@ const homeCopy = {
     reviewsLabel: "Kundenmeinungen",
     reviewsTitle: "Ein Ergebnis, für das man gerne wiederkommt.",
     reviewsIntro: "Am besten berichten die Fahrer über uns, die ihr Fahrzeug bei uns abgeholt haben.",
-    ratingLabel: "durchschnittliche Bewertung bei Booksy",
     reviewsLink: "Bewertungen und Termine ansehen",
+    booksyReviews: "150 Bewertungen",
+    googleReviews: "79 Bewertungen",
+    googleReviewsLink: "Google-Bewertungen ansehen",
     reviews: [
       ["Karol K.", "Ich schreibe selten Bewertungen, aber hier musste es einfach sein. Weiter so!"],
       ["Artur M.", "Das Auto hat seinen früheren Glanz zurück. Tolle Arbeit. Klare Empfehlung."],
@@ -157,7 +180,12 @@ const homeCopy = {
     contactBooksy: "Einen Termin können Sie auch direkt über Booksy wählen.",
   },
   uk: {
-    heroLead: "Ручна автомийка, детейлінг, керамічні покриття та PPF у центрі Щецина.",
+    heroSlides: [
+      { label: "Автомийка та детейлінг у Щецині", title: "SPA для вашого авто", text: "Ручний догляд, що повертає чистоту, блиск і свіжість щодня." },
+      { label: "Захисні плівки та зміна кольору", title: "Обклеювання авто", text: "Захищаємо лак плівкою PPF і змінюємо вигляд авто без постійного втручання." },
+      { label: "Детейлінг без компромісів", title: "Професійна косметика", text: "Використовуємо перевірені засоби, безпечні для лаку та салону." },
+      { label: "Plac Rodła 8 / PAZIM", title: "У центрі Щецина", text: "Ви знайдете нас на рівні -2 підземного паркінгу PAZIM." },
+    ],
     whyLabel: "Чому BORUCH",
     whyTitle: "Ручний догляд за авто від миття до захисту лаку.",
     whyIntro: "Одне місце для повного догляду за автомобілем зовні та всередині.",
@@ -174,8 +202,10 @@ const homeCopy = {
     reviewsLabel: "Відгуки клієнтів",
     reviewsTitle: "Результат, за яким хочеться повернутися.",
     reviewsIntro: "Найкраще про нашу роботу розповідають водії, які забрали у нас свої автомобілі.",
-    ratingLabel: "середня оцінка на Booksy",
     reviewsLink: "Переглянути відгуки та вільні години",
+    booksyReviews: "150 відгуків",
+    googleReviews: "79 відгуків",
+    googleReviewsLink: "Переглянути відгуки Google",
     reviews: [
       ["Karol K.", "Я рідко пишу відгуки, але тут просто мусив. Так тримати!"],
       ["Artur M.", "Автомобіль повернув колишній блиск. Чудова робота. Рекомендую."],
@@ -197,7 +227,7 @@ const homeCopy = {
     contactBooksy: "Вільний час також можна вибрати безпосередньо в Booksy.",
   },
 } satisfies Record<Locale, {
-  heroLead: string
+  heroSlides: Array<{ label: string; title: string; text: string }>
   whyLabel: string
   whyTitle: string
   whyIntro: string
@@ -210,8 +240,10 @@ const homeCopy = {
   reviewsLabel: string
   reviewsTitle: string
   reviewsIntro: string
-  ratingLabel: string
   reviewsLink: string
+  booksyReviews: string
+  googleReviews: string
+  googleReviewsLink: string
   reviews: [string, string][]
   faqLabel: string
   faqTitle: string
@@ -330,32 +362,22 @@ function HomeHeader({ locale }: { locale: Locale }) {
 }
 
 function HomeHero({ locale }: { locale: Locale }) {
-  const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
   const [activeSlide, setActiveSlide] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const slide = src.slides[activeSlide]
+  const slide = copy.heroSlides[activeSlide]
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (isPaused || motionQuery.matches) return
+    if (motionQuery.matches) return
 
     const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % src.slides.length)
+      setActiveSlide((current) => (current + 1) % copy.heroSlides.length)
     }, 6000)
 
     return () => window.clearInterval(timer)
-  }, [isPaused, src.slides.length])
-
-  const showPrevious = () => {
-    setActiveSlide((current) => (current - 1 + src.slides.length) % src.slides.length)
-  }
-
-  const showNext = () => {
-    setActiveSlide((current) => (current + 1) % src.slides.length)
-  }
+  }, [copy.heroSlides.length])
 
   return (
     <section aria-labelledby="hero-title" className="relative isolate flex min-h-svh flex-col overflow-hidden bg-[#080809] pt-24">
@@ -384,10 +406,10 @@ function HomeHero({ locale }: { locale: Locale }) {
       <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-14rem)] flex-1 items-center py-14 sm:py-20 lg:min-h-[calc(100svh-13rem)]">
         <div key={activeSlide} className="home-hero-copy flex max-w-3xl flex-col items-start">
           <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
-            <span className="h-px w-9 bg-brand" />{slide.title} - {slide.sub}
+            <span className="h-px w-9 bg-brand" />{slide.label}
           </p>
-          <h1 id="hero-title" className="home-hero-title max-w-[9ch] text-balance">{slide.kicker}</h1>
-          <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{copy.heroLead}</p>
+          <h1 id="hero-title" className="home-hero-title max-w-[10ch] text-balance">{slide.title}</h1>
+          <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{slide.text}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-red">
               {t.book}<ArrowUpRight className="size-4" aria-hidden="true" />
@@ -398,11 +420,11 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="absolute inset-x-5 bottom-8 flex items-end justify-between gap-6 sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] lg:bottom-10">
-          <div className="flex items-center gap-2" role="group" aria-label={`${t.photo} ${activeSlide + 1} ${t.of} ${src.slides.length}`}>
-            {src.slides.map((item, index) => (
+        <div className="absolute inset-x-5 bottom-6 flex flex-col-reverse items-start gap-4 sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] sm:bottom-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
+          <div className="flex items-center gap-2" role="group" aria-label={`${t.photo} ${activeSlide + 1} ${t.of} ${copy.heroSlides.length}`}>
+            {copy.heroSlides.map((item, index) => (
               <button
-                key={`${item.title}-${item.sub}`}
+                key={item.title}
                 type="button"
                 onClick={() => setActiveSlide(index)}
                 aria-label={`${t.photo} ${index + 1}`}
@@ -415,16 +437,24 @@ function HomeHero({ locale }: { locale: Locale }) {
             ))}
           </div>
 
-          <div className="flex items-center border border-white/15 bg-black/35 backdrop-blur-md">
-            <button type="button" onClick={showPrevious} className="grid size-11 place-items-center border-r border-white/15 text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={t.prev}>
-              <ArrowLeft className="size-4" aria-hidden="true" />
-            </button>
-            <button type="button" onClick={() => setIsPaused((current) => !current)} className="grid size-11 place-items-center border-r border-white/15 text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={isPaused ? sliderControls[locale].play : sliderControls[locale].pause}>
-              {isPaused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
-            </button>
-            <button type="button" onClick={showNext} className="grid size-11 place-items-center text-white/70 transition-colors hover:bg-white hover:text-black" aria-label={t.next}>
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </button>
+          <div className="flex items-stretch border border-white/14 bg-[#0b0b0c]/86 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md">
+            <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[-.04em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
+            <span className="flex min-w-0 flex-col justify-center divide-y divide-white/10">
+              <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
+                <span className="min-w-0 flex-1">
+                  <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
+                  <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.booksyReviews}</span>
+                </span>
+                <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+              </a>
+              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.googleReviewsLink}: 4.9 / 5, ${copy.googleReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
+                <span className="min-w-0 flex-1">
+                  <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
+                  <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.googleReviews}</span>
+                </span>
+                <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+              </a>
+            </span>
           </div>
         </div>
       </div>
@@ -667,43 +697,94 @@ function TeamStory({ locale }: { locale: Locale }) {
 
 function Reviews({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
+  const [activeReview, setActiveReview] = useState(0)
+  const reviewCount = copy.reviews.length
+  const visibleReviews = [-1, 0, 1].map((offset) => ({
+    offset,
+    review: copy.reviews[(activeReview + offset + reviewCount) % reviewCount],
+  }))
+
+  const showPreviousReview = () => {
+    setActiveReview((current) => (current - 1 + reviewCount) % reviewCount)
+  }
+
+  const showNextReview = () => {
+    setActiveReview((current) => (current + 1) % reviewCount)
+  }
 
   return (
-    <section aria-labelledby="reviews-title" className="border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
-      <div className="home-shell">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="home-kicker">{copy.reviewsLabel}</p>
-            <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.reviewsTitle}</h2>
-          </div>
-          <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
-          </div>
+    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
+      <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
+      <div className="home-shell relative">
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+          <p className="home-kicker">{copy.reviewsLabel}</p>
+          <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.reviewsTitle}</h2>
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="mt-14 grid border border-white/10 lg:grid-cols-[.72fr_2.28fr]">
-          <div className="flex min-h-64 flex-col justify-between border-b border-white/10 bg-[#111112] p-7 lg:border-b-0 lg:border-r lg:p-10">
-            <div className="flex gap-1 text-brand" aria-label="4.9 / 5">
-              {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
-            </div>
-            <div>
-              <strong className="font-display text-[clamp(4.8rem,8vw,7.5rem)] font-black leading-none tracking-[-.06em]">4.9</strong>
-              <p className="mt-3 max-w-44 text-[.62rem] font-bold uppercase tracking-[.15em] text-white/40">{copy.ratingLabel}</p>
-            </div>
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-3 text-[.62rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-[#ef6267]">
-              {copy.reviewsLink}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
-            </a>
-          </div>
-
-          <div className="grid md:grid-cols-3">
-            {copy.reviews.map(([name, text]) => (
-              <figure key={name} data-reveal="" className="flex min-h-72 flex-col border-b border-white/10 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 lg:p-9">
-                <Quote className="size-7 text-brand" strokeWidth={1.5} aria-hidden="true" />
-                <blockquote className="mt-8 text-lg leading-relaxed text-white/76">„{text}”</blockquote>
-                <figcaption className="mt-auto pt-8 text-[.62rem] font-bold uppercase tracking-[.16em] text-white/40">{name}</figcaption>
+        <div className="mt-14 grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
+          {visibleReviews.map(({ offset, review }) => {
+            const [name, text] = review
+            const isActive = offset === 0
+            return (
+              <figure
+                key={`${offset}-${name}`}
+                className={cn(
+                  "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
+                  isActive
+                    ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+                    : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-40 md:flex",
+                )}
+              >
+                <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
+                <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
+                <div className="relative flex gap-1 text-brand" aria-label="5 / 5">
+                  {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+                </div>
+                <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
+                <blockquote className={cn("mt-5 font-medium leading-relaxed", isActive ? "text-lg text-white/84 sm:text-xl" : "text-base text-white/64")}>„{text}”</blockquote>
+                <figcaption className="mt-auto border-t border-white/10 pt-6">
+                  <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{name}</strong>
+                  <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">Booksy / BORUCH Szczecin</span>
+                </figcaption>
               </figure>
+            )
+          })}
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <button type="button" onClick={showPreviousReview} aria-label={reviewControls[locale].previous} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <ArrowLeft className="size-4" aria-hidden="true" />
+          </button>
+          <div className="flex items-center" role="group" aria-label={copy.reviewsLabel}>
+            {copy.reviews.map(([name], index) => (
+              <button key={name} type="button" onClick={() => setActiveReview(index)} aria-label={`${reviewControls[locale].select} ${index + 1}`} aria-current={index === activeReview ? "true" : undefined} className="group grid size-10 place-items-center">
+                <span className={cn("block h-1.5 transition-all duration-300", index === activeReview ? "w-7 bg-brand" : "w-1.5 bg-white/25 group-hover:bg-white/50")} aria-hidden="true" />
+              </button>
             ))}
           </div>
+          <button type="button" onClick={showNextReview} aria-label={reviewControls[locale].next} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="mx-auto mt-8 grid max-w-3xl gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
+          <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.reviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
+            <span className="min-w-0 flex-1">
+              <strong className="block text-sm font-bold text-white">Booksy</strong>
+              <span className="mt-1 block text-xs text-white/42">{copy.booksyReviews}</span>
+            </span>
+            <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.googleReviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
+            <span className="min-w-0 flex-1">
+              <strong className="block text-sm font-bold text-white">Google</strong>
+              <span className="mt-1 block text-xs text-white/42">{copy.googleReviews}</span>
+            </span>
+            <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
@@ -747,26 +828,36 @@ function Location({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="location-title" className="bg-[#080809] py-20 lg:py-28">
-      <div className="home-shell grid overflow-hidden border border-white/10 lg:grid-cols-[.48fr_1.52fr]">
-        <div className="relative flex min-h-72 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10">
+    <section aria-labelledby="location-title" className="bg-[#080809] py-16 lg:py-20">
+      <div className="home-shell grid overflow-hidden border border-white/10 lg:grid-cols-[.42fr_.83fr_.95fr]">
+        <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
           <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/48">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(6rem,12vw,10rem)] font-black leading-[.72] tracking-[-.07em] text-brand">-2</strong>
+          <strong className="font-display text-[clamp(6rem,10vw,9rem)] font-black leading-[.72] tracking-[-.07em] text-brand">-2</strong>
         </div>
-        <div className="grid gap-12 bg-[#101011] p-8 sm:p-10 lg:grid-cols-2 lg:items-end lg:p-14">
+        <div className="flex flex-col justify-between bg-[#101011] p-8 sm:p-10 lg:min-h-80">
           <div>
             <p className="home-kicker">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="home-section-title mt-6 max-w-[10ch]">{slide.title} {slide.sub}</h2>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/54">{copy.routeHint}</p>
+            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[10ch] font-display text-[clamp(2.8rem,4.5vw,4.8rem)] font-black uppercase leading-[.86] tracking-[-.045em]">{slide.title} {slide.sub}</h2>
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/54">{copy.routeHint}</p>
           </div>
-          <div className="border-t border-white/12 pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-            <address className="flex flex-col gap-1 not-italic text-lg leading-relaxed text-white/72">
-              <MapPin className="mb-3 size-5 text-brand" aria-hidden="true" />
-              {src.address.lines.map((line) => <span key={line}>{line}</span>)}
-            </address>
-            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark mt-7 w-fit">{t.openMap}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
-          </div>
+          <address className="mt-8 flex items-start gap-3 border-t border-white/12 pt-5 not-italic text-sm leading-relaxed text-white/68">
+            <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+            <span className="flex flex-col">{src.address.lines.map((line) => <span key={line}>{line}</span>)}</span>
+          </address>
+        </div>
+        <div className="group relative min-h-64 overflow-hidden border-t border-white/10 bg-[#151516] lg:min-h-80 lg:border-l lg:border-t-0">
+          <iframe
+            title={`${t.openMap} - BORUCH Szczecin`}
+            src={mapEmbedUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="absolute inset-0 h-full w-full border-0 opacity-80 [filter:grayscale(1)_invert(.92)_sepia(.12)_hue-rotate(310deg)_contrast(.95)] transition-[filter,opacity,transform] duration-700 group-hover:scale-[1.02] group-hover:opacity-95 group-hover:[filter:grayscale(.7)_invert(.9)_contrast(.92)]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-black/5" aria-hidden="true" />
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-4 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.6rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
+            {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
