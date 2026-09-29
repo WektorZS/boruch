@@ -26,7 +26,8 @@ Stan na 29.09.2026.
 ## Zakres przebudowy
 
 - Strona główna została napisana od zera i nie korzysta ze wspólnego nagłówka ani stopki podstron.
-- Nowy home ma asymetryczne hero, własną nawigację, manifest marki, wierszowy indeks usług, nowy układ realizacji, poziome porównanie pakietów, opowieść o zespole, moduł lokalizacji PAZIM -2, końcowe CTA i uproszczoną stopkę.
+- Nowy home ma asymetryczne hero, własną nawigację, sekcję konkretnych korzyści, wierszowy indeks usług, pełną siatkę realizacji, trzy porównywalne pakiety, krótką opowieść o zespole, moduł lokalizacji PAZIM -2, końcową rezerwację i uproszczoną stopkę.
+- Usunięto powtórzony manifest o zespole, dekoracyjny moduł -2 z hero oraz ogólne hasła, które nie pomagały wybrać usługi.
 - Zachowano treści źródłowe, fotografie BORUCH, ceny, dane kontaktowe, Booksy i wszystkie odnośniki.
 - Strona główna nie używa numeracji dekoracyjnej. Wartość -2 oznacza rzeczywisty poziom parkingu PAZIM.
 - Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
