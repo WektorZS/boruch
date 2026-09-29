@@ -1,7 +1,7 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono, Roboto_Flex } from 'next/font/google'
 import { MotionObserver } from '@/components/motion-observer'
+import { GlobalOverlays } from '@/components/global-overlays'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 
@@ -106,7 +106,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         {children}
         <MotionObserver />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <GlobalOverlays />
       </body>
     </html>
   )
