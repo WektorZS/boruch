@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Alex_Brush } from "next/font/google"
-import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles } from "lucide-react"
+import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
@@ -33,6 +33,13 @@ const reviewControls: Record<Locale, { previous: string; next: string; select: s
   en: { previous: "Previous review", next: "Next review", select: "Show review" },
   de: { previous: "Vorherige Bewertung", next: "Nächste Bewertung", select: "Bewertung anzeigen" },
   uk: { previous: "Попередній відгук", next: "Наступний відгук", select: "Показати відгук" },
+}
+
+const reviewDialogCopy: Record<Locale, { more: string; close: string; label: string }> = {
+  pl: { more: "Zobacz więcej", close: "Zamknij opinię", label: "Opinia klienta" },
+  en: { more: "Read more", close: "Close review", label: "Customer review" },
+  de: { more: "Mehr anzeigen", close: "Bewertung schließen", label: "Kundenbewertung" },
+  uk: { more: "Показати більше", close: "Закрити відгук", label: "Відгук клієнта" },
 }
 
 const packageSaleCopy: Record<Locale, { title: string; without: string; save: string }> = {
@@ -82,7 +89,7 @@ type VerifiedReview = {
   source: "Booksy" | "Google"
 }
 
-const verifiedReviews: VerifiedReview[] = [
+const verifiedReviewsSource: VerifiedReview[] = [
   {
     name: "Sandra",
     source: "Booksy",
@@ -164,6 +171,8 @@ const verifiedReviews: VerifiedReview[] = [
     text: "Bardzo profesjonalne i indywidualne podejście do każdego klienta. Pan właściciel bardzo uprzejmy. Polecam z całego serca.",
   },
 ]
+
+const verifiedReviews = [0, 7, 1, 6, 2, 11, 4, 8, 3, 9, 5, 10, 12, 15, 13, 14].map((index) => verifiedReviewsSource[index])
 
 const homeCopy = {
   pl: {
@@ -658,7 +667,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                 <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/48">{group.description}</p>
               </header>
 
-              <div className="grid grow gap-x-8 xl:grid-cols-2">
+              <div className="grid content-start gap-x-8 xl:grid-cols-2">
                 {group.items.map((item) => {
                   const Icon = item.icon
                   return (
@@ -761,12 +770,12 @@ function Packages({ locale }: { locale: Locale }) {
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[radial-gradient(circle_at_100%_0%,rgba(225,38,46,.14),transparent_38%),rgba(255,255,255,.025)]")}>
-                {featured && <span className="absolute inset-x-0 top-0 h-0.5 bg-brand" aria-hidden="true" />}
+              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[radial-gradient(circle_at_88%_8%,rgba(225,38,46,.22),transparent_34%),linear-gradient(145deg,rgba(80,12,16,.36),rgba(255,255,255,.035)_58%)] shadow-[inset_0_0_0_1px_rgba(225,38,46,.34)]")}>
+                {featured && <span className="absolute inset-x-0 top-0 h-[3px] bg-brand shadow-[0_0_24px_rgba(225,38,46,.55)]" aria-hidden="true" />}
                 <div>
                   <div className="mb-5 flex items-center justify-between gap-5">
-                    {pkg.popular ? <span className="bg-brand px-2.5 py-1 text-[.55rem] font-bold uppercase tracking-[.16em]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
-                    <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/35 bg-brand/10")}>
+                    {pkg.popular ? <span className="bg-brand px-3 py-1.5 text-[.62rem] font-bold uppercase tracking-[.16em] shadow-[0_8px_24px_rgba(225,38,46,.2)]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
+                    <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/50 bg-brand/15")}>
                       <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                     </span>
                   </div>
@@ -782,11 +791,11 @@ function Packages({ locale }: { locale: Locale }) {
                 </div>
                 <div className="mt-auto pt-6">
                   {featured && (
-                    <div className="mb-4 border-l-2 border-brand pl-4">
-                      <strong className="block text-[.62rem] font-bold uppercase tracking-[.14em] text-[#ef6267]">{packageSaleCopy[locale].title}</strong>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[.62rem] font-semibold tracking-[.04em]">
-                        <span className="text-white/44">{packageSaleCopy[locale].without} <s className="text-white/60 decoration-brand decoration-2">240 zł</s></span>
-                        <span className="text-white/82">{packageSaleCopy[locale].save}</span>
+                    <div className="mb-5 border-l-2 border-brand bg-brand/[.07] px-4 py-3.5">
+                      <strong className="block text-[.72rem] font-bold uppercase tracking-[.13em] text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[.72rem] font-semibold tracking-[.025em]">
+                        <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 zł</s></span>
+                        <span className="font-bold uppercase tracking-[.08em] text-white">{packageSaleCopy[locale].save}</span>
                       </div>
                     </div>
                   )}
@@ -856,22 +865,107 @@ function TeamStory({ locale }: { locale: Locale }) {
   )
 }
 
+function ReviewCard({ review, isActive, locale, onOpen }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void }) {
+  const visibleTextRef = useRef<HTMLQuoteElement>(null)
+  const fullTextRef = useRef<HTMLParagraphElement>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
+
+  useEffect(() => {
+    const visibleText = visibleTextRef.current
+    const fullText = fullTextRef.current
+    if (!visibleText || !fullText) return
+
+    const checkTruncation = () => setIsTruncated(fullText.getBoundingClientRect().height > visibleText.getBoundingClientRect().height + 2)
+    const frame = requestAnimationFrame(checkTruncation)
+    const observer = new ResizeObserver(checkTruncation)
+    observer.observe(visibleText)
+    observer.observe(fullText)
+    window.addEventListener("resize", checkTruncation)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+      window.removeEventListener("resize", checkTruncation)
+    }
+  }, [review.text, isActive])
+
+  return (
+    <figure
+      className={cn(
+        "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
+        isActive
+          ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+          : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-35 md:flex",
+      )}
+    >
+      <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
+      <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
+      <div className="relative flex items-center justify-between gap-5">
+        <div className="flex gap-1 text-brand" aria-label="5 / 5">
+          {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+        </div>
+        <span className="text-[.58rem] font-bold uppercase tracking-[.16em] text-white/38">Opinia z {review.source}</span>
+      </div>
+      <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
+      <div className="relative mt-5 pb-8">
+        <blockquote ref={visibleTextRef} className={cn("line-clamp-3 font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
+        <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>
+        {isTruncated && (
+          <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.64rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
+            {reviewDialogCopy[locale].more}
+            <ArrowRight className="size-3.5 transition-transform group-hover/more:translate-x-1" aria-hidden="true" />
+          </button>
+        )}
+      </div>
+      <figcaption className="mt-auto border-t border-white/10 pt-6">
+        <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{review.name}</strong>
+        <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">{review.source} / BORUCH Myjnia Szczecin</span>
+      </figcaption>
+    </figure>
+  )
+}
+
 function Reviews({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
   const [activeReview, setActiveReview] = useState(0)
+  const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
+  const openerRef = useRef<HTMLElement | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   const reviewCount = copy.reviews.length
   const visibleReviews = [-1, 0, 1].map((offset) => ({
     offset,
     review: copy.reviews[(activeReview + offset + reviewCount) % reviewCount],
   }))
 
-  const showPreviousReview = () => {
-    setActiveReview((current) => (current - 1 + reviewCount) % reviewCount)
+  const openReview = (review: VerifiedReview) => {
+    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    setSelectedReview(review)
   }
 
-  const showNextReview = () => {
-    setActiveReview((current) => (current + 1) % reviewCount)
-  }
+  const closeReview = useCallback(() => {
+    setSelectedReview(null)
+    requestAnimationFrame(() => openerRef.current?.focus())
+  }, [])
+
+  useEffect(() => {
+    if (!selectedReview) return
+    const previousOverflow = document.body.style.overflow
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeReview()
+    }
+    document.body.style.overflow = "hidden"
+    window.addEventListener("keydown", handleKeyDown)
+    const frame = requestAnimationFrame(() => dialogRef.current?.querySelector<HTMLButtonElement>("[data-review-close]")?.focus())
+
+    return () => {
+      cancelAnimationFrame(frame)
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [selectedReview, closeReview])
+
+  const showPreviousReview = () => setActiveReview((current) => (current - 1 + reviewCount) % reviewCount)
+  const showNextReview = () => setActiveReview((current) => (current + 1) % reviewCount)
 
   return (
     <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
@@ -883,37 +977,12 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="mt-14 grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
-          {visibleReviews.map(({ offset, review }) => {
-            const { name, text, source } = review
-            const isActive = offset === 0
-            return (
-              <figure
-                key={`${offset}-${name}`}
-                className={cn(
-                  "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
-                  isActive
-                    ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-                    : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-40 md:flex",
-                )}
-              >
-                <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
-                <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
-                <div className="relative flex items-center justify-between gap-5">
-                  <div className="flex gap-1 text-brand" aria-label="5 / 5">
-                    {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
-                  </div>
-                  <span className="text-[.58rem] font-bold uppercase tracking-[.16em] text-white/38">Opinia z {source}</span>
-                </div>
-                <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
-                <blockquote className={cn("mt-5 font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "line-clamp-7 text-sm text-white/64")}>„{text}”</blockquote>
-                <figcaption className="mt-auto border-t border-white/10 pt-6">
-                  <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{name}</strong>
-                  <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">{source} / BORUCH Myjnia Szczecin</span>
-                </figcaption>
-              </figure>
-            )
-          })}
+        <div className="relative mt-14 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+          <div className="grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
+            {visibleReviews.map(({ offset, review }) => (
+              <ReviewCard key={`${offset}-${review.name}`} review={review} isActive={offset === 0} locale={locale} onOpen={() => openReview(review)} />
+            ))}
+          </div>
         </div>
 
         <div className="mt-8 flex items-center justify-center gap-3">
@@ -933,22 +1002,49 @@ function Reviews({ locale }: { locale: Locale }) {
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
           <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.reviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
             <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
-            <span className="min-w-0 flex-1">
-              <strong className="block text-sm font-bold text-white">Booksy</strong>
-              <span className="mt-1 block text-xs text-white/42">{copy.booksyReviews}</span>
-            </span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Booksy</strong><span className="mt-1 block text-xs text-white/42">{copy.booksyReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
           <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.googleReviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
             <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
-            <span className="min-w-0 flex-1">
-              <strong className="block text-sm font-bold text-white">Google</strong>
-              <span className="mt-1 block text-xs text-white/42">{copy.googleReviews}</span>
-            </span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Google</strong><span className="mt-1 block text-xs text-white/42">{copy.googleReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
         </div>
       </div>
+
+      {selectedReview && (
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="review-dialog-title"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-md sm:items-center sm:p-6"
+          onMouseDown={(event) => { if (event.target === event.currentTarget) closeReview() }}
+        >
+          <div className="relative max-h-[calc(100dvh-2rem)] w-full overflow-y-auto border-t border-brand/55 bg-[#121213] shadow-[0_32px_120px_rgba(0,0,0,.72)] sm:max-w-3xl sm:border sm:border-white/12">
+            <span className="absolute inset-x-0 top-0 h-[3px] bg-brand" aria-hidden="true" />
+            <button data-review-close type="button" onClick={closeReview} aria-label={reviewDialogCopy[locale].close} className="absolute right-4 top-4 z-10 grid size-11 place-items-center border border-white/12 bg-black/45 text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white sm:right-6 sm:top-6">
+              <X className="size-5" aria-hidden="true" />
+            </button>
+            <div className="p-6 sm:p-10 lg:p-12">
+              <div className="flex gap-1 text-brand" aria-label="5 / 5">
+                {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-5 fill-current" aria-hidden="true" />)}
+              </div>
+              <p className="mt-5 text-[.62rem] font-bold uppercase tracking-[.18em] text-brand">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
+              <h3 id="review-dialog-title" className="mt-4 pr-14 font-display text-[clamp(2rem,5vw,3.8rem)] font-black uppercase leading-[1.04] tracking-[-.015em]">{selectedReview.name}</h3>
+              <div className="my-7 h-px bg-white/10 sm:my-9" />
+              <div className="relative max-w-2xl">
+                <span className="pointer-events-none absolute -right-2 -top-12 select-none font-serif text-[8rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
+                <p className="relative text-base font-medium leading-8 text-white/78 sm:text-lg sm:leading-9">„{selectedReview.text}”</p>
+              </div>
+              <button type="button" onClick={closeReview} className="mt-9 inline-flex items-center gap-3 text-[.68rem] font-bold uppercase tracking-[.15em] text-brand transition-colors hover:text-[#ff676d]">
+                {reviewDialogCopy[locale].close}<X className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
