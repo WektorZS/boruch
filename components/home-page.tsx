@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react"
 import Link from "next/link"
 import { Alex_Brush } from "next/font/google"
 import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
@@ -954,13 +954,13 @@ function Reviews({ locale }: { locale: Locale }) {
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const desktopCarouselRef = useRef<HTMLDivElement>(null)
   const mobileCarouselRef = useRef<HTMLDivElement>(null)
+  const desktopScrollFrameRef = useRef<number | null>(null)
   const mobileScrollFrameRef = useRef<number | null>(null)
+  const desktopDragRef = useRef({ pointerId: -1, startX: 0, scrollLeft: 0, moved: false })
+  const suppressReviewClickRef = useRef(false)
   const reviewCount = copy.reviews.length
-  const visibleReviews = [-1, 0, 1].map((offset) => ({
-    offset,
-    review: copy.reviews[(activeReview + offset + reviewCount) % reviewCount],
-  }))
 
   const openReview = (review: VerifiedReview) => {
     openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -993,8 +993,7 @@ function Reviews({ locale }: { locale: Locale }) {
     const normalizedIndex = (index + reviewCount) % reviewCount
     setActiveReview(normalizedIndex)
 
-    if (window.innerWidth >= 768) return
-    const carousel = mobileCarouselRef.current
+    const carousel = window.innerWidth >= 768 ? desktopCarouselRef.current : mobileCarouselRef.current
     const card = carousel?.querySelector<HTMLElement>(`[data-review-index="${normalizedIndex}"]`)
     if (!carousel || !card) return
 
@@ -1004,10 +1003,11 @@ function Reviews({ locale }: { locale: Locale }) {
     })
   }
 
-  const updateMobileReview = () => {
-    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
-    mobileScrollFrameRef.current = requestAnimationFrame(() => {
-      const carousel = mobileCarouselRef.current
+  const updateReviewFromCarousel = (desktop: boolean) => {
+    const carousel = desktop ? desktopCarouselRef.current : mobileCarouselRef.current
+    const frameRef = desktop ? desktopScrollFrameRef : mobileScrollFrameRef
+    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+    frameRef.current = requestAnimationFrame(() => {
       if (!carousel) return
       const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
       let closestIndex = activeReview
@@ -1023,13 +1023,56 @@ function Reviews({ locale }: { locale: Locale }) {
       })
 
       if (Number.isFinite(closestIndex)) setActiveReview(closestIndex)
-      mobileScrollFrameRef.current = null
+      frameRef.current = null
     })
   }
 
+  const updateDesktopReview = () => updateReviewFromCarousel(true)
+
+  const updateMobileReview = () => {
+    updateReviewFromCarousel(false)
+  }
+
   useEffect(() => () => {
+    if (desktopScrollFrameRef.current !== null) cancelAnimationFrame(desktopScrollFrameRef.current)
     if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
   }, [])
+
+  const handleDesktopPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return
+    desktopDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: event.currentTarget.scrollLeft,
+      moved: false,
+    }
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handleDesktopPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = desktopDragRef.current
+    if (drag.pointerId !== event.pointerId) return
+    const distance = event.clientX - drag.startX
+    if (Math.abs(distance) > 4) drag.moved = true
+    if (!drag.moved) return
+    event.preventDefault()
+    event.currentTarget.scrollLeft = drag.scrollLeft - distance
+  }
+
+  const handleDesktopPointerEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = desktopDragRef.current
+    if (drag.pointerId !== event.pointerId) return
+    suppressReviewClickRef.current = drag.moved
+    desktopDragRef.current.pointerId = -1
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    if (drag.moved) window.setTimeout(() => { suppressReviewClickRef.current = false }, 0)
+  }
+
+  const preventClickAfterDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!suppressReviewClickRef.current) return
+    event.preventDefault()
+    event.stopPropagation()
+  }
 
   const showPreviousReview = () => selectReview(activeReview - 1)
   const showNextReview = () => selectReview(activeReview + 1)
@@ -1044,10 +1087,22 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-14 hidden md:block md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
-          <div key={activeReview} className="home-review-stage grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
-            {visibleReviews.map(({ offset, review }) => (
-              <ReviewCard key={`${offset}-${review.name}`} review={review} isActive={offset === 0} locale={locale} onOpen={() => openReview(review)} />
+        <div className="relative mt-14 hidden md:block">
+          <div
+            ref={desktopCarouselRef}
+            onScroll={updateDesktopReview}
+            onPointerDown={handleDesktopPointerDown}
+            onPointerMove={handleDesktopPointerMove}
+            onPointerUp={handleDesktopPointerEnd}
+            onPointerCancel={handleDesktopPointerEnd}
+            onClickCapture={preventClickAfterDrag}
+            className="flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-smooth px-[22%] py-8 select-none active:cursor-grabbing md:[scrollbar-width:none] lg:px-[26%] [&::-webkit-scrollbar]:hidden"
+            aria-label={copy.reviewsLabel}
+          >
+            {copy.reviews.map((review, index) => (
+              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[56%] shrink-0 snap-center lg:w-[48%]">
+                <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
+              </div>
             ))}
           </div>
         </div>
