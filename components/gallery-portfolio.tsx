@@ -80,7 +80,7 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
               aria-label={`${labels.open}: ${photos[id].alt} (${i + 1} ${labels.of} ${ids.length})`}
               className="group zoom-on-hover block h-full w-full cursor-zoom-in"
             >
-              <Photo id={id} sizes="(min-width: 768px) 60vw, 50vw" />
+              <Photo id={id} sizes={i % 4 === 0 || i % 4 === 3 ? "(min-width: 1600px) 965px, (min-width: 768px) 64vw, 92vw" : "(min-width: 1600px) 475px, (min-width: 768px) 32vw, 46vw"} />
               <span aria-hidden="true" className="absolute inset-0 border border-transparent transition-colors duration-300 group-hover:border-brand/70 group-focus-visible:border-brand/70" />
             </button>
           </li>

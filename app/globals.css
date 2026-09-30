@@ -827,7 +827,7 @@
   background: linear-gradient(90deg, rgb(6 6 7 / .58), transparent 70%);
 }
 .editorial-photo {
-  clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 1.25rem 100%, 0 calc(100% - 1.25rem));
   background: #151516;
 }
 .text-brand { color: #f16b70; }

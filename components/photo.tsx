@@ -37,7 +37,8 @@ export function Photo({ id, sizes, className, alt, priority = false, eager = fal
   return (
     <>
     {priority && optimizedPhotos.has(id) && <link rel="preload" as="image" type="image/avif" href={photoSrc(id, 960, "avif")} imageSrcSet={photoSrcSet(id, "avif")} imageSizes={sizes} fetchPriority="high" />}
-    <picture>
+    {/* A full-size block is required for the section's clip-path reveal and lazy-loading bounds. */}
+    <picture className="absolute inset-0 block h-full w-full">
       {optimizedPhotos.has(id) && <source type="image/avif" srcSet={photoSrcSet(id, "avif")} sizes={sizes} />}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
