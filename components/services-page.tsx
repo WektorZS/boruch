@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
-import { serviceConfigs, servicePrice, type ServiceSlug } from "@/lib/content/services"
+import type { ServiceSlug } from "@/lib/content/services"
 
 const clients = [
   { file: "radisson", name: "Radisson Blu" },
@@ -62,10 +62,8 @@ export function ServicesPage({ locale }: { locale: Locale }) {
             </div>
             <ol className="border-b border-white/10 lg:col-span-8">
               {group.items.map((item, index) => {
-                const config = serviceConfigs.find((service) => service.slug === item.slug)
                 const slug = item.slug as ServiceSlug
-                const href = locale === "pl" && config ? `/${slug}` : null
-                const price = config ? servicePrice(locale, slug) : null
+                const href = locale === "pl" ? `/${slug}` : null
                 const content = (
                   <>
                     <span className="mt-1 size-2 shrink-0 bg-brand" aria-hidden="true" />
@@ -73,10 +71,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
                       <strong className="font-display text-[clamp(1.45rem,2.2vw,2rem)] font-bold uppercase leading-[1.08] tracking-[-.015em] text-white/90 transition-colors group-hover:text-white">{item.title}</strong>
                       <span className="mt-3 block max-w-2xl text-sm leading-relaxed text-white/48">{item.text}</span>
                     </span>
-                    <span className="flex shrink-0 items-center gap-5 self-end lg:self-center">
-                      <span className="text-right"><span className="type-label block text-white/30">{t.priceLabel}</span><strong className="mt-1 block whitespace-nowrap text-sm font-semibold text-white/78">{price ?? t.individualQuote}</strong></span>
-                      {href && <span className="grid size-11 place-items-center border border-white/12 text-white/55 transition-colors group-hover:border-brand group-hover:bg-brand group-hover:text-white"><ArrowRight className="size-4" /></span>}
-                    </span>
+                    {href && <span className="flex shrink-0 items-center gap-4 self-end text-[.6rem] font-bold uppercase tracking-[.14em] text-white/48 transition-colors group-hover:text-white lg:self-center"><span className="hidden sm:inline">{t.viewService}</span><span className="grid size-11 place-items-center border border-white/12 transition-colors group-hover:border-brand group-hover:bg-brand group-hover:text-white"><ArrowRight className="size-4" /></span></span>}
                   </>
                 )
                 const rowClass = "group flex flex-wrap items-start gap-5 border-t border-white/10 py-7 transition-colors hover:border-brand/40 sm:flex-nowrap lg:items-center lg:py-8"

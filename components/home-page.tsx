@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Alex_Brush } from "next/font/google"
 import useEmblaCarousel from "embla-carousel-react"
-import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
+import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { servicePrice, serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
+import { serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
 import { cn } from "@/lib/utils"
 
@@ -449,10 +449,14 @@ function HomeHeader({ locale }: { locale: Locale }) {
           {t.book}<ArrowUpRight className="size-4" aria-hidden="true" />
         </a>
 
-        <details className="home-mobile-menu ml-auto lg:hidden">
-          <summary className="grid size-11 cursor-pointer list-none place-items-center border border-white/15 text-white">
-            <Menu className="size-5" aria-hidden="true" />
-            <span className="sr-only">{t.menu}</span>
+        <details className="home-mobile-menu group/home-menu ml-auto lg:hidden">
+          <summary className="flex h-11 cursor-pointer list-none items-center gap-3 text-white">
+            <span className="type-label text-bone group-open/home-menu:hidden">{t.menu}</span>
+            <span className="type-label hidden text-bone group-open/home-menu:inline">{t.close}</span>
+            <span aria-hidden="true" className="flex w-6 flex-col items-end gap-1.5">
+              <span className="h-px w-6 bg-bone transition-transform duration-300 group-open/home-menu:translate-y-[3.5px] group-open/home-menu:rotate-45" />
+              <span className="h-px w-4 bg-brand transition-all duration-300 group-open/home-menu:w-6 group-open/home-menu:-translate-y-[3.5px] group-open/home-menu:-rotate-45" />
+            </span>
           </summary>
           <div className="fixed inset-x-0 top-24 min-h-[calc(100svh-6rem)] border-t border-white/10 bg-[#101011] px-5 py-8 shadow-2xl">
             <nav aria-label={t.navigation}>
@@ -655,7 +659,6 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       return {
         slug: service.slug,
         title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-        price: servicePrice(locale, service.slug) ?? t.individualQuote,
         icon: serviceIcons[service.slug],
         href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
       }
@@ -695,10 +698,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                       <span className="grid size-9 place-items-center text-brand transition-transform group-hover/item:-translate-y-0.5">
                         <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                       </span>
-                      <span className="min-w-0">
-                        <strong className="block font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.13] tracking-0">{item.title}</strong>
-                        <span className="mt-2 block text-[.58rem] font-bold uppercase tracking-[.12em] text-white/52">{item.price}</span>
-                      </span>
+                      <strong className="min-w-0 font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.13] tracking-0">{item.title}</strong>
                       <ArrowUpRight className="size-4 text-white/35 transition-colors group-hover/item:text-brand" aria-hidden="true" />
                     </Link>
                   )

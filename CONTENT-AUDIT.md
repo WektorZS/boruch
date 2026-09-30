@@ -29,6 +29,7 @@ Stan na 30.09.2026.
 - Nowy home ma poszerzone asymetryczne hero, własną nawigację, sekcję konkretnych korzyści, wierszowy indeks usług, pełną siatkę realizacji, trzy porównywalne pakiety, krótką opowieść o zespole, opinie klientów, FAQ, moduł lokalizacji PAZIM -2, formularz kontaktowy i uproszczoną stopkę.
 - Usunięto powtórzony manifest o zespole, dekoracyjny moduł -2 z hero oraz ogólne hasła, które nie pomagały wybrać usługi.
 - Zachowano treści źródłowe, fotografie BORUCH, ceny, dane kontaktowe, Booksy i wszystkie odnośniki.
+- Uporządkowano odpowiedzialność stron: home pokazuje ceny tylko trzech głównych pakietów myjni, strona Usługi opisuje ofertę i prowadzi do kart szczegółowych, a pełna lista cen znajduje się wyłącznie w Cenniku.
 - Strona główna nie używa numeracji dekoracyjnej. Wartość -2 oznacza rzeczywisty poziom parkingu PAZIM.
 - Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
 - Ujednolicono wszystkie polskie strony szczegółowych usług.
@@ -110,8 +111,8 @@ Stan na 30.09.2026.
 
 ## Mobile, dostępność i ruch
 
-- Menu mobilne działa jako pełnoekranowy panel oparty na natywnym elemencie `details`.
-- Karty usług na telefonie mają własne zdjęcia, opis i cenę. Nie wymagają hovera.
+- Menu mobilne strony głównej i podstron korzysta z tego samego czytelnego przycisku `MENU / ZAMKNIJ`. Oba warianty otwierają pełnoekranowy, nieprześwitujący panel.
+- Karty na stronie Usługi są opisowe i nie powielają cen z Cennika. Każda polska pozycja prowadzi do przygotowanej karty szczegółowej usługi.
 - Galeria ma powtarzalny rytm czterech zdjęć, małe odstępy i dialogowy lightbox ze sterowaniem klawiaturą oraz gestem przesunięcia.
 - Elementy z `data-reveal` obsługuje jeden `IntersectionObserver`.
 - Dla `prefers-reduced-motion: reduce` animacje i przejścia są skracane, a treści pozostają widoczne.
@@ -120,12 +121,14 @@ Stan na 30.09.2026.
 - Cookies, wybór języka i pływający kontakt są montowane globalnie, dlatego działają na stronie głównej, wszystkich podstronach oraz we wszystkich wersjach językowych.
 - Kontakt i O nas otrzymały nowe układy od zera, a Usługi, Cennik, Galeria, Booksy i wszystkie strony szczegółowe usług zostały dopasowane do systemu strony głównej.
 - Cennik korzysta z tej samej listy danych co strona Usługi i pokazuje wszystkie 11 pozycji w dwóch tradycyjnych tabelach: Myjnia i Detailing.
+- Strona główna zachowuje trzy ceny potrzebne do szybkiego porównania: czyszczenie zewnętrzne, czyszczenie wnętrza i komplet.
 - Podstrony mają jedno wspólne wezwanie do kontaktu w stopce. Usunięto powielone sekcje kontaktowe z treści stron.
 
 ## Weryfikacja
 
 - Sprawdzono kluczowe szablony i przejścia między wersjami PL, EN, DE i UA.
-- Wizualnie sprawdzono stronę główną i cennik, w tym hero, kontrast, typografię, nawigację, sekcje treści oraz stopkę.
+- Wizualnie sprawdzono stronę główną, Usługi i Cennik, w tym hero, kontrast, typografię, nawigację, sekcje treści oraz stopkę.
+- Na szerokości 390 px sprawdzono otwieranie pełnoekranowego menu na stronie głównej i podstronie Usługi.
 - Sprawdzono nowe hero, opinie, FAQ i formularz na szerokości 1440 px oraz 390 px.
 - Potwierdzono rozwijanie odpowiedzi w FAQ.
 - Potwierdzono, że nieużywana numeracja nie wróciła do kart ani nagłówków.

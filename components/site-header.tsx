@@ -167,10 +167,11 @@ export function SiteHeader({
         inert={!open}
         data-open={open}
         className={cn(
-          "group/menu fixed inset-0 z-(--z-menu) flex flex-col bg-[radial-gradient(circle_at_85%_15%,rgba(143,24,29,.24),transparent_26rem),#070707] lg:hidden",
+          "group/menu fixed inset-0 z-(--z-menu) flex flex-col overflow-hidden bg-[#070707] lg:hidden",
           "invisible opacity-0 transition-[opacity,visibility] duration-500 ease-(--ease-out) data-[open=true]:visible data-[open=true]:opacity-100",
         )}
       >
+        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 size-[34rem] rounded-full bg-brand/10 blur-[120px]" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-wine-deep/70 to-transparent" />
 
         <div className="shell-wide relative flex h-(--header-h-compact) items-center justify-between border-b border-line">

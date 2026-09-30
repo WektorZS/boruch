@@ -744,10 +744,6 @@
 .home-mobile-menu:not([open]) > div {
   display: none;
 }
-.home-mobile-menu[open] > summary {
-  border-color: var(--brand);
-  background: var(--brand);
-}
 
 @media (max-width: 639px) {
   .home-hero-photo {
