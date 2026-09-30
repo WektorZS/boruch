@@ -648,19 +648,6 @@
     transform: translateY(0);
   }
 }
-@keyframes home-review-stage-in {
-  from {
-    opacity: 0.45;
-    transform: translate3d(0.8rem, 0, 0) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.home-review-stage {
-  animation: home-review-stage-in 520ms var(--ease-out) both;
-}
 .home-section-title {
   font-family: var(--font-display);
   font-stretch: 82%;

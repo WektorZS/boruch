@@ -1,8 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Alex_Brush } from "next/font/google"
+import useEmblaCarousel from "embla-carousel-react"
 import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Menu, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
@@ -918,7 +919,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
             : "min-h-[25rem] scale-[.9] border-white/15 bg-[#18181a] opacity-30 shadow-[0_18px_50px_rgba(0,0,0,.28)] md:scale-[.88] md:opacity-15"
           : isActive
             ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-            : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-15 md:flex",
+            : "hidden min-h-[20rem] border-white/10 bg-white/[.025] md:flex",
       )}
     >
       <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
@@ -957,13 +958,8 @@ function Reviews({ locale }: { locale: Locale }) {
   const mobileCarouselRef = useRef<HTMLDivElement>(null)
   const mobileScrollFrameRef = useRef<number | null>(null)
   const mobileLoopTimerRef = useRef<number | null>(null)
-  const desktopDragRef = useRef({ pointerId: -1, startX: 0, distance: 0, moved: false })
-  const suppressReviewClickRef = useRef(false)
+  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ align: "center", loop: true, skipSnaps: false })
   const reviewCount = copy.reviews.length
-  const visibleReviews = [-1, 0, 1].map((offset) => ({
-    offset,
-    review: copy.reviews[(activeReview + offset + reviewCount) % reviewCount],
-  }))
   const mobileLoopReviews = Array.from({ length: 3 }, (_, copyIndex) =>
     copy.reviews.map((review, index) => ({ review, index, loopPosition: copyIndex * reviewCount + index })),
   ).flat()
@@ -1009,11 +1005,25 @@ function Reviews({ locale }: { locale: Locale }) {
     return () => cancelAnimationFrame(frame)
   }, [reviewCount])
 
+  useEffect(() => {
+    if (!desktopEmblaApi) return
+    const updateActiveReview = () => setActiveReview(desktopEmblaApi.selectedScrollSnap())
+    updateActiveReview()
+    desktopEmblaApi.on("select", updateActiveReview)
+    desktopEmblaApi.on("reInit", updateActiveReview)
+    return () => {
+      desktopEmblaApi.off("select", updateActiveReview)
+      desktopEmblaApi.off("reInit", updateActiveReview)
+    }
+  }, [desktopEmblaApi])
+
   const selectReview = (index: number) => {
     const normalizedIndex = (index + reviewCount) % reviewCount
+    if (window.innerWidth >= 768) {
+      desktopEmblaApi?.scrollTo(normalizedIndex)
+      return
+    }
     setActiveReview(normalizedIndex)
-
-    if (window.innerWidth >= 768) return
     const carousel = mobileCarouselRef.current
     if (!carousel) return
     const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
@@ -1082,47 +1092,6 @@ function Reviews({ locale }: { locale: Locale }) {
     if (mobileLoopTimerRef.current !== null) window.clearTimeout(mobileLoopTimerRef.current)
   }, [])
 
-  const handleDesktopPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse" || event.button !== 0) return
-    desktopDragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      distance: 0,
-      moved: false,
-    }
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }
-
-  const handleDesktopPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = desktopDragRef.current
-    if (drag.pointerId !== event.pointerId) return
-    const distance = event.clientX - drag.startX
-    if (Math.abs(distance) > 4) drag.moved = true
-    if (!drag.moved) return
-    event.preventDefault()
-    drag.distance = distance
-    event.currentTarget.style.transition = "none"
-    event.currentTarget.style.transform = `translate3d(${Math.max(-42, Math.min(42, distance * 0.18))}px, 0, 0)`
-  }
-
-  const handleDesktopPointerEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = desktopDragRef.current
-    if (drag.pointerId !== event.pointerId) return
-    suppressReviewClickRef.current = drag.moved
-    desktopDragRef.current.pointerId = -1
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
-    event.currentTarget.style.transition = "transform 320ms cubic-bezier(.22,1,.36,1)"
-    event.currentTarget.style.transform = ""
-    if (Math.abs(drag.distance) >= 45) selectReview(activeReview + (drag.distance < 0 ? 1 : -1))
-    if (drag.moved) window.setTimeout(() => { suppressReviewClickRef.current = false }, 0)
-  }
-
-  const preventClickAfterDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!suppressReviewClickRef.current) return
-    event.preventDefault()
-    event.stopPropagation()
-  }
-
   const showPreviousReview = () => selectReview(activeReview - 1)
   const showNextReview = () => selectReview(activeReview + 1)
 
@@ -1137,19 +1106,28 @@ function Reviews({ locale }: { locale: Locale }) {
         </div>
 
         <div className="relative mt-14 hidden md:block md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
-          <div
-            key={activeReview}
-            onPointerDown={handleDesktopPointerDown}
-            onPointerMove={handleDesktopPointerMove}
-            onPointerUp={handleDesktopPointerEnd}
-            onPointerCancel={handleDesktopPointerEnd}
-            onClickCapture={preventClickAfterDrag}
-            className="home-review-stage grid cursor-grab select-none items-center gap-4 active:cursor-grabbing md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5"
-            aria-label={copy.reviewsLabel}
-          >
-            {visibleReviews.map(({ offset, review }) => (
-              <ReviewCard key={`${offset}-${review.name}`} review={review} isActive={offset === 0} locale={locale} onOpen={() => openReview(review)} />
-            ))}
+          <div ref={desktopEmblaRef} className="cursor-grab overflow-hidden active:cursor-grabbing" aria-label={copy.reviewsLabel}>
+            <div className="-ml-5 flex touch-pan-y items-center py-8">
+              {copy.reviews.map((review, index) => {
+                const isActive = index === activeReview
+                const forwardDistance = (index - activeReview + reviewCount) % reviewCount
+                const isBefore = forwardDistance > reviewCount / 2
+                return (
+                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[42%] pl-5">
+                    <div className={cn(
+                      "relative h-full transition-all duration-500 ease-out",
+                      isActive
+                        ? "z-20 origin-center scale-100 opacity-100"
+                        : isBefore
+                          ? "z-10 origin-right scale-[.7] opacity-15"
+                          : "z-10 origin-left scale-[.7] opacity-15",
+                    )}>
+                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
 
