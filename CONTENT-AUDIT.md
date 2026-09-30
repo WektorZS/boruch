@@ -1,6 +1,6 @@
 # Audyt treści i wdrożenia
 
-Stan na 29.09.2026.
+Stan na 30.09.2026.
 
 ## Audyt wejściowy
 
@@ -75,7 +75,7 @@ Stan na 29.09.2026.
 - Telefon: +48 534 095 265.
 - E-mail: bruchkarol@gmail.com.
 - Wszystkie przyciski rezerwacji prowadzą do jednego adresu Booksy z `lib/content/index.ts`.
-- Sekcja opinii prezentuje aktualną ocenę 4,9 na Booksy oraz trzy krótkie cytaty z publicznych opinii klientów. Dane sprawdzono 29.09.2026.
+- Sekcja opinii prezentuje oceny Booksy i Google oraz 16 zweryfikowanych opinii podanych przez właściciela. Opinie działają jako płynna, zapętlona karuzela z pełną treścią w oknie dialogowym.
 
 ## Formularz i Resend
 
@@ -117,6 +117,8 @@ Stan na 29.09.2026.
 - Dla `prefers-reduced-motion: reduce` animacje i przejścia są skracane, a treści pozostają widoczne.
 - Długie niemieckie i ukraińskie nagłówki mieszczą się bez poziomego przewijania.
 - Usunięto poziome przewijanie powodowane przez długi nagłówek sekcji na małym ekranie.
+- Cookies, wybór języka i pływający kontakt są montowane globalnie, dlatego działają na stronie głównej, wszystkich podstronach oraz we wszystkich wersjach językowych.
+- Kontakt i O nas otrzymały nowe układy od zera, a Usługi, Cennik, Galeria, Booksy i wszystkie strony szczegółowe usług zostały dopasowane do systemu strony głównej.
 
 ## Weryfikacja
 

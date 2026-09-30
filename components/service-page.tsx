@@ -75,11 +75,12 @@ function ServiceHero({ service }: { service: Service }) {
   const group = serviceGroupTitle("pl", service.slug)
 
   return (
-    <section aria-labelledby="service-title" className="relative isolate flex min-h-[700px] items-end overflow-hidden border-b border-line pt-(--header-h)">
-      <div className="enter-unmask frame absolute inset-0 border-0"><Photo id={service.hero} priority sizes="100vw" position="50% 60%" /></div>
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.98)_0%,rgba(7,7,7,.83)_47%,rgba(7,7,7,.32)_100%)]" />
-      <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-ink via-transparent to-ink/35" />
-      <div className="shell-wide relative z-10 pb-14 lg:pb-16">
+    <section aria-labelledby="service-title" className="relative isolate flex min-h-[700px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
+      <div className="enter-unmask absolute inset-0"><Photo id={service.hero} priority sizes="100vw" position="50% 60%" /></div>
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.86)_48%,rgba(6,6,7,.3)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
+      <div className="shell-wide relative z-10 grid gap-9 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
+        <div className="lg:col-span-8">
         <div className="enter-fade mb-8 flex items-center gap-6" style={{ "--i": 0 } as React.CSSProperties}>
           <nav aria-label="Breadcrumb">
             <ol className="type-label flex flex-wrap items-center gap-2 text-ash">
@@ -89,16 +90,16 @@ function ServiceHero({ service }: { service: Service }) {
             </ol>
           </nav>
         </div>
-        <h1 id="service-title" className="enter-fade type-h1 max-w-[12ch] text-balance" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
-        <div className="mt-8 grid max-w-4xl gap-7 border-t border-line-strong pt-7 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-          <div className="enter-fade flex flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
+        <h1 id="service-title" className="enter-fade type-h1 max-w-[14ch] text-balance" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
+          <div className="enter-fade mt-7 flex max-w-2xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
-            <p className="max-w-xl text-pretty leading-relaxed text-bone/75 first-letter:uppercase">{service.source.tagline}</p>
+            <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
           </div>
-          <div className="enter-fade flex flex-col gap-4" style={{ "--i": 3 } as React.CSSProperties}>
-            <p className="flex flex-col gap-1"><span className="type-label text-ash">{t.priceLabel}</span><span className="font-display text-2xl font-bold text-bone">{price ?? t.individualQuote}</span></p>
-            <div className="flex flex-wrap gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
-          </div>
+        </div>
+        <div className="enter-fade border-l border-brand pl-6 lg:col-span-3 lg:col-start-10" style={{ "--i": 3 } as React.CSSProperties}>
+          <p className="type-label text-brand">{t.priceLabel}</p>
+          <p className="mt-4 font-display text-3xl font-black uppercase tracking-[-.02em] text-white">{price ?? t.individualQuote}</p>
+          <div className="mt-6 flex flex-col gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
         </div>
       </div>
     </section>
@@ -108,7 +109,7 @@ function ServiceHero({ service }: { service: Service }) {
 function ServiceIntro({ service }: { service: Service }) {
   const [first, ...rest] = service.source.intro
   return (
-    <section aria-label={service.navTitle} className="section-lg">
+    <section aria-label={service.navTitle} className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
         <div className="flex flex-col gap-10 lg:col-span-7 lg:pt-8">
           <p className="eyebrow">{service.navTitle}</p>
@@ -134,7 +135,7 @@ function ServiceProcess({ service }: { service: Service }) {
   const after = steps.slice(split)
 
   return (
-    <section aria-labelledby="process-title" className="border-t border-line">
+    <section aria-labelledby="process-title" className="border-b border-white/10 bg-[#101011]">
       <div className="shell-wide section-lg">
         <div className="mb-12 grid gap-7 lg:mb-16 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-3"><p className="eyebrow">{t.process}</p></div>
@@ -158,7 +159,7 @@ function StepList({ steps, start = 1, stepLabel, compact = false }: { steps: Ser
       {steps.map((step, i) => (
         <li key={step.title} data-reveal="" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("group grid gap-4 border-t border-line transition-colors hover:border-line-strong md:grid-cols-12 md:gap-8", compact ? "py-7" : "py-9 lg:py-12")}>
           <p className="flex items-baseline gap-3 md:col-span-2 md:flex-col md:gap-2">
-            <span className="type-index text-3xl text-bone transition-colors group-hover:text-highlight lg:text-4xl">{formatIndex(start + i)}</span>
+            <span className="type-index text-xl text-white/38 transition-colors group-hover:text-highlight lg:text-2xl">{formatIndex(start + i)}</span>
             <span className="type-label text-ash">{stepLabel}</span>
           </p>
           <h3 className={cn("text-pretty md:col-span-4", compact ? "type-h3" : "type-h3 lg:text-[1.75rem] lg:leading-tight")}>{step.title}</h3>
@@ -177,7 +178,7 @@ function ServiceSection({ service, section, id }: { service: Service; section: S
 
 function ListSection({ section, id }: { section: Section; id: string }) {
   return (
-    <section aria-labelledby={id} className="section-md border-t border-line">
+    <section aria-labelledby={id} className="section-md border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="type-h2 max-w-[14ch] text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
         <div className="lg:col-span-7">{section.kind === "process" && section.steps ? <StepList steps={section.steps} stepLabel={ui.pl.step} compact /> : <Blocks blocks={section.blocks} />}</div>
@@ -211,7 +212,7 @@ function PriceSection({ service, section, id }: { service: Service; section: Sec
   const price = servicePrice("pl", service.slug)
   const linkText = section.blocks.find((block) => block.type === "text")?.text
   return (
-    <section aria-labelledby={id} className="border-t border-line-wine bg-wine-deep/35">
+    <section aria-labelledby={id} className="border-b border-white/10 bg-[radial-gradient(circle_at_85%_20%,rgba(213,43,47,.12),transparent_28rem),#101011]">
       <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="type-h2 text-balance">{section.heading}</h2></div>
         <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
@@ -226,7 +227,7 @@ function PriceSection({ service, section, id }: { service: Service; section: Sec
 function SummarySection({ section, id }: { section: Section; id: string }) {
   const [first, ...rest] = section.blocks.map((block) => block.text)
   return (
-    <section aria-labelledby={id} className="section-lg border-t border-line">
+    <section aria-labelledby={id} className="section-lg border-b border-white/10 bg-[#101011]">
       <div className="shell-wide flex flex-col gap-10">
         <h2 id={id} className="eyebrow">{section.heading}</h2>
         <p data-reveal="" className="type-h2 max-w-4xl text-balance">{first}</p>
@@ -241,7 +242,7 @@ function ServiceRelated({ service }: { service: Service }) {
   const i = service.index - 1
   const neighbours = [services[(i - 1 + services.length) % services.length], services[(i + 1) % services.length]]
   return (
-    <section aria-labelledby="related-title" className="section-lg border-t border-line">
+    <section aria-labelledby="related-title" className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide flex flex-col gap-10">
         <div className="flex items-end justify-between gap-6">
           <h2 id="related-title" className="eyebrow">{t.related}</h2>
@@ -251,7 +252,7 @@ function ServiceRelated({ service }: { service: Service }) {
           {neighbours.map((item) => (
             <li key={item.slug} className="bg-background">
               <Link href={`/${item.slug}`} className="group relative flex min-h-80 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-[28rem] lg:p-8">
-                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-0 transition-opacity duration-700 group-hover:opacity-45 group-focus-visible:opacity-45"><Photo id={item.hero} sizes="(min-width: 768px) 50vw, 100vw" className="scale-105 transition-transform duration-[1.4s] group-hover:scale-100" /></span>
+                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-30 transition-opacity duration-700 group-hover:opacity-50 group-focus-visible:opacity-50"><Photo id={item.hero} sizes="(min-width: 768px) 50vw, 100vw" className="scale-105 transition-transform duration-[1.4s] group-hover:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/20" /></span>
                 <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
                 <span className="type-h2 relative max-w-[14ch] text-balance">{item.navTitle}</span>
               </Link>
@@ -270,8 +271,7 @@ function BookingCta() {
     <section aria-labelledby="booking-title" className="relative isolate overflow-hidden border-t border-line">
       <div className="absolute inset-0 -z-10">
         <Photo id="p06" sizes="100vw" className="opacity-35" position="50% 60%" />
-        <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/85 to-ink/30" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-wine-deep/50 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#080809] via-[#080809]/90 to-[#270b0e]/65" />
       </div>
       <div className="shell-wide section-lg grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-8">
         <div className="flex max-w-4xl flex-col gap-6 lg:col-span-8">

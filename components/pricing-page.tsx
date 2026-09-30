@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Phone } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
@@ -34,22 +34,27 @@ export function PricingPage({ locale }: { locale: Locale }) {
         }}
       />
 
-      {/* HERO */}
-      <section aria-labelledby="page-title" className="relative isolate overflow-hidden border-b border-line bg-[radial-gradient(circle_at_85%_20%,rgba(143,24,29,.22),transparent_28rem)] pt-[calc(var(--header-h)+5rem)] pb-16 lg:pt-[calc(var(--header-h)+7rem)] lg:pb-20">
-        <div className="shell-wide">
-          <div className="max-w-4xl">
+      <section aria-labelledby="page-title" className="relative isolate flex min-h-[660px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
+        <div className="enter-unmask absolute inset-0"><Photo id="p51" priority sizes="100vw" position="55% 58%" /></div>
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_50%,rgba(6,6,7,.38)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
+        <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
+          <div className="lg:col-span-8">
             <p className="eyebrow mb-7">{t.nav.pricing}</p>
-            <h1 id="page-title" className="enter-fade type-h1 max-w-[14ch] text-balance">{pricing.h1}</h1>
-            <p className="mt-6 max-w-2xl text-pretty leading-relaxed text-bone/70">{pricing.sub}</p>
-            <ul className="mt-8 flex flex-wrap gap-2">
-              {pricing.categories.map((category) => <li key={category} className="type-label border border-line bg-ink-2 px-3 py-2 text-bone/80">{category}</li>)}
+            <h1 id="page-title" className="type-h1 max-w-[18ch] text-balance">{pricing.h1}</h1>
+            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{pricing.sub}</p>
+          </div>
+          <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
+            <p className="type-label text-brand">{pricing.packagesTitle}</p>
+            <ul className="mt-5 flex flex-col gap-3">
+              {pricing.categories.map((category) => <li key={category} className="flex items-center gap-3 text-sm text-white/62"><span className="size-1.5 bg-brand" />{category}</li>)}
             </ul>
           </div>
         </div>
       </section>
 
       {/* PAKIETY */}
-      <section aria-labelledby="packages-title" className="section-lg">
+      <section aria-labelledby="packages-title" className="section-lg border-b border-white/10 bg-[#0a0a0b]">
         <div className="shell-wide flex flex-col gap-10 lg:gap-14">
           <SectionHeading id="packages-title" eyebrow={t.pricing} title={pricing.packagesTitle} />
           <PricingPackages locale={locale} headingId="packages-title" />
@@ -57,7 +62,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
       </section>
 
       {/* POZOSTAŁE USŁUGI */}
-      <section aria-labelledby="other-title" className="section-lg border-t border-line bg-ink-2">
+      <section aria-labelledby="other-title" className="section-lg border-b border-white/10 bg-[#101011]">
         <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
@@ -66,7 +71,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
             </div>
           </div>
           <div className="flex flex-col gap-8 lg:col-span-8">
-            <ul className="grid gap-3 sm:grid-cols-2">
+            <ul className="grid border-b border-white/10 sm:grid-cols-2">
               {pricing.other.map((row, i) => {
                 const slug = otherServiceSlugs[i]
                 const href = locale === "pl" && slug ? "/" + slug : null
@@ -77,7 +82,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
                     {href && <ArrowRight className="arrow-shift hidden size-5 shrink-0 text-ash sm:block" aria-hidden="true" />}
                   </>
                 )
-                const rowClass = "flex h-full flex-wrap items-end gap-x-6 gap-y-5 border border-line bg-ink p-6 transition-colors hover:border-line-wine hover:bg-ink-warm sm:flex-nowrap"
+                const rowClass = "flex h-full flex-wrap items-end gap-x-6 gap-y-5 border-t border-white/10 py-6 transition-colors hover:border-brand/40 sm:flex-nowrap sm:px-5"
                 return (
                   <li key={row.name} data-reveal="" style={{ "--d": i % 2 } as React.CSSProperties}>
                     {href ? <Link href={href} className={"group " + rowClass + " transition-colors hover:bg-ink-warm/50"}>{content}</Link> : <div className={rowClass}>{content}</div>}
@@ -90,7 +95,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <div className="shell-wide py-10">
+      <div className="shell-wide border-b border-white/10 py-10">
         <Link href={routes[locale].services} className="group flex w-fit items-center gap-4 text-bone">
           <span className="type-label link-draw">{t.allServices}</span>
           <ArrowRight className="arrow-shift size-5" aria-hidden="true" />
@@ -100,9 +105,8 @@ export function PricingPage({ locale }: { locale: Locale }) {
       {/* REZERWACJA */}
       <section aria-labelledby="booking-title" className="relative isolate overflow-hidden border-t border-line">
         <div className="absolute inset-0 -z-10">
-          <Photo id="p51" sizes="100vw" className="opacity-35" position="50% 60%" />
-          <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/85 to-ink/30" />
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-wine-deep/50 to-transparent" />
+          <Photo id="p46" sizes="100vw" className="opacity-35" position="50% 60%" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#080809] via-[#080809]/90 to-[#270b0e]/65" />
         </div>
         <div className="shell-wide section-lg grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-8">
           <div className="flex max-w-4xl flex-col gap-6 lg:col-span-8">
@@ -112,7 +116,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
           </div>
           <div data-reveal="" style={{ "--d": 3 } as React.CSSProperties} className="flex flex-col gap-3 sm:flex-row lg:col-span-3 lg:col-start-10 lg:flex-col">
             <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group min-h-14 px-7">{t.booksy}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a>
-            <a href={contact.phoneHref} className="btn btn-outline min-h-14 px-7">{t.call} · {contact.phone}</a>
+            <a href={contact.phoneHref} className="btn btn-outline min-h-14 px-7"><Phone className="size-4 text-brand" />{contact.phone}</a>
           </div>
         </div>
       </section>
@@ -133,11 +137,11 @@ function PricingPackages({ locale, headingId }: { locale: Locale; headingId?: st
           if (!pkg) return null
           const featured = Boolean(pkg.popular)
           return (
-            <li key={pkg.title} data-reveal="" className={cn("relative flex min-h-full flex-col gap-8 border border-line bg-ink-2 p-6 sm:p-8", featured && "border-line-wine bg-linear-to-br from-wine via-wine-deep to-ink-warm")}>
+            <li key={pkg.title} data-reveal="" className={cn("relative flex min-h-full flex-col gap-7 border border-white/10 bg-[#101011] p-6 sm:p-8", featured && "border-brand/45 bg-[radial-gradient(circle_at_100%_0%,rgba(213,43,47,.16),transparent_18rem),#151112]")}>
               {featured && <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />}
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h3 className="type-h2">{pkg.title}</h3>
+                  <h3 className="font-display text-[clamp(1.8rem,2.8vw,2.7rem)] font-black uppercase leading-[1.02] tracking-[-.02em]">{pkg.title}</h3>
                   {pkg.popular && <span className="type-label bg-brand px-2 py-1 text-bone">{pkg.popular}</span>}
                 </div>
                 <p className="text-pretty leading-relaxed text-ash">{pkg.tagline}</p>
