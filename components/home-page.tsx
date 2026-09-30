@@ -1056,7 +1056,7 @@ function Reviews({ locale }: { locale: Locale }) {
           <div
             ref={mobileCarouselRef}
             onScroll={updateMobileReview}
-            className="flex touch-pan-x snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 py-5 [mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
+            className="flex touch-auto snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth px-1 py-5 [mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
             aria-label={copy.reviewsLabel}
           >
             {copy.reviews.map((review, index) => (
