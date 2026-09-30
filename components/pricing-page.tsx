@@ -178,7 +178,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_50%,rgba(6,6,7,.38)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-8"><p className="eyebrow mb-7">{t.nav.pricing}</p><h1 id="page-title" className="type-h1 max-w-[18ch] text-balance">{pricing.h1}</h1><p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.intro}</p></div>
+          <div className="lg:col-span-9"><p className="eyebrow mb-7">{t.nav.pricing}</p><h1 id="page-title" className="page-hero-title type-h1">{pricing.h1}</h1><p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.intro}</p></div>
           <nav aria-label={copy.title} className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10"><p className="type-label text-brand">{copy.title}</p><ul className="mt-5 flex flex-col gap-3 text-sm text-white/62"><li><a href="#mycie" className="transition-colors hover:text-white">{copy.washTitle}</a></li><li><a href="#detailing" className="transition-colors hover:text-white">{copy.detailingTitle}</a></li><li><a href="#pakiet-sprzedaz" className="transition-colors hover:text-white">{copy.saleTitle}</a></li></ul></nav>
         </div>
       </section>

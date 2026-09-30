@@ -242,6 +242,12 @@
   letter-spacing: -0.012em;
   font-size: clamp(1.25rem, 1.8vw, 1.7rem);
 }
+.page-hero-title {
+  max-width: 100%;
+  font-size: clamp(2.35rem, 3.6vw, 4rem);
+  line-height: 1.03;
+  text-wrap: pretty;
+}
 @utility type-lead {
   font-weight: 420;
   line-height: 1.6;
@@ -606,13 +612,15 @@
   font-family: var(--font-display);
   font-stretch: 78%;
   font-variation-settings: 'wdth' 78;
-  font-size: clamp(3.1rem, 5.4vw, 5.2rem);
+  max-width: min(18ch, 76vw);
+  font-size: clamp(3.1rem, 4.8vw, 5rem);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.025em;
   text-transform: uppercase;
 }
 .home-hero-copy {
+  width: min(100%, 70rem);
   animation: home-hero-copy-in 650ms var(--ease-out) both;
 }
 .home-photo-panel {
@@ -751,6 +759,7 @@
     transform: scale(1.025);
   }
   .home-hero-title {
+    max-width: 11ch;
     font-size: clamp(2.75rem, 12.6vw, 3.85rem);
     line-height: 0.98;
   }

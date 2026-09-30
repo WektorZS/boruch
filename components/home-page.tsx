@@ -627,11 +627,11 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-6rem)] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-14rem)] sm:py-20">
-        <div key={activeSlide} className="home-hero-copy flex max-w-3xl flex-col items-start">
+        <div key={activeSlide} className="home-hero-copy flex flex-col items-start">
           <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.label}
           </p>
-          <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord ? "home-hero-title-long max-w-full sm:max-w-[12ch]" : "max-w-[10ch]")}>{slide.title}</h1>
+          <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord && "home-hero-title-long")}>{slide.title}</h1>
           <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{slide.text}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href="#wycena" className="home-button home-button-red">
@@ -662,11 +662,11 @@ function HomeHero({ locale }: { locale: Locale }) {
         {copy.benefits.map(([title, text], index) => {
           const Icon = benefitIcons[index] ?? Car
           return (
-            <li key={title} className="flex min-h-0 items-start gap-4 border-b border-white/10 px-5 py-5 last:border-b-0 sm:min-h-32 sm:gap-5 sm:border-b-0 sm:border-r sm:px-6 sm:py-7 sm:last:border-r-0 lg:px-10">
-              <Icon className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
-              <span className="flex flex-col gap-2">
-                <strong className="text-[.7rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
-                <span className="max-w-xs text-sm leading-relaxed text-white/42">{text}</span>
+            <li key={title} className="flex min-h-0 items-center gap-3 border-b border-white/10 px-5 py-3.5 last:border-b-0 sm:min-h-20 sm:gap-4 sm:border-b-0 sm:border-r sm:px-6 sm:py-4 sm:last:border-r-0 lg:px-8">
+              <Icon className="size-4.5 shrink-0 text-brand" aria-hidden="true" />
+              <span className="flex flex-col gap-1">
+                <strong className="text-[.66rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
+                <span className="text-[.8rem] leading-snug text-white/44">{text}</span>
               </span>
             </li>
           )

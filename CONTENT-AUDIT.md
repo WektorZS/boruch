@@ -119,6 +119,8 @@ Stan na 30.09.2026.
 - Elementy z `data-reveal` obsługuje jeden `IntersectionObserver`.
 - Dla `prefers-reduced-motion: reduce` animacje i przejścia są skracane, a treści pozostają widoczne.
 - Długie niemieckie i ukraińskie nagłówki mieszczą się bez poziomego przewijania.
+- Nagłówki hero na desktopie wykorzystują szersze kolumny i naturalne łamanie wierszy, bez pojedynczych słów pozostających w osobnej linii. Na mobile zachowują osobne, bezpieczne ograniczenia szerokości.
+- Pasek trzech korzyści pod hero strony głównej ma zwarty układ wzorowany na projekcie Golet: niższy pionowy padding, mniejsze odstępy i pełne wykorzystanie szerokości każdej kolumny.
 - Usunięto poziome przewijanie powodowane przez długi nagłówek sekcji na małym ekranie.
 - Cookies, wybór języka i pływający kontakt są montowane globalnie, dlatego działają na stronie głównej, wszystkich podstronach oraz we wszystkich wersjach językowych.
 - Linki do Facebooka i Instagrama korzystają z rozpoznawalnych ikon w hero, obu stopkach, sekcji O nas, podstronie O nas, Kontakcie i Galerii. Z hero usunięto dekoracyjne wskaźniki slajdów, pozostawiając automatyczną zmianę zdjęć.
@@ -133,6 +135,7 @@ Stan na 30.09.2026.
 - Wizualnie sprawdzono stronę główną, Usługi i Cennik, w tym hero, kontrast, typografię, nawigację, sekcje treści oraz stopkę.
 - Na szerokości 390 px sprawdzono otwieranie pełnoekranowego menu na stronie głównej i podstronie Usługi.
 - Sprawdzono nowe hero, opinie, FAQ i formularz na szerokości 1440 px oraz 390 px.
+- Wizualnie sprawdzono po zmianie hero strony głównej, Galerii, Usług i Kontaktu na desktopie oraz stronę główną i Galerię na szerokości 390 px.
 - Potwierdzono rozwijanie odpowiedzi w FAQ.
 - Potwierdzono, że nieużywana numeracja nie wróciła do kart ani nagłówków.
 - `tsc --noEmit` kończy się bez błędów.

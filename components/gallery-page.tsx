@@ -28,9 +28,9 @@ export function GalleryPage({ locale }: { locale: Locale }) {
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.84)_50%,rgba(6,6,7,.3)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-9">
             <p className="eyebrow mb-7">{t.nav.gallery}</p>
-            <h1 id="page-title" className="type-h1 max-w-[18ch] text-balance">{src.gallery.h1}</h1>
+            <h1 id="page-title" className="page-hero-title type-h1">{src.gallery.h1}</h1>
             <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{src.gallery.sub}</p>
           </div>
           <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">

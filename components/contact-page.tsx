@@ -82,9 +82,9 @@ export function ContactPage({ locale }: { locale: Locale }) {
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_45%,rgba(6,6,7,.38)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/55" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-9">
             <p className="eyebrow mb-7">{t.nav.contact}</p>
-            <h1 id="page-title" className="type-h1 max-w-[16ch] text-balance">{src.contact.h1}</h1>
+            <h1 id="page-title" className="page-hero-title type-h1">{src.contact.h1}</h1>
             <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{src.contact.sub}</p>
           </div>
           <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">

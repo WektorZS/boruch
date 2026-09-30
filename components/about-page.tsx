@@ -44,7 +44,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 pb-14 lg:pb-16">
           <p className="eyebrow mb-7">{about.teamTitle ?? t.nav.about}</p>
-          <h1 id="page-title" className="type-h1 max-w-[16ch] text-balance">{about.h1}</h1>
+          <h1 id="page-title" className="page-hero-title type-h1">{about.h1}</h1>
           {opening && <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-white/66">{opening}</p>}
         </div>
       </section>

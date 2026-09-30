@@ -78,7 +78,7 @@ function ServiceHero({ service }: { service: Service }) {
       <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.86)_48%,rgba(6,6,7,.3)_100%)]" />
       <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
       <div className="shell-wide relative z-10 grid gap-9 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-9">
         <div className="enter-fade mb-8 flex items-center gap-6" style={{ "--i": 0 } as React.CSSProperties}>
           <nav aria-label="Breadcrumb">
             <ol className="type-label flex flex-wrap items-center gap-2 text-ash">
@@ -88,7 +88,7 @@ function ServiceHero({ service }: { service: Service }) {
             </ol>
           </nav>
         </div>
-        <h1 id="service-title" className="enter-fade type-h1 max-w-[14ch] text-balance" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
+        <h1 id="service-title" className="page-hero-title enter-fade type-h1" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
           <div className="enter-fade mt-7 flex max-w-2xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
