@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Phone } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
-import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
+import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
 import { serviceConfigs, servicePrice, type ServiceSlug } from "@/lib/content/services"
 
 const clients = [
@@ -99,13 +99,6 @@ export function ServicesPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section aria-labelledby="booking-title" className="relative isolate overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 -z-10"><Photo id="p65" sizes="100vw" className="opacity-30" position="50% 60%" /><div className="absolute inset-0 bg-linear-to-r from-[#080809] via-[#080809]/90 to-[#270b0e]/70" /></div>
-        <div className="shell-wide grid gap-10 py-16 sm:py-20 lg:grid-cols-12 lg:items-end lg:py-28">
-          <div className="lg:col-span-8"><p className="eyebrow">{t.book}</p><h2 id="booking-title" className="mt-7 type-h1 max-w-[12ch]">{src.home.contactTitle}</h2><p className="mt-6 max-w-xl text-lg leading-relaxed text-white/62">{src.home.contactText}</p></div>
-          <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:justify-end"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group min-h-14 px-7">{t.booksy}<ArrowUpRight className="size-4" /></a><a href={contact.phoneHref} className="btn btn-outline min-h-14 px-7"><Phone className="size-4 text-brand" />{contact.phone}</a></div>
-        </div>
-      </section>
     </SiteShell>
   )
 }
