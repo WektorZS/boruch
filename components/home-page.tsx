@@ -7,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
+import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
@@ -34,6 +35,13 @@ const reviewControls: Record<Locale, { previous: string; next: string; select: s
   en: { previous: "Previous review", next: "Next review", select: "Show review" },
   de: { previous: "Vorherige Bewertung", next: "Nächste Bewertung", select: "Bewertung anzeigen" },
   uk: { previous: "Попередній відгук", next: "Наступний відгук", select: "Показати відгук" },
+}
+
+const followCopy: Record<Locale, string> = {
+  pl: "Obserwuj nas",
+  en: "Follow us",
+  de: "Folgen Sie uns",
+  uk: "Слідкуйте за нами",
 }
 
 const reviewDialogCopy: Record<Locale, { more: string; close: string; label: string }> = {
@@ -636,20 +644,14 @@ function HomeHero({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mt-10 flex w-full flex-col-reverse items-start gap-4 sm:absolute sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] sm:bottom-8 sm:mt-0 sm:w-auto sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
-          <div className="flex items-center gap-2" role="group" aria-label={`${t.photo} ${activeSlide + 1} ${t.of} ${copy.heroSlides.length}`}>
-            {copy.heroSlides.map((item, index) => (
-              <button
-                key={item.title}
-                type="button"
-                onClick={() => setActiveSlide(index)}
-                aria-label={`${t.photo} ${index + 1}`}
-                aria-current={index === activeSlide ? "true" : undefined}
-                className={cn(
-                  "h-1.5 transition-all duration-500",
-                  index === activeSlide ? "w-11 bg-brand" : "w-5 bg-white/32 hover:bg-white/70",
-                )}
-              />
-            ))}
+          <div className="flex items-center gap-3">
+            <span className="text-[.6rem] font-bold uppercase tracking-[.16em] text-white/48">{followCopy[locale]}</span>
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center border border-white/14 text-white/68 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+              <FacebookIcon className="size-4.5" />
+            </a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-10 place-items-center border border-white/14 text-white/68 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+              <InstagramIcon className="size-4.5" />
+            </a>
           </div>
 
           <HeroRatings copy={copy} className="hidden sm:flex" />
@@ -973,10 +975,10 @@ function TeamStory({ locale }: { locale: Locale }) {
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
               <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
-                <span className="font-sans text-lg font-black lowercase" aria-hidden="true">f</span>
+                <FacebookIcon className="size-5" />
               </a>
               <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
-                <span className="text-[.62rem] font-black uppercase tracking-[-.02em]" aria-hidden="true">IG</span>
+                <InstagramIcon className="size-5" />
               </a>
               <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
                 <MapPin className="size-4" aria-hidden="true" />
@@ -1470,8 +1472,8 @@ function HomeFooter({ locale }: { locale: Locale }) {
           <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
           <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
           <div className="mt-4 flex flex-wrap gap-2">
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Instagram</a>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Facebook</a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
           </div>
         </div>
       </div>

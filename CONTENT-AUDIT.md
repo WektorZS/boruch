@@ -121,6 +121,7 @@ Stan na 30.09.2026.
 - Długie niemieckie i ukraińskie nagłówki mieszczą się bez poziomego przewijania.
 - Usunięto poziome przewijanie powodowane przez długi nagłówek sekcji na małym ekranie.
 - Cookies, wybór języka i pływający kontakt są montowane globalnie, dlatego działają na stronie głównej, wszystkich podstronach oraz we wszystkich wersjach językowych.
+- Linki do Facebooka i Instagrama korzystają z rozpoznawalnych ikon w hero, obu stopkach, sekcji O nas, podstronie O nas, Kontakcie i Galerii. Z hero usunięto dekoracyjne wskaźniki slajdów, pozostawiając automatyczną zmianę zdjęć.
 - Kontakt i O nas otrzymały nowe układy od zera, a Usługi, Cennik, Galeria, Booksy i wszystkie strony szczegółowe usług zostały dopasowane do systemu strony głównej.
 - Cennik korzysta z tej samej listy danych co strona Usługi i pokazuje wszystkie 11 pozycji w dwóch tradycyjnych tabelach: Myjnia i Detailing.
 - Strona główna zachowuje trzy ceny potrzebne do szybkiego porównania: czyszczenie zewnętrzne, czyszczenie wnętrza i komplet.

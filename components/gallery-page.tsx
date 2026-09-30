@@ -1,7 +1,7 @@
-import { ArrowUpRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { GalleryPortfolio } from "./gallery-portfolio"
+import { InstagramIcon } from "./social-icons"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 import { galleryOrder } from "@/lib/photos"
 
@@ -36,7 +36,7 @@ export function GalleryPage({ locale }: { locale: Locale }) {
           <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
             <p className="type-label text-brand">Boruch Myjnia</p>
             <p className="mt-4 text-sm leading-relaxed text-white/55">{src.home.projectsText}</p>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand">Instagram<ArrowUpRight className="size-4 text-brand" /></a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand"><InstagramIcon className="size-4 text-brand" />Instagram</a>
           </div>
         </div>
       </section>

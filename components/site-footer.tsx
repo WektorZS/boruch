@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
+import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 
 const pageOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
@@ -59,8 +60,8 @@ export function SiteFooter({ locale, alternates }: { locale: Locale; alternates:
           <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
           <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
           <div className="mt-4 flex flex-wrap gap-2">
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Instagram</a>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white">Facebook</a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
           </div>
         </div>
       </div>

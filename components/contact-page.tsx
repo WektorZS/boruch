@@ -1,7 +1,8 @@
-import { ArrowRight, ArrowUpRight, CalendarCheck, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, CalendarCheck, Mail, MapPin, Phone } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
+import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 
 const MAP_EMBED = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
@@ -113,8 +114,8 @@ export function ContactPage({ locale }: { locale: Locale }) {
               <h2 id="contact-form-title" data-reveal="" className="mt-7 max-w-[11ch] font-display text-[clamp(2.5rem,4.2vw,4.4rem)] font-black uppercase leading-[1.02] tracking-[-.025em]">{copy.formTitle}</h2>
               <p className="mt-6 max-w-md text-base leading-relaxed text-white/52">{copy.formText}</p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white">Instagram<ArrowUpRight className="size-4 text-brand" /></a>
-                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white">Facebook<ArrowUpRight className="size-4 text-brand" /></a>
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
+                <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
               </div>
             </div>
           </div>

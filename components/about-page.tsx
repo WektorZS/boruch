@@ -2,6 +2,7 @@ import { Alex_Brush } from "next/font/google"
 import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
+import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
 import type { PhotoId } from "@/lib/photos"
 
@@ -64,8 +65,8 @@ export function AboutPage({ locale }: { locale: Locale }) {
             </div>
             <p className={`${alexBrush.className} mt-8 text-[clamp(3.5rem,6vw,5.5rem)] leading-none text-white`}>{about.author}</p>
             <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-6">
-              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="grid size-11 place-items-center border border-white/12 text-[.62rem] font-bold uppercase text-white/66 transition-colors hover:border-brand hover:text-white">IG</a>
-              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="grid size-11 place-items-center border border-white/12 text-[.62rem] font-bold uppercase text-white/66 transition-colors hover:border-brand hover:text-white">FB</a>
+              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/12 text-white/66 transition-colors hover:border-brand hover:bg-brand hover:text-white"><FacebookIcon className="size-5" /></a>
+              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center border border-white/12 text-white/66 transition-colors hover:border-brand hover:bg-brand hover:text-white"><InstagramIcon className="size-5" /></a>
               <span className="ml-auto type-label text-white/34">{copy.social}</span>
             </div>
           </div>
