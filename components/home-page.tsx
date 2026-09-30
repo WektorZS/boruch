@@ -198,6 +198,7 @@ const homeCopy = {
     reviewsLabel: "Opinie klientów",
     reviewsTitle: "Efekt, do którego chce się wracać.",
     reviewsIntro: "Najlepiej mówią o nas kierowcy, którzy odebrali od nas swoje samochody.",
+    reviewsSwipe: "Przesuń, aby zobaczyć kolejne opinie",
     reviewsLink: "Zobacz opinie i terminy",
     booksyReviews: "150 opinii",
     googleReviews: "79 opinii",
@@ -241,6 +242,7 @@ const homeCopy = {
     reviewsLabel: "Customer reviews",
     reviewsTitle: "Results worth coming back for.",
     reviewsIntro: "The best account of our work comes from drivers collecting their cars.",
+    reviewsSwipe: "Swipe to see more reviews",
     reviewsLink: "See reviews and appointments",
     booksyReviews: "150 reviews",
     googleReviews: "79 reviews",
@@ -284,6 +286,7 @@ const homeCopy = {
     reviewsLabel: "Kundenmeinungen",
     reviewsTitle: "Ein Ergebnis, für das man gerne wiederkommt.",
     reviewsIntro: "Am besten berichten die Fahrer über uns, die ihr Fahrzeug bei uns abgeholt haben.",
+    reviewsSwipe: "Wischen Sie für weitere Bewertungen",
     reviewsLink: "Bewertungen und Termine ansehen",
     booksyReviews: "150 Bewertungen",
     googleReviews: "79 Bewertungen",
@@ -327,6 +330,7 @@ const homeCopy = {
     reviewsLabel: "Відгуки клієнтів",
     reviewsTitle: "Результат, за яким хочеться повернутися.",
     reviewsIntro: "Найкраще про нашу роботу розповідають водії, які забрали у нас свої автомобілі.",
+    reviewsSwipe: "Гортайте, щоб переглянути більше відгуків",
     reviewsLink: "Переглянути відгуки та вільні години",
     booksyReviews: "150 відгуків",
     googleReviews: "79 відгуків",
@@ -361,6 +365,7 @@ const homeCopy = {
   reviewsLabel: string
   reviewsTitle: string
   reviewsIntro: string
+  reviewsSwipe: string
   reviewsLink: string
   booksyReviews: string
   googleReviews: string
@@ -507,6 +512,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
   const [activeSlide, setActiveSlide] = useState(0)
   const slide = copy.heroSlides[activeSlide]
+  const hasLongTitleWord = slide.title.split(/\s+/).some((word) => word.length >= 12)
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -549,7 +555,7 @@ function HomeHero({ locale }: { locale: Locale }) {
           <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.label}
           </p>
-          <h1 id="hero-title" className="home-hero-title max-w-[10ch] text-balance">{slide.title}</h1>
+          <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord ? "home-hero-title-long max-w-full sm:max-w-[12ch]" : "max-w-[10ch]")}>{slide.title}</h1>
           <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{slide.text}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href="#wycena" className="home-button home-button-red">
@@ -878,7 +884,7 @@ function TeamStory({ locale }: { locale: Locale }) {
   )
 }
 
-function ReviewCard({ review, isActive, locale, onOpen }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void }) {
+function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void; mobileCarousel?: boolean }) {
   const visibleTextRef = useRef<HTMLQuoteElement>(null)
   const fullTextRef = useRef<HTMLParagraphElement>(null)
   const [isTruncated, setIsTruncated] = useState(false)
@@ -906,9 +912,13 @@ function ReviewCard({ review, isActive, locale, onOpen }: { review: VerifiedRevi
     <figure
       className={cn(
         "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
-        isActive
-          ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-          : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-35 md:flex",
+        mobileCarousel
+          ? isActive
+            ? "min-h-[23rem] scale-100 border-brand/45 bg-[#151516] opacity-100 shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+            : "min-h-[23rem] scale-[.94] border-white/10 bg-white/[.025] opacity-45"
+          : isActive
+            ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+            : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-35 md:flex",
       )}
     >
       <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
@@ -944,6 +954,8 @@ function Reviews({ locale }: { locale: Locale }) {
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const mobileCarouselRef = useRef<HTMLDivElement>(null)
+  const mobileScrollFrameRef = useRef<number | null>(null)
   const reviewCount = copy.reviews.length
   const visibleReviews = [-1, 0, 1].map((offset) => ({
     offset,
@@ -977,8 +989,50 @@ function Reviews({ locale }: { locale: Locale }) {
     }
   }, [selectedReview, closeReview])
 
-  const showPreviousReview = () => setActiveReview((current) => (current - 1 + reviewCount) % reviewCount)
-  const showNextReview = () => setActiveReview((current) => (current + 1) % reviewCount)
+  const selectReview = (index: number) => {
+    const normalizedIndex = (index + reviewCount) % reviewCount
+    setActiveReview(normalizedIndex)
+
+    if (window.innerWidth >= 768) return
+    const carousel = mobileCarouselRef.current
+    const card = carousel?.querySelector<HTMLElement>(`[data-review-index="${normalizedIndex}"]`)
+    if (!carousel || !card) return
+
+    carousel.scrollTo({
+      left: card.offsetLeft - (carousel.clientWidth - card.clientWidth) / 2,
+      behavior: "smooth",
+    })
+  }
+
+  const updateMobileReview = () => {
+    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
+    mobileScrollFrameRef.current = requestAnimationFrame(() => {
+      const carousel = mobileCarouselRef.current
+      if (!carousel) return
+      const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
+      let closestIndex = activeReview
+      let closestDistance = Number.POSITIVE_INFINITY
+
+      carousel.querySelectorAll<HTMLElement>("[data-review-index]").forEach((card) => {
+        const cardCenter = card.offsetLeft + card.clientWidth / 2
+        const distance = Math.abs(cardCenter - carouselCenter)
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestIndex = Number(card.dataset.reviewIndex)
+        }
+      })
+
+      if (Number.isFinite(closestIndex)) setActiveReview(closestIndex)
+      mobileScrollFrameRef.current = null
+    })
+  }
+
+  useEffect(() => () => {
+    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
+  }, [])
+
+  const showPreviousReview = () => selectReview(activeReview - 1)
+  const showNextReview = () => selectReview(activeReview + 1)
 
   return (
     <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-32">
@@ -990,12 +1044,28 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-14 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
-          <div className="grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
+        <div className="relative mt-14 hidden md:block md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+          <div key={activeReview} className="home-review-stage grid items-center gap-4 md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5">
             {visibleReviews.map(({ offset, review }) => (
               <ReviewCard key={`${offset}-${review.name}`} review={review} isActive={offset === 0} locale={locale} onOpen={() => openReview(review)} />
             ))}
           </div>
+        </div>
+
+        <div className="relative mt-10 md:hidden">
+          <div
+            ref={mobileCarouselRef}
+            onScroll={updateMobileReview}
+            className="flex touch-pan-x snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 py-5 [mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,black_0%,black_92%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
+            aria-label={copy.reviewsLabel}
+          >
+            {copy.reviews.map((review, index) => (
+              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[88%] shrink-0 snap-center">
+                <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-center text-[.58rem] font-bold uppercase tracking-[.14em] text-white/32">{copy.reviewsSwipe}</p>
         </div>
 
         <div className="mt-8 flex items-center justify-center gap-3">
