@@ -1,31 +1,18 @@
 import type { Metadata, Viewport } from 'next'
-import { JetBrains_Mono, Roboto_Flex } from 'next/font/google'
 import { MotionObserver } from '@/components/motion-observer'
 import { GlobalOverlays } from '@/components/global-overlays'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 
-const flex = Roboto_Flex({
-  subsets: ['latin', 'latin-ext', 'cyrillic'],
-  axes: ['wdth'],
-  variable: '--font-flex',
-  display: 'swap',
-})
-const mono = JetBrains_Mono({
-  subsets: ['latin', 'latin-ext', 'cyrillic'],
-  variable: '--font-mono-tech',
-  display: 'swap',
-})
 const OG_IMAGE = '/images/home/szczecin-myjnia-banner.png'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://boruchmyjnia.pl'),
+  metadataBase: new URL(siteConfig.sourceUrl),
   title: {
     default: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
     template: `%s | BORUCH Myjnia ${siteConfig.city}`,
   },
   description: siteConfig.description,
-  generator: 'v0.app',
   keywords: [
     'myjnia Szczecin',
     'myjnia ręczna Szczecin',
@@ -39,12 +26,12 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.owner }],
   alternates: {
     canonical: '/',
-    languages: { 'pl-PL': '/', en: '/en', de: '/de', uk: '/uk', 'x-default': '/' },
+    languages: { 'pl-PL': '/', en: '/en/', de: '/de/', uk: '/uk/', 'x-default': '/' },
   },
   openGraph: {
     title: 'BORUCH Myjnia Ręczna | Detailing & Pielęgnacja Aut | Szczecin',
     description: siteConfig.description,
-    url: 'https://boruchmyjnia.pl',
+    url: siteConfig.sourceUrl,
     siteName: siteConfig.name,
     locale: 'pl_PL',
     type: 'website',
@@ -66,12 +53,12 @@ export const metadata: Metadata = {
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoWash',
-  '@id': 'https://boruchmyjnia.pl/#business',
+  '@id': `${siteConfig.sourceUrl}/#business`,
   name: siteConfig.legalName,
   alternateName: siteConfig.name,
   description: siteConfig.description,
-  image: `https://boruchmyjnia.pl${OG_IMAGE}`,
-  url: 'https://boruchmyjnia.pl',
+  image: `${siteConfig.sourceUrl}${OG_IMAGE}`,
+  url: siteConfig.sourceUrl,
   telephone: siteConfig.phone,
   email: siteConfig.email,
   priceRange: 'od 110 zł',
@@ -84,7 +71,7 @@ const localBusinessJsonLd = {
     addressCountry: 'PL',
   },
   areaServed: siteConfig.city,
-  sameAs: [siteConfig.bookingUrl],
+  sameAs: [siteConfig.bookingUrl, 'https://www.facebook.com/Boruch-Myjnia-101966125989872', 'https://www.instagram.com/boruchmyjnia/'],
 }
 
 export const viewport: Viewport = {
@@ -94,11 +81,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl" className={`${flex.variable} ${mono.variable} bg-background`} suppressHydrationWarning>
-      <head>
-        {/* Marks JS as available before first paint so reveal styles never hide content for no-JS visitors. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
-      </head>
+    <html lang="pl" className="bg-background" suppressHydrationWarning>
+      <head><link rel="preload" href="/fonts/roboto-flex-latin-full-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" /></head>
       <body className="antialiased">
         <script
           type="application/ld+json"

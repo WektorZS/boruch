@@ -77,7 +77,7 @@ const formCopy = {
   error: string
 }>
 
-const fieldClass = "min-h-14 w-full border border-white/14 bg-[#0a0a0b] px-4 text-sm text-white outline-none transition placeholder:text-white/28 hover:border-white/28 focus:border-brand focus:ring-2 focus:ring-brand/15"
+const fieldClass = "min-h-12 w-full min-w-0 border border-white/20 bg-[#0a0a0b] px-3 text-base font-normal normal-case leading-relaxed tracking-normal text-white outline-none transition placeholder:text-white/65 hover:border-white/35 focus:border-brand focus:ring-2 focus:ring-brand/25"
 
 export function HomeContactForm({ locale }: { locale: Locale }) {
   const copy = formCopy[locale]
@@ -86,13 +86,15 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (status === "sending" || status === "success") return
     const form = event.currentTarget
     const formData = new FormData(form)
 
     setStatus("sending")
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact", {
+        signal: AbortSignal.timeout(20000),
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -118,26 +120,26 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-5">
+    <form onSubmit={handleSubmit} aria-busy={status === "sending"} className="relative grid gap-5">
       <div className="absolute -left-[10000px] top-auto size-px overflow-hidden" aria-hidden="true">
         <label htmlFor={`website-${locale}`}>Website</label>
         <input id={`website-${locale}`} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="grid gap-2 text-[.62rem] font-bold uppercase tracking-[.14em] text-white/62">
+      <div className="grid min-w-0 gap-5 sm:grid-cols-2">
+        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
           {copy.name}
           <input className={fieldClass} name="name" type="text" autoComplete="name" minLength={2} maxLength={100} required />
         </label>
-        <label className="grid gap-2 text-[.62rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
           {copy.phone}
           <input className={fieldClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" minLength={7} maxLength={20} required />
         </label>
-        <label className="grid gap-2 text-[.62rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
           {copy.email}
           <input className={fieldClass} name="email" type="email" autoComplete="email" maxLength={160} required />
         </label>
-        <label className="grid gap-2 text-[.62rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
           {copy.service}
           <select className={fieldClass} name="service" defaultValue="" required>
             <option value="" disabled>{copy.choose}</option>
@@ -146,12 +148,12 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
         </label>
       </div>
 
-      <label className="grid gap-2 text-[.62rem] font-bold uppercase tracking-[.14em] text-white/62">
+      <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
         {copy.message}
         <textarea className={`${fieldClass} min-h-36 resize-y py-4 normal-case leading-relaxed tracking-normal`} name="message" maxLength={1200} required />
       </label>
 
-      <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/48">
+      <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/65">
         <input name="privacyConsent" type="checkbox" required className="mt-1 size-4 shrink-0 accent-[#d52b32]" />
         <span>{copy.consent}</span>
       </label>
@@ -161,7 +163,7 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
           {status === "sending" ? copy.sending : copy.submit}
           {status === "sending" ? <LoaderCircle className="size-4 animate-spin" aria-hidden="true" /> : <ArrowRight className="size-4" aria-hidden="true" />}
         </button>
-        <p aria-live="polite" className={`flex items-center gap-2 text-sm leading-relaxed ${status === "success" ? "text-emerald-400" : status === "error" ? "text-[#ef6267]" : "text-white/42"}`}>
+        <p role="status" aria-live="polite" className={`flex items-center gap-2 text-sm leading-relaxed ${status === "success" ? "text-emerald-400" : status === "error" ? "text-[#ef6267]" : "text-white/65"}`}>
           {status === "success" && <CheckCircle2 className="size-4 shrink-0" aria-hidden="true" />}
           {status === "success" ? copy.success : status === "error" ? copy.error : null}
         </p>

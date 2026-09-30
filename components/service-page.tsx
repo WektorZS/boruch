@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo, photoSrc } from "./photo"
 import { contact, localeOrder, routes, sources, ui, type Locale } from "@/lib/content"
@@ -15,13 +15,14 @@ export function serviceMetadata(slug: ServiceSlug): Metadata {
   return {
     title: { absolute: source.meta.title },
     description: source.meta.description,
-    alternates: { canonical: `/${slug}` },
+    alternates: { canonical: `/${slug}/`, languages: {} },
     openGraph: {
       title: source.meta.title,
       description: source.meta.description,
-      url: `https://boruchmyjnia.pl/${slug}`,
+      url: `${siteConfig.sourceUrl}/${slug}/`,
       images: [{ url: photoSrc(getService(slug).hero, 1600) }],
     },
+    twitter: { card: "summary_large_image", title: source.meta.title, description: source.meta.description, images: [photoSrc(getService(slug).hero, 1600)] },
   }
 }
 export function ServicePage({ slug }: { slug: ServiceSlug }) {
@@ -38,14 +39,14 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
     "@type": "Service",
     name: service.navTitle,
     description: service.source.meta.description,
-    url: `https://boruchmyjnia.pl/${slug}`,
+    url: `${siteConfig.sourceUrl}/${slug}/`,
     areaServed: siteConfig.city,
-    provider: { "@id": "https://boruchmyjnia.pl/#business" },
+    provider: { "@id": `${siteConfig.sourceUrl}/#business` },
     ...(price ? { offers: { "@type": "Offer", priceCurrency: "PLN", description: price, url: contact.bookingUrl } } : {}),
   }
 
   return (
-    <SiteShell locale="pl" page="services" alternates={alternates}>
+    <SiteShell locale="pl" page="services" alternates={alternates} breadcrumbs={[{ name: ui.pl.nav.home, path: "/" }, { name: ui.pl.nav.services, path: "/uslugi" }, { name: service.navTitle, path: `/${slug}` }]}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ServiceHero service={service} />
       <ServiceIntro service={service} />
@@ -55,7 +56,7 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
           <ServiceSection service={service} section={section} id={`section-${i + 1}`} />
           {i === breakAfter && (
             <div className="shell-wide grid pb-4 lg:grid-cols-12">
-              <div data-reveal="mask" className="frame aspect-[4/3] lg:col-span-9 lg:col-start-4 lg:aspect-[16/8]">
+              <div data-reveal="mask" className="frame editorial-photo aspect-[16/10] lg:col-span-9 lg:col-start-4 lg:aspect-[16/8]">
                 <Photo id={service.frames[2]} sizes="(min-width: 1024px) 75vw, 100vw" />
               </div>
             </div>
@@ -73,22 +74,14 @@ function ServiceHero({ service }: { service: Service }) {
   const group = serviceGroupTitle("pl", service.slug)
 
   return (
-    <section aria-labelledby="service-title" className="relative isolate flex min-h-[700px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
+    <section aria-labelledby="service-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
       <div className="enter-unmask absolute inset-0"><Photo id={service.hero} priority sizes="100vw" position="50% 60%" /></div>
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.86)_48%,rgba(6,6,7,.3)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.6)_48%,rgba(6,6,7,.15)_100%)]" />
       <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
       <div className="shell-wide relative z-10 grid gap-9 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
         <div className="lg:col-span-9">
-        <div className="enter-fade mb-8 flex items-center gap-6" style={{ "--i": 0 } as React.CSSProperties}>
-          <nav aria-label="Breadcrumb">
-            <ol className="type-label flex flex-wrap items-center gap-2 text-ash">
-              <li><Link href={routes.pl.services} className="transition-colors hover:text-bone">{t.nav.services}</Link></li>
-              <li aria-hidden="true"><ChevronRight className="size-3" /></li>
-              <li className="text-bone">{group}</li>
-            </ol>
-          </nav>
-        </div>
-        <h1 id="service-title" className="page-hero-title enter-fade type-h1" style={{ "--i": 1 } as React.CSSProperties}>{service.source.heading}</h1>
+        <p className="eyebrow mb-7">{group}</p>
+        <h1 id="service-title" className="page-hero-title enter-fade type-h1" style={{ "--i": 1 } as React.CSSProperties}>{service.navTitle}</h1>
           <div className="enter-fade mt-7 flex max-w-2xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
@@ -96,8 +89,8 @@ function ServiceHero({ service }: { service: Service }) {
         </div>
         <div className="enter-fade border-l border-brand pl-6 lg:col-span-3 lg:col-start-10" style={{ "--i": 3 } as React.CSSProperties}>
           <p className="type-label text-brand">{t.priceLabel}</p>
-          <p className="mt-4 font-display text-3xl font-black uppercase tracking-[-.02em] text-white">{price ?? t.individualQuote}</p>
-          <div className="mt-6 flex flex-col gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
+          <p className="mt-4 font-display text-[clamp(1.25rem,2vw,1.7rem)] font-bold leading-relaxed tracking-normal text-white">{price ?? t.individualQuote}</p>
+          <div className="mt-6 flex flex-col gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link prefetch={false} href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
         </div>
       </div>
     </section>
@@ -111,12 +104,12 @@ function ServiceIntro({ service }: { service: Service }) {
         <div className="flex flex-col gap-10 lg:col-span-7 lg:pt-8">
           <p className="eyebrow">{service.navTitle}</p>
           <p data-reveal="" className="type-lead max-w-3xl text-pretty text-bone/90">{first}</p>
-          <div className="flex max-w-2xl flex-col gap-5 lg:ml-[16%]">
+          <div className="flex max-w-2xl flex-col gap-5">
             {rest.map((para, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/70">{para}</p>)}
           </div>
         </div>
         <div className="lg:col-span-4 lg:col-start-9">
-          <div data-reveal="mask" className="frame aspect-[3/4] lg:sticky lg:top-[calc(var(--header-h)+2rem)]"><Photo id={service.frames[0]} sizes="(min-width: 1024px) 33vw, 100vw" /></div>
+          <div data-reveal="mask" className="frame editorial-photo aspect-[4/3] lg:aspect-[3/4] lg:sticky lg:top-[calc(var(--header-h)+2rem)]"><Photo id={service.frames[0]} sizes="(min-width: 1024px) 33vw, 100vw" /></div>
         </div>
       </div>
     </section>
@@ -142,7 +135,7 @@ function ServiceProcess({ service }: { service: Service }) {
       </div>
       {after.length > 0 && (
         <>
-          <div data-reveal="mask" className="frame aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2/1]"><Photo id={service.frames[1]} sizes="100vw" /></div>
+          <div data-reveal="mask" className="frame editorial-photo aspect-[16/10] sm:aspect-[16/9] lg:aspect-[5/2]"><Photo id={service.frames[1]} sizes="100vw" /></div>
           <div className="shell-wide section-lg"><StepList steps={after} start={split + 1} stepLabel={t.step} /></div>
         </>
       )}
@@ -154,9 +147,9 @@ function StepList({ steps, start = 1, stepLabel, compact = false }: { steps: Ser
   return (
     <ol className="border-b border-line">
       {steps.map((step, i) => (
-        <li key={step.title} data-reveal="" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("group grid gap-4 border-t border-line transition-colors hover:border-line-strong md:grid-cols-12 md:gap-8", compact ? "py-7" : "py-9 lg:py-12")}>
+        <li key={step.title} data-reveal="" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("group grid gap-4 border-t border-line transition-colors hover:border-line-strong md:grid-cols-12 md:gap-8", compact ? "py-7" : "py-7 lg:py-8")}>
           <p className="flex items-baseline gap-3 md:col-span-2 md:flex-col md:gap-2">
-            <span className="type-index text-xl text-white/38 transition-colors group-hover:text-highlight lg:text-2xl">{formatIndex(start + i)}</span>
+            <span className="type-index text-xl text-white/65 transition-colors group-hover:text-highlight lg:text-2xl">{formatIndex(start + i)}</span>
             <span className="type-label text-ash">{stepLabel}</span>
           </p>
           <h3 className={cn("text-pretty md:col-span-4", compact ? "type-h3" : "type-h3 lg:text-[1.75rem] lg:leading-tight")}>{step.title}</h3>
@@ -177,7 +170,7 @@ function ListSection({ section, id }: { section: Section; id: string }) {
   return (
     <section aria-labelledby={id} className="section-md border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="type-h2 max-w-[14ch] text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
+        <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="type-h2 max-w-full text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
         <div className="lg:col-span-7">{section.kind === "process" && section.steps ? <StepList steps={section.steps} stepLabel={ui.pl.step} compact /> : <Blocks blocks={section.blocks} />}</div>
       </div>
     </section>
@@ -195,7 +188,7 @@ function Blocks({ blocks }: { blocks: ServiceBlock[] }) {
     <div className="flex flex-col gap-8">
       {groups.map((group, g) => group.type === "item" ? (
         <ul key={g} className="border-b border-line">
-          {group.texts.map((text, i) => <li key={i} data-reveal="" style={{ "--d": i % 4 } as React.CSSProperties} className="group flex items-start gap-5 border-t border-line py-5 transition-colors hover:bg-ink-warm/60 md:px-2"><span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 bg-brand transition-transform group-hover:scale-150" /><span className="text-pretty text-lg leading-snug text-bone md:text-xl">{text}</span></li>)}
+          {group.texts.map((text, i) => <li key={i} data-reveal="" style={{ "--d": i % 4 } as React.CSSProperties} className="group flex items-start gap-5 border-t border-line py-5 transition-colors hover:bg-ink-warm/60 md:px-2"><span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 bg-brand transition-transform group-hover:scale-150" /><span className="text-pretty text-base leading-relaxed text-bone md:text-lg">{text}</span></li>)}
         </ul>
       ) : (
         <div key={g} className="flex max-w-2xl flex-col gap-4">{group.texts.map((text, i) => <p key={i} data-reveal="" className="type-body text-pretty text-bone/75 md:text-lg md:leading-relaxed">{text}</p>)}</div>
@@ -213,8 +206,8 @@ function PriceSection({ service, section, id }: { service: Service; section: Sec
       <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
         <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="type-h2 text-balance">{section.heading}</h2></div>
         <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
-          <p className={price ? "type-h1 [font-stretch:108%] [font-variation-settings:'wdth'_108]" : "type-h2 text-balance text-bone/90"}>{price ?? t.individualQuote}</p>
-          {linkText && <Link href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone"><span className="type-label link-draw">{linkText}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></Link>}
+          <p className={price ? "font-display text-[clamp(1.8rem,3vw,2.8rem)] font-bold leading-relaxed tracking-normal" : "font-display text-[clamp(1.5rem,2.4vw,2.3rem)] font-bold leading-relaxed text-bone/90"}>{price ?? t.individualQuote}</p>
+          {linkText && <Link prefetch={false} href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone"><span className="type-label link-draw">{linkText}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></Link>}
         </div>
       </div>
     </section>
@@ -227,7 +220,7 @@ function SummarySection({ section, id }: { section: Section; id: string }) {
     <section aria-labelledby={id} className="section-lg border-b border-white/10 bg-[#101011]">
       <div className="shell-wide flex flex-col gap-10">
         <h2 id={id} className="eyebrow">{section.heading}</h2>
-        <p data-reveal="" className="type-h2 max-w-4xl text-balance">{first}</p>
+        <p data-reveal="" className="type-lead max-w-4xl text-pretty [overflow-wrap:anywhere]">{first}</p>
         {rest.length > 0 && <div className="grid gap-5 md:grid-cols-2 md:gap-10 lg:ml-[33%]">{rest.map((text, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/75 md:text-lg md:leading-relaxed">{text}</p>)}</div>}
       </div>
     </section>
@@ -243,15 +236,15 @@ function ServiceRelated({ service }: { service: Service }) {
       <div className="shell-wide flex flex-col gap-10">
         <div className="flex items-end justify-between gap-6">
           <h2 id="related-title" className="eyebrow">{t.related}</h2>
-          <Link href={routes.pl.services} className="group type-label flex items-center gap-3 text-bone"><span className="link-draw">{t.allServices}</span><ArrowRight className="arrow-shift size-4" aria-hidden="true" /></Link>
+          <Link prefetch={false} href={routes.pl.services} className="group type-label flex items-center gap-3 text-bone"><span className="link-draw">{t.allServices}</span><ArrowRight className="arrow-shift size-4" aria-hidden="true" /></Link>
         </div>
         <ul className="grid gap-px bg-line md:grid-cols-2">
           {neighbours.map((item) => (
             <li key={item.slug} className="bg-background">
-              <Link href={`/${item.slug}`} className="group relative flex min-h-80 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-[28rem] lg:p-8">
+              <Link prefetch={false} href={`/${item.slug}`} className="group relative flex min-h-56 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-72 lg:p-8">
                 <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-30 transition-opacity duration-700 group-hover:opacity-50 group-focus-visible:opacity-50"><Photo id={item.hero} sizes="(min-width: 768px) 50vw, 100vw" className="scale-105 transition-transform duration-[1.4s] group-hover:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/20" /></span>
                 <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
-                <span className="type-h2 relative max-w-[14ch] text-balance">{item.navTitle}</span>
+                <span className="type-h3 relative max-w-full text-balance">{item.navTitle}</span>
               </Link>
             </li>
           ))}

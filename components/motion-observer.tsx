@@ -13,6 +13,8 @@ const SELECTOR = "[data-reveal]:not(.is-in)"
 export function MotionObserver() {
   useEffect(() => {
     const reveal = (el: Element) => el.classList.add("is-in")
+    // Content is visible unless the observer has actually started successfully.
+    document.documentElement.classList.add("js")
 
     if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const revealAll = () => document.querySelectorAll(SELECTOR).forEach(reveal)
@@ -31,7 +33,7 @@ export function MotionObserver() {
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
+      { rootMargin: "0px 0px 80px 0px", threshold: 0.01 },
     )
 
     const track = (root: ParentNode) => {

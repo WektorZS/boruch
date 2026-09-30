@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Check, Cookie, Mail, MessageCircle, Phone, ShieldCheck, X } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { contact, localeLabels, localeOrder, routes, type Locale, type PageKey } from "@/lib/content"
+import { useModalFocus } from "./use-modal-focus"
 
 const COOKIE_NAME = "boruch_analytics_consent"
 const COOKIE_MAX_AGE = 31536000
@@ -194,11 +195,14 @@ function WhatsAppIcon({ className = "size-5" }: { className?: string }) {
   )
 }
 
-function FloatingContact({ locale }: { locale: Locale }) {
+function FloatingContact({ locale, pathname }: { locale: Locale; pathname: string }) {
   const t = copy[locale]
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const close = useCallback(() => setOpen(false), [])
+  useModalFocus(open, dialogRef, close)
+  useEffect(() => setOpen(false), [pathname])
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -229,32 +233,15 @@ function FloatingContact({ locale }: { locale: Locale }) {
       document.removeEventListener("click", handleContactClick)
     }
   }, [])
-
-  useEffect(() => {
-    if (!open) return
-    const previousOverflow = document.body.style.overflow
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false)
-    }
-    document.body.style.overflow = "hidden"
-    window.addEventListener("keydown", handleKeyDown)
-    const frame = requestAnimationFrame(() => dialogRef.current?.querySelector<HTMLButtonElement>("button")?.focus())
-    return () => {
-      cancelAnimationFrame(frame)
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [open])
-
   const whatsappHref = `https://wa.me/${contact.phoneHref.replace(/\D/g, "")}`
-  const optionClass = "group flex min-h-14 items-center gap-4 border border-white/10 bg-white/[.025] px-5 text-left text-sm font-bold transition-colors hover:border-brand/60 hover:bg-brand/[.08]"
+  const optionClass = "group flex min-h-14 items-center gap-3 border border-white/10 bg-white/[.025] px-4 py-3 text-left text-sm font-semibold leading-relaxed transition-colors hover:border-brand/60 hover:bg-brand/[.08]"
 
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`fixed bottom-3 right-3 z-40 flex min-h-12 items-center gap-3 bg-brand px-4 text-[.66rem] font-bold uppercase tracking-[.14em] text-white shadow-[0_16px_45px_rgba(0,0,0,.4)] transition-all duration-500 hover:bg-[#b91f27] sm:px-5 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}
+        className={`fixed bottom-3 right-3 z-40 flex min-h-12 items-center gap-3 bg-brand px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white shadow-[0_16px_45px_rgba(0,0,0,.4)] transition-all duration-500 hover:bg-[#b91f27] sm:px-5 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}
       >
         <MessageCircle className="size-4" aria-hidden="true" />
         {t.contactButton}
@@ -262,15 +249,15 @@ function FloatingContact({ locale }: { locale: Locale }) {
 
       {open && (
         <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="floating-contact-title" className="fixed inset-0 z-[110] flex items-end justify-center bg-black/75 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false) }}>
-          <section className="relative w-full max-w-lg border-t-[3px] border-brand bg-[#111112] p-6 shadow-[0_30px_120px_rgba(0,0,0,.72)] sm:border sm:border-white/12 sm:p-8">
+          <section className="modal-sheet relative max-h-[90dvh] w-full max-w-lg overflow-y-auto border-t-[3px] border-brand bg-[#111112] p-6 shadow-[0_30px_120px_rgba(0,0,0,.72)] sm:border sm:border-white/12 sm:p-8">
             <button type="button" onClick={() => setOpen(false)} aria-label={t.closeContact} className="absolute right-4 top-4 grid size-10 place-items-center border border-white/12 bg-black/30 text-white/60 transition-colors hover:border-brand hover:bg-brand hover:text-white">
               <X className="size-5" aria-hidden="true" />
             </button>
-            <p className="text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">Boruch Myjnia</p>
-            <h2 id="floating-contact-title" className="mt-4 max-w-[12ch] pr-12 font-display text-[clamp(2rem,6vw,3.35rem)] font-black uppercase leading-[1.03] tracking-[-.015em]">{t.contactTitle}</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/48">{t.contactDescription}</p>
+            <p className="text-[.72rem] font-bold uppercase tracking-[.18em] text-brand">Boruch Myjnia</p>
+            <h2 id="floating-contact-title" className="mt-4 pr-6 font-display text-[clamp(1.45rem,5vw,1.95rem)] font-bold leading-[1.25] tracking-normal">{t.contactTitle}</h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/65">{t.contactDescription}</p>
             <div className="mt-7 grid gap-2">
-              <a href={`${routes[locale].home}#wycena`} onClick={() => setOpen(false)} className={optionClass}><MessageCircle className="size-5 text-brand" aria-hidden="true" />{t.form}</a>
+              <a href={`${pathname === routes[locale].contact ? routes[locale].contact : routes[locale].home}#wycena`} onClick={() => setOpen(false)} className={optionClass}><MessageCircle className="size-5 text-brand" aria-hidden="true" />{t.form}</a>
               <a href={`mailto:${contact.email}`} className={optionClass}><Mail className="size-5 text-brand" aria-hidden="true" />{t.email}</a>
               <a href={contact.phoneHref} className={optionClass}><Phone className="size-5 text-brand" aria-hidden="true" />{t.call}: {contact.phone}</a>
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={optionClass}><span className="text-[#61c99a]"><WhatsAppIcon /></span>{t.whatsapp}</a>
@@ -332,34 +319,8 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
     setEditing(false)
   }, [])
 
-  useEffect(() => {
-    if (!ready || (consent !== null && !editing)) return
-    const previousOverflow = document.body.style.overflow
-    const focusable = () => Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href]') ?? []).filter((element) => element.getClientRects().length > 0)
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && editing) setEditing(false)
-      if (event.key !== "Tab") return
-      const items = focusable()
-      if (!items.length) return
-      const first = items[0]
-      const last = items[items.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-    document.body.style.overflow = "hidden"
-    window.addEventListener("keydown", handleKeyDown)
-    const frame = requestAnimationFrame(() => focusable()[0]?.focus())
-    return () => {
-      cancelAnimationFrame(frame)
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [ready, consent, editing])
+  const closeSettings = useCallback(() => setEditing(false), [])
+  useModalFocus(ready && (consent === null || editing), dialogRef, editing ? closeSettings : undefined)
 
   if (!ready) return null
 
@@ -372,19 +333,19 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
 
       {(firstVisit || editing) && (
         <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
-          <section className="min-h-[68svh] max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-5 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:min-h-0 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
+          <section className="modal-sheet min-h-[68svh] max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-5 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:min-h-0 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
             <div className="flex items-start gap-4">
               <span className="grid size-11 shrink-0 place-items-center text-brand"><Cookie className="size-7" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
-                <p className="text-[.58rem] font-bold uppercase tracking-[.18em] text-brand">{t.cookieWelcome}</p>
-                <h2 id="cookie-title" className="mt-2 pr-8 font-display text-[1.5rem] font-black uppercase leading-[1.08] tracking-[-.01em] sm:pr-10 sm:text-[clamp(1.75rem,5vw,2.8rem)] sm:leading-[1.05]">{editing ? t.settingsTitle : t.cookieTitle}</h2>
-                <p className="mt-2.5 text-[.82rem] leading-relaxed text-white/48 sm:mt-3 sm:text-sm">{editing ? t.settingsDescription : t.cookiePrompt}</p>
+                <p className="text-[.72rem] font-bold uppercase tracking-[.18em] text-brand">{t.cookieWelcome}</p>
+                <h2 id="cookie-title" className="mt-2 font-display text-[1.35rem] font-bold leading-[1.14] tracking-[-.01em] sm:text-[1.85rem] sm:leading-[1.14]">{editing ? t.settingsTitle : t.cookieTitle}</h2>
+                <p className="mt-2.5 text-sm leading-relaxed text-white/65 sm:mt-3 sm:text-sm">{editing ? t.settingsDescription : t.cookiePrompt}</p>
               </div>
               {editing && <button type="button" onClick={() => setEditing(false)} aria-label={t.close} className="grid size-10 shrink-0 place-items-center border border-white/12 text-white/58 transition-colors hover:border-brand hover:bg-brand hover:text-white"><X className="size-5" /></button>}
             </div>
 
             <div className="mt-5 flex items-center justify-between gap-3 border border-white/10 bg-black/20 p-3">
-              <span className="hidden text-[.58rem] font-bold uppercase tracking-[.16em] text-white/45 min-[360px]:block">{t.languageLabel}</span>
+              <span className="hidden text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65 min-[360px]:block">{t.languageLabel}</span>
               <div className="grid grid-cols-4 gap-1" role="group" aria-label={t.languageLabel}>
                 {localeOrder.map((code) => {
                   const active = code === locale
@@ -395,8 +356,9 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
                       onClick={() => changeLanguage(code)}
                       disabled={isChangingLanguage}
                       aria-pressed={active}
+                      aria-label={`${localeLabels[code].short} - ${localeLabels[code].name}`}
                       title={localeLabels[code].name}
-                      className={`flex min-h-10 min-w-11 items-center justify-center gap-1.5 border px-1.5 text-[.58rem] font-bold uppercase tracking-[.08em] transition-colors disabled:cursor-wait disabled:opacity-60 sm:min-h-9 sm:min-w-14 sm:gap-2 sm:px-2 sm:tracking-[.1em] ${active ? "border-white/25 bg-white/12 text-white" : "border-transparent bg-white/[.045] text-white/55 hover:border-white/12 hover:bg-white/10 hover:text-white"}`}
+                      className={`flex min-h-10 min-w-11 items-center justify-center gap-1.5 border px-1.5 text-[.72rem] font-bold uppercase tracking-[.08em] transition-colors disabled:cursor-wait disabled:opacity-60 sm:min-h-9 sm:min-w-14 sm:gap-2 sm:px-2 sm:tracking-[.1em] ${active ? "border-white/25 bg-white/12 text-white" : "border-transparent bg-white/[.045] text-white/55 hover:border-white/12 hover:bg-white/10 hover:text-white"}`}
                     >
                       <LanguageFlag locale={code} />
                       {localeLabels[code].short}
@@ -406,43 +368,43 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
               </div>
             </div>
 
-            {!editing && <p className="mt-5 border-l-2 border-brand pl-4 text-xs leading-relaxed text-white/44">{t.cookieOptionalInfo}</p>}
+            {!editing && <p className="mt-5 border-l-2 border-brand pl-4 text-xs leading-relaxed text-white/65">{t.cookieOptionalInfo}</p>}
 
             <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
               <button type="button" onClick={() => editing ? setDraftConsent("rejected") : saveConsent("rejected")} aria-pressed={editing ? draftConsent === "rejected" : undefined} className={choiceClass(editing && draftConsent === "rejected")}>
                 <div className="flex items-center justify-between gap-3 sm:w-full sm:items-start">
                   <span className="grid size-10 shrink-0 place-items-center bg-white/[.06] text-white/55"><ShieldCheck className="size-5" aria-hidden="true" /></span>
-                  <span className="hidden text-[.55rem] font-bold uppercase tracking-[.14em] text-white/38 sm:block">{editing && draftConsent === "rejected" ? t.selected : t.required}</span>
+                  <span className="hidden text-[.72rem] font-bold uppercase tracking-[.14em] text-white/65 sm:block">{editing && draftConsent === "rejected" ? t.selected : t.required}</span>
                 </div>
                 <div className="min-w-0 flex-1 sm:mt-5">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm font-bold uppercase tracking-[.06em] sm:tracking-[.08em]">{t.necessary}</strong>
-                    <span className="text-[.5rem] font-bold uppercase tracking-[.12em] text-white/38 sm:hidden">{editing && draftConsent === "rejected" ? t.selected : t.required}</span>
+                    {editing && draftConsent === "rejected" && <span className="text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65 sm:hidden">{t.selected}</span>}
                   </div>
-                  <span className="mt-1.5 block text-[.72rem] leading-[1.35] text-white/44 sm:mt-2 sm:text-xs sm:leading-relaxed">{t.necessaryDescription}</span>
+                  <span className="mt-1.5 block text-[.82rem] leading-[1.5] text-white/65 sm:mt-2 sm:text-xs sm:leading-relaxed">{t.necessaryDescription}</span>
                 </div>
               </button>
               <button type="button" onClick={() => editing ? setDraftConsent("accepted") : saveConsent("accepted")} aria-pressed={editing ? draftConsent === "accepted" : undefined} className={choiceClass(editing && draftConsent === "accepted")}>
                 <div className="flex items-center justify-between gap-3 sm:w-full sm:items-start">
                   <span className="grid size-10 shrink-0 place-items-center bg-brand/15 text-brand"><Cookie className="size-5" aria-hidden="true" /></span>
-                  <span className="hidden text-[.55rem] font-bold uppercase tracking-[.14em] text-brand sm:block">{editing && draftConsent === "accepted" ? t.selected : t.optional}</span>
+                  <span className="hidden text-[.72rem] font-bold uppercase tracking-[.14em] text-brand sm:block">{editing && draftConsent === "accepted" ? t.selected : t.optional}</span>
                 </div>
                 <div className="min-w-0 flex-1 sm:mt-5">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm font-bold uppercase tracking-[.06em] sm:tracking-[.08em]">{t.analytics}</strong>
-                    <span className="text-[.5rem] font-bold uppercase tracking-[.12em] text-brand sm:hidden">{editing && draftConsent === "accepted" ? t.selected : t.optional}</span>
+                    <span className="text-[.72rem] font-bold uppercase tracking-[.12em] text-brand sm:hidden">{editing && draftConsent === "accepted" ? t.selected : t.optional}</span>
                   </div>
-                  <span className="mt-1.5 block text-[.72rem] leading-[1.35] text-white/44 sm:mt-2 sm:text-xs sm:leading-relaxed">{t.analyticsDescription}</span>
+                  <span className="mt-1.5 block text-[.82rem] leading-[1.5] text-white/65 sm:mt-2 sm:text-xs sm:leading-relaxed">{t.analyticsDescription}</span>
                 </div>
               </button>
             </div>
 
             {editing && (
-              <button type="button" onClick={() => saveConsent(draftConsent)} className="mt-5 flex min-h-12 w-full items-center justify-center gap-3 bg-brand px-5 text-[.68rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:bg-[#b91f27]">
+              <button type="button" onClick={() => saveConsent(draftConsent)} className="mt-5 flex min-h-12 w-full items-center justify-center gap-3 bg-brand px-5 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:bg-[#b91f27]">
                 <Check className="size-4" aria-hidden="true" />{t.save}
               </button>
             )}
-            <p className="mt-5 border-t border-white/10 pt-4 text-center text-[.62rem] leading-relaxed text-white/38 sm:text-[.64rem]">{t.changeAnytime}</p>
+            <p className="mt-5 border-t border-white/10 pt-4 text-center text-[.72rem] leading-relaxed text-white/65 sm:text-[.72rem]">{t.changeAnytime}</p>
           </section>
         </div>
       )}
@@ -457,7 +419,8 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
 }
 
 export function GlobalOverlays() {
-  const pathname = usePathname()
+  const pathname = decodeURIComponent(usePathname()).replace(/\/$/, "") || "/"
   const locale = localeFromPathname(pathname)
-  return <><FloatingContact locale={locale} /><CookieConsent locale={locale} pathname={pathname} /></>
+  useEffect(() => { document.documentElement.lang = localeLabels[locale].htmlLang }, [locale])
+  return <><FloatingContact locale={locale} pathname={pathname} /><CookieConsent locale={locale} pathname={pathname} /></>
 }

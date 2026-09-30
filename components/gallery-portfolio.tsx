@@ -20,6 +20,7 @@ interface GalleryLabels {
   next: string
   close: string
   open: string
+  more: string
 }
 
 export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: GalleryLabels }) {
@@ -27,8 +28,11 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
   const triggerRefs = useRef<(HTMLButtonElement | null)[]>([])
   const touchX = useRef<number | null>(null)
   const [active, setActive] = useState<number | null>(null)
+  const [visibleCount, setVisibleCount] = useState(12)
+  const opener = useRef(0)
 
   const open = (index: number) => {
+    opener.current = index
     setActive(index)
     dialogRef.current?.showModal()
   }
@@ -44,14 +48,20 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
     const dialog = dialogRef.current
     if (!dialog) return
     const onClose = () => {
-      setActive((i) => {
-        if (i !== null) triggerRefs.current[i]?.focus()
-        return null
-      })
+      setActive(null)
+      triggerRefs.current[opener.current]?.focus({ preventScroll: true })
     }
     dialog.addEventListener("close", onClose)
     return () => dialog.removeEventListener("close", onClose)
   }, [])
+
+  const isOpen = active !== null
+  useEffect(() => {
+    if (!isOpen) return
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => { document.body.style.overflow = overflow }
+  }, [isOpen])
 
   const current = active === null ? null : ids[active]
   const neighbours = active === null ? [] : [ids[(active + 1) % ids.length], ids[(active - 1 + ids.length) % ids.length]]
@@ -59,8 +69,8 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
   return (
     <>
       <ul className="grid grid-cols-2 gap-2 md:grid-cols-12 md:gap-3">
-        {ids.map((id, i) => (
-          <li key={id} data-reveal="mask" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("frame", rhythm[i % rhythm.length])}>
+        {ids.slice(0, visibleCount).map((id, i) => (
+          <li key={id} data-reveal="mask" style={{ "--d": i % 3 } as React.CSSProperties} className={cn("frame editorial-photo", rhythm[i % rhythm.length])}>
             <button
               ref={(el) => {
                 triggerRefs.current[i] = el
@@ -76,6 +86,14 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
           </li>
         ))}
       </ul>
+
+      {visibleCount < ids.length && <div className="mt-10 flex justify-center">
+        <button type="button" className="btn btn-outline gap-3" onClick={() => {
+          const firstNew = visibleCount
+          setVisibleCount(count => Math.min(ids.length, count + 12))
+          requestAnimationFrame(() => triggerRefs.current[firstNew]?.focus({ preventScroll: true }))
+        }}>{labels.more}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></button>
+      </div>}
 
       <dialog
         ref={dialogRef}
@@ -117,7 +135,7 @@ export function GalleryPortfolio({ ids, labels }: { ids: PhotoId[]; labels: Gall
                 srcSet={photoSrcSet(current)}
                 sizes="100vw"
                 alt={photos[current].alt}
-                className="lightbox-img max-h-full max-w-full object-contain"
+                className="lightbox-img h-full w-full object-contain"
               />
               <button
                 type="button"

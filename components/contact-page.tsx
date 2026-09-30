@@ -3,7 +3,7 @@ import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
-import { breadcrumbJsonLd, contact, routes, sources, ui, type Locale } from "@/lib/content"
+import { contact, routes, sources, ui, type Locale } from "@/lib/content"
 
 const MAP_EMBED = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
 
@@ -65,31 +65,21 @@ export function ContactPage({ locale }: { locale: Locale }) {
 
   return (
     <SiteShell locale={locale} page="contact">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbJsonLd([
-              { name: t.nav.home, path: routes[locale].home },
-              { name: t.nav.contact, path: routes[locale].contact },
-            ]),
-          ),
-        }}
-      />
 
-      <section aria-labelledby="page-title" className="relative isolate flex min-h-[680px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
+
+      <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
         <div className="enter-unmask absolute inset-0"><Photo id="p28" priority sizes="100vw" position="48% 68%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_45%,rgba(6,6,7,.38)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.65)_45%,rgba(6,6,7,.18)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/55" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
           <div className="lg:col-span-9">
             <p className="eyebrow mb-7">{t.nav.contact}</p>
-            <h1 id="page-title" className="page-hero-title type-h1">{src.contact.h1}</h1>
-            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{src.contact.sub}</p>
+            <h1 id="page-title" className="page-hero-title type-h1">{t.nav.contact}</h1>
+            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.directText}</p>
           </div>
           <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
             <p className="type-label text-brand">{copy.direct}</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/58">{copy.directText}</p>
+            <p className="mt-4 text-sm leading-relaxed text-white/65">{copy.directions}</p>
             <a href={contact.phoneHref} className="mt-6 inline-flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-brand">
               <Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}
             </a>
@@ -106,48 +96,47 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section aria-labelledby="contact-form-title" className="border-b border-white/10 bg-[#101011] py-16 sm:py-20 lg:py-28">
+      <section id="wycena" aria-labelledby="contact-form-title" className="border-b border-white/10 bg-[#101011] py-16 sm:py-20 lg:py-28">
         <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
               <p className="eyebrow">{copy.formLabel}</p>
-              <h2 id="contact-form-title" data-reveal="" className="mt-7 max-w-[11ch] font-display text-[clamp(2.5rem,4.2vw,4.4rem)] font-black uppercase leading-[1.02] tracking-[-.025em]">{copy.formTitle}</h2>
-              <p className="mt-6 max-w-md text-base leading-relaxed text-white/52">{copy.formText}</p>
+              <h2 id="contact-form-title" data-reveal="" className="mt-7 type-h2">{copy.formTitle}</h2>
+              <p className="mt-6 max-w-md text-base leading-relaxed text-white/65">{copy.formText}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
                 <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
               </div>
             </div>
           </div>
-          <div data-reveal="" className="border-l border-white/10 pl-0 lg:col-span-7 lg:col-start-6 lg:pl-10">
+          <div data-reveal="" className="lg:border-l lg:border-white/10 lg:col-span-7 lg:col-start-6 lg:pl-10">
             <HomeContactForm locale={locale} />
           </div>
         </div>
       </section>
 
       <section aria-labelledby="location-title" className="relative overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-24">
-        <div aria-hidden="true" className="pointer-events-none absolute left-1/3 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
-        <div className="shell-wide relative grid overflow-hidden border border-white/10 lg:grid-cols-[.72fr_1.05fr_1.6fr]">
-          <div className="relative flex min-h-64 flex-col justify-between border-b border-white/10 bg-[#0b0b0c] p-7 lg:min-h-[30rem] lg:border-b-0 lg:border-r lg:p-9">
-            <p className="type-label text-white/45">{copy.level}</p>
-            <span className="font-display text-[clamp(6rem,10vw,10rem)] font-black leading-none tracking-[-.06em] text-brand">-2</span>
+        <div className="shell-wide relative grid gap-0 overflow-hidden lg:grid-cols-[.35fr_.85fr_1.2fr]">
+          <div className="relative flex items-center justify-between gap-4 border-l-4 border-brand py-6 pl-6 lg:flex-col lg:items-start lg:justify-between lg:py-9 lg:pr-6">
+            <p className="type-label text-white/65">{copy.level}</p>
+            <span className="font-display text-[clamp(3.5rem,6vw,6rem)] font-black leading-none tracking-[-.06em] text-brand">-2</span>
           </div>
-          <div className="flex flex-col justify-center bg-[linear-gradient(145deg,#151516,#120a0b)] p-7 sm:p-10 lg:p-12">
+          <div className="flex flex-col justify-center bg-[#111112] p-6 sm:p-8 lg:p-9">
             <p className="eyebrow">{copy.location}</p>
-            <h2 id="location-title" className="mt-7 type-h2 max-w-[10ch]">{copy.locationTitle}</h2>
+            <h2 id="location-title" className="mt-7 type-h2 max-w-full">{copy.locationTitle}</h2>
             <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">{copy.directions}</p>
             <address className="mt-8 border-t border-brand/35 pt-6 not-italic text-sm leading-relaxed text-white/72">
               {src.address.lines.map((line) => <span key={line} className="block">{line}</span>)}
             </address>
             <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex w-fit items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand">{t.openMap}<ArrowRight className="size-4 text-brand" /></a>
           </div>
-          <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[30rem]">
+          <div className="relative min-h-72 overflow-hidden lg:min-h-80">
             <iframe
               src={MAP_EMBED}
               title={`${t.openMap} - ${src.address.lines.join(", ")}`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 h-full w-full border-0 opacity-80 [filter:grayscale(.85)_invert(.9)_sepia(.25)_hue-rotate(310deg)_contrast(.95)]"
+              className="absolute inset-0 h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
             />
             <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-linear-to-r from-[#120a0b] to-transparent" />
           </div>
@@ -159,10 +148,10 @@ export function ContactPage({ locale }: { locale: Locale }) {
 
 function ContactLink({ icon, label, value, href, external = false }: { icon: React.ReactNode; label: string; value: string; href: string; external?: boolean }) {
   return (
-    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="group flex min-h-40 items-end justify-between gap-5 border-b border-white/10 py-7 sm:px-6 lg:border-b-0 lg:border-r lg:px-7">
+    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="group flex min-h-24 items-center justify-between gap-4 border-b border-white/10 py-5 sm:px-5 lg:border-b-0 lg:border-r lg:last:border-r-0">
       <span className="min-w-0">
-        <span className="type-label text-white/38">{label}</span>
-        <strong className="mt-3 block break-words text-base font-semibold text-white/84 transition-colors group-hover:text-white">{value}</strong>
+        <span className="type-label text-white/65">{label}</span>
+        <strong className="mt-3 block [overflow-wrap:anywhere] text-base font-semibold text-white/84 transition-colors group-hover:text-white">{value}</strong>
       </span>
       <span className="grid size-11 shrink-0 place-items-center border border-white/12 text-brand transition-colors group-hover:border-brand group-hover:bg-brand group-hover:text-white">{icon}</span>
     </a>

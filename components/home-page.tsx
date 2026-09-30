@@ -2,11 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Alex_Brush } from "next/font/google"
 import useEmblaCarousel from "embla-carousel-react"
 import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
+import { SiteHeader } from "./site-header"
+import { SiteFooter } from "./site-footer"
+import { useModalFocus } from "./use-modal-focus"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
@@ -15,11 +17,6 @@ import { cn } from "@/lib/utils"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
 
-const alexBrush = Alex_Brush({
-  subsets: ["latin"],
-  weight: "400",
-  display: "swap",
-})
 
 const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p11", position: "54% 58%" },
@@ -457,12 +454,12 @@ export function HomePage({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <div id="top" lang={locale === "pl" ? undefined : localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080809] text-bone">
+    <div id="top" lang={localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080809] text-bone">
       <a href="#main" className="fixed left-4 top-4 z-80 -translate-y-24 bg-brand px-4 py-3 text-xs font-bold uppercase tracking-[.16em] transition-transform focus:translate-y-0">
         {t.skip}
       </a>
       <HomeHeader locale={locale} />
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <HomeHero locale={locale} />
         <WhyBoruch locale={locale} />
         <ServiceMenu locale={locale} />
@@ -482,80 +479,17 @@ export function HomePage({ locale }: { locale: Locale }) {
 
 function HomeHeader({ locale }: { locale: Locale }) {
   const t = ui[locale]
-
-  return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#080809]/92 shadow-[0_12px_40px_rgba(0,0,0,.18)] backdrop-blur-md">
-      <div className="home-shell flex h-24 items-center gap-8">
-        <Link href={routes[locale].home} aria-label={`BORUCH Myjnia - ${t.nav.home}`} className="group flex shrink-0 items-center gap-3">
-          <span className="grid size-12 place-items-center bg-brand font-display text-[2rem] font-black leading-none transition-colors group-hover:bg-[#a91720]">B</span>
-          <span className="flex flex-col">
-            <span className="font-display text-[1.55rem] font-black uppercase leading-none tracking-[-.015em]">Boruch</span>
-            <span className="mt-1 text-[.58rem] font-semibold uppercase tracking-[.22em] text-white/48">Myjnia / detailing</span>
-          </span>
-        </Link>
-
-        <nav aria-label={t.navigation} className="ml-auto hidden lg:block">
-          <ul className="flex items-center gap-7">
-            {navOrder.map((key) => (
-              <li key={key}>
-                <Link href={routes[locale][key]} className="home-nav-link text-[.72rem] font-semibold uppercase tracking-[.14em] text-white/68">
-                  {t.nav[key]}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <ul aria-label={t.language} className="ml-2 hidden items-center gap-1 border-l border-white/12 pl-6 xl:flex">
-          {localeOrder.map((code) => (
-            <li key={code}>
-              <Link href={routes[code].home} hrefLang={localeLabels[code].htmlLang} aria-current={code === locale ? "page" : undefined} className="grid size-8 place-items-center text-[.62rem] font-bold text-white/40 transition-colors hover:text-white aria-[current=page]:bg-white aria-[current=page]:text-black">
-                {localeLabels[code].short}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.68rem] font-bold uppercase tracking-[.14em] transition-colors hover:bg-[#aa1921] sm:flex">
-          {t.book}<ArrowUpRight className="size-4" aria-hidden="true" />
-        </a>
-
-        <details className="home-mobile-menu group/home-menu ml-auto lg:hidden">
-          <summary className="flex h-11 cursor-pointer list-none items-center gap-3 text-white">
-            <span className="type-label text-bone group-open/home-menu:hidden">{t.menu}</span>
-            <span className="type-label hidden text-bone group-open/home-menu:inline">{t.close}</span>
-            <span aria-hidden="true" className="flex w-6 flex-col items-end gap-1.5">
-              <span className="h-px w-6 bg-bone transition-transform duration-300 group-open/home-menu:translate-y-[3.5px] group-open/home-menu:rotate-45" />
-              <span className="h-px w-4 bg-brand transition-all duration-300 group-open/home-menu:w-6 group-open/home-menu:-translate-y-[3.5px] group-open/home-menu:-rotate-45" />
-            </span>
-          </summary>
-          <div className="fixed inset-x-0 top-24 min-h-[calc(100svh-6rem)] border-t border-white/10 bg-[#101011] px-5 py-8 shadow-2xl">
-            <nav aria-label={t.navigation}>
-              <ul className="flex flex-col">
-                {navOrder.map((key) => (
-                  <li key={key} className="border-b border-white/10">
-                    <Link href={routes[locale][key]} className="flex items-center justify-between py-5 font-display text-2xl font-black uppercase tracking-[-.005em]">
-                      {t.nav[key]}<ArrowRight className="size-5 text-brand" aria-hidden="true" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <div className="mt-8 flex flex-wrap items-center gap-2">
-              {localeOrder.map((code) => (
-                <Link key={code} href={routes[code].home} hrefLang={localeLabels[code].htmlLang} aria-current={code === locale ? "page" : undefined} className="grid h-10 min-w-12 place-items-center border border-white/15 px-3 text-xs font-bold aria-[current=page]:border-brand aria-[current=page]:bg-brand">
-                  {localeLabels[code].short}
-                </Link>
-              ))}
-            </div>
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-8 flex min-h-14 w-full items-center justify-between bg-brand px-5 text-xs font-bold uppercase tracking-[.14em]">
-              {t.book}<ArrowUpRight className="size-5" aria-hidden="true" />
-            </a>
-          </div>
-        </details>
-      </div>
-    </header>
-  )
+  return <SiteHeader
+    homeHref={routes[locale].home}
+    homeLabel={t.nav.home}
+    nav={[{ key: "home", label: t.nav.home, href: routes[locale].home, active: true }, ...navOrder.map(key => ({ key, label: t.nav[key], href: routes[locale][key], active: false }))]}
+    languages={localeOrder.map(code => ({ code, short: localeLabels[code].short, name: localeLabels[code].name, htmlLang: localeLabels[code].htmlLang, href: routes[code].home, active: code === locale }))}
+    labels={{ book: t.book, menu: t.menu, close: t.close, language: t.language, navigation: t.navigation, level: t.level }}
+    bookingUrl={contact.bookingUrl}
+    phone={contact.phone}
+    phoneHref={contact.phoneHref}
+    address={[sources[locale].address.lines[0], `PAZIM ${sources[locale].address.lines[2]}`]}
+  />
 }
 
 function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
@@ -563,17 +497,17 @@ function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; cla
     <div className={cn("flex w-full items-stretch border border-white/14 bg-[#0b0b0c]/90 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md sm:w-auto", className)}>
       <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
       <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
-        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
+        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
           <span className="min-w-0 flex-1">
-            <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
-            <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.booksyReviews}</span>
+            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">4.9 / 5 - {copy.booksyReviews}</span>
           </span>
           <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
-        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.googleReviewsLink}: 4.9 / 5, ${copy.googleReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
+        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
           <span className="min-w-0 flex-1">
-            <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
-            <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.googleReviews}</span>
+            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">4.9 / 5 - {copy.googleReviews}</span>
           </span>
           <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
@@ -587,24 +521,38 @@ function HomeHero({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
   const [activeSlide, setActiveSlide] = useState(0)
+  const [loadedSlides, setLoadedSlides] = useState([0])
+  const [heroVisible, setHeroVisible] = useState(true)
+  const [heroPaused, setHeroPaused] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
   const slide = copy.heroSlides[activeSlide]
   const hasLongTitleWord = slide.title.split(/\s+/).some((word) => word.length >= 12)
 
   useEffect(() => {
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (motionQuery.matches) return
+    const hero = heroRef.current
+    if (!hero) return
+    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting))
+    const onVisibility = () => setHeroPaused(document.hidden)
+    observer.observe(hero)
+    document.addEventListener("visibilitychange", onVisibility)
+    return () => {
+      observer.disconnect()
+      document.removeEventListener("visibilitychange", onVisibility)
+    }
+  }, [])
 
-    const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % copy.heroSlides.length)
-    }, 6000)
-
-    return () => window.clearInterval(timer)
-  }, [copy.heroSlides.length])
+  useEffect(() => {
+    if (!heroVisible || heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const next = (activeSlide + 1) % copy.heroSlides.length
+    const preload = window.setTimeout(() => setLoadedSlides(current => current.includes(next) ? current : [...current, next]), 3500)
+    const advance = window.setTimeout(() => setActiveSlide(next), 7500)
+    return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
+  }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused])
 
   return (
-    <section aria-labelledby="hero-title" className="relative isolate flex flex-col overflow-hidden bg-[#080809] pt-24 sm:min-h-svh">
-      <div className="absolute inset-0" aria-hidden="true">
-        {heroPhotos.map((photo, index) => (
+    <section ref={heroRef} onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(document.hidden)} onFocusCapture={() => setHeroPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(document.hidden) }} aria-labelledby="hero-title" className="relative isolate flex flex-col overflow-hidden bg-[#080809] pt-(--header-h) sm:min-h-svh">
+      <div className="absolute inset-x-0 top-0 h-svh sm:inset-0 sm:h-full" aria-hidden="true">
+        {heroPhotos.map((photo, index) => loadedSlides.includes(index) && (
           <div
             key={photo.id}
             className={cn(
@@ -626,9 +574,9 @@ function HomeHero({ locale }: { locale: Locale }) {
         <div className="absolute right-[8%] top-[16%] hidden h-px w-36 bg-linear-to-r from-transparent via-brand/70 to-transparent lg:block" aria-hidden="true" />
       </div>
 
-      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-6rem)] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-14rem)] sm:py-20">
-        <div key={activeSlide} className="home-hero-copy flex flex-col items-start">
-          <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
+      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-var(--header-h))] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-var(--header-h)-5rem)] sm:py-20">
+        <div key={activeSlide} className={cn("home-hero-copy flex flex-col items-start", activeSlide > 0 && "home-hero-copy-animated")}>
+          <p className="mb-7 flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.label}
           </p>
           <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord && "home-hero-title-long")}>{slide.title}</h1>
@@ -637,15 +585,15 @@ function HomeHero({ locale }: { locale: Locale }) {
             <a href="#wycena" className="home-button home-button-red">
               {t.nav.contact}<ArrowRight className="size-4" aria-hidden="true" />
             </a>
-            <Link href={routes[locale].services} className="home-button home-button-dark">
+            <Link prefetch={false} href={routes[locale].services} className="home-button home-button-dark">
               {t.nav.services}<ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
 
-        <div className="mt-10 flex w-full flex-col-reverse items-start gap-4 sm:absolute sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] sm:bottom-8 sm:mt-0 sm:w-auto sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
+        <div className="mt-10 flex w-full flex-col-reverse items-start gap-4 sm:absolute sm:inset-x-(--gutter) sm:bottom-8 sm:mt-0 sm:w-auto sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
           <div className="flex items-center gap-3">
-            <span className="text-[.6rem] font-bold uppercase tracking-[.16em] text-white/48">{followCopy[locale]}</span>
+            <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{followCopy[locale]}</span>
             <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center border border-white/14 text-white/68 transition-colors hover:border-brand hover:bg-brand hover:text-white">
               <FacebookIcon className="size-4.5" />
             </a>
@@ -665,8 +613,8 @@ function HomeHero({ locale }: { locale: Locale }) {
             <li key={title} className="flex min-h-0 items-center gap-3 border-b border-white/10 px-5 py-3.5 last:border-b-0 sm:min-h-20 sm:gap-4 sm:border-b-0 sm:border-r sm:px-6 sm:py-4 sm:last:border-r-0 lg:px-8">
               <Icon className="size-4.5 shrink-0 text-brand" aria-hidden="true" />
               <span className="flex flex-col gap-1">
-                <strong className="text-[.66rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
-                <span className="text-[.8rem] leading-snug text-white/44">{text}</span>
+                <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
+                <span className="text-[.8rem] leading-snug text-white/65">{text}</span>
               </span>
             </li>
           )
@@ -688,23 +636,23 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-32">
+    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:items-stretch">
-        <figure data-reveal="mask" className="home-photo-panel order-2 relative min-h-[23rem] overflow-hidden sm:min-h-[32rem] lg:order-none lg:col-span-6 lg:min-h-[44rem]">
-          <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" eager />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo order-2 relative min-h-[23rem] overflow-hidden sm:min-h-[32rem] lg:order-none lg:col-span-6 lg:min-h-[34rem]">
+          <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
           <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 border-t border-white/12 bg-black/45 px-6 py-5 backdrop-blur-sm">
-            <span className="text-[.62rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
+            <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
             <span className="h-px w-16 bg-brand" />
           </figcaption>
         </figure>
 
         <div className="order-1 flex flex-col justify-center lg:order-none lg:col-span-5 lg:col-start-8">
           <p className="home-kicker">{copy.whyLabel}</p>
-          <h2 id="why-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.whyTitle}</h2>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/52">{copy.whyIntro}</p>
-          <p data-reveal="" className="mt-8 max-w-xl border-l border-brand pl-6 text-base leading-relaxed text-white/42">{src.home.teamParas[2]}</p>
-          <Link href={routes[locale].services} className="home-button home-button-dark mt-10 w-fit">{t.allServices}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+          <h2 id="why-title" data-reveal="" className="home-section-title mt-7">{copy.whyTitle}</h2>
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/65">{copy.whyIntro}</p>
+          <p data-reveal="" className="mt-8 max-w-xl border-l border-brand pl-6 text-base leading-relaxed text-white/65">{src.home.teamParas[2]}</p>
+          <Link prefetch={false} href={routes[locale].services} className="home-button home-button-dark mt-10 w-fit">{t.allServices}<ArrowRight className="size-4" aria-hidden="true" /></Link>
         </div>
       </div>
     </section>
@@ -731,16 +679,16 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   }))
 
   return (
-    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
+    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
       <div className="home-shell">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="mt-6 whitespace-nowrap font-display text-[clamp(2rem,7.8vw,3.8rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+            <h2 id="services-title" data-reveal="" className="mt-6 font-display text-[clamp(1.7rem,6.9vw,3rem)] font-black uppercase leading-[1.14] tracking-normal">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
           </div>
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
-            <Link href={routes[locale].services} className="mt-6 inline-flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]">
+            <Link prefetch={false} href={routes[locale].services} className="mt-6 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]">
               {t.allServices}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
             </Link>
           </div>
@@ -751,20 +699,20 @@ function ServiceMenu({ locale }: { locale: Locale }) {
             <article key={group.category} className={cn("flex flex-col", groupIndex === 0 ? "lg:pr-10 xl:pr-14" : "border-t border-white/10 pt-12 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 xl:pl-14")}>
               <header className="pb-7">
                 <span className="mb-5 block h-px w-10 bg-brand" aria-hidden="true" />
-                <h3 className="font-display text-[clamp(2.2rem,3.4vw,3.35rem)] font-black uppercase leading-[1.04] tracking-[-.015em]">{group.title}</h3>
-                <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/48">{group.description}</p>
+                <h3 className="font-display text-[clamp(1.6rem,2.4vw,2.25rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{group.title}</h3>
+                <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/65">{group.description}</p>
               </header>
 
               <div className="grid content-start gap-x-8 xl:grid-cols-2">
                 {group.items.map((item) => {
                   const Icon = item.icon
                   return (
-                    <Link key={item.slug} href={item.href} className="group/item grid min-h-20 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-4 transition-colors hover:border-brand/45 sm:min-h-24 sm:py-5 lg:min-h-28">
+                    <Link prefetch={false} key={item.slug} href={item.href} className="group/item grid min-h-20 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-4 transition-colors hover:border-brand/45 sm:min-h-24 sm:py-5 lg:min-h-24">
                       <span className="grid size-9 place-items-center text-brand transition-transform group-hover/item:-translate-y-0.5">
                         <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                       </span>
-                      <strong className="min-w-0 font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.13] tracking-0">{item.title}</strong>
-                      <ArrowUpRight className="size-4 text-white/35 transition-colors group-hover/item:text-brand" aria-hidden="true" />
+                      <strong className="min-w-0 [overflow-wrap:anywhere] hyphens-auto font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.2] tracking-0">{item.title}</strong>
+                      <ArrowUpRight className="size-4 text-white/65 transition-colors group-hover/item:text-brand" aria-hidden="true" />
                     </Link>
                   )
                 })}
@@ -783,44 +731,44 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-32">
+    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-24">
       <div className="home-shell mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <p className="home-kicker">{t.nav.gallery}</p>
-          <h2 id="work-title" data-reveal="" className="home-section-title mt-6 max-w-[9ch]">{src.home.projectsTitle}</h2>
+          <h2 id="work-title" data-reveal="" className="home-section-title mt-6">{src.home.projectsTitle}</h2>
         </div>
         <div className="max-w-md lg:col-span-4 lg:col-start-9">
-          <p className="text-pretty text-base leading-relaxed text-white/48">{src.home.projectsText}</p>
-          <Link href={routes[locale].gallery} className="mt-6 inline-flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.16em] text-white">
+          <p className="text-pretty text-base leading-relaxed text-white/65">{src.home.projectsText}</p>
+          <Link prefetch={false} href={routes[locale].gallery} className="mt-6 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white">
             {t.allPhotos}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
       </div>
-      <div className="home-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[20rem_20rem]">
-        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[4/5] lg:col-span-6 lg:row-span-2 lg:aspect-auto">
-          <Photo id="p20" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" className="transition duration-1000 group-hover:scale-[1.025]" eager />
+      <div className="home-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[16rem_16rem]">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[16/10] lg:col-span-6 lg:row-span-2 lg:aspect-auto">
+          <Photo id="p20" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-6 text-[.65rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[0]}</figcaption>
+          <figcaption className="absolute bottom-0 left-0 p-6 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[0]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p62" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[1]}</figcaption>
+          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[1]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p43" sizes="(min-width: 1024px) 25vw, 50vw" position="50% 65%" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[2]}</figcaption>
+          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[2]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p46" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[3]}</figcaption>
+          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[3]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p39" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[4]}</figcaption>
+          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[4]}</figcaption>
         </figure>
       </div>
     </section>
@@ -842,9 +790,9 @@ function Packages({ locale }: { locale: Locale }) {
         <div className="grid gap-7 border-b border-white/12 pb-7 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker">{t.pricing}</p>
-            <h2 id="packages-title" data-reveal="" className="mt-6 font-display text-[clamp(2.45rem,4.1vw,4.05rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{src.home.packagesTitle}</h2>
+            <h2 id="packages-title" data-reveal="" className="mt-6 font-display text-[clamp(1.85rem,2.75vw,3rem)] font-black uppercase leading-[1.14] tracking-[-.02em]">{src.home.packagesTitle}</h2>
           </div>
-          <Link href={routes[locale].pricing} className="inline-flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.16em] lg:col-span-4 lg:col-start-9 lg:justify-self-end">
+          <Link prefetch={false} href={routes[locale].pricing} className="inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] lg:col-span-4 lg:col-start-9 lg:justify-self-end">
             {src.home.moreLink}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
@@ -859,20 +807,20 @@ function Packages({ locale }: { locale: Locale }) {
                 {featured && <span className="absolute inset-x-0 top-0 h-[3px] bg-brand shadow-[0_0_24px_rgba(225,38,46,.55)]" aria-hidden="true" />}
                 <div>
                   <div className="mb-5 flex items-center justify-between gap-5">
-                    {pkg.popular ? <span className="bg-brand px-3 py-1.5 text-[.62rem] font-bold uppercase tracking-[.16em] shadow-[0_8px_24px_rgba(225,38,46,.2)]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
+                    {pkg.popular ? <span className="bg-brand px-3 py-1.5 text-[.72rem] font-bold uppercase tracking-[.16em] shadow-[0_8px_24px_rgba(225,38,46,.2)]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
                     <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/50 bg-brand/15")}>
                       <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                     </span>
                   </div>
-                  <h3 className="max-w-[13ch] font-display text-[clamp(1.85rem,2.6vw,2.55rem)] font-black uppercase leading-[1.08] tracking-[-.012em]">{pkg.title}</h3>
-                  <p className="mt-3 min-h-9 max-w-sm text-[.8rem] leading-relaxed text-white/48">{pkg.tagline}</p>
+                  <h3 className="max-w-full font-display text-[clamp(1.5rem,2vw,1.9rem)] font-black uppercase leading-[1.14] tracking-[-.012em]">{pkg.title}</h3>
+                  <p className="mt-3 min-h-9 max-w-sm text-sm leading-relaxed text-white/65">{pkg.tagline}</p>
                 </div>
                 <div className="mt-5 border-t border-white/10 pt-5">
-                  {pkg.includedLabel && <p className="mb-3 text-[.55rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
-                  <ul className="grid gap-y-2 text-[.76rem] leading-snug text-white/68">
+                  {pkg.includedLabel && <p className="mb-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
+                  <ul className="grid gap-y-2 text-[.875rem] leading-snug text-white/68">
                     {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" />{item}</li>)}
                   </ul>
-                  {pkg.discount && <p className="mt-4 text-[.76rem] leading-relaxed text-white/46">{pkg.discount}</p>}
+                  {pkg.discount && <p className="mt-4 text-[.875rem] leading-relaxed text-white/65">{pkg.discount}</p>}
                 </div>
                 <div className="mt-auto pt-6">
                   {featured && (
@@ -884,14 +832,14 @@ function Packages({ locale }: { locale: Locale }) {
                       </div>
                     </div>
                   )}
-                  <span className="block whitespace-nowrap font-display text-[clamp(2.2rem,3vw,2.85rem)] font-black uppercase leading-[1.04] tracking-[.005em]">{pkg.price}</span>
-                  {pkg.note && <span className="mt-3 block text-[.58rem] font-bold uppercase tracking-[.13em] text-white/38">{pkg.note}</span>}
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.85rem,2.3vw,2.3rem)] font-black uppercase leading-[1.14] tracking-[.005em]">{pkg.price}</span>
+                  {pkg.note && <span className="mt-3 block text-[.72rem] font-bold uppercase tracking-[.13em] text-white/65">{pkg.note}</span>}
                 </div>
               </article>
             )
           })}
         </div>
-        <p className="mt-7 text-xs leading-relaxed text-white/38">* {src.pricing.packagesNote}</p>
+        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}</p>
       </div>
     </section>
   )
@@ -908,31 +856,31 @@ function SalesPackage({ locale }: { locale: Locale }) {
   return (
     <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="scroll-mt-24 border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-28">
       <div className="home-shell grid overflow-hidden border-y border-white/10 lg:grid-cols-12">
-        <figure data-reveal="mask" className="home-photo-panel relative min-h-[22rem] overflow-hidden lg:col-span-5 lg:min-h-[42rem]">
-          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" className="scale-[1.02]" eager />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[18rem] overflow-hidden lg:col-span-5 lg:min-h-[34rem]">
+          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" className="scale-[1.02]" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/72 via-black/10 to-black/10" />
-          <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/90 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
+          <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/90 px-5 py-4 text-[.72rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
         </figure>
 
         <div className="relative px-5 py-10 sm:px-9 sm:py-12 lg:col-span-7 lg:border-l lg:border-white/10 lg:p-[clamp(3rem,5vw,5.5rem)]">
           <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-0 size-72 rounded-full bg-brand/[.08] blur-[90px]" />
           <p className="home-kicker">{copy.label}</p>
-          <h2 id="sales-package-title" data-reveal="" className="mt-6 max-w-[14ch] font-display text-[clamp(2.35rem,4vw,4rem)] font-black uppercase leading-[1.05] tracking-[-.02em]">{copy.title}</h2>
+          <h2 id="sales-package-title" data-reveal="" className="mt-6 font-display text-[clamp(1.85rem,2.75vw,3rem)] font-black uppercase leading-[1.14] tracking-[-.02em]">{copy.title}</h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/55">{copy.intro}</p>
 
           <div className="relative mt-10 grid border-t border-white/12 sm:grid-cols-2 sm:divide-x sm:divide-white/10">
             {offers.map((offer) => <article key={offer.title} className="border-b border-white/10 py-7 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
-              <h3 className="font-display text-2xl font-bold uppercase leading-[1.08] tracking-[-.01em]">{offer.title}</h3>
+              <h3 className="font-display text-xl font-bold uppercase leading-[1.2] tracking-[-.01em]">{offer.title}</h3>
               <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/58">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1.5 shrink-0 bg-brand" />{item}</li>)}</ul>
               <div className="mt-7 flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
                 <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
-                <span className="flex items-center gap-2 text-[.6rem] font-bold uppercase tracking-[.12em] text-white/42"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
+                <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
               </div>
             </article>)}
           </div>
 
           <div className="relative mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="home-button home-button-red">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+            <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="home-button home-button-red">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
             <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark">{ui[locale].book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
           </div>
         </div>
@@ -955,23 +903,23 @@ function TeamStory({ locale }: { locale: Locale }) {
     <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-28">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="home-photo-panel relative min-h-[26rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[48rem]">
-            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" eager />
+          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[23rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[36rem]">
+            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
-            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
+            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.72rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
           </figure>
 
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
             <p className="home-kicker">{t.nav.about}</p>
-            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.05rem,3vw,3.1rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
+            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
 
             <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
               {storyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
 
-            <p className={cn(alexBrush.className, "home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white")}>{src.home.author}</p>
+            <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
               <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
@@ -983,7 +931,7 @@ function TeamStory({ locale }: { locale: Locale }) {
               <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
                 <MapPin className="size-4" aria-hidden="true" />
               </a>
-              <Link href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.62rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
+              <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
                 {t.nav.about}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
               </Link>
             </div>
@@ -1024,8 +972,8 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
         "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
         mobileCarousel
           ? isActive
-            ? "min-h-[25rem] scale-100 border-brand/45 bg-[#151516] opacity-100 shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-            : "min-h-[25rem] scale-[.9] border-white/15 bg-[#18181a] opacity-30 shadow-[0_18px_50px_rgba(0,0,0,.28)] md:scale-[.88] md:opacity-15"
+            ? "min-h-[25rem] md:min-h-[23rem] scale-100 border-brand/45 bg-[#151516] opacity-100 shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+            : "min-h-[25rem] md:min-h-[20rem] border-white/15 bg-[#18181a] shadow-[0_18px_50px_rgba(0,0,0,.28)]"
           : isActive
             ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
             : "hidden min-h-[20rem] border-white/10 bg-white/[.025] md:flex",
@@ -1034,17 +982,17 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
       <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
       <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
       <div className="relative flex items-center justify-between gap-5">
-        <div className="flex gap-1 text-brand" aria-label="5 / 5">
+        <div className="flex gap-1 text-brand" role="img" aria-label="5 / 5">
           {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
         </div>
-        <span className="text-[.58rem] font-bold uppercase tracking-[.16em] text-white/38">Opinia z {review.source}</span>
+        <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source}</span>
       </div>
       <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
       <div className="relative mt-5 pb-8">
         <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
         <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>
         {isTruncated && (
-          <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.64rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
+          <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
             {reviewDialogCopy[locale].more}
             <ArrowRight className="size-3.5 transition-transform group-hover/more:translate-x-1" aria-hidden="true" />
           </button>
@@ -1052,7 +1000,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
       </div>
       <figcaption className="mt-auto border-t border-white/10 pt-6">
         <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{review.name}</strong>
-        <span className="mt-1.5 block text-[.58rem] font-bold uppercase tracking-[.16em] text-white/35">{review.source} / BORUCH Myjnia Szczecin</span>
+        <span className="mt-1.5 block text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source} / BORUCH Myjnia Szczecin</span>
       </figcaption>
     </figure>
   )
@@ -1064,15 +1012,8 @@ function Reviews({ locale }: { locale: Locale }) {
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
-  const mobileCarouselRef = useRef<HTMLDivElement>(null)
-  const mobileScrollFrameRef = useRef<number | null>(null)
-  const mobileLoopTimerRef = useRef<number | null>(null)
-  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ align: "center", loop: true, skipSnaps: false })
+  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ align: "center", loop: true, skipSnaps: false, duration: 32 })
   const reviewCount = copy.reviews.length
-  const mobileLoopReviews = Array.from({ length: 3 }, (_, copyIndex) =>
-    copy.reviews.map((review, index) => ({ review, index, loopPosition: copyIndex * reviewCount + index })),
-  ).flat()
-
   const openReview = (review: VerifiedReview) => {
     openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     setSelectedReview(review)
@@ -1083,36 +1024,7 @@ function Reviews({ locale }: { locale: Locale }) {
     requestAnimationFrame(() => openerRef.current?.focus())
   }, [])
 
-  useEffect(() => {
-    if (!selectedReview) return
-    const previousOverflow = document.body.style.overflow
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeReview()
-    }
-    document.body.style.overflow = "hidden"
-    window.addEventListener("keydown", handleKeyDown)
-    const frame = requestAnimationFrame(() => dialogRef.current?.querySelector<HTMLButtonElement>("[data-review-close]")?.focus())
-
-    return () => {
-      cancelAnimationFrame(frame)
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [selectedReview, closeReview])
-
-  useEffect(() => {
-    const carousel = mobileCarouselRef.current
-    if (!carousel) return
-    const frame = requestAnimationFrame(() => {
-      const firstMiddleCard = carousel.querySelector<HTMLElement>(`[data-loop-position="${reviewCount}"]`)
-      if (!firstMiddleCard) return
-      const previousBehavior = carousel.style.scrollBehavior
-      carousel.style.scrollBehavior = "auto"
-      carousel.scrollLeft = firstMiddleCard.offsetLeft - (carousel.clientWidth - firstMiddleCard.clientWidth) / 2
-      carousel.style.scrollBehavior = previousBehavior
-    })
-    return () => cancelAnimationFrame(frame)
-  }, [reviewCount])
+  useModalFocus(Boolean(selectedReview), dialogRef, closeReview)
 
   useEffect(() => {
     if (!desktopEmblaApi) return
@@ -1126,112 +1038,34 @@ function Reviews({ locale }: { locale: Locale }) {
     }
   }, [desktopEmblaApi])
 
-  const selectReview = (index: number) => {
-    const normalizedIndex = (index + reviewCount) % reviewCount
-    if (window.innerWidth >= 768) {
-      desktopEmblaApi?.scrollTo(normalizedIndex)
-      return
-    }
-    setActiveReview(normalizedIndex)
-    const carousel = mobileCarouselRef.current
-    if (!carousel) return
-    const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
-    let card: HTMLElement | null = null
-    let closestDistance = Number.POSITIVE_INFINITY
-    carousel.querySelectorAll<HTMLElement>(`[data-review-index="${normalizedIndex}"]`).forEach((candidate) => {
-      const candidateCenter = candidate.offsetLeft + candidate.clientWidth / 2
-      const distance = Math.abs(candidateCenter - carouselCenter)
-      if (distance < closestDistance) {
-        closestDistance = distance
-        card = candidate
-      }
-    })
-    if (!card) return
-
-    carousel.scrollTo({
-      left: (card as HTMLElement).offsetLeft - (carousel.clientWidth - (card as HTMLElement).clientWidth) / 2,
-      behavior: "smooth",
-    })
-  }
-
-  const updateMobileReview = () => {
-    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
-    mobileScrollFrameRef.current = requestAnimationFrame(() => {
-      const carousel = mobileCarouselRef.current
-      if (!carousel) return
-      const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
-      let closestIndex = activeReview
-      let closestLoopPosition = reviewCount
-      let closestDistance = Number.POSITIVE_INFINITY
-
-      carousel.querySelectorAll<HTMLElement>("[data-review-index]").forEach((card) => {
-        const cardCenter = card.offsetLeft + card.clientWidth / 2
-        const distance = Math.abs(cardCenter - carouselCenter)
-        if (distance < closestDistance) {
-          closestDistance = distance
-          closestIndex = Number(card.dataset.reviewIndex)
-          closestLoopPosition = Number(card.dataset.loopPosition)
-        }
-      })
-
-      if (Number.isFinite(closestIndex)) setActiveReview(closestIndex)
-      if (mobileLoopTimerRef.current !== null) window.clearTimeout(mobileLoopTimerRef.current)
-      mobileLoopTimerRef.current = window.setTimeout(() => {
-        const currentCarousel = mobileCarouselRef.current
-        if (!currentCarousel) return
-        const targetPosition = closestLoopPosition < reviewCount
-          ? closestLoopPosition + reviewCount
-          : closestLoopPosition >= reviewCount * 2
-            ? closestLoopPosition - reviewCount
-            : null
-        if (targetPosition === null) return
-        const target = currentCarousel.querySelector<HTMLElement>(`[data-loop-position="${targetPosition}"]`)
-        if (!target) return
-        const previousBehavior = currentCarousel.style.scrollBehavior
-        currentCarousel.style.scrollBehavior = "auto"
-        currentCarousel.scrollLeft = target.offsetLeft - (currentCarousel.clientWidth - target.clientWidth) / 2
-        currentCarousel.style.scrollBehavior = previousBehavior
-      }, 120)
-      mobileScrollFrameRef.current = null
-    })
-  }
-
-  useEffect(() => () => {
-    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
-    if (mobileLoopTimerRef.current !== null) window.clearTimeout(mobileLoopTimerRef.current)
-  }, [])
-
-  const showPreviousReview = () => selectReview(activeReview - 1)
-  const showNextReview = () => selectReview(activeReview + 1)
+  const showPreviousReview = () => desktopEmblaApi?.scrollPrev(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  const showNextReview = () => desktopEmblaApi?.scrollNext(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 
   return (
-    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-32">
+    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
       <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
       <div className="home-shell relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
           <p className="home-kicker">{copy.reviewsLabel}</p>
           <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[18ch]">{copy.reviewsTitle}</h2>
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/65">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-14 hidden md:block md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
-          <div ref={desktopEmblaRef} className="cursor-grab overflow-hidden active:cursor-grabbing" aria-label={copy.reviewsLabel}>
-            <div className="-ml-5 flex touch-pan-y items-center py-8">
+        <div className="relative mt-10 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-14 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+          <div ref={desktopEmblaRef} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
+            <div className="-ml-3 flex touch-pan-y items-center py-5 md:-ml-5 md:py-8">
               {copy.reviews.map((review, index) => {
                 const isActive = index === activeReview
-                const forwardDistance = (index - activeReview + reviewCount) % reviewCount
-                const isBefore = forwardDistance > reviewCount / 2
+                const isBefore = (index - activeReview + reviewCount) % reviewCount > reviewCount / 2
                 return (
-                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[42%] pl-5">
+                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[98%] pl-3 md:basis-[42%] md:pl-5" inert={!isActive} aria-hidden={!isActive}>
                     <div className={cn(
-                      "relative h-full transition-all duration-500 ease-out",
-                      isActive
-                        ? "z-20 origin-center scale-100 opacity-100"
-                        : isBefore
-                          ? "z-10 origin-right scale-[.7] opacity-15"
-                          : "z-10 origin-left scale-[.7] opacity-15",
+                      "relative h-full transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none",
+                      isActive ? "z-20 scale-100 opacity-100" : isBefore
+                        ? "z-10 scale-[.9] opacity-30 md:origin-right md:scale-[.7] md:opacity-15"
+                        : "z-10 scale-[.9] opacity-30 md:origin-left md:scale-[.7] md:opacity-15",
                     )}>
-                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} />
+                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
                     </div>
                   </div>
                 )
@@ -1239,22 +1073,7 @@ function Reviews({ locale }: { locale: Locale }) {
             </div>
           </div>
         </div>
-
-        <div className="relative mt-10 md:hidden">
-          <div
-            ref={mobileCarouselRef}
-            onScroll={updateMobileReview}
-            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[1%] py-5 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
-            aria-label={copy.reviewsLabel}
-          >
-            {mobileLoopReviews.map(({ review, index, loopPosition }) => (
-              <div key={`${loopPosition}-${review.source}-${review.name}`} data-review-index={index} data-loop-position={loopPosition} className="w-[98%] shrink-0 snap-center">
-                <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-center text-[.58rem] font-bold uppercase tracking-[.14em] text-white/32">{copy.reviewsSwipe}</p>
-        </div>
+        <p className="mt-2 text-center text-[.72rem] font-bold uppercase tracking-[.14em] text-white/65 md:hidden">{copy.reviewsSwipe}</p>
 
         <div className="mt-8 flex items-center justify-center gap-3">
           <button type="button" onClick={showPreviousReview} aria-label={reviewControls[locale].previous} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
@@ -1272,14 +1091,14 @@ function Reviews({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
-          <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.reviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+          <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
             <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
-            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Booksy</strong><span className="mt-1 block text-xs text-white/42">{copy.booksyReviews}</span></span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Booksy</strong><span className="mt-1 block text-xs text-white/65">{copy.booksyReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.googleReviewsLink} className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
             <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
-            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Google</strong><span className="mt-1 block text-xs text-white/42">{copy.googleReviews}</span></span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Google</strong><span className="mt-1 block text-xs text-white/65">{copy.googleReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
         </div>
@@ -1303,14 +1122,14 @@ function Reviews({ locale }: { locale: Locale }) {
               <div className="flex gap-1 text-brand" aria-label="5 / 5">
                 {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-5 fill-current" aria-hidden="true" />)}
               </div>
-              <p className="mt-5 text-[.62rem] font-bold uppercase tracking-[.18em] text-brand">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
-              <h3 id="review-dialog-title" className="mt-4 pr-14 font-display text-[clamp(2rem,5vw,3.8rem)] font-black uppercase leading-[1.04] tracking-[-.015em]">{selectedReview.name}</h3>
+              <p className="mt-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-brand">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
+              <h3 id="review-dialog-title" className="mt-4 pr-14 font-display text-[clamp(1.5rem,4.8vw,2.25rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{selectedReview.name}</h3>
               <div className="my-7 h-px bg-white/10 sm:my-9" />
               <div className="relative max-w-2xl">
                 <span className="pointer-events-none absolute -right-2 -top-12 select-none font-serif text-[8rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
                 <p className="relative text-base font-medium leading-8 text-white/78 sm:text-lg sm:leading-9">„{selectedReview.text}”</p>
               </div>
-              <button type="button" onClick={closeReview} className="mt-9 inline-flex items-center gap-3 text-[.68rem] font-bold uppercase tracking-[.15em] text-brand transition-colors hover:text-[#ff676d]">
+              <button type="button" onClick={closeReview} className="mt-9 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.15em] text-brand transition-colors hover:text-[#ff676d]">
                 {reviewDialogCopy[locale].close}<X className="size-4" aria-hidden="true" />
               </button>
             </div>
@@ -1325,12 +1144,12 @@ function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
+    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
       <div className="home-shell grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="home-kicker">{copy.faqLabel}</p>
-          <h2 id="faq-title" data-reveal="" className="home-section-title mt-7 max-w-[9ch]">{copy.faqTitle}</h2>
-          <p className="mt-7 max-w-sm text-base leading-relaxed text-white/48">{copy.faqIntro}</p>
+          <h2 id="faq-title" data-reveal="" className="home-section-title mt-7">{copy.faqTitle}</h2>
+          <p className="mt-7 max-w-sm text-base leading-relaxed text-white/65">{copy.faqIntro}</p>
         </div>
 
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
@@ -1342,7 +1161,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
                   <ChevronDown className="size-4" aria-hidden="true" />
                 </span>
               </summary>
-              <p className="max-w-2xl pb-8 pr-12 text-base leading-relaxed text-white/52">{answer}</p>
+              <p className="max-w-2xl pb-8 pr-12 text-base leading-relaxed text-white/65">{answer}</p>
             </details>
           ))}
         </div>
@@ -1363,14 +1182,14 @@ function Location({ locale }: { locale: Locale }) {
         <div className="relative grid overflow-hidden lg:grid-cols-[.42fr_.83fr_.95fr]">
           <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
-          <span className="text-[.62rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
+          <span className="text-[.72rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
           <strong className="font-display text-[clamp(5rem,8vw,7.25rem)] font-black leading-[.8] tracking-[-.03em] text-[#ee343e] drop-shadow-[0_12px_32px_rgba(218,38,48,.2)]">-2</strong>
           </div>
           <div className="relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(135deg,#121213_0%,#101011_68%,#1c0b0e_100%)] p-8 sm:p-10 lg:min-h-80">
           <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-brand/[.07] blur-[70px]" aria-hidden="true" />
           <div>
             <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="mt-6 max-w-[12ch] font-display text-[clamp(2.2rem,3.3vw,3.35rem)] font-black uppercase leading-[1.05] tracking-[-.015em]">{slide.title} {slide.sub}</h2>
+            <h2 id="location-title" data-reveal="" className="mt-6 font-display text-[clamp(1.8rem,2.5vw,2.65rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{slide.title} {slide.sub}</h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
           </div>
           <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">
@@ -1387,7 +1206,7 @@ function Location({ locale }: { locale: Locale }) {
             className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
           />
           <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/42 via-transparent to-transparent" aria-hidden="true" />
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.6rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
             {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
           </div>
@@ -1401,12 +1220,12 @@ function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
+    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">
             <p className="home-kicker">{copy.contactLabel}</p>
-            <h2 id="contact-form-title" data-reveal="" className="home-section-title mt-7 max-w-[10ch]">{copy.contactTitle}</h2>
+            <h2 id="contact-form-title" data-reveal="" className="home-section-title mt-7">{copy.contactTitle}</h2>
             <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/55">{copy.contactIntro}</p>
 
             <div className="mt-10 grid gap-4 border-t border-white/10 pt-8 text-sm text-white/58">
@@ -1416,7 +1235,7 @@ function ContactSection({ locale }: { locale: Locale }) {
             </div>
           </div>
         </div>
-        <div data-reveal="" className="border border-white/10 bg-[#080809] p-6 sm:p-9 lg:col-span-7 lg:p-12">
+        <div data-reveal="" className="border-t border-white/10 pt-8 lg:col-span-7 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
           <HomeContactForm locale={locale} />
         </div>
       </div>
@@ -1425,65 +1244,5 @@ function ContactSection({ locale }: { locale: Locale }) {
 }
 
 function HomeFooter({ locale }: { locale: Locale }) {
-  const t = ui[locale]
-  const src = sources[locale]
-  const copy = homeCopy[locale]
-  const footerServices = src.services.groups.flatMap((group) => group.items).slice(0, 6)
-
-  return (
-    <footer className="bg-[#050505]">
-      <div className="border-y border-white/10 bg-[radial-gradient(circle_at_82%_20%,rgba(225,38,46,.13),transparent_30%),#101011]">
-        <div className="home-shell grid gap-9 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
-          <div className="lg:col-span-7">
-            <p className="home-kicker">{copy.contactLabel}</p>
-            <h2 className="mt-6 max-w-[15ch] font-display text-[clamp(2.35rem,3.7vw,3.5rem)] font-black uppercase leading-[1.04] tracking-[-.02em]">{copy.contactTitle}</h2>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/45">{src.home.contactText}</p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:col-start-9 lg:justify-end">
-            <a href={contact.phoneHref} className="home-button home-button-red"><Phone className="size-4" aria-hidden="true" />{contact.phone}</a>
-            <a href={`mailto:${contact.email}`} className="home-button home-button-dark"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
-          </div>
-        </div>
-      </div>
-
-      <div className="home-shell grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-4">
-          <Link href={routes[locale].home} className="font-display text-5xl font-black uppercase tracking-[-.02em]">Boruch<span className="text-brand">.</span></Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/38">{src.meta.home.description}</p>
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="mt-7 flex max-w-xs items-start gap-3 border-l border-brand pl-4 text-sm leading-relaxed text-white/58 transition-colors hover:text-white">
-            <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-            <span>{src.address.lines.slice(0, 3).join(", ")}</span>
-          </a>
-        </div>
-        <nav aria-label={t.navigation} className="lg:col-span-2">
-          <p className="mb-5 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.navigation}</p>
-          <ul className="grid gap-3 text-sm text-white/58">
-            {navOrder.map((key) => <li key={key}><Link href={routes[locale][key]} className="transition-colors hover:text-white">{t.nav[key]}</Link></li>)}
-          </ul>
-        </nav>
-        <nav aria-label={t.nav.services} className="lg:col-span-3">
-          <p className="mb-5 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.nav.services}</p>
-          <ul className="grid gap-3 text-sm text-white/58">
-            {footerServices.map((item) => <li key={item.title}><Link href={routes[locale].services} className="transition-colors hover:text-white">{item.title}</Link></li>)}
-          </ul>
-        </nav>
-        <div className="flex flex-col gap-3 text-sm text-white/58 lg:col-span-3">
-          <p className="mb-2 text-[.6rem] font-bold uppercase tracking-[.18em] text-brand">{t.nav.contact}</p>
-          <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
-          <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border border-white/12 px-4 py-3 text-[.58rem] font-bold uppercase tracking-[.13em] transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-white/8">
-        <div className="home-shell flex flex-col gap-4 py-5 text-[.58rem] font-semibold uppercase tracking-[.14em] text-white/28 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} BORUCH</span>
-          <span>Szczecin / Plac Rodła 8 / PAZIM</span>
-          <a href="#top" className="inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white">{t.backToTop}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
-        </div>
-      </div>
-    </footer>
-  )
+  return <SiteFooter locale={locale} alternates={Object.fromEntries(localeOrder.map(code => [code, routes[code].home])) as Record<Locale, string>} showContactCta={false} />
 }

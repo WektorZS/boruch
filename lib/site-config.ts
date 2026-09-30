@@ -42,7 +42,7 @@ export const myjniaNav = [
   { title: "Pakiet Komplet", href: "/komplet" },
 ] as const
 
-const SITE_URL = "https://boruchmyjnia.pl"
+const SITE_URL = siteConfig.sourceUrl
 
 export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
   return {

@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowRight, Clock3 } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
-import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
+import { routes, sources, ui, type Locale } from "@/lib/content"
 import type { ServiceSlug } from "@/lib/content/services"
 
 type Localized = Record<Locale, string>
@@ -119,44 +119,50 @@ function PriceGroup({ id, title, intro, items, locale, scopeFor }: { id: string;
   const copy = tableCopy[locale]
   const currency = locale === "pl" ? "zł" : "PLN"
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28 border-b border-white/10 py-12 last:border-b-0 lg:py-16">
-      <div className="mb-9 grid gap-4 lg:grid-cols-12 lg:items-end">
-        <h3 id={`${id}-title`} className="font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black uppercase leading-[1.05] tracking-[-.02em] lg:col-span-7">{title}</h3>
-        <p className="max-w-xl text-sm leading-relaxed text-white/48 lg:col-span-5">{intro}</p>
+    <section id={id} aria-labelledby={id + "-title"} className="scroll-mt-28 border-b border-white/10 py-12 last:border-b-0 lg:py-14">
+      <div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
+        <h3 id={id + "-title"} className="type-h2 lg:col-span-7">{title}</h3>
+        <p className="max-w-xl text-sm leading-relaxed text-white/65 lg:col-span-5">{intro}</p>
       </div>
-      <div className="border-t border-white/12">
-        <div className="hidden grid-cols-[minmax(15rem,1fr)_minmax(18rem,1.15fr)_minmax(18rem,1.1fr)] gap-8 border-b border-white/12 py-4 text-[.58rem] font-bold uppercase tracking-[.15em] text-white/35 lg:grid">
-          <span>{copy.service}</span><span>{copy.scope}</span><span>{copy.variant} / {copy.price} / {copy.time}</span>
-        </div>
-        <ol>
-          {items.map((item, index) => {
-            const href = locale === "pl" && item.slug ? `/${item.slug}` : null
+      <table className="price-table w-full table-fixed border-collapse text-left">
+        <caption className="sr-only">{title} - {copy.price} / {copy.time}</caption>
+        <thead>
+          <tr className="border-y border-white/15 text-xs font-semibold text-white/65">
+            <th scope="col" className="w-[26%] py-4 pr-6">{copy.service}</th>
+            <th scope="col" className="w-[34%] py-4 pr-8">{copy.scope}</th>
+            <th scope="col" className="w-[40%] py-4">{copy.variant} / {copy.price} / {copy.time}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map(item => {
+            const href = locale === "pl" && item.slug ? "/" + item.slug : null
             const scope = scopeFor?.(item) ?? []
-            const content = <>
-              <div>
-                <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-brand lg:hidden">{copy.service}</span>
-                <strong className="font-display text-[clamp(1.35rem,2vw,1.8rem)] font-bold uppercase leading-[1.1] tracking-[-.01em] text-white/92">{item.name[locale]}</strong>
-                {href && <span className="mt-5 inline-flex items-center gap-2 text-[.58rem] font-bold uppercase tracking-[.14em] text-white/42 transition-colors group-hover:text-white">{copy.details}<ArrowRight className="size-3.5 text-brand" /></span>}
-              </div>
-              <div>
-                <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{copy.scope}</span>
-                {scope.length > 0 ? <ul className="grid gap-2 text-xs leading-relaxed text-white/58 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">{scope.map((entry) => <li key={entry} className="flex gap-2"><span className="mt-[.5em] size-1 shrink-0 bg-brand" />{entry}</li>)}</ul> : <p className="text-sm leading-relaxed text-white/45">{item.description?.[locale] ?? copy.scopeFallback}</p>}
-              </div>
-              <div>
-                <span className="mb-3 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{copy.variant} / {copy.price} / {copy.time}</span>
-                <dl className="divide-y divide-white/10 border-y border-white/10 lg:border-t-0">
-                  {item.variants.map((variant, variantIndex) => <div key={`${item.id}-${variantIndex}`} className="grid grid-cols-[1fr_auto] items-center gap-5 py-3 first:pt-0">
-                    <div><dt className="text-xs font-semibold text-white/72">{variant.name?.[locale] ?? item.name[locale]}</dt><dd className="mt-1 flex items-center gap-1.5 text-[.6rem] font-bold uppercase tracking-[.1em] text-white/36"><Clock3 className="size-3 text-brand" />{duration(variant.minutes, locale)}</dd></div>
-                    <dd className="text-right text-sm font-bold text-white/90">{variant.price === null ? copy.quote : `${copy.from} ${variant.price} ${currency}`}</dd>
+            return <tr key={item.id} className="border-b border-white/12 align-top">
+              <th scope="row" className="py-7 pr-6 font-normal">
+                <span className="block font-display text-xl font-bold leading-[1.25] text-white">{item.name[locale]}</span>
+                {href && <Link prefetch={false} href={href} className="mt-4 inline-flex min-h-8 items-center gap-2 text-xs font-semibold text-white/70 hover:text-white">{copy.details}<ArrowRight className="size-3.5 text-brand" aria-hidden="true" /></Link>}
+              </th>
+              <td className="py-7 pr-8">
+                <details className="price-scope group">
+                  <summary className="flex min-h-8 list-none items-center justify-between gap-4 text-sm font-semibold text-white/80">{copy.scope}<span aria-hidden="true" className="text-brand group-open:rotate-45">+</span></summary>
+                  {scope.length > 0
+                    ? <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-white/70">{scope.map(entry => <li key={entry} className="flex gap-2"><span className="mt-2 size-1 shrink-0 bg-brand" aria-hidden="true" />{entry}</li>)}</ul>
+                    : <p className="mt-3 text-sm leading-relaxed text-white/70">{item.description?.[locale] ?? copy.scopeFallback}</p>}
+                </details>
+              </td>
+              <td className="py-7">
+                <dl className="divide-y divide-white/10">
+                  {item.variants.map((variant, index) => <div key={index} className="grid grid-cols-[minmax(0,1fr)_minmax(0,.85fr)] gap-x-5 gap-y-2 py-3 first:pt-0">
+                    <dt className="text-sm leading-relaxed text-white/75">{variant.name?.[locale] ?? copy.service}</dt>
+                    <dd className="text-right text-base font-bold leading-relaxed text-white">{variant.price === null ? copy.quote : copy.from + " " + variant.price + " " + currency}</dd>
+                    <dd className="col-span-2 flex items-center gap-2 text-xs leading-relaxed text-white/65"><Clock3 className="size-3.5 text-brand" aria-hidden="true" />{duration(variant.minutes, locale)}</dd>
                   </div>)}
                 </dl>
-              </div>
-            </>
-            const rowClass = "group grid gap-7 border-b border-white/10 py-8 last:border-b-0 lg:grid-cols-[minmax(15rem,1fr)_minmax(18rem,1.15fr)_minmax(18rem,1.1fr)] lg:gap-8"
-            return <li key={item.id} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
+              </td>
+            </tr>
           })}
-        </ol>
-      </div>
+        </tbody>
+      </table>
     </section>
   )
 }
@@ -172,22 +178,22 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
   return (
     <SiteShell locale={locale} page="pricing">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: t.nav.home, path: routes[locale].home }, { name: t.nav.pricing, path: routes[locale].pricing }])) }} />
-      <section aria-labelledby="page-title" className="relative isolate flex min-h-[660px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
+
+      <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
         <div className="enter-unmask absolute inset-0"><Photo id="p51" priority sizes="100vw" position="55% 58%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_50%,rgba(6,6,7,.38)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.65)_50%,rgba(6,6,7,.18)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-9"><p className="eyebrow mb-7">{t.nav.pricing}</p><h1 id="page-title" className="page-hero-title type-h1">{pricing.h1}</h1><p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.intro}</p></div>
+          <div className="lg:col-span-9"><p className="eyebrow mb-7">{t.nav.pricing}</p><h1 id="page-title" className="page-hero-title type-h1">{t.nav.pricing}</h1><p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.intro}</p></div>
           <nav aria-label={copy.title} className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10"><p className="type-label text-brand">{copy.title}</p><ul className="mt-5 flex flex-col gap-3 text-sm text-white/62"><li><a href="#mycie" className="transition-colors hover:text-white">{copy.washTitle}</a></li><li><a href="#detailing" className="transition-colors hover:text-white">{copy.detailingTitle}</a></li><li><a href="#pakiet-sprzedaz" className="transition-colors hover:text-white">{copy.saleTitle}</a></li></ul></nav>
         </div>
       </section>
       <section aria-labelledby="price-list-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-28">
         <div className="shell-wide">
-          <div className="grid gap-7 border-b border-white/10 pb-10 lg:grid-cols-12 lg:items-end"><div className="lg:col-span-7"><p className="eyebrow">BOOKSY</p><h2 id="price-list-title" className="mt-6 type-h2 max-w-[16ch] text-balance">{copy.title}</h2></div><p className="max-w-2xl text-sm leading-relaxed text-white/52 lg:col-span-5 lg:text-base">{copy.intro}</p></div>
-          <div className="grid border-b border-white/10 lg:grid-cols-3 lg:divide-x lg:divide-white/10">{[[copy.noticePrice, copy.noticePriceText], [copy.noticeTime, copy.noticeTimeText], [copy.noticeCondition, copy.noticeConditionText]].map(([title, text]) => <div key={title} className="border-b border-white/10 py-7 last:border-b-0 lg:border-b-0 lg:px-8 lg:first:pl-0 lg:last:pr-0"><strong className="type-label text-brand">{title}</strong><p className="mt-3 max-w-sm text-sm leading-relaxed text-white/48">{text}</p></div>)}</div>
+          <div className="grid gap-7 border-b border-white/10 pb-10 lg:grid-cols-12 lg:items-end"><div className="lg:col-span-7"><p className="eyebrow">BOOKSY</p><h2 id="price-list-title" className="mt-6 type-h2 max-w-[16ch] text-balance">{copy.title}</h2></div><p className="max-w-2xl text-sm leading-relaxed text-white/65 lg:col-span-5 lg:text-base">{copy.intro}</p></div>
+          <div className="grid border-b border-white/10 lg:grid-cols-3 lg:divide-x lg:divide-white/10">{[[copy.noticePrice, copy.noticePriceText], [copy.noticeTime, copy.noticeTimeText], [copy.noticeCondition, copy.noticeConditionText]].map(([title, text]) => <div key={title} className="border-b border-white/10 py-7 last:border-b-0 lg:border-b-0 lg:px-8 lg:first:pl-0 lg:last:pr-0"><strong className="type-label text-brand">{title}</strong><p className="mt-3 max-w-sm text-sm leading-relaxed text-white/65">{text}</p></div>)}</div>
           <PriceGroup id="mycie" title={copy.washTitle} intro={copy.washIntro} items={washItems} locale={locale} scopeFor={washScope} />
-          <p className="border-l border-brand py-1 pl-5 text-sm leading-relaxed text-white/52">{copy.coating}</p>
+          <p className="border-l border-brand py-1 pl-5 text-sm leading-relaxed text-white/65">{copy.coating}</p>
           <PriceGroup id="detailing" title={copy.detailingTitle} intro={copy.detailingIntro} items={detailingItems} locale={locale} />
           <PriceGroup id="pakiet-sprzedaz" title={copy.saleTitle} intro={copy.saleIntro} items={saleItems} locale={locale} />
         </div>

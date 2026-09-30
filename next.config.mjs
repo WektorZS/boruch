@@ -2,9 +2,7 @@
 const nextConfig = {
   agentRules: false,
   output: 'export',
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },

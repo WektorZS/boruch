@@ -40,7 +40,7 @@ export function Photo({ id, sizes, className, alt, priority = false, eager = fal
       decoding="async"
       draggable={false}
       style={position ? { objectPosition: position } : undefined}
-      className={cn("h-full w-full object-cover", className)}
+      className={cn("absolute inset-0 h-full w-full object-cover", className)}
     />
   )
 }

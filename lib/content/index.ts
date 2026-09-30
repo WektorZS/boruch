@@ -4,10 +4,11 @@ import { enSource } from "./generated/en"
 import { deSource } from "./generated/de"
 import { ukSource } from "./generated/uk"
 import type { Locale, LocaleSource, PageKey } from "./types"
+import { siteConfig } from "../site-config"
 
 export type { Locale, PageKey } from "./types"
 
-export const SITE_URL = "https://boruchmyjnia.pl"
+export const SITE_URL = siteConfig.sourceUrl
 
 export const sources: Record<Locale, LocaleSource> = {
   pl: plSource,
@@ -34,26 +35,35 @@ export const localeLabels: Record<Locale, { short: string; name: string; htmlLan
 
 export function alternatesFor(page: PageKey) {
   return {
-    "pl-PL": routes.pl[page],
-    en: routes.en[page],
-    de: routes.de[page],
-    uk: routes.uk[page],
-    "x-default": routes.pl[page],
+    "pl-PL": canonicalPath(routes.pl[page]),
+    en: canonicalPath(routes.en[page]),
+    de: canonicalPath(routes.de[page]),
+    uk: canonicalPath(routes.uk[page]),
+    "x-default": canonicalPath(routes.pl[page]),
   }
+}
+
+export function canonicalPath(path: string) {
+  return path === "/" ? path : `${path.replace(/\/$/, "")}/`
 }
 
 export function pageMetadata(locale: Locale, page: PageKey): Metadata {
   const meta = sources[locale].meta[page]
+  const title = page === "home" ? meta.title : `${ui[locale].nav[page]} | Boruch Myjnia Szczecin`
   return {
-    title: { absolute: meta.title },
+    title: { absolute: title },
     description: meta.description,
-    alternates: { canonical: routes[locale][page], languages: alternatesFor(page) },
+    alternates: { canonical: canonicalPath(routes[locale][page]), languages: alternatesFor(page) },
     openGraph: {
-      title: meta.title,
+      title,
       description: meta.description,
-      url: `${SITE_URL}${routes[locale][page]}`,
+      url: `${SITE_URL}${canonicalPath(routes[locale][page])}`,
       locale: { pl: "pl_PL", en: "en_GB", de: "de_DE", uk: "uk_UA" }[locale],
+      type: "website",
+      siteName: "Boruch Myjnia",
+      images: [{ url: "/images/home/szczecin-myjnia-banner.png", alt: "Boruch Myjnia Szczecin" }],
     },
+    twitter: { card: "summary_large_image", title, description: meta.description, images: ["/images/home/szczecin-myjnia-banner.png"] },
   }
 }
 
@@ -272,7 +282,7 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${SITE_URL}${item.path}`,
+      item: `${SITE_URL}${canonicalPath(item.path)}`,
     })),
   }
 }

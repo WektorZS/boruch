@@ -66,6 +66,8 @@ function clientKey(request: Request) {
 
 function rateLimited(key: string) {
   const now = Date.now()
+  for (const [ip, entry] of rateStore) if (entry.resetAt <= now) rateStore.delete(ip)
+  if (rateStore.size >= 5000 && !rateStore.has(key)) return true
   const current = rateStore.get(key)
 
   if (!current || current.resetAt <= now) {
@@ -101,6 +103,7 @@ async function handlePost(request: Request) {
     const raw = await request.text()
     if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) return json({ ok: false }, 413)
     payload = JSON.parse(raw) as ContactPayload
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) return json({ ok: false }, 400)
   } catch {
     return json({ ok: false }, 400)
   }
@@ -162,6 +165,7 @@ async function handlePost(request: Request) {
         message,
       ].join("\n"),
     }),
+    signal: AbortSignal.timeout(8000),
   })
 
   if (!sent.ok) {
@@ -174,13 +178,25 @@ async function handlePost(request: Request) {
 
 export default {
   async fetch(request: Request) {
-    if (request.method !== "POST") return json({ ok: false }, 405)
+    if (!allowedOrigin(request)) return json({ ok: false }, 403)
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": request.headers.get("origin")!,
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Vary": "Origin",
+    }
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { ...corsHeaders, "Access-Control-Max-Age": "600" } })
+    const withCors = (response: Response) => {
+      for (const [name, value] of Object.entries(corsHeaders)) response.headers.set(name, value)
+      return response
+    }
+    if (request.method !== "POST") return withCors(json({ ok: false }, 405))
 
     try {
-      return await handlePost(request)
+      return withCors(await handlePost(request))
     } catch (error) {
       console.error("BORUCH contact form error", error)
-      return json({ ok: false }, 500)
+      return withCors(json({ ok: false }, 500))
     }
   },
 }

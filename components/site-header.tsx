@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useModalFocus } from "./use-modal-focus"
 
 export interface HeaderNavItem {
   key: string
@@ -49,6 +50,7 @@ export function SiteHeader({
   const sentinel = useRef<HTMLDivElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const el = sentinel.current
@@ -63,21 +65,13 @@ export function SiteHeader({
     toggleRef.current?.focus()
   }, [])
 
+  useModalFocus(open, menuRef, close)
   useEffect(() => {
-    if (!open) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    const focusTimer = window.setTimeout(() => closeRef.current?.focus({ preventScroll: true }), 0)
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close()
-    }
-    window.addEventListener("keydown", onKey)
-    return () => {
-      window.clearTimeout(focusTimer)
-      document.body.style.overflow = previous
-      window.removeEventListener("keydown", onKey)
-    }
-  }, [open, close])
+    const desktop = window.matchMedia("(min-width: 1024px)")
+    const onResize = () => { if (desktop.matches) setOpen(false) }
+    desktop.addEventListener("change", onResize)
+    return () => desktop.removeEventListener("change", onResize)
+  }, [])
 
   const menuNav = nav
 
@@ -92,16 +86,16 @@ export function SiteHeader({
           "data-[scrolled=true]:bg-[#080809]/96 data-[scrolled=true]:backdrop-blur-xl",
         )}
       >
-        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-6 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-4 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
           <Wordmark href={homeHref} label={homeLabel} />
 
           <nav aria-label={labels.navigation} className="hidden lg:block">
-            <ul className="flex items-center gap-7">
+            <ul className="flex items-center gap-5 xl:gap-7">
               {nav
                 .filter((item) => item.key !== "home")
                 .map((item) => (
                   <li key={item.key}>
-                    <Link
+                    <Link prefetch={false}
                       href={item.href}
                       aria-current={item.active ? "page" : undefined}
                     className="home-nav-link text-[.72rem] font-semibold uppercase tracking-[.14em] text-white/68 transition-colors hover:text-white aria-[current=page]:text-white"
@@ -117,13 +111,13 @@ export function SiteHeader({
             <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
               {languages.map((lang) => (
                 <li key={lang.code}>
-                  <Link
+                  <Link prefetch={false}
                     href={lang.href}
                     hrefLang={lang.htmlLang}
                     lang={lang.htmlLang}
-                    aria-label={lang.name}
+                    aria-label={`${lang.short} - ${lang.name}`}
                     aria-current={lang.active ? "true" : undefined}
-                    className="relative grid size-8 place-items-center text-[.62rem] font-bold text-white/40 transition-colors hover:text-white aria-[current=true]:bg-white aria-[current=true]:text-black"
+                    className="relative grid size-8 place-items-center text-[.72rem] font-bold text-white/65 transition-colors hover:text-white aria-[current=true]:bg-white aria-[current=true]:text-black"
                   >
                     {lang.short}
                   </Link>
@@ -135,7 +129,7 @@ export function SiteHeader({
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.68rem] font-bold uppercase tracking-[.14em] transition-colors hover:bg-[#aa1921] sm:flex"
+              className="hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.72rem] font-bold uppercase tracking-[.14em] transition-colors hover:bg-[#aa1921] sm:flex"
             >
               {labels.book}
               <ArrowUpRight className="arrow-lift size-3.5" aria-hidden="true" />
@@ -160,6 +154,7 @@ export function SiteHeader({
       </header>
 
       <div
+        ref={menuRef}
         id="site-menu"
         role="dialog"
         aria-modal="true"
@@ -185,21 +180,21 @@ export function SiteHeader({
           </button>
         </div>
 
-        <nav aria-label={labels.navigation} className="shell-wide relative flex-1 overflow-y-auto py-8">
+        <nav aria-label={labels.navigation} className="shell-wide relative min-h-0 flex-1 overflow-y-auto py-3 sm:py-6">
           <ul className="flex flex-col">
             {menuNav.map((item) => (
               <li key={item.key} className="overflow-hidden border-b border-line">
-                <Link
+                <Link prefetch={false}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   aria-current={item.active ? "page" : undefined}
                   style={{ transitionDelay: open ? "120ms" : "0ms" }}
                   className={cn(
-                    "group flex items-center justify-between gap-5 py-5 transition-transform duration-700 ease-(--ease-out)",
+                    "group flex items-center justify-between gap-4 py-3.5 transition-transform duration-700 ease-(--ease-out)",
                     "translate-y-full group-data-[open=true]/menu:translate-y-0",
                   )}
                 >
-                  <span className="font-display text-[clamp(2rem,9vw,3.5rem)] font-extrabold uppercase leading-none tracking-[-0.025em] text-bone/85 [font-stretch:75%] [font-variation-settings:'wdth'_75] transition-colors group-hover:text-bone group-aria-[current=page]:text-highlight">
+                  <span className="min-w-0 font-display text-[clamp(1.65rem,6.8vw,2.8rem)] font-extrabold uppercase leading-[1.15] tracking-normal text-bone/85 [font-stretch:75%] [font-variation-settings:'wdth'_75] transition-colors group-hover:text-bone group-aria-[current=page]:text-highlight">
                     {item.label}
                   </span>
                   <span aria-hidden="true" className="h-px w-8 bg-line transition-colors group-aria-[current=page]:bg-brand" />
@@ -209,15 +204,15 @@ export function SiteHeader({
           </ul>
         </nav>
 
-        <div className="shell-wide relative flex flex-col gap-6 border-t border-line py-6">
+        <div className="shell-wide menu-bottom relative shrink-0 flex flex-col gap-4 border-t border-line py-4">
           <ul aria-label={labels.language} className="flex gap-2">
             {languages.map((lang) => (
               <li key={lang.code}>
-                <Link
+                <Link prefetch={false}
                   href={lang.href}
                   hrefLang={lang.htmlLang}
                   lang={lang.htmlLang}
-                  aria-label={lang.name}
+                  aria-label={`${lang.short} - ${lang.name}`}
                   aria-current={lang.active ? "true" : undefined}
                   onClick={() => setOpen(false)}
                   className="type-label flex h-10 min-w-12 items-center justify-center border border-line px-3 text-ash transition-colors hover:border-line-strong hover:text-bone aria-[current=true]:border-brand aria-[current=true]:text-bone"
@@ -232,7 +227,7 @@ export function SiteHeader({
               <a href={phoneHref} className="font-display text-xl font-semibold [font-stretch:115%] [font-variation-settings:'wdth'_115]">
                 {phone}
               </a>
-              <p className="type-label text-ash">{address.join(" - ")}</p>
+              <p className="text-xs leading-relaxed text-ash">{address.join(" - ")}</p>
             </div>
             <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group w-full sm:w-auto">
               {labels.book}
@@ -247,7 +242,7 @@ export function SiteHeader({
 
 function Wordmark({ href, label, className }: { href: string; label: string; className?: string }) {
   return (
-    <Link href={href} aria-label={label} className={cn("group flex items-center gap-3", className)}>
+    <Link prefetch={false} href={href} aria-label={`Boruch Myjnia / Detailing - ${label}`} className={cn("group flex shrink-0 items-center gap-3", className)}>
       <span
         aria-hidden="true"
         className="grid size-12 place-items-center bg-brand font-display text-[2rem] font-black uppercase leading-none text-bone [font-stretch:75%] [font-variation-settings:'wdth'_75]"
@@ -256,7 +251,7 @@ function Wordmark({ href, label, className }: { href: string; label: string; cla
       </span>
       <span aria-hidden="true" className="flex flex-col gap-0.5 leading-none">
         <span className="font-display text-[1.55rem] font-black uppercase tracking-[-0.02em] text-bone [font-stretch:80%] [font-variation-settings:'wdth'_80]">Boruch</span>
-        <span className="mt-1 text-[.58rem] font-semibold uppercase tracking-[.22em] text-white/48">Myjnia / detailing</span>
+        <span className="mt-1 whitespace-nowrap text-[.72rem] font-semibold uppercase tracking-[.17em] text-white/65">Myjnia / detailing</span>
       </span>
     </Link>
   )

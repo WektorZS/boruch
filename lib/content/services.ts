@@ -97,7 +97,10 @@ export function servicePrice(locale: Locale, slug: ServiceSlug): string | null {
   if (!ref) return null
   const pricing = sources[locale].pricing
   const raw = ref[0] === "packages" ? pricing.packages[ref[1]]?.price : pricing.other[ref[1]]?.price
-  return raw ? raw.replace(/\*$/, "").trim() : null
+  if (!raw) return null
+  const value = raw.replace(/\*$/, "").trim()
+  const from = { pl: "od", en: "from", de: "ab", uk: "від" }[locale]
+  return value.toLowerCase().startsWith(from) ? value : `${from} ${value}`
 }
 
 export function formatIndex(n: number) {

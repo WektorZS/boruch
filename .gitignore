@@ -25,6 +25,8 @@ yarn-error.log*
 
 # local reference projects
 /.tmp-golet-reference/
+/.backups/
+/.tmp-ui-audit/
 
 # typescript
 *.tsbuildinfo
