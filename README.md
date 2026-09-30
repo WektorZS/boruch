@@ -96,6 +96,8 @@ To testy przeglądarkowe z symulowanymi rozmiarami i gestami, nie certyfikat WCA
 
 Zdjęcia pierwszego ekranu i wybranych sekcji mają lżejsze wersje AVIF oraz rezerwowe WebP w `public/images/photos/optimized-v1`. Dodatkowe rozmiary 768 i 1280 px pozwalają przeglądarce dokładniej dobrać plik do ekranu. Kadry, proporcje i zdjęcia nie zostały zmienione. Nie ma optymalizacji zdjęć wymagającej serwera Node.js.
 
+Mobilne warianty pierwszego zdjęcia hero (480, 768 i 960 px) mają dodatkową, delikatną kompresję w `public/images/photos/hero-v2`. Wariant 768 px zmniejszono z 43 116 do 31 039 bajtów. Karuzela opinii uruchamia pomiary i obsługę przesuwania dopiero 400 px przed wejściem sekcji w ekran. Treści opinii pozostają w statycznym HTML; zmiana nie wymaga serwera ani nie zmienia wyglądu kart. Przycisk języka w oknie cookies nie animuje obrysu klawiaturowego.
+
 Polskie litery i podpis właściciela mają małe podzbiory tych samych czcionek. Pełne pliki pozostają jako rezerwa dla innych znaków. JetBrains Mono zawiera tylko używane grubości 400-500. CSS jest umieszczony w HTML podczas statycznego eksportu, przez obsługiwaną opcję Next.js `experimental.inlineCss`.
 
-Fonty i zdjęcia z katalogu `optimized-v1` mają roczny cache. Przy zmianie zawartości takiego pliku użyj nowej nazwy lub nowego katalogu wersji i zaktualizuj odwołania oraz regułę w `vercel.json`. Nie nadpisuj zasobu oznaczonego `immutable` pod tym samym adresem. Na innym hostingu ustaw analogiczne nagłówki cache dla tych katalogów; sama strona będzie działać także bez nich.
+Fonty i zdjęcia z katalogów `optimized-v1` oraz `hero-v2` mają roczny cache. Przy zmianie zawartości takiego pliku użyj nowej nazwy lub nowego katalogu wersji i zaktualizuj odwołania oraz regułę w `vercel.json`. Nie nadpisuj zasobu oznaczonego `immutable` pod tym samym adresem. Na innym hostingu ustaw analogiczne nagłówki cache dla tych katalogów; sama strona będzie działać także bez nich.

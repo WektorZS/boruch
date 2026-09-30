@@ -943,12 +943,13 @@ function TeamStory({ locale }: { locale: Locale }) {
   )
 }
 
-function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void; mobileCarousel?: boolean }) {
+function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false, measure = true }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void; mobileCarousel?: boolean; measure?: boolean }) {
   const visibleTextRef = useRef<HTMLQuoteElement>(null)
   const fullTextRef = useRef<HTMLParagraphElement>(null)
   const [isTruncated, setIsTruncated] = useState(false)
 
   useEffect(() => {
+    if (!measure) return
     const visibleText = visibleTextRef.current
     const fullText = fullTextRef.current
     if (!visibleText || !fullText) return
@@ -965,7 +966,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
       observer.disconnect()
       window.removeEventListener("resize", checkTruncation)
     }
-  }, [review.text, isActive])
+  }, [review.text, isActive, measure])
 
   return (
     <figure
@@ -991,7 +992,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
       <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
       <div className="relative mt-5 pb-8">
         <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
-        <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>
+        {measure && <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>}
         {isTruncated && (
           <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
             {reviewDialogCopy[locale].more}
@@ -1009,11 +1010,13 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
 
 function Reviews({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
+  const sectionRef = useRef<HTMLElement>(null)
+  const [carouselReady, setCarouselReady] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
-  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ align: "center", loop: true, skipSnaps: false, duration: 32 })
+  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ active: carouselReady, align: "center", loop: true, skipSnaps: false, duration: 32 })
   const reviewCount = copy.reviews.length
   const openReview = (review: VerifiedReview) => {
     openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -1026,6 +1029,23 @@ function Reviews({ locale }: { locale: Locale }) {
   }, [])
 
   useModalFocus(Boolean(selectedReview), dialogRef, closeReview)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || !("IntersectionObserver" in window)) {
+      setCarouselReady(true)
+      return
+    }
+    // Keep carousel layout measurements out of the hero's initial rendering work.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setCarouselReady(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: "400px 0px" })
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!desktopEmblaApi) return
@@ -1043,7 +1063,7 @@ function Reviews({ locale }: { locale: Locale }) {
   const showNextReview = () => desktopEmblaApi?.scrollNext(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 
   return (
-    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
+    <section ref={sectionRef} aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
       <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
       <div className="home-shell relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
@@ -1066,7 +1086,7 @@ function Reviews({ locale }: { locale: Locale }) {
                         ? "z-10 scale-[.9] opacity-30 md:origin-right md:scale-[.7] md:opacity-15"
                         : "z-10 scale-[.9] opacity-30 md:origin-left md:scale-[.7] md:opacity-15",
                     )}>
-                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
+                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel measure={carouselReady} />
                     </div>
                   </div>
                 )

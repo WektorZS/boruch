@@ -12,7 +12,8 @@ function photoSizes(id: PhotoId) {
 export function photoSrc(id: PhotoId, width?: number, format: "webp" | "avif" = "webp") {
   const sizes = photoSizes(id)
   const size = width ? (sizes.find((s) => s >= width) ?? sizes[sizes.length - 1]) : sizes[sizes.length - 1]
-  return `/images/photos/${optimizedPhotos.has(id) ? "optimized-v1/" : ""}${id}-${size}.${format}`
+  const folder = id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
+  return `/images/photos/${folder}${id}-${size}.${format}`
 }
 
 export function photoSrcSet(id: PhotoId, format: "webp" | "avif" = "webp") {

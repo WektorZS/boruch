@@ -358,7 +358,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
                       aria-pressed={active}
                       aria-label={`${localeLabels[code].short} - ${localeLabels[code].name}`}
                       title={localeLabels[code].name}
-                      className={`flex min-h-10 min-w-11 items-center justify-center gap-1.5 border px-1.5 text-[.72rem] font-bold uppercase tracking-[.08em] transition-colors disabled:cursor-wait disabled:opacity-60 sm:min-h-9 sm:min-w-14 sm:gap-2 sm:px-2 sm:tracking-[.1em] ${active ? "border-white/25 bg-white/12 text-white" : "border-transparent bg-white/[.045] text-white/55 hover:border-white/12 hover:bg-white/10 hover:text-white"}`}
+                      className={`flex min-h-10 min-w-11 items-center justify-center gap-1.5 border px-1.5 text-[.72rem] font-bold uppercase tracking-[.08em] transition-[background-color,color,border-color] disabled:cursor-wait disabled:opacity-60 sm:min-h-9 sm:min-w-14 sm:gap-2 sm:px-2 sm:tracking-[.1em] ${active ? "border-white/25 bg-white/12 text-white" : "border-transparent bg-white/[.045] text-white/55 hover:border-white/12 hover:bg-white/10 hover:text-white"}`}
                     >
                       <LanguageFlag locale={code} />
                       {localeLabels[code].short}
