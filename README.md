@@ -91,3 +91,11 @@ Pomiar z 30.09.2026 na lokalnym eksporcie statycznym z kompresją gzip, w mobiln
 Kontrola końcowa: 228 wariantów układu bez wykrytych przepełnień, uszkodzonych zdjęć i błędów JavaScript; 48 automatycznych kontroli dostępności bez zgłoszonych naruszeń; 48 kombinacji slajdów hero, języków i szerokości bez wyjścia nagłówka poza obszar; 42 unikalne wewnętrzne adresy działają w statycznym podglądzie. Osobno sprawdzono gesty pionowe i poziome opinii, przeciąganie myszką, zamykanie popupów, powrót fokusu, lightbox i doładowywanie galerii oraz cookies w czterech językach na małym i poziomym ekranie.
 
 To testy przeglądarkowe z symulowanymi rozmiarami i gestami, nie certyfikat WCAG ani pomiar Core Web Vitals od rzeczywistych użytkowników. W tej sesji osadzona mapa Google nie odpowiedziała na zewnętrzne żądanie w podglądzie. Jej renderowanie trzeba dodatkowo potwierdzić na docelowym hostingu. Adres, osadzenie i link do Google Maps pozostały w kodzie.
+
+## Optymalizacja po raporcie PageSpeed
+
+Zdjęcia pierwszego ekranu i wybranych sekcji mają lżejsze wersje AVIF oraz rezerwowe WebP w `public/images/photos/optimized-v1`. Dodatkowe rozmiary 768 i 1280 px pozwalają przeglądarce dokładniej dobrać plik do ekranu. Kadry, proporcje i zdjęcia nie zostały zmienione. Nie ma optymalizacji zdjęć wymagającej serwera Node.js.
+
+Polskie litery i podpis właściciela mają małe podzbiory tych samych czcionek. Pełne pliki pozostają jako rezerwa dla innych znaków. JetBrains Mono zawiera tylko używane grubości 400-500. CSS jest umieszczony w HTML podczas statycznego eksportu, przez obsługiwaną opcję Next.js `experimental.inlineCss`.
+
+Fonty i zdjęcia z katalogu `optimized-v1` mają roczny cache. Przy zmianie zawartości takiego pliku użyj nowej nazwy lub nowego katalogu wersji i zaktualizuj odwołania oraz regułę w `vercel.json`. Nie nadpisuj zasobu oznaczonego `immutable` pod tym samym adresem. Na innym hostingu ustaw analogiczne nagłówki cache dla tych katalogów; sama strona będzie działać także bez nich.

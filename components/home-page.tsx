@@ -544,7 +544,8 @@ function HomeHero({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (!heroVisible || heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const next = (activeSlide + 1) % copy.heroSlides.length
-    const preload = window.setTimeout(() => setLoadedSlides(current => current.includes(next) ? current : [...current, next]), 3500)
+    // Keep the next slide out of the critical loading window on a slow mobile connection.
+    const preload = window.setTimeout(() => setLoadedSlides(current => current.includes(next) ? current : [...current, next]), 5500)
     const advance = window.setTimeout(() => setActiveSlide(next), 7500)
     return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
   }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused])
