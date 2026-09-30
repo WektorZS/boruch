@@ -371,8 +371,8 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
       {process.env.NODE_ENV === "production" && consent === "accepted" ? <Analytics /> : null}
 
       {(firstVisit || editing) && (
-        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
-          <section className="max-h-[78svh] w-full max-w-lg overflow-y-auto border border-white/12 border-t-[3px] border-t-brand bg-[#111112] p-4 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:max-h-[92dvh] sm:max-w-2xl sm:p-8">
+        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
+          <section className="max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-4 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
             <div className="flex items-start gap-3 sm:gap-4">
               <span className="grid size-10 shrink-0 place-items-center text-brand sm:size-11"><Cookie className="size-6 sm:size-7" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
