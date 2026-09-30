@@ -1056,11 +1056,11 @@ function Reviews({ locale }: { locale: Locale }) {
           <div
             ref={mobileCarouselRef}
             onScroll={updateMobileReview}
-            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[12%] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[8%] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             aria-label={copy.reviewsLabel}
           >
             {copy.reviews.map((review, index) => (
-              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[76%] shrink-0 snap-center">
+              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[84%] shrink-0 snap-center">
                 <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
               </div>
             ))}
