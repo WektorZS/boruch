@@ -477,6 +477,30 @@ function HomeHeader({ locale }: { locale: Locale }) {
   )
 }
 
+function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
+  return (
+    <div className={cn("flex w-full items-stretch border border-white/14 bg-[#0b0b0c]/90 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md sm:w-auto", className)}>
+      <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
+      <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
+        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
+          <span className="min-w-0 flex-1">
+            <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
+            <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.booksyReviews}</span>
+          </span>
+          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </a>
+        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.googleReviewsLink}: 4.9 / 5, ${copy.googleReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
+          <span className="min-w-0 flex-1">
+            <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
+            <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.googleReviews}</span>
+          </span>
+          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </a>
+      </span>
+    </div>
+  )
+}
+
 function HomeHero({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const copy = homeCopy[locale]
@@ -520,7 +544,7 @@ function HomeHero({ locale }: { locale: Locale }) {
         <div className="absolute right-[8%] top-[16%] hidden h-px w-36 bg-linear-to-r from-transparent via-brand/70 to-transparent lg:block" aria-hidden="true" />
       </div>
 
-      <div className="home-hero-shell relative z-10 flex min-h-0 flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-14rem)] sm:py-20 lg:min-h-[calc(100svh-13rem)]">
+      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-6rem)] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-14rem)] sm:py-20">
         <div key={activeSlide} className="home-hero-copy flex max-w-3xl flex-col items-start">
           <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.label}
@@ -554,25 +578,7 @@ function HomeHero({ locale }: { locale: Locale }) {
             ))}
           </div>
 
-          <div className="flex w-full max-w-sm items-stretch border border-white/14 bg-[#0b0b0c]/90 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md sm:w-auto sm:max-w-none">
-            <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
-            <span className="flex min-w-0 flex-col justify-center divide-y divide-white/10">
-              <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
-                <span className="min-w-0 flex-1">
-                  <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
-                  <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.booksyReviews}</span>
-                </span>
-                <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-              </a>
-              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.googleReviewsLink}: 4.9 / 5, ${copy.googleReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
-                <span className="min-w-0 flex-1">
-                  <strong className="block text-[.6rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
-                  <span className="mt-0.5 block text-[.62rem] text-white/48">4.9 / 5 - {copy.googleReviews}</span>
-                </span>
-                <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-              </a>
-            </span>
-          </div>
+          <HeroRatings copy={copy} className="hidden sm:flex" />
         </div>
       </div>
 
@@ -590,6 +596,12 @@ function HomeHero({ locale }: { locale: Locale }) {
           )
         })}
       </ul>
+
+      <div className="relative z-10 border-b border-white/10 bg-[#080809] sm:hidden">
+        <div className="home-shell py-5">
+          <HeroRatings copy={copy} />
+        </div>
+      </div>
     </section>
   )
 }
