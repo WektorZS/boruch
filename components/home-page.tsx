@@ -915,7 +915,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
         mobileCarousel
           ? isActive
             ? "min-h-[25rem] scale-100 border-brand/45 bg-[#151516] opacity-100 shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-            : "min-h-[25rem] scale-[.96] border-white/20 bg-[#18181a] opacity-75 shadow-[0_18px_50px_rgba(0,0,0,.28)]"
+            : "min-h-[25rem] scale-[.9] border-white/15 bg-[#18181a] opacity-30 shadow-[0_18px_50px_rgba(0,0,0,.28)] md:scale-[.88] md:opacity-15"
           : isActive
             ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
             : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-35 md:flex",
@@ -1111,11 +1111,11 @@ function Reviews({ locale }: { locale: Locale }) {
           <div
             ref={mobileCarouselRef}
             onScroll={updateMobileReview}
-            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[5%] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[3%] py-5 [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
             aria-label={copy.reviewsLabel}
           >
             {copy.reviews.map((review, index) => (
-              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[90%] shrink-0 snap-center">
+              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[94%] shrink-0 snap-center">
                 <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
               </div>
             ))}
