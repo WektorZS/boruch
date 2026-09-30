@@ -918,7 +918,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
             : "min-h-[25rem] scale-[.9] border-white/15 bg-[#18181a] opacity-30 shadow-[0_18px_50px_rgba(0,0,0,.28)] md:scale-[.88] md:opacity-15"
           : isActive
             ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-            : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-35 md:flex",
+            : "hidden min-h-[20rem] scale-[.92] border-white/10 bg-white/[.025] opacity-15 md:flex",
       )}
     >
       <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
@@ -931,7 +931,7 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false }
       </div>
       <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
       <div className="relative mt-5 pb-8">
-        <blockquote ref={visibleTextRef} className={cn("line-clamp-3 font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
+        <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
         <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>
         {isTruncated && (
           <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.64rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
@@ -954,13 +954,19 @@ function Reviews({ locale }: { locale: Locale }) {
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
-  const desktopCarouselRef = useRef<HTMLDivElement>(null)
   const mobileCarouselRef = useRef<HTMLDivElement>(null)
-  const desktopScrollFrameRef = useRef<number | null>(null)
   const mobileScrollFrameRef = useRef<number | null>(null)
-  const desktopDragRef = useRef({ pointerId: -1, startX: 0, scrollLeft: 0, moved: false })
+  const mobileLoopTimerRef = useRef<number | null>(null)
+  const desktopDragRef = useRef({ pointerId: -1, startX: 0, distance: 0, moved: false })
   const suppressReviewClickRef = useRef(false)
   const reviewCount = copy.reviews.length
+  const visibleReviews = [-1, 0, 1].map((offset) => ({
+    offset,
+    review: copy.reviews[(activeReview + offset + reviewCount) % reviewCount],
+  }))
+  const mobileLoopReviews = Array.from({ length: 3 }, (_, copyIndex) =>
+    copy.reviews.map((review, index) => ({ review, index, loopPosition: copyIndex * reviewCount + index })),
+  ).flat()
 
   const openReview = (review: VerifiedReview) => {
     openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -989,28 +995,54 @@ function Reviews({ locale }: { locale: Locale }) {
     }
   }, [selectedReview, closeReview])
 
+  useEffect(() => {
+    const carousel = mobileCarouselRef.current
+    if (!carousel) return
+    const frame = requestAnimationFrame(() => {
+      const firstMiddleCard = carousel.querySelector<HTMLElement>(`[data-loop-position="${reviewCount}"]`)
+      if (!firstMiddleCard) return
+      const previousBehavior = carousel.style.scrollBehavior
+      carousel.style.scrollBehavior = "auto"
+      carousel.scrollLeft = firstMiddleCard.offsetLeft - (carousel.clientWidth - firstMiddleCard.clientWidth) / 2
+      carousel.style.scrollBehavior = previousBehavior
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [reviewCount])
+
   const selectReview = (index: number) => {
     const normalizedIndex = (index + reviewCount) % reviewCount
     setActiveReview(normalizedIndex)
 
-    const carousel = window.innerWidth >= 768 ? desktopCarouselRef.current : mobileCarouselRef.current
-    const card = carousel?.querySelector<HTMLElement>(`[data-review-index="${normalizedIndex}"]`)
-    if (!carousel || !card) return
+    if (window.innerWidth >= 768) return
+    const carousel = mobileCarouselRef.current
+    if (!carousel) return
+    const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
+    let card: HTMLElement | null = null
+    let closestDistance = Number.POSITIVE_INFINITY
+    carousel.querySelectorAll<HTMLElement>(`[data-review-index="${normalizedIndex}"]`).forEach((candidate) => {
+      const candidateCenter = candidate.offsetLeft + candidate.clientWidth / 2
+      const distance = Math.abs(candidateCenter - carouselCenter)
+      if (distance < closestDistance) {
+        closestDistance = distance
+        card = candidate
+      }
+    })
+    if (!card) return
 
     carousel.scrollTo({
-      left: card.offsetLeft - (carousel.clientWidth - card.clientWidth) / 2,
+      left: (card as HTMLElement).offsetLeft - (carousel.clientWidth - (card as HTMLElement).clientWidth) / 2,
       behavior: "smooth",
     })
   }
 
-  const updateReviewFromCarousel = (desktop: boolean) => {
-    const carousel = desktop ? desktopCarouselRef.current : mobileCarouselRef.current
-    const frameRef = desktop ? desktopScrollFrameRef : mobileScrollFrameRef
-    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
-    frameRef.current = requestAnimationFrame(() => {
+  const updateMobileReview = () => {
+    if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
+    mobileScrollFrameRef.current = requestAnimationFrame(() => {
+      const carousel = mobileCarouselRef.current
       if (!carousel) return
       const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2
       let closestIndex = activeReview
+      let closestLoopPosition = reviewCount
       let closestDistance = Number.POSITIVE_INFINITY
 
       carousel.querySelectorAll<HTMLElement>("[data-review-index]").forEach((card) => {
@@ -1019,23 +1051,35 @@ function Reviews({ locale }: { locale: Locale }) {
         if (distance < closestDistance) {
           closestDistance = distance
           closestIndex = Number(card.dataset.reviewIndex)
+          closestLoopPosition = Number(card.dataset.loopPosition)
         }
       })
 
       if (Number.isFinite(closestIndex)) setActiveReview(closestIndex)
-      frameRef.current = null
+      if (mobileLoopTimerRef.current !== null) window.clearTimeout(mobileLoopTimerRef.current)
+      mobileLoopTimerRef.current = window.setTimeout(() => {
+        const currentCarousel = mobileCarouselRef.current
+        if (!currentCarousel) return
+        const targetPosition = closestLoopPosition < reviewCount
+          ? closestLoopPosition + reviewCount
+          : closestLoopPosition >= reviewCount * 2
+            ? closestLoopPosition - reviewCount
+            : null
+        if (targetPosition === null) return
+        const target = currentCarousel.querySelector<HTMLElement>(`[data-loop-position="${targetPosition}"]`)
+        if (!target) return
+        const previousBehavior = currentCarousel.style.scrollBehavior
+        currentCarousel.style.scrollBehavior = "auto"
+        currentCarousel.scrollLeft = target.offsetLeft - (currentCarousel.clientWidth - target.clientWidth) / 2
+        currentCarousel.style.scrollBehavior = previousBehavior
+      }, 120)
+      mobileScrollFrameRef.current = null
     })
   }
 
-  const updateDesktopReview = () => updateReviewFromCarousel(true)
-
-  const updateMobileReview = () => {
-    updateReviewFromCarousel(false)
-  }
-
   useEffect(() => () => {
-    if (desktopScrollFrameRef.current !== null) cancelAnimationFrame(desktopScrollFrameRef.current)
     if (mobileScrollFrameRef.current !== null) cancelAnimationFrame(mobileScrollFrameRef.current)
+    if (mobileLoopTimerRef.current !== null) window.clearTimeout(mobileLoopTimerRef.current)
   }, [])
 
   const handleDesktopPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -1043,7 +1087,7 @@ function Reviews({ locale }: { locale: Locale }) {
     desktopDragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
-      scrollLeft: event.currentTarget.scrollLeft,
+      distance: 0,
       moved: false,
     }
     event.currentTarget.setPointerCapture(event.pointerId)
@@ -1056,7 +1100,9 @@ function Reviews({ locale }: { locale: Locale }) {
     if (Math.abs(distance) > 4) drag.moved = true
     if (!drag.moved) return
     event.preventDefault()
-    event.currentTarget.scrollLeft = drag.scrollLeft - distance
+    drag.distance = distance
+    event.currentTarget.style.transition = "none"
+    event.currentTarget.style.transform = `translate3d(${Math.max(-42, Math.min(42, distance * 0.18))}px, 0, 0)`
   }
 
   const handleDesktopPointerEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -1065,6 +1111,9 @@ function Reviews({ locale }: { locale: Locale }) {
     suppressReviewClickRef.current = drag.moved
     desktopDragRef.current.pointerId = -1
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    event.currentTarget.style.transition = "transform 320ms cubic-bezier(.22,1,.36,1)"
+    event.currentTarget.style.transform = ""
+    if (Math.abs(drag.distance) >= 45) selectReview(activeReview + (drag.distance < 0 ? 1 : -1))
     if (drag.moved) window.setTimeout(() => { suppressReviewClickRef.current = false }, 0)
   }
 
@@ -1087,22 +1136,19 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="mt-7 max-w-xl text-base leading-relaxed text-white/48">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-14 hidden md:block">
+        <div className="relative mt-14 hidden md:block md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
           <div
-            ref={desktopCarouselRef}
-            onScroll={updateDesktopReview}
+            key={activeReview}
             onPointerDown={handleDesktopPointerDown}
             onPointerMove={handleDesktopPointerMove}
             onPointerUp={handleDesktopPointerEnd}
             onPointerCancel={handleDesktopPointerEnd}
             onClickCapture={preventClickAfterDrag}
-            className="flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-smooth px-[22%] py-8 select-none active:cursor-grabbing md:[scrollbar-width:none] lg:px-[26%] [&::-webkit-scrollbar]:hidden"
+            className="home-review-stage grid cursor-grab select-none items-center gap-4 active:cursor-grabbing md:grid-cols-[.82fr_1.18fr_.82fr] lg:gap-5"
             aria-label={copy.reviewsLabel}
           >
-            {copy.reviews.map((review, index) => (
-              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[56%] shrink-0 snap-center lg:w-[48%]">
-                <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
-              </div>
+            {visibleReviews.map(({ offset, review }) => (
+              <ReviewCard key={`${offset}-${review.name}`} review={review} isActive={offset === 0} locale={locale} onOpen={() => openReview(review)} />
             ))}
           </div>
         </div>
@@ -1111,11 +1157,11 @@ function Reviews({ locale }: { locale: Locale }) {
           <div
             ref={mobileCarouselRef}
             onScroll={updateMobileReview}
-            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[3%] py-5 [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
+            className="flex touch-auto snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-[1%] py-5 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] [scrollbar-width:none] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] [&::-webkit-scrollbar]:hidden"
             aria-label={copy.reviewsLabel}
           >
-            {copy.reviews.map((review, index) => (
-              <div key={`${review.source}-${review.name}`} data-review-index={index} className="w-[94%] shrink-0 snap-center">
+            {mobileLoopReviews.map(({ review, index, loopPosition }) => (
+              <div key={`${loopPosition}-${review.source}-${review.name}`} data-review-index={index} data-loop-position={loopPosition} className="w-[98%] shrink-0 snap-center">
                 <ReviewCard review={review} isActive={index === activeReview} locale={locale} onOpen={() => openReview(review)} mobileCarousel />
               </div>
             ))}
@@ -1127,10 +1173,11 @@ function Reviews({ locale }: { locale: Locale }) {
           <button type="button" onClick={showPreviousReview} aria-label={reviewControls[locale].previous} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
             <ArrowLeft className="size-4" aria-hidden="true" />
           </button>
-          <div className="flex min-w-28 items-center justify-center gap-3 text-[.62rem] font-bold tabular-nums tracking-[.16em] text-white/38" aria-label={`${activeReview + 1} / ${reviewCount}`}>
-            <span className="text-white">{String(activeReview + 1).padStart(2, "0")}</span>
-            <span className="h-px w-8 bg-brand" aria-hidden="true" />
-            <span>{String(reviewCount).padStart(2, "0")}</span>
+          <div className="flex min-w-28 items-center justify-center gap-2" aria-live="polite">
+            <span className="sr-only">{copy.reviews[activeReview].name}</span>
+            <span className="h-px w-5 bg-white/18" aria-hidden="true" />
+            <span className="h-0.5 w-10 bg-brand" aria-hidden="true" />
+            <span className="h-px w-5 bg-white/18" aria-hidden="true" />
           </div>
           <button type="button" onClick={showNextReview} aria-label={reviewControls[locale].next} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
             <ArrowRight className="size-4" aria-hidden="true" />
