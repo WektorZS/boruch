@@ -374,7 +374,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
         <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
           <section className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto border-t-[3px] border-brand bg-[#111112] p-5 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:border sm:border-white/12 sm:p-8">
             <div className="flex items-start gap-4">
-              <span className="grid size-11 shrink-0 place-items-center bg-brand text-white"><Cookie className="size-5" aria-hidden="true" /></span>
+              <span className="grid size-11 shrink-0 place-items-center text-brand"><Cookie className="size-7" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
                 <p className="text-[.58rem] font-bold uppercase tracking-[.18em] text-brand">{t.cookieWelcome}</p>
                 <h2 id="cookie-title" className="mt-2 pr-10 font-display text-[clamp(1.75rem,5vw,2.8rem)] font-black uppercase leading-[1.05] tracking-[-.01em]">{editing ? t.settingsTitle : t.cookieTitle}</h2>
@@ -396,7 +396,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
                       disabled={isChangingLanguage}
                       aria-pressed={active}
                       title={localeLabels[code].name}
-                      className={`flex min-h-9 min-w-14 items-center justify-center gap-2 px-2 text-[.58rem] font-bold uppercase tracking-[.1em] transition-colors disabled:cursor-wait disabled:opacity-60 ${active ? "bg-brand text-white" : "bg-white/[.045] text-white/55 hover:bg-white/10 hover:text-white"}`}
+                      className={`flex min-h-9 min-w-14 items-center justify-center gap-2 border px-2 text-[.58rem] font-bold uppercase tracking-[.1em] transition-colors disabled:cursor-wait disabled:opacity-60 ${active ? "border-white/25 bg-white/12 text-white" : "border-transparent bg-white/[.045] text-white/55 hover:border-white/12 hover:bg-white/10 hover:text-white"}`}
                     >
                       <LanguageFlag locale={code} />
                       {localeLabels[code].short}

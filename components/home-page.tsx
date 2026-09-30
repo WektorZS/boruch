@@ -496,7 +496,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   }, [copy.heroSlides.length])
 
   return (
-    <section aria-labelledby="hero-title" className="relative isolate flex min-h-svh flex-col overflow-hidden bg-[#080809] pt-24">
+    <section aria-labelledby="hero-title" className="relative isolate flex flex-col overflow-hidden bg-[#080809] pt-24 sm:min-h-svh">
       <div className="absolute inset-0" aria-hidden="true">
         {heroPhotos.map((photo, index) => (
           <div
@@ -511,15 +511,16 @@ function HomeHero({ locale }: { locale: Locale }) {
               priority={index === 0}
               sizes="100vw"
               position={photo.position}
-              className="saturate-[.72] contrast-[1.06]"
+              className="home-hero-photo saturate-[.78] contrast-[1.08]"
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,6,.96)_0%,rgba(5,5,6,.87)_32%,rgba(5,5,6,.48)_66%,rgba(5,5,6,.34)_100%)]" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-[#080809]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,6,.34)_0%,rgba(5,5,6,.68)_48%,rgba(5,5,6,.97)_100%)] sm:bg-[linear-gradient(90deg,rgba(5,5,6,.94)_0%,rgba(5,5,6,.82)_34%,rgba(5,5,6,.36)_68%,rgba(5,5,6,.2)_100%)]" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/15 via-transparent to-[#080809]/80 sm:from-black/25 sm:to-[#080809]" />
+        <div className="absolute right-[8%] top-[16%] hidden h-px w-36 bg-linear-to-r from-transparent via-brand/70 to-transparent lg:block" aria-hidden="true" />
       </div>
 
-      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-14rem)] flex-1 items-center py-14 sm:py-20 lg:min-h-[calc(100svh-13rem)]">
+      <div className="home-hero-shell relative z-10 flex min-h-0 flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-14rem)] sm:py-20 lg:min-h-[calc(100svh-13rem)]">
         <div key={activeSlide} className="home-hero-copy flex max-w-3xl flex-col items-start">
           <p className="mb-7 flex items-center gap-3 text-[.65rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
             <span className="h-px w-9 bg-brand" />{slide.label}
@@ -536,7 +537,7 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="absolute inset-x-5 bottom-6 flex flex-col-reverse items-start gap-4 sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] sm:bottom-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
+        <div className="mt-10 flex w-full flex-col-reverse items-start gap-4 sm:absolute sm:inset-x-[clamp(1.25rem,2.5vw,3rem)] sm:bottom-8 sm:mt-0 sm:w-auto sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
           <div className="flex items-center gap-2" role="group" aria-label={`${t.photo} ${activeSlide + 1} ${t.of} ${copy.heroSlides.length}`}>
             {copy.heroSlides.map((item, index) => (
               <button
@@ -553,7 +554,7 @@ function HomeHero({ locale }: { locale: Locale }) {
             ))}
           </div>
 
-          <div className="flex items-stretch border border-white/14 bg-[#0b0b0c]/86 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md">
+          <div className="flex w-full max-w-sm items-stretch border border-white/14 bg-[#0b0b0c]/90 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md sm:w-auto sm:max-w-none">
             <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
             <span className="flex min-w-0 flex-col justify-center divide-y divide-white/10">
               <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.reviewsLink}: 4.9 / 5, ${copy.booksyReviews}`} className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
@@ -579,7 +580,7 @@ function HomeHero({ locale }: { locale: Locale }) {
         {copy.benefits.map(([title, text], index) => {
           const Icon = benefitIcons[index] ?? Car
           return (
-            <li key={title} className="flex min-h-32 items-start gap-5 border-b border-white/10 px-6 py-7 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 lg:px-10">
+            <li key={title} className="flex min-h-0 items-start gap-4 border-b border-white/10 px-5 py-5 last:border-b-0 sm:min-h-32 sm:gap-5 sm:border-b-0 sm:border-r sm:px-6 sm:py-7 sm:last:border-r-0 lg:px-10">
               <Icon className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
               <span className="flex flex-col gap-2">
                 <strong className="text-[.7rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
@@ -599,10 +600,10 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
+    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-32">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:items-stretch">
-        <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:col-span-6 lg:min-h-[44rem]">
-          <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" />
+        <figure data-reveal="mask" className="home-photo-panel order-2 relative min-h-[23rem] overflow-hidden sm:min-h-[32rem] lg:order-none lg:col-span-6 lg:min-h-[44rem]">
+          <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" eager />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
           <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 border-t border-white/12 bg-black/45 px-6 py-5 backdrop-blur-sm">
             <span className="text-[.62rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
@@ -610,7 +611,7 @@ function WhyBoruch({ locale }: { locale: Locale }) {
           </figcaption>
         </figure>
 
-        <div className="flex flex-col justify-center lg:col-span-5 lg:col-start-8">
+        <div className="order-1 flex flex-col justify-center lg:order-none lg:col-span-5 lg:col-start-8">
           <p className="home-kicker">{copy.whyLabel}</p>
           <h2 id="why-title" data-reveal="" className="home-section-title mt-7 max-w-[11ch]">{copy.whyTitle}</h2>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/52">{copy.whyIntro}</p>
@@ -643,7 +644,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   }))
 
   return (
-    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
+    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
       <div className="home-shell">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
@@ -658,7 +659,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-0">
+        <div className="mt-10 grid gap-10 sm:mt-14 sm:gap-12 lg:grid-cols-2 lg:gap-0">
           {groups.map((group, groupIndex) => (
             <article key={group.category} className={cn("flex flex-col", groupIndex === 0 ? "lg:pr-10 xl:pr-14" : "border-t border-white/10 pt-12 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 xl:pl-14")}>
               <header className="pb-7">
@@ -671,7 +672,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                 {group.items.map((item) => {
                   const Icon = item.icon
                   return (
-                    <Link key={item.slug} href={item.href} className="group/item grid min-h-28 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-5 transition-colors hover:border-brand/45">
+                    <Link key={item.slug} href={item.href} className="group/item grid min-h-20 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-4 transition-colors hover:border-brand/45 sm:min-h-24 sm:py-5 lg:min-h-28">
                       <span className="grid size-9 place-items-center text-brand transition-transform group-hover/item:-translate-y-0.5">
                         <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                       </span>
@@ -698,7 +699,7 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-24 lg:py-32">
+    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-32">
       <div className="home-shell mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <p className="home-kicker">{t.nav.gallery}</p>
@@ -712,27 +713,27 @@ function WorkShowcase({ locale }: { locale: Locale }) {
         </div>
       </div>
       <div className="home-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[20rem_20rem]">
-        <figure data-reveal="mask" className="group relative aspect-[4/5] overflow-hidden sm:col-span-2 lg:col-span-6 lg:row-span-2 lg:aspect-auto">
-          <Photo id="p20" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" className="transition duration-1000 group-hover:scale-[1.025]" />
+        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[4/5] lg:col-span-6 lg:row-span-2 lg:aspect-auto">
+          <Photo id="p20" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" className="transition duration-1000 group-hover:scale-[1.025]" eager />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-6 text-[.65rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[0]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p62" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[1]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p43" sizes="(min-width: 1024px) 25vw, 50vw" position="50% 65%" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[2]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p46" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[3]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
+        <figure data-reveal="mask" className="home-photo-panel group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
           <Photo id="p39" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.62rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[4]}</figcaption>
@@ -823,16 +824,16 @@ function TeamStory({ locale }: { locale: Locale }) {
   ].filter(Boolean)
 
   return (
-    <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-20 lg:py-28">
+    <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-28">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="relative min-h-[34rem] overflow-hidden lg:min-h-[48rem]">
-            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
+          <figure data-reveal="mask" className="home-photo-panel relative min-h-[26rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[48rem]">
+            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" eager />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
             <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
           </figure>
 
-          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-8 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
+          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
             <p className="home-kicker">{t.nav.about}</p>
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(2.05rem,3vw,3.1rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
@@ -968,7 +969,7 @@ function Reviews({ locale }: { locale: Locale }) {
   const showNextReview = () => setActiveReview((current) => (current + 1) % reviewCount)
 
   return (
-    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-24 lg:py-32">
+    <section aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-32">
       <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
       <div className="home-shell relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
@@ -1053,7 +1054,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-24 lg:py-32">
+    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
       <div className="home-shell grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="home-kicker">{copy.faqLabel}</p>
@@ -1129,7 +1130,7 @@ function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-24 lg:py-32">
+    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-32">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">

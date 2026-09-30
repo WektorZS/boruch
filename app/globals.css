@@ -615,6 +615,21 @@
 .home-hero-copy {
   animation: home-hero-copy-in 650ms var(--ease-out) both;
 }
+.home-photo-panel {
+  background:
+    radial-gradient(circle at 85% 12%, rgb(218 38 48 / 0.08), transparent 32%),
+    #0c0c0d;
+}
+.home-photo-panel::after {
+  content: '';
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    inset 0 -5rem 7rem rgb(0 0 0 / 0.08);
+}
 .home-signature {
   font-weight: 400;
   font-style: normal;
@@ -735,8 +750,13 @@
 }
 
 @media (max-width: 639px) {
+  .home-hero-photo {
+    object-position: 62% 50% !important;
+    transform: scale(1.025);
+  }
   .home-hero-title {
-    font-size: clamp(2.85rem, 13.5vw, 4.2rem);
+    font-size: clamp(2.75rem, 12.6vw, 3.85rem);
+    line-height: 0.98;
   }
   .home-section-title {
     font-size: clamp(2rem, 8.6vw, 3.2rem);

@@ -17,12 +17,14 @@ interface PhotoProps {
   className?: string
   alt?: string
   priority?: boolean
+  /** Load before the image enters the viewport without competing with the hero image. */
+  eager?: boolean
   /** CSS object-position, e.g. "50% 80%". */
   position?: string
 }
 
 /** Authentic BORUCH photograph rendered as a responsive, static-export friendly <img>. */
-export function Photo({ id, sizes, className, alt, priority = false, position }: PhotoProps) {
+export function Photo({ id, sizes, className, alt, priority = false, eager = false, position }: PhotoProps) {
   const meta = photos[id]
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -33,7 +35,7 @@ export function Photo({ id, sizes, className, alt, priority = false, position }:
       width={meta.w}
       height={meta.h}
       alt={alt ?? meta.alt}
-      loading={priority ? "eager" : "lazy"}
+      loading={priority || eager ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"
       draggable={false}
