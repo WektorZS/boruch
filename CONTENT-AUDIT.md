@@ -62,13 +62,15 @@ Stan na 30.09.2026.
 
 ## Cennik
 
-- Czyszczenie zewnętrzne: od 110 zł.
-- Czyszczenie wnętrza: od 130 zł.
-- Komplet: od 220 zł.
-- Dopłata dla auta średniego: 10 zł.
-- Dopłata dla dużego auta: 30 zł.
-- Dopłaty za rozmiar są prezentowane przy pakietach mycia, a nie automatycznie przy każdej usłudze detailingowej.
-- PPF, korekta lakieru, powłoka ceramiczna, przyciemnianie oraz zmiana koloru nie otrzymały wymyślonych cen indywidualnych.
+- Cennik korzysta z pełnej listy przekazanej z Booksy i pokazuje cenę początkową oraz szacunkowy czas wykonania każdej usługi.
+- Mycie zewnętrzne: małe auto od 110 zł, średnie od 120 zł, duże od 140 zł. Szacunkowy czas: 1 godzina.
+- Czyszczenie wnętrza: małe auto od 130 zł, średnie od 140 zł, duże od 160 zł. Szacunkowy czas: 1 godzina.
+- Komplet: małe auto od 220 zł, średnie od 240 zł, duże od 260 zł. Szacunkowy czas: 2 godziny.
+- Auto z dodatkową powłoką ochronną wymaga innych środków myjących. Do mycia zewnętrznego doliczane jest 20 zł.
+- Dodano ręczne woskowanie, niewidzialną wycieraczkę, serwis powłoki ceramicznej, pranie tapicerki, czyszczenie skór, folie, korektę i polerowanie, powłoki oraz dechroming.
+- Pakiet Sprzedaż Standard kosztuje od 1000 zł, a Premium z korektą lakieru od 1400 zł. Oba mają szacunkowy czas 4 godzin.
+- Wszystkie kwoty są cenami od dla przeciętnie zabrudzonego auta. Przy ponadstandardowym zabrudzeniu klient otrzymuje informację o możliwej zmianie ceny przed rozpoczęciem pracy.
+- Usługi oznaczone w Booksy jako zmienne pozostały wyceniane indywidualnie. Nie dodano do nich wymyślonych kwot.
 
 ## Dane firmy
 

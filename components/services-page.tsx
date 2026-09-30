@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
-import type { ServiceSlug } from "@/lib/content/services"
 
 const clients = [
   { file: "radisson", name: "Radisson Blu" },
@@ -23,10 +22,59 @@ const pageCopy = {
   uk: { intro: "Повний догляд за авто", introText: "Від регулярного миття до професійного захисту лаку. Оберіть послугу або зверніться до нас за порадою.", trusted: "Нам довіряють", choose: "Оберіть послугу" },
 } satisfies Record<Locale, Record<string, string>>
 
+const extraServiceGroup = {
+  pl: {
+    title: "Pakiety i pielęgnacja dodatkowa",
+    items: [
+      { id: "niewidzialna-wycieraczka", title: "Niewidzialna wycieraczka", text: "Hydrofobowa ochrona szyb ułatwiająca odprowadzanie wody podczas jazdy.", anchor: "detailing" },
+      { id: "serwis-powloki", title: "Serwis powłoki ceramicznej", text: "Mycie, dekontaminacja i odświeżenie właściwości ochronnych powłoki ceramicznej.", anchor: "detailing" },
+      { id: "sprzedaz-standard", title: "Pakiet Sprzedaż Standard", text: "Kompleksowe przygotowanie wnętrza i nadwozia, pranie lub pielęgnacja skór oraz woskowanie.", anchor: "pakiet-sprzedaz" },
+      { id: "sprzedaz-premium", title: "Pakiet Sprzedaż Premium", text: "Pełne przygotowanie auta do sprzedaży rozszerzone o glinkowanie i korektę lakieru.", anchor: "pakiet-sprzedaz" },
+    ],
+  },
+  en: {
+    title: "Packages and additional care",
+    items: [
+      { id: "invisible-wiper", title: "Hydrophobic glass coating", text: "Hydrophobic protection that helps water run off the glass while driving.", anchor: "detailing" },
+      { id: "coating-service", title: "Ceramic coating maintenance", text: "Washing, decontamination and restoration of the coating's protective properties.", anchor: "detailing" },
+      { id: "sale-standard", title: "Standard Sales Package", text: "Interior and exterior preparation, upholstery or leather care, plus waxing.", anchor: "pakiet-sprzedaz" },
+      { id: "sale-premium", title: "Premium Sales Package", text: "Complete sales preparation extended with claying and paint correction.", anchor: "pakiet-sprzedaz" },
+    ],
+  },
+  de: {
+    title: "Pakete und Zusatzpflege",
+    items: [
+      { id: "glasversiegelung", title: "Hydrophobe Glasversiegelung", text: "Hydrophober Schutz, durch den Wasser während der Fahrt leichter von den Scheiben abperlt.", anchor: "detailing" },
+      { id: "beschichtungsservice", title: "Keramikversiegelungs-Service", text: "Wäsche, Dekontamination und Auffrischung der Schutzeigenschaften der Beschichtung.", anchor: "detailing" },
+      { id: "verkauf-standard", title: "Verkaufspaket Standard", text: "Innen- und Außenaufbereitung, Polster- oder Lederpflege sowie Wachs.", anchor: "pakiet-sprzedaz" },
+      { id: "verkauf-premium", title: "Verkaufspaket Premium", text: "Komplette Verkaufsvorbereitung mit Lackkneten und Lackkorrektur.", anchor: "pakiet-sprzedaz" },
+    ],
+  },
+  uk: {
+    title: "Пакети та додатковий догляд",
+    items: [
+      { id: "hydrophobic-glass", title: "Гідрофобне покриття скла", text: "Захист, завдяки якому вода легше стікає зі скла під час руху.", anchor: "detailing" },
+      { id: "coating-service", title: "Обслуговування керамічного покриття", text: "Миття, деконтамінація та відновлення захисних властивостей покриття.", anchor: "detailing" },
+      { id: "sale-standard", title: "Стандартний пакет для продажу", text: "Підготовка салону та кузова, хімчистка або догляд за шкірою та нанесення воску.", anchor: "pakiet-sprzedaz" },
+      { id: "sale-premium", title: "Преміум пакет для продажу", text: "Повна підготовка до продажу з очищенням глиною та корекцією лаку.", anchor: "pakiet-sprzedaz" },
+    ],
+  },
+} satisfies Record<Locale, { title: string; items: { id: string; title: string; text: string; anchor: string }[] }>
+
 export function ServicesPage({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = pageCopy[locale]
+  const groups = [
+    ...src.services.groups.map((group) => ({
+      title: group.title,
+      items: group.items.map((item) => ({ id: item.slug, title: item.title, text: item.text, href: locale === "pl" ? `/${item.slug}` : null })),
+    })),
+    {
+      title: extraServiceGroup[locale].title,
+      items: extraServiceGroup[locale].items.map((item) => ({ ...item, href: `${routes[locale].pricing}#${item.anchor}` })),
+    },
+  ]
 
   return (
     <SiteShell locale={locale} page="services">
@@ -50,7 +98,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {src.services.groups.map((group, groupIndex) => (
+      {groups.map((group, groupIndex) => (
         <section key={group.title} aria-labelledby={`group-${groupIndex}`} className={`border-b border-white/10 py-16 sm:py-20 lg:py-28 ${groupIndex % 2 === 0 ? "bg-[#0a0a0b]" : "bg-[#101011]"}`}>
           <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-4">
@@ -62,8 +110,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
             </div>
             <ol className="border-b border-white/10 lg:col-span-8">
               {group.items.map((item, index) => {
-                const slug = item.slug as ServiceSlug
-                const href = locale === "pl" ? `/${slug}` : null
+                const href = item.href
                 const content = (
                   <>
                     <span className="mt-1 size-2 shrink-0 bg-brand" aria-hidden="true" />
@@ -75,7 +122,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
                   </>
                 )
                 const rowClass = "group flex flex-wrap items-start gap-5 border-t border-white/10 py-7 transition-colors hover:border-brand/40 sm:flex-nowrap lg:items-center lg:py-8"
-                return <li key={item.slug} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
+                return <li key={item.id} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
               })}
             </ol>
           </div>

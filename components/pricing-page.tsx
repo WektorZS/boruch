@@ -1,141 +1,195 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Clock3 } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { breadcrumbJsonLd, routes, sources, ui, type Locale } from "@/lib/content"
-import { servicePrice, type ServiceSlug } from "@/lib/content/services"
+import type { ServiceSlug } from "@/lib/content/services"
 
-const packageBySlug: Partial<Record<ServiceSlug, number>> = {
-  "czyszczenie-wnetrza": 0,
-  "mycie-zewnatrz": 1,
-  komplet: 2,
+type Localized = Record<Locale, string>
+type PriceVariant = { name?: Localized; price: number | null; minutes: number }
+type PriceItem = {
+  id: string
+  name: Localized
+  description?: Localized
+  slug?: ServiceSlug
+  variants: PriceVariant[]
 }
 
 const tableCopy = {
-  pl: { title: "Pełny cennik usług", intro: "Wszystkie usługi z naszej oferty w jednym miejscu. Przy pracach zależnych od stanu auta cenę potwierdzamy po krótkich oględzinach.", service: "Usługa", scope: "Zakres usługi", details: "Zobacz usługę", noDetails: "Szczegóły ustalamy indywidualnie" },
-  en: { title: "Complete price list", intro: "All services from our offer in one place. For work depending on the condition of the car, we confirm the price after a short inspection.", service: "Service", scope: "Scope", details: "View service", noDetails: "Details agreed individually" },
-  de: { title: "Vollständige Preisliste", intro: "Alle Leistungen aus unserem Angebot an einem Ort. Bei Arbeiten, deren Preis vom Fahrzeugzustand abhängt, bestätigen wir ihn nach einer kurzen Besichtigung.", service: "Leistung", scope: "Leistungsumfang", details: "Leistung ansehen", noDetails: "Details nach Absprache" },
-  uk: { title: "Повний прайс-лист", intro: "Усі послуги з нашої пропозиції в одному місці. Для робіт, вартість яких залежить від стану авто, ціну підтверджуємо після короткого огляду.", service: "Послуга", scope: "Обсяг робіт", details: "Переглянути послугу", noDetails: "Деталі узгоджуємо індивідуально" },
+  pl: {
+    title: "Pełny cennik usług",
+    intro: "Aktualna oferta zgodna z Booksy. Wariant auta, cena początkowa i orientacyjny czas są podane przy każdej usłudze.",
+    service: "Usługa", scope: "Zakres", variant: "Wariant", price: "Cena od", time: "Szacunkowy czas", from: "od", quote: "Wycena indywidualna", details: "Zobacz szczegóły usługi", scopeFallback: "Dokładny zakres dobierzemy do stanu auta podczas rezerwacji lub oględzin.",
+    noticePrice: "Ceny od", noticePriceText: "Podane kwoty dotyczą przeciętnie zabrudzonego auta.",
+    noticeTime: "Czas orientacyjny", noticeTimeText: "Rzeczywisty czas zależy od stanu i wielkości samochodu.",
+    noticeCondition: "Mocne zabrudzenia", noticeConditionText: "Jeśli auto wymaga większego nakładu pracy, potwierdzimy koszt przed rozpoczęciem usługi.",
+    coating: "Auto z dodatkową powłoką ochronną wymaga innych środków myjących. Do ceny mycia zewnętrznego doliczamy 20 zł.",
+    washTitle: "Mycie i wnętrze", washIntro: "Podstawowe pakiety z ceną dobraną do wielkości samochodu.",
+    detailingTitle: "Pielęgnacja i detailing", detailingIntro: "Zabiegi ochronne, renowacyjne i zmieniające wygląd auta.",
+    saleTitle: "Pakiet Sprzedaż", saleIntro: "Kompleksowe przygotowanie samochodu, które podnosi jego atrakcyjność przed wystawieniem ogłoszenia.",
+  },
+  en: {
+    title: "Complete price list",
+    intro: "The current Booksy offer. Vehicle variant, starting price and estimated duration are shown for every service.",
+    service: "Service", scope: "Scope", variant: "Variant", price: "Price from", time: "Estimated time", from: "from", quote: "Individual quote", details: "View service details", scopeFallback: "We match the exact scope to the condition of the car during booking or inspection.",
+    noticePrice: "Starting prices", noticePriceText: "The listed amounts apply to an averagely soiled car.",
+    noticeTime: "Estimated duration", noticeTimeText: "The actual duration depends on the condition and size of the car.",
+    noticeCondition: "Heavy soiling", noticeConditionText: "If the car requires additional work, we confirm the cost before starting.",
+    coating: "Cars with an additional protective coating require different cleaning products. We add PLN 20 to the exterior wash price.",
+    washTitle: "Washing and interior", washIntro: "Core packages with prices matched to the size of the car.",
+    detailingTitle: "Care and detailing", detailingIntro: "Protective, restorative and appearance-changing treatments.",
+    saleTitle: "Sales Package", saleIntro: "Complete preparation that makes the car more attractive before it is listed for sale.",
+  },
+  de: {
+    title: "Vollständige Preisliste",
+    intro: "Das aktuelle Booksy-Angebot. Fahrzeugvariante, Startpreis und geschätzte Dauer stehen bei jeder Leistung.",
+    service: "Leistung", scope: "Umfang", variant: "Variante", price: "Preis ab", time: "Geschätzte Dauer", from: "ab", quote: "Individuelle Preisermittlung", details: "Details ansehen", scopeFallback: "Den genauen Umfang stimmen wir bei der Buchung oder Besichtigung auf den Fahrzeugzustand ab.",
+    noticePrice: "Preise ab", noticePriceText: "Die angegebenen Beträge gelten für ein durchschnittlich verschmutztes Auto.",
+    noticeTime: "Ungefähre Dauer", noticeTimeText: "Die tatsächliche Dauer hängt von Zustand und Größe des Autos ab.",
+    noticeCondition: "Starke Verschmutzung", noticeConditionText: "Bei höherem Arbeitsaufwand bestätigen wir die Kosten vor Beginn.",
+    coating: "Autos mit zusätzlicher Schutzbeschichtung benötigen andere Reinigungsmittel. Für die Außenwäsche berechnen wir 20 PLN zusätzlich.",
+    washTitle: "Wäsche und Innenraum", washIntro: "Grundpakete mit Preisen passend zur Fahrzeuggröße.",
+    detailingTitle: "Pflege und Detailing", detailingIntro: "Schutz, Aufbereitung und optische Veränderungen des Fahrzeugs.",
+    saleTitle: "Verkaufspaket", saleIntro: "Komplette Vorbereitung, die das Auto vor dem Verkauf attraktiver macht.",
+  },
+  uk: {
+    title: "Повний прайс-лист",
+    intro: "Актуальна пропозиція Booksy. Для кожної послуги вказані тип авто, початкова ціна та орієнтовний час.",
+    service: "Послуга", scope: "Обсяг", variant: "Варіант", price: "Ціна від", time: "Орієнтовний час", from: "від", quote: "Індивідуальна оцінка", details: "Переглянути деталі", scopeFallback: "Точний обсяг робіт підберемо відповідно до стану авто під час запису або огляду.",
+    noticePrice: "Ціни від", noticePriceText: "Вказані суми стосуються автомобіля із середнім рівнем забруднення.",
+    noticeTime: "Орієнтовний час", noticeTimeText: "Фактичний час залежить від стану та розміру автомобіля.",
+    noticeCondition: "Сильне забруднення", noticeConditionText: "Якщо потрібно більше роботи, ми підтвердимо вартість до її початку.",
+    coating: "Для авто з додатковим захисним покриттям потрібні інші засоби. До зовнішнього миття додається 20 PLN.",
+    washTitle: "Миття та салон", washIntro: "Основні пакети з ціною відповідно до розміру автомобіля.",
+    detailingTitle: "Догляд і детейлінг", detailingIntro: "Захисні, відновлювальні та стилістичні процедури.",
+    saleTitle: "Пакет для продажу", saleIntro: "Комплексна підготовка, яка підвищує привабливість автомобіля перед продажем.",
+  },
 } satisfies Record<Locale, Record<string, string>>
+
+const sizeNames = {
+  small: { pl: "Małe auto", en: "Small car", de: "Kleines Auto", uk: "Мале авто" },
+  medium: { pl: "Średnie auto", en: "Medium car", de: "Mittelgroßes Auto", uk: "Середнє авто" },
+  large: { pl: "Duże auto", en: "Large car", de: "Großes Auto", uk: "Велике авто" },
+} satisfies Record<string, Localized>
+
+const washItems: PriceItem[] = [
+  { id: "exterior", name: { pl: "Mycie auta z zewnątrz", en: "Exterior car wash", de: "Außenwäsche", uk: "Зовнішнє миття авто" }, slug: "mycie-zewnatrz", variants: [
+    { name: sizeNames.small, price: 110, minutes: 60 }, { name: sizeNames.medium, price: 120, minutes: 60 }, { name: sizeNames.large, price: 140, minutes: 60 },
+  ] },
+  { id: "interior", name: { pl: "Czyszczenie i mycie wnętrza", en: "Interior cleaning", de: "Innenraumreinigung", uk: "Чищення салону" }, slug: "czyszczenie-wnetrza", variants: [
+    { name: sizeNames.small, price: 130, minutes: 60 }, { name: sizeNames.medium, price: 140, minutes: 60 }, { name: sizeNames.large, price: 160, minutes: 60 },
+  ] },
+  { id: "complete", name: { pl: "Komplet - mycie zewnątrz i wewnątrz", en: "Complete exterior and interior wash", de: "Komplettwäsche außen und innen", uk: "Комплекс - миття кузова та салону" }, slug: "komplet", variants: [
+    { name: sizeNames.small, price: 220, minutes: 120 }, { name: sizeNames.medium, price: 240, minutes: 120 }, { name: sizeNames.large, price: 260, minutes: 120 },
+  ] },
+]
+
+const detailingItems: PriceItem[] = [
+  { id: "wax", name: { pl: "Ręczne woskowanie", en: "Hand waxing", de: "Handwachs", uk: "Ручне нанесення воску" }, slug: "woskowanie", variants: [{ price: 350, minutes: 120 }] },
+  { id: "invisible-wiper", name: { pl: "Niewidzialna wycieraczka", en: "Hydrophobic glass coating", de: "Hydrophobe Glasversiegelung", uk: "Гідрофобне покриття скла" }, description: {
+    pl: "Hydrofobowa powłoka na szyby, dzięki której krople wody łatwiej spływają pod wpływem pędu powietrza.", en: "A hydrophobic glass coating that helps water droplets run off while driving.", de: "Eine hydrophobe Glasversiegelung, durch die Wasser während der Fahrt leichter abperlt.", uk: "Гідрофобне покриття скла, завдяки якому краплі води легше стікають під час руху.",
+  }, variants: [{ price: 200, minutes: 30 }] },
+  { id: "ceramic-service", name: { pl: "Serwis powłoki ceramicznej", en: "Ceramic coating maintenance", de: "Keramikversiegelungs-Service", uk: "Обслуговування керамічного покриття" }, description: {
+    pl: "Mycie, dekontaminacja i odświeżenie powłoki boosterem. Serwis zalecany co 6 miesięcy.", en: "Washing, decontamination and refreshing the coating with a booster. Recommended every 6 months.", de: "Wäsche, Dekontamination und Auffrischung mit einem Booster. Alle 6 Monate empfohlen.", uk: "Миття, деконтамінація та оновлення покриття бустером. Рекомендовано кожні 6 місяців.",
+  }, variants: [{ price: 500, minutes: 180 }] },
+  { id: "upholstery", name: { pl: "Pranie tapicerki", en: "Upholstery cleaning", de: "Polsterreinigung", uk: "Хімчистка оббивки" }, slug: "pranie-tapicerki", variants: [{ price: 400, minutes: 180 }] },
+  { id: "leather", name: { pl: "Czyszczenie skór z impregnacją", en: "Leather cleaning and protection", de: "Lederreinigung und Imprägnierung", uk: "Чищення та захист шкіри" }, slug: "czyszczenie-skor", variants: [{ price: 350, minutes: 180 }] },
+  { id: "wrap", name: { pl: "Oklejanie auta, szyb i lamp folią", en: "Car, window and lamp wrapping", de: "Folierung von Auto, Scheiben und Leuchten", uk: "Обклеювання авто, скла та фар плівкою" }, slug: "folia-ppf", variants: [{ price: null, minutes: 180 }] },
+  { id: "correction", name: { pl: "Korekta lakieru, polerowanie, glinkowanie", en: "Paint correction, polishing and claying", de: "Lackkorrektur, Polieren und Kneten", uk: "Корекція лаку, полірування та очищення глиною" }, slug: "korekta-lakieru", variants: [{ price: null, minutes: 240 }] },
+  { id: "coating", name: { pl: "Aplikacja powłoki ceramicznej lub kwarcowej", en: "Ceramic or quartz coating application", de: "Keramik- oder Quarzversiegelung", uk: "Нанесення керамічного або кварцового покриття" }, slug: "powloka-ceramiczna", variants: [{ price: null, minutes: 240 }] },
+  { id: "dechroming", name: { pl: "Dechroming auta", en: "Car dechroming", de: "Dechroming des Fahrzeugs", uk: "Дехромінг авто" }, description: { pl: "Oklejenie chromowanych elementów auta.", en: "Wrapping the car's chrome trim.", de: "Folierung der verchromten Fahrzeugteile.", uk: "Обклеювання хромованих елементів авто." }, slug: "zmiana-koloru-dechroming", variants: [{ price: null, minutes: 240 }] },
+]
+
+const saleItems: PriceItem[] = [
+  { id: "sale-standard", name: { pl: "Pakiet Sprzedaż Standard", en: "Standard Sales Package", de: "Verkaufspaket Standard", uk: "Стандартний пакет для продажу" }, description: {
+    pl: "Mycie detailingowe wnętrza i nadwozia, pranie tapicerki lub czyszczenie skór z impregnacją oraz woskowanie.", en: "Interior and exterior detailing, upholstery cleaning or leather care, plus waxing.", de: "Innen- und Außendetailing, Polster- oder Lederreinigung sowie Wachs.", uk: "Детейлінг салону та кузова, хімчистка оббивки або догляд за шкірою та нанесення воску.",
+  }, variants: [{ price: 1000, minutes: 240 }] },
+  { id: "sale-premium", name: { pl: "Pakiet Sprzedaż Premium z korektą lakieru", en: "Premium Sales Package with paint correction", de: "Verkaufspaket Premium mit Lackkorrektur", uk: "Преміум пакет для продажу з корекцією лаку" }, description: {
+    pl: "Zakres Standard rozszerzony o glinkowanie i korektę lakieru w zakresie ustalonym po oględzinach.", en: "The Standard package extended with claying and paint correction agreed after inspection.", de: "Das Standardpaket ergänzt um Lackkneten und eine nach Besichtigung vereinbarte Lackkorrektur.", uk: "Стандартний пакет, доповнений очищенням глиною та корекцією лаку після огляду.",
+  }, variants: [{ price: 1400, minutes: 240 }] },
+]
+
+function duration(minutes: number, locale: Locale) {
+  if (minutes < 60) return `${minutes} min`
+  const hours = minutes / 60
+  return locale === "pl" ? `ok. ${hours} godz.` : locale === "de" ? `ca. ${hours} Std.` : locale === "uk" ? `бл. ${hours} год.` : `approx. ${hours} hr`
+}
+
+function PriceGroup({ id, title, intro, items, locale, scopeFor }: { id: string; title: string; intro: string; items: PriceItem[]; locale: Locale; scopeFor?: (item: PriceItem) => string[] }) {
+  const copy = tableCopy[locale]
+  const currency = locale === "pl" ? "zł" : "PLN"
+  return (
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28 border-b border-white/10 py-12 last:border-b-0 lg:py-16">
+      <div className="mb-9 grid gap-4 lg:grid-cols-12 lg:items-end">
+        <h3 id={`${id}-title`} className="font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black uppercase leading-[1.05] tracking-[-.02em] lg:col-span-7">{title}</h3>
+        <p className="max-w-xl text-sm leading-relaxed text-white/48 lg:col-span-5">{intro}</p>
+      </div>
+      <div className="border-t border-white/12">
+        <div className="hidden grid-cols-[minmax(15rem,1fr)_minmax(18rem,1.15fr)_minmax(18rem,1.1fr)] gap-8 border-b border-white/12 py-4 text-[.58rem] font-bold uppercase tracking-[.15em] text-white/35 lg:grid">
+          <span>{copy.service}</span><span>{copy.scope}</span><span>{copy.variant} / {copy.price} / {copy.time}</span>
+        </div>
+        <ol>
+          {items.map((item, index) => {
+            const href = locale === "pl" && item.slug ? `/${item.slug}` : null
+            const scope = scopeFor?.(item) ?? []
+            const content = <>
+              <div>
+                <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-brand lg:hidden">{copy.service}</span>
+                <strong className="font-display text-[clamp(1.35rem,2vw,1.8rem)] font-bold uppercase leading-[1.1] tracking-[-.01em] text-white/92">{item.name[locale]}</strong>
+                {href && <span className="mt-5 inline-flex items-center gap-2 text-[.58rem] font-bold uppercase tracking-[.14em] text-white/42 transition-colors group-hover:text-white">{copy.details}<ArrowRight className="size-3.5 text-brand" /></span>}
+              </div>
+              <div>
+                <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{copy.scope}</span>
+                {scope.length > 0 ? <ul className="grid gap-2 text-xs leading-relaxed text-white/58 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">{scope.map((entry) => <li key={entry} className="flex gap-2"><span className="mt-[.5em] size-1 shrink-0 bg-brand" />{entry}</li>)}</ul> : <p className="text-sm leading-relaxed text-white/45">{item.description?.[locale] ?? copy.scopeFallback}</p>}
+              </div>
+              <div>
+                <span className="mb-3 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{copy.variant} / {copy.price} / {copy.time}</span>
+                <dl className="divide-y divide-white/10 border-y border-white/10 lg:border-t-0">
+                  {item.variants.map((variant, variantIndex) => <div key={`${item.id}-${variantIndex}`} className="grid grid-cols-[1fr_auto] items-center gap-5 py-3 first:pt-0">
+                    <div><dt className="text-xs font-semibold text-white/72">{variant.name?.[locale] ?? item.name[locale]}</dt><dd className="mt-1 flex items-center gap-1.5 text-[.6rem] font-bold uppercase tracking-[.1em] text-white/36"><Clock3 className="size-3 text-brand" />{duration(variant.minutes, locale)}</dd></div>
+                    <dd className="text-right text-sm font-bold text-white/90">{variant.price === null ? copy.quote : `${copy.from} ${variant.price} ${currency}`}</dd>
+                  </div>)}
+                </dl>
+              </div>
+            </>
+            const rowClass = "group grid gap-7 border-b border-white/10 py-8 last:border-b-0 lg:grid-cols-[minmax(15rem,1fr)_minmax(18rem,1.15fr)_minmax(18rem,1.1fr)] lg:gap-8"
+            return <li key={item.id} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
+          })}
+        </ol>
+      </div>
+    </section>
+  )
+}
 
 export function PricingPage({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const pricing = src.pricing
   const t = ui[locale]
   const copy = tableCopy[locale]
-  const currency = locale === "pl" ? "zł" : "PLN"
+  const exteriorScope = pricing.packages[1]?.items ?? []
+  const interiorScope = pricing.packages[0]?.items ?? []
+  const washScope = (item: PriceItem) => item.id === "exterior" ? exteriorScope : item.id === "interior" ? interiorScope : [...exteriorScope, ...interiorScope]
 
   return (
     <SiteShell locale={locale} page="pricing">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbJsonLd([
-              { name: t.nav.home, path: routes[locale].home },
-              { name: t.nav.pricing, path: routes[locale].pricing },
-            ]),
-          ),
-        }}
-      />
-
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: t.nav.home, path: routes[locale].home }, { name: t.nav.pricing, path: routes[locale].pricing }])) }} />
       <section aria-labelledby="page-title" className="relative isolate flex min-h-[660px] items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
         <div className="enter-unmask absolute inset-0"><Photo id="p51" priority sizes="100vw" position="55% 58%" /></div>
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.98)_0%,rgba(6,6,7,.9)_50%,rgba(6,6,7,.38)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-8">
-            <p className="eyebrow mb-7">{t.nav.pricing}</p>
-            <h1 id="page-title" className="type-h1 max-w-[18ch] text-balance">{pricing.h1}</h1>
-            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{pricing.sub}</p>
-          </div>
-          <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
-            <p className="type-label text-brand">{copy.title}</p>
-            <ul className="mt-5 flex flex-col gap-3">
-              {src.services.groups.map((group) => <li key={group.title} className="flex items-center gap-3 text-sm text-white/62"><span className="size-1.5 bg-brand" />{group.title}</li>)}
-            </ul>
-          </div>
+          <div className="lg:col-span-8"><p className="eyebrow mb-7">{t.nav.pricing}</p><h1 id="page-title" className="type-h1 max-w-[18ch] text-balance">{pricing.h1}</h1><p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.intro}</p></div>
+          <nav aria-label={copy.title} className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10"><p className="type-label text-brand">{copy.title}</p><ul className="mt-5 flex flex-col gap-3 text-sm text-white/62"><li><a href="#mycie" className="transition-colors hover:text-white">{copy.washTitle}</a></li><li><a href="#detailing" className="transition-colors hover:text-white">{copy.detailingTitle}</a></li><li><a href="#pakiet-sprzedaz" className="transition-colors hover:text-white">{copy.saleTitle}</a></li></ul></nav>
         </div>
       </section>
-
       <section aria-labelledby="price-list-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-28">
         <div className="shell-wide">
-          <div className="grid gap-7 border-b border-white/10 pb-10 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <p className="eyebrow">{t.nav.pricing}</p>
-              <h2 id="price-list-title" className="mt-6 type-h2 max-w-[16ch] text-balance">{copy.title}</h2>
-            </div>
-            <p className="max-w-2xl text-sm leading-relaxed text-white/52 lg:col-span-5 lg:text-base">{copy.intro}</p>
-          </div>
-
-          <div className="grid border-b border-white/10 py-8 lg:grid-cols-12 lg:items-center">
-            <p className="type-label mb-6 text-white/55 lg:col-span-3 lg:mb-0">{t.sizes}</p>
-            <dl className="grid grid-cols-3 lg:col-span-6">
-              {[
-                { label: t.compact, value: "0" },
-                { label: t.medium, value: "+10" },
-                { label: t.large, value: "+30" },
-              ].map((row) => (
-                <div key={row.label} className="border-l border-white/12 px-4 first:border-l-0 first:pl-0 sm:px-6 sm:first:pl-0">
-                  <dt className="text-[.58rem] font-bold uppercase tracking-[.14em] text-white/38">{row.label}</dt>
-                  <dd className="mt-2 flex items-baseline gap-1.5"><strong className="font-display text-2xl font-bold tracking-[-.02em]">{row.value}</strong><span className="text-[.6rem] font-bold uppercase text-white/45">{currency}</span></dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-6 text-xs leading-relaxed text-white/38 lg:col-span-3 lg:mt-0">{pricing.packagesNote}</p>
-          </div>
-
-          <div className="flex flex-col">
-            {src.services.groups.map((group, groupIndex) => (
-              <section key={group.title} aria-labelledby={`price-group-${groupIndex}`} className="border-b border-white/10 py-12 last:border-b-0 lg:py-16">
-                <div className="mb-7 flex items-end justify-between gap-6">
-                  <h3 id={`price-group-${groupIndex}`} className="font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black uppercase leading-none tracking-[-.02em]">{group.title}</h3>
-                </div>
-
-                <div className="border-t border-white/12">
-                  <div className="hidden grid-cols-[minmax(14rem,1.05fr)_minmax(22rem,1.8fr)_11rem_3rem] gap-6 border-b border-white/12 py-4 text-[.58rem] font-bold uppercase tracking-[.15em] text-white/35 lg:grid">
-                    <span>{copy.service}</span>
-                    <span>{copy.scope}</span>
-                    <span className="text-right">{t.priceLabel}</span>
-                    <span aria-hidden="true" />
-                  </div>
-                  <ol>
-                    {group.items.map((item, index) => {
-                      const slug = item.slug as ServiceSlug
-                      const price = servicePrice(locale, slug) ?? t.individualQuote
-                      const packageIndex = packageBySlug[slug]
-                      const pkg = packageIndex === undefined ? null : pricing.packages[packageIndex]
-                      const href = locale === "pl" ? `/${slug}` : null
-                      const row = (
-                        <>
-                          <div>
-                            <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-brand lg:hidden">{copy.service}</span>
-                            <strong className="font-display text-[clamp(1.4rem,2vw,1.85rem)] font-bold uppercase leading-[1.08] tracking-[-.012em] text-white/92">{item.title}</strong>
-                          </div>
-                          <div>
-                            <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{copy.scope}</span>
-                            <p className="text-sm leading-relaxed text-white/48">{item.text}</p>
-                            {pkg && <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-relaxed text-white/65">{pkg.items.map((included) => <li key={included} className="flex items-center gap-2"><span className="size-1 bg-brand" />{included}</li>)}</ul>}
-                          </div>
-                          <div className="lg:text-right">
-                            <span className="mb-2 block text-[.56rem] font-bold uppercase tracking-[.14em] text-white/35 lg:hidden">{t.priceLabel}</span>
-                            <strong className="text-sm font-bold uppercase tracking-[.05em] text-white/85">{price}</strong>
-                          </div>
-                          <div className="flex items-end justify-end">
-                            {href ? <ArrowRight className="size-5 text-brand transition-transform group-hover:translate-x-1" aria-label={copy.details} /> : <span className="sr-only">{copy.noDetails}</span>}
-                          </div>
-                        </>
-                      )
-                      const rowClass = "group grid gap-6 border-b border-white/10 py-7 last:border-b-0 lg:grid-cols-[minmax(14rem,1.05fr)_minmax(22rem,1.8fr)_11rem_3rem] lg:items-start lg:gap-6 lg:py-8"
-                      return <li key={item.slug} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link href={href} className={rowClass}>{row}</Link> : <div className={rowClass}>{row}</div>}</li>
-                    })}
-                  </ol>
-                </div>
-              </section>
-            ))}
-          </div>
-
-          {pricing.otherNote && <p className="max-w-3xl border-l border-brand pl-5 text-sm leading-relaxed text-white/50">{pricing.otherNote}</p>}
+          <div className="grid gap-7 border-b border-white/10 pb-10 lg:grid-cols-12 lg:items-end"><div className="lg:col-span-7"><p className="eyebrow">BOOKSY</p><h2 id="price-list-title" className="mt-6 type-h2 max-w-[16ch] text-balance">{copy.title}</h2></div><p className="max-w-2xl text-sm leading-relaxed text-white/52 lg:col-span-5 lg:text-base">{copy.intro}</p></div>
+          <div className="grid border-b border-white/10 lg:grid-cols-3 lg:divide-x lg:divide-white/10">{[[copy.noticePrice, copy.noticePriceText], [copy.noticeTime, copy.noticeTimeText], [copy.noticeCondition, copy.noticeConditionText]].map(([title, text]) => <div key={title} className="border-b border-white/10 py-7 last:border-b-0 lg:border-b-0 lg:px-8 lg:first:pl-0 lg:last:pr-0"><strong className="type-label text-brand">{title}</strong><p className="mt-3 max-w-sm text-sm leading-relaxed text-white/48">{text}</p></div>)}</div>
+          <PriceGroup id="mycie" title={copy.washTitle} intro={copy.washIntro} items={washItems} locale={locale} scopeFor={washScope} />
+          <p className="border-l border-brand py-1 pl-5 text-sm leading-relaxed text-white/52">{copy.coating}</p>
+          <PriceGroup id="detailing" title={copy.detailingTitle} intro={copy.detailingIntro} items={detailingItems} locale={locale} />
+          <PriceGroup id="pakiet-sprzedaz" title={copy.saleTitle} intro={copy.saleIntro} items={saleItems} locale={locale} />
         </div>
       </section>
     </SiteShell>

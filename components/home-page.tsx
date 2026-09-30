@@ -50,6 +50,68 @@ const packageSaleCopy: Record<Locale, { title: string; without: string; save: st
   uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", save: "На 20 PLN дешевше" },
 }
 
+const salesPackageCopy: Record<Locale, {
+  label: string
+  title: string
+  intro: string
+  standard: string
+  premium: string
+  standardItems: string[]
+  premiumItems: string[]
+  from: string
+  time: string
+  details: string
+}> = {
+  pl: {
+    label: "Pakiet Sprzedaż",
+    title: "Przygotuj auto do sprzedaży.",
+    intro: "Kompleksowo odświeżymy wnętrze i nadwozie, aby samochód prezentował się lepiej w ogłoszeniu i podczas oględzin.",
+    standard: "Standard",
+    premium: "Premium z korektą lakieru",
+    standardItems: ["Detailing wnętrza i nadwozia", "Pranie tapicerki lub pielęgnacja skór", "Ręczne woskowanie"],
+    premiumItems: ["Pełny zakres pakietu Standard", "Glinkowanie lakieru", "Korekta lakieru dobrana po oględzinach"],
+    from: "od",
+    time: "około 4 godz.",
+    details: "Zobacz zakres i ceny",
+  },
+  en: {
+    label: "Sales Package",
+    title: "Prepare your car for sale.",
+    intro: "We refresh the interior and bodywork so the car looks better in the listing and during viewings.",
+    standard: "Standard",
+    premium: "Premium with paint correction",
+    standardItems: ["Interior and exterior detailing", "Upholstery cleaning or leather care", "Hand waxing"],
+    premiumItems: ["Full Standard package", "Paint claying", "Paint correction matched after inspection"],
+    from: "from",
+    time: "approx. 4 hr",
+    details: "View scope and prices",
+  },
+  de: {
+    label: "Verkaufspaket",
+    title: "Bereiten Sie Ihr Auto für den Verkauf vor.",
+    intro: "Wir frischen Innenraum und Karosserie auf, damit das Auto im Inserat und bei der Besichtigung besser wirkt.",
+    standard: "Standard",
+    premium: "Premium mit Lackkorrektur",
+    standardItems: ["Innen- und Außendetailing", "Polster- oder Lederpflege", "Handwachs"],
+    premiumItems: ["Komplettes Standardpaket", "Lackkneten", "Lackkorrektur nach Besichtigung"],
+    from: "ab",
+    time: "ca. 4 Std.",
+    details: "Umfang und Preise ansehen",
+  },
+  uk: {
+    label: "Пакет для продажу",
+    title: "Підготуйте авто до продажу.",
+    intro: "Ми освіжимо салон і кузов, щоб автомобіль краще виглядав в оголошенні та під час огляду.",
+    standard: "Стандарт",
+    premium: "Преміум з корекцією лаку",
+    standardItems: ["Детейлінг салону та кузова", "Хімчистка або догляд за шкірою", "Ручне нанесення воску"],
+    premiumItems: ["Повний пакет Стандарт", "Очищення лаку глиною", "Корекція лаку після огляду"],
+    from: "від",
+    time: "близько 4 год.",
+    details: "Переглянути обсяг і ціни",
+  },
+}
+
 const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string }> = {
   pl: {
     myjnia: "Ręczne mycie oraz kompleksowa pielęgnacja wnętrza i karoserii.",
@@ -398,6 +460,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         <ServiceMenu locale={locale} />
         <WorkShowcase locale={locale} />
         <Packages locale={locale} />
+        <SalesPackage locale={locale} />
         <TeamStory locale={locale} />
         <Reviews locale={locale} />
         <HomeFaq locale={locale} />
@@ -827,6 +890,50 @@ function Packages({ locale }: { locale: Locale }) {
           })}
         </div>
         <p className="mt-7 text-xs leading-relaxed text-white/38">* {src.pricing.packagesNote}</p>
+      </div>
+    </section>
+  )
+}
+
+function SalesPackage({ locale }: { locale: Locale }) {
+  const copy = salesPackageCopy[locale]
+  const currency = locale === "pl" ? "zł" : "PLN"
+  const offers = [
+    { title: copy.standard, price: 1000, items: copy.standardItems },
+    { title: copy.premium, price: 1400, items: copy.premiumItems },
+  ]
+
+  return (
+    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="scroll-mt-24 border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-28">
+      <div className="home-shell grid overflow-hidden border-y border-white/10 lg:grid-cols-12">
+        <figure data-reveal="mask" className="home-photo-panel relative min-h-[22rem] overflow-hidden lg:col-span-5 lg:min-h-[42rem]">
+          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" className="scale-[1.02]" eager />
+          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/72 via-black/10 to-black/10" />
+          <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/90 px-5 py-4 text-[.6rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
+        </figure>
+
+        <div className="relative px-5 py-10 sm:px-9 sm:py-12 lg:col-span-7 lg:border-l lg:border-white/10 lg:p-[clamp(3rem,5vw,5.5rem)]">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-0 size-72 rounded-full bg-brand/[.08] blur-[90px]" />
+          <p className="home-kicker">{copy.label}</p>
+          <h2 id="sales-package-title" data-reveal="" className="mt-6 max-w-[14ch] font-display text-[clamp(2.35rem,4vw,4rem)] font-black uppercase leading-[1.05] tracking-[-.02em]">{copy.title}</h2>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/55">{copy.intro}</p>
+
+          <div className="relative mt-10 grid border-t border-white/12 sm:grid-cols-2 sm:divide-x sm:divide-white/10">
+            {offers.map((offer) => <article key={offer.title} className="border-b border-white/10 py-7 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
+              <h3 className="font-display text-2xl font-bold uppercase leading-[1.08] tracking-[-.01em]">{offer.title}</h3>
+              <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/58">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1.5 shrink-0 bg-brand" />{item}</li>)}</ul>
+              <div className="mt-7 flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
+                <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
+                <span className="flex items-center gap-2 text-[.6rem] font-bold uppercase tracking-[.12em] text-white/42"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
+              </div>
+            </article>)}
+          </div>
+
+          <div className="relative mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="home-button home-button-red">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark">{ui[locale].book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
+          </div>
+        </div>
       </div>
     </section>
   )
