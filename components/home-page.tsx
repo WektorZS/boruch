@@ -611,10 +611,12 @@ function HomeHero({ locale }: { locale: Locale }) {
           <div
             key={photo.id}
             className={cn(
-              "absolute inset-0",
-              transitionsReady && "transition-[opacity,transform] duration-[700ms] ease-out motion-reduce:transition-none",
-              transitionsReady && (index === activeSlide ? "scale-100 opacity-100" : "scale-[1.035] opacity-0"),
-            )}
+  "absolute inset-0",
+  transitionsReady &&
+    "transition-opacity duration-[1600ms] ease-in-out motion-reduce:transition-none",
+  transitionsReady &&
+    (index === activeSlide ? "opacity-100" : "opacity-0"),
+)}
           >
             <Photo
               id={photo.id}
