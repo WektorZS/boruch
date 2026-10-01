@@ -806,7 +806,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   </div>
 </div>
 
-      
+      </div>
 
         <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
           {copy.benefits.map(([title, text], index) => {
