@@ -748,31 +748,33 @@ function HomeHero({ locale }: { locale: Locale }) {
   aria-label={copy.reviewsLabel}
 >
   <div className="hero-editorial-bottom sm:hidden">
-    <div className="flex items-center justify-center gap-3 text-white">
-      <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
-        {followCopy[locale]}
-      </span>
+   <div className="flex items-center justify-center text-white">
+  <span className="mr-4 text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+    {followCopy[locale]}
+  </span>
 
-      <a
-        href={contact.facebook}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Facebook"
-        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-      >
-        <FacebookIcon className="size-5" />
-      </a>
+  <div className="flex items-center gap-1.5">
+    <a
+      href={contact.facebook}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+    >
+      <FacebookIcon className="size-5" />
+    </a>
 
-      <a
-        href={contact.instagram}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram"
-        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-      >
-        <InstagramIcon className="size-5" />
-      </a>
-    </div>
+    <a
+      href={contact.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+    >
+      <InstagramIcon className="size-5" />
+    </a>
+  </div>
+</div>
   </div>
 
   <div className="hero-trust-item">
