@@ -136,21 +136,6 @@ const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string }> = 
   },
 }
 
-const serviceVisuals: Record<ServiceSlug, { id: PhotoId; position: string }> = {
-  "mycie-zewnatrz": { id: "p46", position: "50% 55%" },
-  "czyszczenie-wnetrza": { id: "p43", position: "50% 50%" },
-  komplet: { id: "p11", position: "48% 55%" },
-  "pranie-tapicerki": { id: "p44", position: "50% 55%" },
-  "czyszczenie-skor": { id: "p68", position: "50% 50%" },
-  woskowanie: { id: "p39", position: "50% 55%" },
-  polerowanie: { id: "p21", position: "50% 58%" },
-  "korekta-lakieru": { id: "p20", position: "50% 58%" },
-  "powloka-ceramiczna": { id: "p58", position: "50% 55%" },
-  "folia-ppf": { id: "p52", position: "50% 55%" },
-  "przyciemnianie-szyb-i-lamp": { id: "p22", position: "50% 55%" },
-  "zmiana-koloru-dechroming": { id: "p51", position: "50% 55%" },
-}
-
 const editorialCopy = {
   pl: { previous: "Poprzedni slajd", next: "Następny slajd", pause: "Zatrzymaj slajdy", play: "Wznów slajdy", select: "Wybierz usługę", detail: "Poznaj usługę", why: "Każdy etap ręcznie.", studio: "Myjnia / Detailing / Szczecin", portfolio: "Wybrane realizacje", scope: "Zakres pielęgnacji", talk: "Porozmawiajmy o Twoim aucie." },
   en: { previous: "Previous slide", next: "Next slide", pause: "Pause slides", play: "Resume slides", select: "Choose a service", detail: "Explore the service", why: "Every stage by hand.", studio: "Car wash / Detailing / Szczecin", portfolio: "Selected work", scope: "Care included", talk: "Let's talk about your car." },
@@ -919,88 +904,169 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
-  const [activeService, setActiveService] = useState<ServiceSlug>("mycie-zewnatrz")
-  const [previousService, setPreviousService] = useState<ServiceSlug>("mycie-zewnatrz")
-  const [readyService, setReadyService] = useState<ServiceSlug>("mycie-zewnatrz")
-  const [category, setCategory] = useState<"myjnia" | "detailing">("myjnia")
-  const selectService = (slug: ServiceSlug) => {
-    if (slug === activeService) return
-    setPreviousService(readyService)
-    setActiveService(slug)
-  }
-  const groups = (["myjnia", "detailing"] as const).map((category, groupIndex) => ({
-    category,
-    title: src.services.groups[groupIndex]?.title ?? category,
-    description: serviceGroupCopy[locale][category],
-    items: serviceConfigs.filter((service) => service.category === category).map((service) => {
-      const summary = serviceSummary(locale, service.slug)
-      return {
-        slug: service.slug,
-        title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-        description: summary?.text ?? serviceGroupCopy[locale][category],
-        href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
-      }
+
+  const groups = (["myjnia", "detailing"] as const).map(
+    (category, groupIndex) => ({
+      category,
+      title: src.services.groups[groupIndex]?.title ?? category,
+      description: serviceGroupCopy[locale][category],
+      items: serviceConfigs
+        .filter((service) => service.category === category)
+        .map((service) => {
+          const summary = serviceSummary(locale, service.slug)
+
+          return {
+            slug: service.slug,
+            title:
+              locale === "pl"
+                ? service.navTitle
+                : (summary?.title ?? service.navTitle),
+            description:
+              summary?.text ?? serviceGroupCopy[locale][category],
+            href:
+              locale === "pl"
+                ? `/${service.slug}`
+                : routes[locale].services,
+          }
+        }),
     }),
-  }))
-  const activeItem = groups.flatMap(group => group.items).find(item => item.slug === activeService) ?? groups[0].items[0]
-  const visual = serviceVisuals[activeService]
-  const activeGroup = groups.find(group => group.category === category) ?? groups[0]
-  const changeCategory = (next: "myjnia" | "detailing") => {
-    setCategory(next)
-    selectService(serviceConfigs.find(service => service.category === next)!.slug)
-  }
+  )
 
   return (
-    <section id="services" aria-labelledby="services-title" className="section-xl service-explorer bg-[#111112]">
+    <section
+      id="services"
+      aria-labelledby="services-title"
+      className="section-xl bg-[#111112]"
+    >
       <div className="home-shell">
-        <div className="mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
-            <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="editorial-display mt-6">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+            <p className="home-kicker text-white/62">
+              {t.nav.services}
+            </p>
+
+            <h2
+              id="services-title"
+              data-reveal=""
+              className="editorial-display mt-6"
+            >
+              {src.services.groups
+                .map((group) => group.title)
+                .join(" / ")}
+            </h2>
           </div>
+
           <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
-            <Link prefetch={false} href={routes[locale].services} className="mt-6 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]">
-              {t.allServices}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+            <p className="max-w-md text-base leading-relaxed text-white/58">
+              {copy.servicesIntro}
+            </p>
+
+            <Link
+              prefetch={false}
+              href={routes[locale].services}
+              className="mt-6 inline-flex w-fit items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]"
+            >
+              {t.allServices}
+
+              <ArrowRight
+                className="size-4 text-brand"
+                aria-hidden="true"
+              />
             </Link>
           </div>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="min-w-0 lg:col-span-5">
-            <div className="explorer-categories" aria-label={editorialCopy[locale].select}>
-              {groups.map(group => <button key={group.category} type="button" aria-pressed={category === group.category} onClick={() => changeCategory(group.category)}>{group.title}</button>)}
+        <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-white/15">
+          {groups.map((group, groupIndex) => (
+            <div
+              key={group.category}
+              data-reveal=""
+              className={cn(
+                "min-w-0 py-10 lg:py-14",
+                groupIndex === 0
+                  ? "border-b border-white/15 lg:border-b-0 lg:pr-12 xl:pr-16"
+                  : "lg:pl-12 xl:pl-16",
+              )}
+            >
+              <div className="mb-8">
+                <div className="flex items-baseline justify-between gap-6">
+                  <h3 className="font-display text-3xl font-semibold uppercase leading-none tracking-tight text-white sm:text-4xl">
+                    {group.title}
+                  </h3>
+
+                  <span
+                    className="font-mono text-[.65rem] font-bold uppercase tracking-[.18em] text-brand"
+                    aria-hidden="true"
+                  >
+                    {String(group.items.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/58 sm:text-base">
+                  {group.description}
+                </p>
+              </div>
+
+              <ol className="border-t border-white/15">
+                {group.items.map((item) => {
+                  const serviceIndex =
+                    serviceConfigs.findIndex(
+                      service => service.slug === item.slug,
+                    ) + 1
+
+                  return (
+                    <li
+                      key={item.slug}
+                      className="border-b border-white/15"
+                    >
+                      <Link
+                        prefetch={false}
+                        href={item.href}
+                        className="group flex min-h-20 items-center gap-4 py-5 sm:gap-6"
+                      >
+                        <span className="w-7 shrink-0 font-mono text-[.65rem] font-bold tracking-[.12em] text-white/35 transition-colors group-hover:text-brand group-focus-visible:text-brand">
+                          {String(serviceIndex).padStart(2, "0")}
+                        </span>
+
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-display text-xl font-semibold leading-tight text-white/82 transition-colors group-hover:text-white group-focus-visible:text-white sm:text-2xl">
+                            {item.title}
+                          </span>
+
+                          <span className="mt-2 hidden max-w-xl text-sm leading-relaxed text-white/45 sm:block">
+                            {item.description}
+                          </span>
+                        </span>
+
+                        <ArrowUpRight
+                          className="size-4 shrink-0 text-white/35 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ol>
+
+              <Link
+                prefetch={false}
+                href={routes[locale].services}
+                className="editorial-link mt-7 w-fit"
+              >
+                {t.allServices}
+
+                <ArrowUpRight
+                  className="size-4 text-brand"
+                  aria-hidden="true"
+                />
+              </Link>
             </div>
-            <p className="mb-7 mt-5 max-w-md text-sm leading-relaxed text-white/65">{activeGroup.description}</p>
-            <label className="block lg:hidden"><span className="sr-only">{editorialCopy[locale].select}</span><select value={activeService} onChange={event => selectService(event.target.value as ServiceSlug)} className="mb-6 w-full border-b border-white/25 bg-transparent py-4 text-base text-white">{activeGroup.items.map(item => <option key={item.slug} value={item.slug}>{item.title}</option>)}</select></label>
-            <ol className="hidden border-t border-white/15 lg:block">
-              {activeGroup.items.map(item => <li key={item.slug}>
-                <button type="button" onMouseEnter={() => selectService(item.slug)} onFocus={() => selectService(item.slug)} onClick={() => selectService(item.slug)} aria-pressed={activeService === item.slug} className="explorer-service">
-                  <span className="type-index text-xs">{String(serviceConfigs.findIndex(service => service.slug === item.slug) + 1).padStart(2, "0")}</span>
-                  <span>{item.title}</span><ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
-                </button>
-              </li>)}
-            </ol>
-          </div>
-          <div className="min-w-0 lg:col-span-7">
-          <figure className="explorer-stage relative aspect-[4/3] overflow-hidden bg-[#171718] lg:aspect-[5/4]">
-            {previousService !== activeService && <Photo id={serviceVisuals[previousService].id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={serviceVisuals[previousService].position} />}
-            <div key={activeService} onLoadCapture={() => setReadyService(activeService)} className={cn("absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none", readyService === activeService ? "opacity-100" : "opacity-0")}>
-              <Photo id={visual.id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={visual.position} eager={activeService !== "mycie-zewnatrz"} />
-            </div>
-            <figcaption className="absolute left-0 top-0 bg-[#111112] pb-3 pr-5 text-[.65rem] uppercase tracking-[.18em] text-white/70">{activeGroup.title} / BORUCH</figcaption>
-          </figure>
-          <div key={activeService} className="explorer-description home-hero-copy-animated mt-6 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
-            <div><h3 className="font-display text-2xl font-semibold leading-snug">{activeItem.title}</h3><p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">{activeItem.description}</p></div>
-            <Link prefetch={false} href={activeItem.href} className="editorial-link w-fit">{editorialCopy[locale].detail}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
-          </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
-
 function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
