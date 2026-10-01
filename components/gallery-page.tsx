@@ -13,16 +13,16 @@ export function GalleryPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="gallery">
 
 
-      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#0a0a0b] pt-(--header-h)">
-        <div className="shell-wide grid gap-10 pb-12 pt-20 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-20 lg:pt-24">
-          <div className="lg:col-span-5">
+      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#080809]">
+        <div className="shell-wide page-cover-grid">
+          <div className="min-w-0">
             <p className="eyebrow mb-7">{t.nav.gallery}</p>
-            <h1 id="page-title" className="page-hero-title type-h1">{src.home.projectsTitle}</h1>
+            <h1 id="page-title" className="page-cover-title">{t.nav.gallery}<span className="text-brand">.</span></h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{src.gallery.sub}</p>
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.home.projectsText}</p>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="link-draw mt-8 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="editorial-link mt-8"><InstagramIcon className="size-4 text-brand" />Instagram</a>
           </div>
-          <figure className="editorial-photo relative aspect-[4/3] overflow-hidden lg:col-span-7 lg:aspect-[16/11]">
+          <figure className="editorial-photo relative aspect-[4/3] overflow-hidden lg:aspect-[16/11]">
             <Photo id="p52" priority sizes="(min-width: 1600px) 850px, (min-width: 1024px) 56vw, 92vw" position="54% 58%" />
             <figcaption className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/65 to-transparent px-6 pb-5 pt-12 type-label text-white/80">Boruch Myjnia / PAZIM / Szczecin</figcaption>
           </figure>

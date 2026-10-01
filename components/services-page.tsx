@@ -81,7 +81,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
       items: services.filter(service => service.category === (group.title.toLowerCase() === "myjnia" || group === src.services.groups[0] ? "myjnia" : "detailing")).map(service => {
         const item = serviceSummary(locale, service.slug)
         const polishingTitle = { pl: "Polerowanie", en: "Polishing", de: "Polieren", uk: "Полірування" }[locale]
-        return { id: service.slug, title: service.slug === "polerowanie" ? polishingTitle : (item?.title ?? service.navTitle), text: item?.text ?? service.source.tagline, href: locale === "pl" ? `/${service.slug}` : null }
+        return { id: service.slug, title: locale === "pl" ? service.navTitle : service.slug === "polerowanie" ? polishingTitle : (item?.title ?? service.navTitle), text: item?.text ?? service.source.tagline, href: locale === "pl" ? `/${service.slug}` : null }
       }),
     })),
     {
@@ -98,7 +98,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
         <div className="shell-wide service-index-cover">
           <div className="min-w-0">
             <p className="eyebrow mb-7">{copy.intro}</p>
-            <h1 id="page-title" className="cinematic-title">{t.nav.services}<span className="text-brand">.</span></h1>
+            <h1 id="page-title" className="page-cover-title">{t.nav.services}<span className="text-brand">.</span></h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/75">{copy.introText}</p>
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.meta.services.description}</p>
             <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-8">{t.pricing}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></Link>
@@ -126,7 +126,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
                 <p className="mt-5 max-w-md text-base leading-relaxed text-white/65">{additional ? category.additional : groupIndex === 0 ? category.wash : category.detailing}</p>
                 <Link prefetch={false} href={routes[locale].pricing} className="group mt-7 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white/80 hover:text-white"><span className="link-draw">{category.pricing}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></Link>
               </div>
-              {!additional && <figure data-reveal="mask"><Photo id={visual} sizes="(min-width: 1024px) 55vw, 92vw" position={groupIndex === 1 ? "50% 56%" : "55% 50%"} /><figcaption className="absolute bottom-0 right-0 bg-[#101011] pl-5 pt-3 text-[.65rem] uppercase tracking-[.14em] text-white/65">{category.photo}</figcaption></figure>}
+              {!additional && <figure data-reveal="mask"><Photo id={visual} sizes="(min-width: 1024px) 55vw, 92vw" position={groupIndex === 1 ? "50% 60%" : "55% 50%"} /><figcaption className="absolute bottom-0 right-0 bg-[#101011] pl-5 pt-3 text-[.65rem] uppercase tracking-[.14em] text-white/65">{category.photo}</figcaption></figure>}
             </div>
             <ul className="border-b border-white/15">
               {group.items.map((item, index) => {

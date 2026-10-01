@@ -129,9 +129,9 @@ function PriceScope({ item, scope, locale }: { item: PriceItem; scope: string[];
 function WashMatrix({ locale, scopeFor }: { locale: Locale; scopeFor: (item: PriceItem) => string[] }) {
   const copy = tableCopy[locale]
   const currency = locale === "pl" ? "zł" : "PLN"
-  return <section id="mycie" aria-labelledby="mycie-title" className="scroll-mt-28 border-b border-white/10 py-12 lg:py-14">
+  return <section id="mycie" aria-labelledby="mycie-title" className="pricing-section border-b border-white/10 py-12 lg:py-14">
     <div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
-      <h3 id="mycie-title" className="type-h2 lg:col-span-7">{copy.washTitle}</h3>
+      <h3 id="mycie-title" className="editorial-display lg:col-span-7">{copy.washTitle}</h3>
       <p className="max-w-xl text-base leading-relaxed text-white/65 lg:col-span-5">{copy.washIntro}</p>
     </div>
     <table className="pricing-matrix w-full table-fixed border-collapse text-left">
@@ -162,9 +162,9 @@ function PriceGroup({ id, title, intro, items, locale, scopeFor }: { id: string;
   const copy = tableCopy[locale]
   const currency = locale === "pl" ? "zł" : "PLN"
   return (
-    <section id={id} aria-labelledby={id + "-title"} className="scroll-mt-28 border-b border-white/10 py-12 last:border-b-0 lg:py-14">
+    <section id={id} aria-labelledby={id + "-title"} className="pricing-section border-b border-white/10 py-12 last:border-b-0 lg:py-14">
       <div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
-        <h3 id={id + "-title"} className="type-h2 lg:col-span-7">{title}</h3>
+        <h3 id={id + "-title"} className="editorial-display lg:col-span-7">{title}</h3>
         <p className="max-w-xl text-sm leading-relaxed text-white/65 lg:col-span-5">{intro}</p>
       </div>
       <table className="price-catalog-table block w-full table-fixed border-collapse text-left lg:table">
@@ -218,14 +218,14 @@ export function PricingPage({ locale }: { locale: Locale }) {
   return (
     <SiteShell locale={locale} page="pricing">
 
-      <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#101011] pt-(--header-h)">
-        <div className="shell-wide grid items-center gap-10 pb-12 pt-24 sm:pb-16 lg:grid-cols-12 lg:gap-16 lg:pt-28">
-          <div className="lg:col-span-8"><p className="eyebrow mb-5">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-hero-title type-h1">{t.nav.pricing}</h1><p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/65">{copy.intro}</p></div>
-          <div className="lg:col-span-4"><div className="frame editorial-photo aspect-[16/8] sm:aspect-[16/7] lg:aspect-[4/3]"><Photo id="p51" priority sizes="(min-width: 1600px) 450px, (min-width: 1024px) 30vw, 92vw" position="55% 58%" /></div></div>
+      <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
+        <div className="shell-wide page-cover-grid page-cover-pricing">
+          <div className="min-w-0"><p className="eyebrow mb-7">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1><p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/65">{copy.intro}</p></div>
+          <div><div className="editorial-photo relative aspect-[16/10] overflow-hidden"><Photo id="p47" priority sizes="(min-width: 1024px) 512px, 92vw" position="50% 52%" /></div></div>
         </div>
       </section>
 
-      <nav aria-label={copy.title} className="sticky top-(--header-h) z-30 border-b border-white/10 bg-[#101011]">
+      <nav aria-label={copy.title} className="sticky top-(--header-h-compact) z-30 border-b border-white/10 bg-[#101011]">
         <ul className="shell-wide grid grid-cols-3 gap-3 py-2 sm:flex sm:gap-8">
           {[["mycie", copy.washTitle], ["detailing", copy.detailingTitle], ["pakiet-sprzedaz", copy.saleTitle]].map(([id, label]) => <li key={id}><a href={`#${id}`} className="group flex min-h-12 items-center gap-2 text-xs font-semibold leading-relaxed text-white/75 transition-colors hover:text-white sm:text-sm"><span className="link-draw">{label}</span><ArrowRight className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" /></a></li>)}
         </ul>

@@ -67,11 +67,11 @@ export function ContactPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="contact">
 
 
-      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#0a0a0b] pt-(--header-h)">
-        <div className="shell-wide grid gap-10 pb-12 pt-20 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-20 lg:pt-24">
-          <div className="lg:col-span-6">
+      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#080809]">
+        <div className="shell-wide page-cover-grid">
+          <div className="min-w-0">
             <p className="eyebrow mb-7">{t.nav.contact}</p>
-            <h1 id="page-title" className="page-hero-title type-h1">{t.nav.contact}</h1>
+            <h1 id="page-title" className="page-cover-title">{t.nav.contact}<span className="text-brand">.</span></h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{copy.directText}</p>
             <div className="mt-9 border-t border-white/10 pt-6">
               <p className="type-label text-white/60">{copy.direct}</p>
@@ -86,8 +86,8 @@ export function ContactPage({ locale }: { locale: Locale }) {
               <p className="mt-4 text-sm leading-relaxed text-white/60">{copy.booking}</p>
             </div>
           </div>
-          <figure className="editorial-photo relative aspect-[16/11] overflow-hidden lg:col-span-5 lg:col-start-8 lg:aspect-[4/5]">
-            <Photo id="p33" priority sizes="(min-width: 1600px) 640px, (min-width: 1024px) 42vw, 92vw" position="50% 64%" />
+          <figure className="page-cover-portrait editorial-photo relative aspect-[4/5] w-full overflow-hidden">
+            <Photo id="p33" priority sizes="(min-width: 1024px) 432px, 92vw" position="50% 64%" />
             <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 bg-linear-to-t from-black/80 to-transparent px-6 pb-5 pt-16">
               <span className="type-label text-white/85">{copy.level}</span><span className="text-4xl font-semibold leading-none text-white">-2</span>
             </figcaption>
@@ -95,12 +95,12 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section id="wycena" aria-labelledby="contact-form-title" className="border-b border-white/10 bg-[#101011] py-16 sm:py-20 lg:py-28">
+      <section id="wycena" aria-labelledby="contact-form-title" className="section-lg border-b border-white/10 bg-[#101011]">
         <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
               <p className="eyebrow">{copy.formLabel}</p>
-              <h2 id="contact-form-title" data-reveal="" className="mt-7 type-h2 max-w-full">{copy.formTitle}</h2>
+              <h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7 max-w-full">{copy.formTitle}</h2>
               <p className="mt-6 max-w-md text-base leading-relaxed text-white/65">{copy.formText}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="link-draw inline-flex min-h-11 items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white/75"><FacebookIcon className="size-4 text-brand" />Facebook</a>
@@ -114,16 +114,16 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section aria-labelledby="location-title" className="relative overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-24">
+      <section aria-labelledby="location-title" className="section-lg relative overflow-hidden border-b border-white/10 bg-[#080809]">
         <div className="shell-wide relative grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="flex flex-col justify-center lg:col-span-5">
             <p className="eyebrow">{copy.location}</p>
-            <h2 id="location-title" className="mt-7 type-h2 max-w-full">{copy.locationTitle}</h2>
+            <h2 id="location-title" className="editorial-display mt-7 max-w-full">{copy.locationTitle}</h2>
             <p className="mt-6 max-w-md border-l-2 border-brand pl-5 text-base leading-relaxed text-white/80">{copy.directions}</p>
             <address className="mt-7 not-italic text-sm leading-relaxed text-white/70">
               {src.address.lines.map((line) => <span key={line} className="block">{line}</span>)}
             </address>
-            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="group mt-7 inline-flex min-h-11 w-fit items-center gap-3 text-xs font-bold uppercase tracking-widest text-white"><span className="link-draw">{t.openMap}</span><ArrowRight className="arrow-shift size-4 text-brand" /></a>
+            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="editorial-link mt-7 w-fit">{t.openMap}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></a>
           </div>
           <div className="relative min-h-80 overflow-hidden lg:col-span-7 lg:min-h-96">
             <iframe

@@ -128,7 +128,7 @@ function ServiceHero({ service }: { service: Service }) {
             <div className="mt-5 flex flex-wrap items-center gap-6"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><a href="#service-process" className="editorial-link">{t.process}<ArrowRight className="size-4" aria-hidden="true" /></a></div>
           </div>
         </div>
-        <figure className="service-cover-visual editorial-photo enter-unmask"><Photo id={service.hero} priority sizes="(min-width: 640px) 56vw, 92vw" position={art?.heroPosition ?? "50% 56%"} /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-6 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / {group}</figcaption></figure>
+        <figure className="service-cover-visual editorial-photo enter-unmask"><Photo id={service.hero} priority sizes="(min-width: 1600px) 888px, (min-width: 1024px) 56vw, (min-width: 640px) 46vw, 92vw" position={art?.heroPosition ?? "50% 56%"} /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-6 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / {group}</figcaption></figure>
       </div>
     </section>
   )
@@ -162,7 +162,7 @@ function ServiceProcess({ service }: { service: Service }) {
           <div className="service-process-image">
             <p className="eyebrow">{t.process}</p>
             <h2 id="process-title" data-reveal="" className="editorial-display mt-5">{processTitle ?? t.process}</h2>
-            <figure data-reveal="mask" className="relative mt-8 aspect-[4/5] overflow-hidden"><Photo id={service.frames[0]} sizes="(min-width: 1024px) 36vw, 92vw" position={serviceArtDirection[service.slug]?.detailPosition} /></figure>
+            <figure data-reveal="mask" className="relative mt-8 aspect-[4/5] overflow-hidden"><Photo id={service.frames[0]} sizes="(min-width: 1600px) 520px, (min-width: 640px) 42vw, 92vw" position={serviceArtDirection[service.slug]?.detailPosition} /></figure>
           </div>
           <ol className="service-process-steps">
             {steps.map((step, index) => <li key={step.title} data-reveal=""><span className="type-index pt-1 text-sm text-brand">{formatIndex(index + 1)}</span><div><h3>{step.title}</h3><div className="mt-4 grid gap-4">{step.body.map((paragraph, i) => <p key={i} className="type-body text-white/65">{paragraph}</p>)}</div></div></li>)}
@@ -183,7 +183,7 @@ function StepList({ steps, start = 1, stepLabel, compact = false }: { steps: Ser
             <span className="type-index text-xl text-white/65 transition-colors group-hover:text-highlight lg:text-2xl">{formatIndex(start + i)}</span>
             <span className="type-label text-ash">{stepLabel}</span>
           </p>
-          <h3 className={cn("text-pretty md:col-span-4", compact ? "type-h3" : "type-h3 lg:text-[1.75rem] lg:leading-tight")}>{step.title}</h3>
+          <h3 className={cn("text-pretty font-display font-semibold leading-[1.3] md:col-span-4", compact ? "text-lg" : "text-xl lg:text-2xl")}>{step.title}</h3>
           <div className="flex flex-col gap-4 md:col-span-6">{step.body.map((para, j) => <p key={j} className="type-body text-pretty text-bone/75">{para}</p>)}</div>
         </li>
       ))}
@@ -283,9 +283,9 @@ function ServiceRelated({ service }: { service: Service }) {
           {neighbours.map((item) => (
             <li key={item.slug} className="bg-background">
               <Link prefetch={false} href={`/${item.slug}`} className="group relative flex min-h-56 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-72 lg:p-8">
-                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-65 transition-opacity duration-700 group-hover:opacity-85 group-focus-visible:opacity-85"><Photo id={item.hero} sizes="(min-width: 1600px) 730px, (min-width: 768px) 46vw, 92vw" className="scale-[1.03] transition-transform duration-1000 group-hover:scale-100 group-focus-visible:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-black/10" /></span>
+                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-90 transition-opacity duration-700 group-hover:opacity-100 group-focus-visible:opacity-100"><Photo id={item.hero} sizes="(min-width: 1600px) 730px, (min-width: 768px) 46vw, 92vw" className="scale-[1.03] transition-transform duration-700 group-hover:scale-100 group-focus-visible:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/10" /></span>
                 <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
-                <span className="type-h3 relative max-w-full text-balance">{item.navTitle}</span>
+                <span className="relative max-w-full text-pretty font-display text-xl font-semibold leading-[1.3] sm:text-2xl">{item.navTitle}</span>
               </Link>
             </li>
           ))}

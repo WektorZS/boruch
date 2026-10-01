@@ -43,7 +43,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
           </a>
           <ul aria-label={t.language} className="mt-7 flex flex-wrap gap-2">
             {localeOrder.map((code) => (
-              <li key={code}><Link prefetch={false} href={alternates[code]} hrefLang={localeLabels[code].htmlLang} lang={localeLabels[code].htmlLang} aria-label={`${localeLabels[code].short} - ${localeLabels[code].name}`} aria-current={code === locale ? "true" : undefined} className="grid h-9 min-w-10 place-items-center border border-white/12 px-2 text-[.72rem] font-bold text-white/65 transition-colors hover:border-white/30 hover:text-white aria-[current=true]:border-white/35 aria-[current=true]:bg-white aria-[current=true]:text-black">{localeLabels[code].short}</Link></li>
+              <li key={code}><Link prefetch={false} href={alternates[code]} hrefLang={localeLabels[code].htmlLang} lang={localeLabels[code].htmlLang} aria-label={`${localeLabels[code].short} - ${localeLabels[code].name}`} aria-current={code === locale ? "true" : undefined} className="grid h-10 min-w-12 place-items-center border border-white/12 px-3 text-[.72rem] font-medium text-white/65 transition-colors hover:border-white/30 hover:text-white aria-[current=true]:border-white/30 aria-[current=true]:bg-white/10 aria-[current=true]:text-bone">{localeLabels[code].short}</Link></li>
             ))}
           </ul>
         </div>

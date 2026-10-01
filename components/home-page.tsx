@@ -571,14 +571,14 @@ function HomeHero({ locale }: { locale: Locale }) {
           <div
             key={photo.id}
             className={cn(
-              "absolute inset-0 transition-[opacity,transform] duration-[1400ms] ease-out motion-reduce:transition-none",
+              "absolute inset-0 transition-[opacity,transform] duration-[1000ms] ease-out motion-reduce:transition-none",
               index === activeSlide ? "scale-100 opacity-100" : "scale-[1.035] opacity-0",
             )}
           >
             <Photo
               id={photo.id}
               priority={index === 0}
-              sizes="100vw"
+              sizes="(min-width: 1024px) 66vw, (min-width: 640px) 82vw, 100vw"
               position={photo.position}
               className="home-hero-photo saturate-[.88] contrast-[1.04]"
             />
@@ -665,7 +665,7 @@ function WhyBoruch({ locale }: { locale: Locale }) {
           <Photo id="p60" sizes="(min-width: 1024px) 51vw, 92vw" position="50% 52%" />
           <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-6 pb-6 pt-16 text-xs tracking-widest text-white/75">BORUCH MYJNIA / SZCZECIN</figcaption>
         </figure>
-        <figure className="why-editorial-detail relative aspect-[4/3] overflow-hidden" data-reveal="mask"><Photo id="p43" sizes="(min-width: 1024px) 22vw, 45vw" position="50% 58%" /></figure>
+        <figure className="why-editorial-detail relative aspect-[4/3] overflow-hidden" data-reveal="mask"><Photo id="p00" sizes="(min-width: 1024px) 22vw, 45vw" position="50% 40%" /></figure>
         <div className="why-editorial-story">
           <p className="max-w-lg text-lg leading-relaxed text-white/80">{copy.whyIntro}</p>
           <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/65">{src.home.teamParas[2]}</p>
@@ -805,9 +805,9 @@ function Packages({ locale }: { locale: Locale }) {
         <div className="grid gap-7 border-b border-white/12 pb-7 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="home-kicker">{t.pricing}</p>
-            <h2 id="packages-title" data-reveal="" className="mt-6 font-display text-[clamp(1.85rem,2.75vw,3rem)] font-black uppercase leading-[1.14] tracking-[-.02em]">{src.home.packagesTitle}</h2>
+            <h2 id="packages-title" data-reveal="" className="editorial-display mt-6">{src.home.packagesTitle}</h2>
           </div>
-          <Link prefetch={false} href={routes[locale].pricing} className="inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] lg:col-span-4 lg:col-start-9 lg:justify-self-end">
+          <Link prefetch={false} href={routes[locale].pricing} className="editorial-link lg:col-span-4 lg:col-start-9 lg:justify-self-end">
             {src.home.moreLink}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
@@ -821,7 +821,7 @@ function Packages({ locale }: { locale: Locale }) {
               <article key={pkg.title} data-reveal="" className={cn("editorial-price-row", featured && "editorial-price-featured")}>
                 <div>
                   {pkg.popular && <span className="mb-3 block text-xs font-medium uppercase tracking-[.16em] text-brand">{pkg.popular}</span>}
-                  <h3 className="max-w-full font-display text-[clamp(1.4rem,1.8vw,1.85rem)] font-bold uppercase leading-[1.16] tracking-normal">{pkg.title}</h3>
+                  <h3 className="max-w-full font-display text-[clamp(1.4rem,1.8vw,1.85rem)] font-semibold leading-[1.25] tracking-normal">{pkg.title}</h3>
                   <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/65">{pkg.tagline}</p>
                 </div>
                 <div>
@@ -864,22 +864,21 @@ function SalesPackage({ locale }: { locale: Locale }) {
   ]
 
   return (
-    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="scroll-mt-24 border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-28">
+    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
       <div className="home-shell grid overflow-hidden border-y border-white/10 lg:grid-cols-12">
         <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[18rem] overflow-hidden lg:col-span-5 lg:min-h-[34rem]">
-          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" className="scale-[1.02]" />
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/72 via-black/10 to-black/10" />
+          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" />
           <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
         </figure>
 
         <div className="relative px-5 py-10 sm:px-9 sm:py-12 lg:col-span-7 lg:border-l lg:border-white/10 lg:p-[clamp(3rem,5vw,5.5rem)]">
           <p className="home-kicker">{copy.label}</p>
-          <h2 id="sales-package-title" data-reveal="" className="mt-6 font-display text-[clamp(1.85rem,2.75vw,3rem)] font-black uppercase leading-[1.14] tracking-[-.02em]">{copy.title}</h2>
+          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/55">{copy.intro}</p>
 
           <div className="relative mt-10 grid border-t border-white/12 sm:grid-cols-2 sm:divide-x sm:divide-white/10">
             {offers.map((offer) => <article key={offer.title} className="border-b border-white/10 py-7 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
-              <h3 className="font-display text-xl font-bold uppercase leading-[1.2] tracking-[-.01em]">{offer.title}</h3>
+              <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
               <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/58">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1.5 shrink-0 bg-brand" />{item}</li>)}</ul>
               <div className="mt-7 flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
                 <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
@@ -909,12 +908,11 @@ function TeamStory({ locale }: { locale: Locale }) {
   ].filter(Boolean)
 
   return (
-    <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-28">
+    <section aria-labelledby="team-title" className="section-lg border-y border-white/10 bg-[#111112]">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
           <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[3/4] self-start overflow-hidden">
             <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
-            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
             <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
           </figure>
 
@@ -930,13 +928,13 @@ function TeamStory({ locale }: { locale: Locale }) {
             <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
 
             <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
-              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
                 <FacebookIcon className="size-5" />
               </a>
-              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
                 <InstagramIcon className="size-5" />
               </a>
-              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center border border-white/14 text-white/65 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
                 <MapPin className="size-4" aria-hidden="true" />
               </a>
               <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
@@ -1078,7 +1076,7 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-10 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-14 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+        <div className="relative mt-6 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-10 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
           <div ref={desktopEmblaRef} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
             <div className="-ml-3 flex touch-pan-y items-center py-5 md:-ml-5 md:py-8">
               {copy.reviews.map((review, index) => {
@@ -1170,18 +1168,18 @@ function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="faq-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
+    <section aria-labelledby="faq-title" className="section-lg border-b border-white/10 bg-[#111112]">
       <div className="home-shell grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="home-kicker">{copy.faqLabel}</p>
-          <h2 id="faq-title" data-reveal="" className="home-section-title mt-7">{copy.faqTitle}</h2>
+          <h2 id="faq-title" data-reveal="" className="editorial-display mt-7">{copy.faqTitle}</h2>
           <p className="mt-7 max-w-sm text-base leading-relaxed text-white/65">{copy.faqIntro}</p>
         </div>
 
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-semibold normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-medium normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span>{question}</span>
                 <span className="grid size-6 shrink-0 place-items-center text-brand transition-transform group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
@@ -1201,6 +1199,7 @@ function Location({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const slide = src.slides[3]
   const copy = homeCopy[locale]
+  const locationTitle = { pl: "W centrum Szczecina", en: "In central Szczecin", de: "Im Zentrum von Szczecin", uk: "У центрі Щецина" }[locale]
 
   return (
     <section aria-labelledby="location-title" className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-20">
@@ -1214,7 +1213,7 @@ function Location({ locale }: { locale: Locale }) {
           <div className="relative flex flex-col justify-between overflow-hidden bg-[#111112] p-8 sm:p-10 lg:min-h-80">
           <div>
             <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="mt-6 font-display text-[clamp(1.8rem,2.5vw,2.65rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{slide.title} {slide.sub}</h2>
+            <h2 id="location-title" data-reveal="" className="mt-6 font-display text-[clamp(1.8rem,2.5vw,2.65rem)] font-semibold leading-[1.2] tracking-normal">{locationTitle}</h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
           </div>
           <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">

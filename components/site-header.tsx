@@ -82,11 +82,11 @@ export function SiteHeader({
       <header
         data-scrolled={scrolled}
         className={cn(
-          "group/header fixed inset-x-0 top-0 z-(--z-header) border-b border-white/10 bg-[#080809] transition-colors duration-500",
+          "group/header fixed inset-x-0 top-0 z-(--z-header) border-b border-white/10 bg-[#080809] transition-colors duration-300",
           "data-[scrolled=true]:bg-ink-2",
         )}
       >
-        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-4 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-4 transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
           <Wordmark href={homeHref} label={homeLabel} />
 
           <nav aria-label={labels.navigation} className="hidden lg:ml-auto lg:block">
@@ -163,10 +163,10 @@ export function SiteHeader({
         data-open={open}
         className={cn(
           "group/menu fixed inset-0 z-(--z-menu) flex flex-col overflow-hidden bg-ink-2 lg:hidden",
-          "invisible opacity-0 transition-[opacity,visibility] duration-500 ease-(--ease-out) data-[open=true]:visible data-[open=true]:opacity-100",
+          "invisible opacity-0 transition-[opacity,visibility] duration-300 ease-(--ease-out) data-[open=true]:visible data-[open=true]:opacity-100",
         )}
       >
-        <div className="shell-wide relative flex h-(--header-h-compact) items-center justify-between border-b border-line">
+        <div className="shell-wide relative flex h-(--header-h-compact) shrink-0 items-center justify-between border-b border-line">
           <Wordmark href={homeHref} label={homeLabel} />
           <button ref={closeRef} type="button" onClick={close} className="group flex min-h-11 items-center gap-3">
             <span className="type-label text-bone">{labels.close}</span>
@@ -185,9 +185,9 @@ export function SiteHeader({
                   href={item.href}
                   onClick={() => setOpen(false)}
                   aria-current={item.active ? "page" : undefined}
-                  style={{ transitionDelay: open ? `${80 + index * 45}ms` : "0ms" }}
+                  style={{ transitionDelay: open ? `${40 + index * 30}ms` : "0ms" }}
                   className={cn(
-                    "group flex min-h-14 items-center justify-between gap-4 py-3.5 transition-[transform,opacity] duration-500 ease-(--ease-out)",
+                    "group flex min-h-14 items-center justify-between gap-4 py-3.5 transition-[transform,opacity] duration-300 ease-(--ease-out)",
                     "translate-y-4 opacity-0 group-data-[open=true]/menu:translate-y-0 group-data-[open=true]/menu:opacity-100",
                   )}
                 >
@@ -212,7 +212,7 @@ export function SiteHeader({
                   aria-label={`${lang.short} - ${lang.name}`}
                   aria-current={lang.active ? "true" : undefined}
                   onClick={() => setOpen(false)}
-                  className="type-label flex h-10 min-w-12 items-center justify-center border border-line px-3 text-ash transition-colors hover:border-line-strong hover:text-bone aria-[current=true]:border-brand aria-[current=true]:text-bone"
+                  className="type-label flex h-10 min-w-12 items-center justify-center border border-line px-3 text-ash transition-colors hover:border-line-strong hover:text-bone aria-[current=true]:border-white/30 aria-[current=true]:bg-white/10 aria-[current=true]:text-bone"
                 >
                   {lang.short}
                 </Link>

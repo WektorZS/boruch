@@ -348,9 +348,9 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
               {editing && <button type="button" onClick={() => setEditing(false)} aria-label={t.close} className="grid size-10 shrink-0 place-items-center border border-white/12 text-white/58 transition-colors hover:border-brand hover:bg-brand hover:text-white"><X className="size-5" /></button>}
             </div>
 
-            <div className="mt-5 flex items-center justify-between gap-3 border border-white/10 bg-black/20 p-3">
-              <span className="hidden text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65 min-[360px]:block">{t.languageLabel}</span>
-              <div className="grid grid-cols-4 gap-1" role="group" aria-label={t.languageLabel}>
+            <div className="mt-5 flex flex-col gap-3 border-y border-white/10 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-[.72rem] font-medium uppercase tracking-[.12em] text-white/65">{t.languageLabel}</span>
+              <div className="grid w-full grid-cols-4 gap-2 sm:w-auto sm:gap-1" role="group" aria-label={t.languageLabel}>
                 {localeOrder.map((code) => {
                   const active = code === locale
                   return (
