@@ -71,19 +71,10 @@ export function AboutPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section aria-labelledby="story-title" className="section-lg border-b border-white/10 bg-[#080809]">
-        <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-5">
-            <h2 id="story-title" data-reveal="" className="editorial-display">{copy.gallery}</h2>
-            <div className="mt-8 flex max-w-xl flex-col gap-5 text-pretty text-base leading-relaxed text-white/58">
-              {invitation && <p data-reveal="" className="border-l border-brand pl-5 text-lg text-white/82">{invitation}</p>}
-            </div>
-            <a href={routes[locale].gallery} className="editorial-link mt-9">{t.allPhotos}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></a>
-          </div>
-          <div className="grid grid-cols-2 items-start gap-4 sm:gap-6 lg:col-span-7">
-            <figure data-reveal="mask" className="editorial-photo relative aspect-[3/4] overflow-hidden"><Photo id="p59" sizes="(min-width: 1600px) 420px, (min-width: 1024px) 28vw, 44vw" position="50% 50%" /></figure>
-            <figure data-reveal="mask" style={{ "--d": 1 } as React.CSSProperties} className="editorial-photo relative mt-10 aspect-[3/4] overflow-hidden sm:mt-16"><Photo id="p55" sizes="(min-width: 1600px) 420px, (min-width: 1024px) 28vw, 44vw" position="50% 52%" /></figure>
-          </div>
+      <section aria-label={copy.gallery} className="border-b border-white/10 bg-[#080809] py-9 sm:py-12">
+        <div className="shell-wide flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-12">
+          {invitation && <p className="max-w-2xl border-l border-brand pl-5 text-pretty text-base leading-relaxed text-white/75">{invitation}</p>}
+          <a href={routes[locale].gallery} className="editorial-link shrink-0">{t.allPhotos}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></a>
         </div>
       </section>
 

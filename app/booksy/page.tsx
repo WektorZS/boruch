@@ -1,13 +1,28 @@
 import type { Metadata } from "next"
 import { ArrowUpRight } from "lucide-react"
 import { SiteShell } from "@/components/site-shell"
-import { Photo } from "@/components/photo"
+import { Photo, photoSrc } from "@/components/photo"
 import { siteConfig } from "@/lib/site-config"
 
+const title = "Booksy - rezerwacja online"
+const description = "Zarezerwuj wizytę w BORUCH Myjnia online przez Booksy - wybierz usługę i wolny termin."
+const socialTitle = `${title} | Boruch Myjnia Szczecin`
+const socialImage = photoSrc("p06", 1600)
+
 export const metadata: Metadata = {
-  title: "Booksy - rezerwacja online",
-  description: "Zarezerwuj wizytę w BORUCH Myjnia online przez Booksy - wybierz usługę i wolny termin.",
+  title,
+  description,
   alternates: { canonical: "/booksy/", languages: {} },
+  openGraph: {
+    title: socialTitle,
+    description,
+    url: `${siteConfig.sourceUrl}/booksy/`,
+    siteName: "Boruch Myjnia",
+    locale: "pl_PL",
+    type: "website",
+    images: [{ url: socialImage, alt: "Boruch Myjnia Szczecin - rezerwacja online" }],
+  },
+  twitter: { card: "summary_large_image", title: socialTitle, description, images: [socialImage] },
 }
 
 export default function BooksyPage() {
@@ -24,16 +39,19 @@ export default function BooksyPage() {
         </div>
       </section>
       <section className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-28">
-        <div className="shell-wide grid lg:grid-cols-12">
-          <div data-reveal="mask" className="editorial-photo relative aspect-[16/10] overflow-hidden lg:col-span-6 lg:aspect-auto">
-            <Photo id="p25" sizes="(min-width: 1024px) 58vw, 100vw" />
+        <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-4">
+            <p className="eyebrow">Wybierz dogodny termin</p>
+            <h2 className="mt-6 editorial-display">Rezerwacja w kilku krokach</h2>
           </div>
-          <div className="flex flex-col justify-between gap-8 bg-[#111112] p-7 sm:p-10 lg:col-span-6 lg:p-12">
-            <div><p className="eyebrow">Wybierz dogodny termin</p><h2 className="mt-6 type-h2">Rezerwacja w kilku krokach</h2>
-              <ol className="mt-7 grid gap-4 text-base leading-relaxed text-white/75"><li>Wybierz usługę i wariant odpowiedni do wielkości auta.</li><li>Sprawdź dostępne terminy i wybierz godzinę wizyty.</li><li>Potwierdź rezerwację bezpośrednio w Booksy.</li></ol>
-              <p className="mt-5 text-sm leading-relaxed text-white/65">Nie wiesz, co wybrać? Zadzwoń do nas, pomożemy ustalić zakres.</p>
-            </div>
-            <div className="flex flex-col gap-3">
+          <div className="min-w-0 lg:col-span-7 lg:col-start-6">
+            <ol className="border-t border-white/15 text-base leading-relaxed text-white/75">
+              {["Wybierz usługę i wariant odpowiedni do wielkości auta.", "Sprawdź dostępne terminy i wybierz godzinę wizyty.", "Potwierdź rezerwację bezpośrednio w Booksy."].map((step, index) => (
+                <li key={step} className="flex items-start gap-5 border-b border-white/15 py-5"><span aria-hidden="true" className="type-index shrink-0 pt-0.5 text-sm text-brand">{String(index + 1).padStart(2, "0")}</span><span>{step}</span></li>
+              ))}
+            </ol>
+            <p className="mt-7 text-sm leading-relaxed text-white/65">Nie wiesz, co wybrać? Zadzwoń do nas, pomożemy ustalić zakres.</p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <a href={siteConfig.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">
                 Otwórz Booksy
                 <ArrowUpRight className="arrow-lift size-4" aria-hidden="true" />

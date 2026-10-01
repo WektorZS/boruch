@@ -158,6 +158,29 @@ const editorialCopy = {
   uk: { previous: "Попередній слайд", next: "Наступний слайд", pause: "Зупинити слайди", play: "Продовжити слайди", select: "Оберіть послугу", detail: "Дізнатися про послугу", why: "Кожен етап вручну.", studio: "Мийка / Детейлінг / Щецин", portfolio: "Вибрані роботи", scope: "Обсяг догляду", talk: "Поговорімо про ваше авто." },
 } satisfies Record<Locale, Record<string, string>>
 
+const careSteps: Record<Locale, Array<[string, string]>> = {
+  pl: [
+    ["Dobieramy zakres", "Oglądamy auto i ustalamy, czego potrzebuje. Od zwykłego mycia po korektę i ochronę lakieru."],
+    ["Pracujemy nad detalem", "Dobieramy środki do powierzchni. Czyścimy wnętrze, karoserię i miejsca, które łatwo przeoczyć."],
+    ["Ustalamy dalszą pielęgnację", "Podpowiadamy, jak myć i pielęgnować auto po wykonanej usłudze."],
+  ],
+  en: [
+    ["Agree on the scope", "We inspect the car and discuss what it needs, from a regular wash to paint correction and protection."],
+    ["Work on the details", "We match products to each surface, cleaning the interior, bodywork and easily overlooked areas."],
+    ["Plan future care", "We explain how to wash and care for your car after the service."],
+  ],
+  de: [
+    ["Umfang abstimmen", "Wir sehen uns das Auto an und besprechen den Bedarf, von der Wäsche bis zur Lackkorrektur und zum Schutz."],
+    ["Details bearbeiten", "Wir stimmen die Produkte auf jede Oberfläche ab und reinigen Innenraum, Karosserie und leicht übersehene Stellen."],
+    ["Weitere Pflege besprechen", "Wir erklären, wie Sie Ihr Auto nach der Behandlung waschen und pflegen können."],
+  ],
+  uk: [
+    ["Узгоджуємо обсяг", "Оглядаємо авто й визначаємо потреби: від звичайного миття до корекції та захисту лаку."],
+    ["Працюємо над деталями", "Підбираємо засоби до поверхні. Очищаємо салон, кузов і місця, які легко не помітити."],
+    ["Обговорюємо подальший догляд", "Пояснюємо, як мити та доглядати за авто після виконаної послуги."],
+  ],
+}
+
 type VerifiedReview = {
   name: string
   text: string
@@ -657,7 +680,6 @@ function HomeHero({ locale }: { locale: Locale }) {
 
 function WhyBoruch({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
-  const src = sources[locale]
   const t = ui[locale]
 
   return (
@@ -666,18 +688,15 @@ function WhyBoruch({ locale }: { locale: Locale }) {
         <div className="why-editorial-heading">
           <p className="home-kicker">{copy.whyLabel}</p>
           <h2 id="why-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].why}</h2>
-          <p className="mt-7 max-w-md text-lg leading-relaxed text-white/70">{copy.whyTitle}</p>
-        </div>
-        <figure data-reveal="mask" className="why-editorial-photo relative aspect-[4/5] overflow-hidden">
-          <Photo id="p60" sizes="(min-width: 1024px) 51vw, 92vw" position="50% 52%" />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-6 pb-6 pt-16 text-xs tracking-widest text-white/75">BORUCH MYJNIA / SZCZECIN</figcaption>
-        </figure>
-        <figure className="why-editorial-detail relative aspect-[4/3] overflow-hidden" data-reveal="mask"><Photo id="p00" sizes="(min-width: 1024px) 22vw, 45vw" position="50% 40%" /></figure>
-        <div className="why-editorial-story">
-          <p className="max-w-lg text-lg leading-relaxed text-white/80">{copy.whyIntro}</p>
-          <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/65">{src.home.teamParas[2]}</p>
+          <p className="mt-7 max-w-md text-base leading-relaxed text-white/65">{copy.whyIntro}</p>
           <Link prefetch={false} href={routes[locale].about} className="editorial-link mt-7">{t.nav.about}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
         </div>
+        <ol className="why-editorial-steps">
+          {careSteps[locale].map(([title, text], index) => <li key={title}>
+            <span className="type-label pt-1 text-brand" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <div><h3 className="font-display text-xl font-medium leading-snug sm:text-2xl">{title}</h3><p className="mt-3 max-w-xl text-base leading-relaxed text-white/65">{text}</p></div>
+          </li>)}
+        </ol>
       </div>
     </section>
   )
@@ -773,7 +792,12 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
-  const projects: { id: PhotoId; position: string }[] = [{ id: "p20", position: "50% 58%" }, { id: "p62", position: "50% 58%" }, { id: "p43", position: "50% 60%" }, { id: "p46", position: "50% 50%" }, { id: "p39", position: "50% 55%" }]
+  const projects: { id: PhotoId; position: string; label: string }[] = [
+    { id: "p21", position: "50% 58%", label: copy.galleryCaptions[0] },
+    { id: "p62", position: "50% 58%", label: copy.galleryCaptions[1] },
+    { id: "p29", position: "50% 50%", label: copy.galleryCaptions[2] },
+    { id: "p39", position: "50% 55%", label: copy.galleryCaptions[4] },
+  ]
 
   return (
     <section aria-labelledby="work-title" className="section-xl overflow-hidden bg-[#080809]">
@@ -790,10 +814,15 @@ function WorkShowcase({ locale }: { locale: Locale }) {
         </div>
       </div>
       <div className="home-shell portfolio-editorial">
-        {projects.map((project, index) => <figure key={project.id} className={`portfolio-project portfolio-project-${index}`}>
-          <Link prefetch={false} href={routes[locale].gallery} aria-label={`${copy.galleryCaptions[index]} - ${t.allPhotos}`} className="group block">
-            <div data-reveal="mask" className="portfolio-image relative overflow-hidden"><Photo id={project.id} sizes={index === 0 ? "(min-width: 1024px) 62vw, 92vw" : index === 4 ? "92vw" : "(min-width: 1024px) 45vw, 92vw"} position={project.position} className="transition-transform duration-1000 group-hover:scale-[1.035] group-focus-visible:scale-[1.035]" /></div>
-            <figcaption className="mt-4 flex items-center justify-between gap-5 border-b border-white/15 pb-4 text-xs uppercase tracking-[.14em]"><span>{copy.galleryCaptions[index]}</span><ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden="true" /></figcaption>
+        {projects.map((project, index) => <figure key={project.id} className="portfolio-project">
+          <Link prefetch={false} href={routes[locale].gallery} aria-label={`${project.label} - ${t.allPhotos}`} className="group block">
+            <div className="portfolio-image relative overflow-hidden">
+              <Photo id={project.id} sizes="(min-width: 1600px) 740px, (min-width: 640px) 46vw, 92vw" position={project.position} className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.035] group-focus-visible:scale-[1.035]" />
+              <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-black/5 transition-colors duration-500 group-hover:bg-transparent group-focus-visible:bg-transparent" />
+            </div>
+            <figcaption className="flex items-center justify-between gap-4 border-b border-white/15 py-5">
+              <span className="flex min-w-0 items-baseline gap-4"><span className="text-xs tabular-nums text-white/45" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><span className="text-sm font-medium tracking-[.03em]">{project.label}</span></span><ArrowUpRight className="size-4 shrink-0 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5" aria-hidden="true" />
+            </figcaption>
           </Link>
         </figure>)}
       </div>
@@ -815,7 +844,7 @@ function Packages({ locale }: { locale: Locale }) {
             <h2 id="packages-title" data-reveal="" className="editorial-display mt-6">{src.home.packagesTitle}</h2>
           </div>
           <Link prefetch={false} href={routes[locale].pricing} className="editorial-link lg:col-span-4 lg:col-start-9 lg:justify-self-end">
-            {src.home.moreLink}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+            {{ pl: "Pełny cennik", en: "Full price list", de: "Vollständige Preisliste", uk: "Повний прайс" }[locale]}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
 
@@ -843,7 +872,7 @@ function Packages({ locale }: { locale: Locale }) {
                     <div className="mb-5">
                       <strong className="block text-xs font-semibold text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
                       <div className="mt-2 flex flex-col gap-1 text-sm">
-                        <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 zł</s></span>
+                        <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 {locale === "pl" ? "zł" : "PLN"}</s></span>
                         <span className="font-semibold text-white">{packageSaleCopy[locale].save}</span>
                       </div>
                     </div>
@@ -872,32 +901,25 @@ function SalesPackage({ locale }: { locale: Locale }) {
 
   return (
     <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
-      <div className="home-shell grid overflow-hidden border-y border-white/10 lg:grid-cols-12">
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[18rem] overflow-hidden lg:col-span-5 lg:min-h-[34rem]">
-          <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
-        </figure>
-
-        <div className="relative px-5 py-10 sm:px-9 sm:py-12 lg:col-span-7 lg:border-l lg:border-white/10 lg:p-[clamp(3rem,5vw,5.5rem)]">
+      <div className="home-shell grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-5">
           <p className="home-kicker">{copy.label}</p>
           <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/55">{copy.intro}</p>
-
-          <div className="relative mt-10 grid border-t border-white/12 sm:grid-cols-2 sm:divide-x sm:divide-white/10">
-            {offers.map((offer) => <article key={offer.title} className="border-b border-white/10 py-7 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
+          <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+        </div>
+        <div className="lg:col-span-7">
+          <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
+            {offers.map((offer) => <article key={offer.title} className="flex flex-col border-b border-white/10 py-7 last:border-b-0 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
               <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
-              <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/58">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1.5 shrink-0 bg-brand" />{item}</li>)}</ul>
-              <div className="mt-7 flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
+              <ul className="mb-7 mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1 shrink-0 bg-brand" aria-hidden="true" />{item}</li>)}</ul>
+              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
                 <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
                 <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
               </div>
             </article>)}
           </div>
 
-          <div className="relative mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="home-button home-button-red">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
-            <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="home-button home-button-dark">{ui[locale].book}<ArrowUpRight className="size-4" aria-hidden="true" /></a>
-          </div>
         </div>
       </div>
     </section>
@@ -908,17 +930,12 @@ function TeamStory({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
-  const storyParagraphs = [
-    src.home.teamParas.slice(0, 3).join(" "),
-    src.home.teamParas.slice(3, 5).join(" "),
-    src.home.teamParas.slice(5).join(" "),
-  ].filter(Boolean)
 
   return (
     <section aria-labelledby="team-title" className="section-lg border-y border-white/10 bg-[#111112]">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[3/4] self-start overflow-hidden">
+          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] self-start overflow-hidden">
             <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
             <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
           </figure>
@@ -929,7 +946,7 @@ function TeamStory({ locale }: { locale: Locale }) {
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
 
             <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
-              {storyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              <p>{copy.teamBody}</p>
             </div>
 
             <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
@@ -1259,11 +1276,11 @@ function ContactSection({ locale }: { locale: Locale }) {
         </div>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
-            <figure className="relative aspect-[16/10] overflow-hidden" data-reveal="mask"><Photo id="p51" sizes="(min-width: 1024px) 38vw, 92vw" position="50% 57%" /></figure>
-            <div className="mt-7 flex flex-col gap-4">
+            <div className="flex flex-col gap-5 border-t border-white/15 pt-6">
               <a href={contact.phoneHref} className="editorial-contact-phone">{contact.phone}<ArrowUpRight className="size-5 text-brand" aria-hidden="true" /></a>
               <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/60">{copy.contactBooksy}</p>
+              <p className="mt-3 max-w-sm text-base leading-relaxed text-white/65">{copy.contactBooksy}</p>
+              <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-2 w-fit">{ui[locale].pricing}<ArrowRight className="size-4" aria-hidden="true" /></Link>
             </div>
           </div>
         <div data-reveal="" className="lg:col-span-7">

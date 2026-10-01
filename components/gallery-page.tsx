@@ -19,7 +19,6 @@ export function GalleryPage({ locale }: { locale: Locale }) {
             <p className="eyebrow mb-7">{t.nav.gallery}</p>
             <h1 id="page-title" className="page-cover-title">{t.nav.gallery}<span className="text-brand">.</span></h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{src.gallery.sub}</p>
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.home.projectsText}</p>
             <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="editorial-link mt-8"><InstagramIcon className="size-4 text-brand" />Instagram</a>
           </div>
           <figure className="editorial-photo relative aspect-[4/3] overflow-hidden lg:aspect-[16/11]">

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Check, Cookie, Mail, MessageCircle, Phone, ShieldCheck, X } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { contact, localeLabels, localeOrder, routes, type Locale, type PageKey } from "@/lib/content"
+import { serviceConfigs } from "@/lib/content/services"
 import { useModalFocus } from "./use-modal-focus"
 
 const COOKIE_NAME = "boruch_analytics_consent"
@@ -158,6 +159,7 @@ function localeFromPathname(pathname: string): Locale {
 
 function pageFromPathname(pathname: string, locale: Locale): PageKey {
   const page = Object.entries(routes[locale]).find(([, path]) => path === pathname)?.[0]
+  if (!page && serviceConfigs.some(({ slug }) => pathname === `/${slug}`)) return "services"
   return (page as PageKey | undefined) ?? "home"
 }
 

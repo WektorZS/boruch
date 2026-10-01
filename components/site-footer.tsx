@@ -6,6 +6,13 @@ import { serviceConfigs } from "@/lib/content/services"
 
 const pageOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
 
+const footerIntro: Record<Locale, string> = {
+  pl: "Myjnia ręczna i detailing w centrum Szczecina. Zajmujemy się wnętrzem, lakierem i ochroną nadwozia.",
+  en: "Hand washing and detailing in central Szczecin. Interior care, paint restoration and bodywork protection.",
+  de: "Handwäsche und Detailing im Zentrum von Szczecin. Innenraumpflege, Lackaufbereitung und Schutz der Karosserie.",
+  uk: "Ручна мийка та детейлінг у центрі Щецина. Догляд за салоном, відновлення лаку та захист кузова.",
+}
+
 export function SiteFooter({ locale, alternates, showContactCta = true }: { locale: Locale; alternates: Record<Locale, string>; showContactCta?: boolean }) {
   const src = sources[locale]
   const t = ui[locale]
@@ -33,7 +40,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
 
       <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-14 lg:grid-cols-12 lg:gap-8 lg:py-20">
         <div className="col-span-2 lg:col-span-4">
-          <p className="max-w-sm text-sm leading-relaxed text-white/65">{src.meta.home.description}</p>
+          <p className="max-w-sm text-sm leading-relaxed text-white/65">{footerIntro[locale]}</p>
           <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="group mt-8 flex max-w-sm items-center gap-5 border-l border-brand pl-5 text-sm leading-relaxed text-white/65 transition-colors hover:text-white">
             <span className="shrink-0 font-display text-4xl font-bold leading-none text-brand" aria-hidden="true">-2</span>
             <span>

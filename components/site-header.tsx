@@ -167,7 +167,7 @@ export function SiteHeader({
         )}
       >
         <div className="shell-wide relative flex h-(--header-h-compact) shrink-0 items-center justify-between border-b border-line">
-          <Wordmark href={homeHref} label={homeLabel} />
+          <Wordmark href={homeHref} label={homeLabel} onClick={close} />
           <button ref={closeRef} type="button" onClick={close} className="group flex min-h-11 items-center gap-3">
             <span className="type-label text-bone">{labels.close}</span>
             <span aria-hidden="true" className="relative size-6">
@@ -237,9 +237,9 @@ export function SiteHeader({
   )
 }
 
-function Wordmark({ href, label, className }: { href: string; label: string; className?: string }) {
+function Wordmark({ href, label, className, onClick }: { href: string; label: string; className?: string; onClick?: () => void }) {
   return (
-    <Link prefetch={false} href={href} aria-label={`Boruch Myjnia / Detailing - ${label}`} className={cn("group flex shrink-0 items-center gap-2 min-[360px]:gap-3", className)}>
+    <Link prefetch={false} href={href} onClick={onClick} aria-label={`Boruch Myjnia / Detailing - ${label}`} className={cn("group flex shrink-0 items-center gap-2 min-[360px]:gap-3", className)}>
       <span
         aria-hidden="true"
         className="grid size-10 place-items-center bg-brand font-display text-[2rem] font-black uppercase leading-none text-bone min-[360px]:size-12 [font-stretch:75%] [font-variation-settings:'wdth'_75]"

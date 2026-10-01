@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { routes, sources, ui, type Locale } from "@/lib/content"
-import type { PhotoId } from "@/lib/photos"
 import { services, serviceSummary } from "@/lib/content/services"
 
 const clients = [
@@ -18,7 +17,7 @@ const clients = [
 ]
 
 const pageCopy = {
-  pl: { intro: "Pełny zakres pielęgnacji", introText: "Od regularnego mycia po zaawansowane zabezpieczenie lakieru. Wybierz zakres lub skontaktuj się z nami, a dobierzemy usługę do stanu auta.", trusted: "Zaufali nam", choose: "Wybierz zakres" },
+  pl: { intro: "Myjnia / Detailing", introText: "Mycie, pielęgnacja wnętrza, renowacja lakieru i folie. Poznaj zakres usług, a ceny i warianty dla swojego auta sprawdź w cenniku.", trusted: "Zaufali nam", choose: "Wybierz zakres" },
   en: { intro: "Complete car care", introText: "From regular washing to advanced paint protection. Choose a service or contact us and we will match it to your car.", trusted: "Trusted by", choose: "Choose a service" },
   de: { intro: "Komplette Fahrzeugpflege", introText: "Von der regelmäßigen Wäsche bis zum hochwertigen Lackschutz. Wählen Sie eine Leistung oder lassen Sie sich beraten.", trusted: "Unsere Kunden", choose: "Leistung wählen" },
   uk: { intro: "Повний догляд за авто", introText: "Від регулярного миття до професійного захисту лаку. Оберіть послугу або зверніться до нас за порадою.", trusted: "Нам довіряють", choose: "Оберіть послугу" },
@@ -81,7 +80,8 @@ export function ServicesPage({ locale }: { locale: Locale }) {
       items: services.filter(service => service.category === (group.title.toLowerCase() === "myjnia" || group === src.services.groups[0] ? "myjnia" : "detailing")).map(service => {
         const item = serviceSummary(locale, service.slug)
         const polishingTitle = { pl: "Polerowanie", en: "Polishing", de: "Polieren", uk: "Полірування" }[locale]
-        return { id: service.slug, title: locale === "pl" ? service.navTitle : service.slug === "polerowanie" ? polishingTitle : (item?.title ?? service.navTitle), text: item?.text ?? service.source.tagline, href: locale === "pl" ? `/${service.slug}` : null }
+        const priceAnchor = ["mycie-zewnatrz", "czyszczenie-wnetrza", "komplet"].includes(service.slug) ? "mycie" : "detailing"
+        return { id: service.slug, title: locale === "pl" ? service.navTitle : service.slug === "polerowanie" ? polishingTitle : (item?.title ?? service.navTitle), text: item?.text ?? service.source.tagline, href: locale === "pl" ? `/${service.slug}` : `${routes[locale].pricing}#${priceAnchor}` }
       }),
     })),
     {
@@ -100,10 +100,9 @@ export function ServicesPage({ locale }: { locale: Locale }) {
             <p className="eyebrow mb-7">{copy.intro}</p>
             <h1 id="page-title" className="page-cover-title">{t.nav.services}<span className="text-brand">.</span></h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/75">{copy.introText}</p>
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.meta.services.description}</p>
             <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-8">{t.pricing}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></Link>
           </div>
-          <figure className="enter-unmask overflow-hidden"><Photo id="p62" priority sizes="(min-width: 1024px) 55vw, 92vw" position="65% 52%" /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-5 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH / PAZIM / -2</figcaption></figure>
+          <figure className="enter-unmask overflow-hidden"><Photo id="p62" priority sizes="(min-width: 1024px) 55vw, 92vw" position="65% 52%" /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-5 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / PAZIM / -2</figcaption></figure>
         </div>
       </section>
 
@@ -115,18 +114,17 @@ export function ServicesPage({ locale }: { locale: Locale }) {
 
       {groups.map((group, groupIndex) => {
         const additional = groupIndex === groups.length - 1
-        const visual: PhotoId = groupIndex === 0 ? "p46" : "p20"
         return (
         <section id={`service-group-${groupIndex}`} key={group.title} aria-labelledby={`group-${groupIndex}`} className={`scroll-mt-28 border-b border-white/10 section-lg ${groupIndex % 2 === 0 ? "bg-[#0a0a0b]" : "bg-[#101011]"}`}>
           <div className="shell-wide">
             <div className="service-index-category">
               <div>
-                <p className="eyebrow">{t.nav.services}</p>
-                <h2 id={`group-${groupIndex}`} className="editorial-display mt-5">{group.title}</h2>
-                <p className="mt-5 max-w-md text-base leading-relaxed text-white/65">{additional ? category.additional : groupIndex === 0 ? category.wash : category.detailing}</p>
-                <Link prefetch={false} href={routes[locale].pricing} className="group mt-7 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white/80 hover:text-white"><span className="link-draw">{category.pricing}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></Link>
+                <h2 id={`group-${groupIndex}`} className="editorial-display">{group.title}</h2>
               </div>
-              {!additional && <figure data-reveal="mask"><Photo id={visual} sizes="(min-width: 1024px) 55vw, 92vw" position={groupIndex === 1 ? "50% 60%" : "55% 50%"} /><figcaption className="absolute bottom-0 right-0 bg-[#101011] pl-5 pt-3 text-[.65rem] uppercase tracking-[.14em] text-white/65">{category.photo}</figcaption></figure>}
+              <div className="min-w-0 lg:justify-self-end lg:max-w-xl">
+                <p className="text-base leading-relaxed text-white/65">{additional ? category.additional : groupIndex === 0 ? category.wash : category.detailing}</p>
+                <Link prefetch={false} href={`${routes[locale].pricing}#${additional ? "pakiet-sprzedaz" : groupIndex === 0 ? "mycie" : "detailing"}`} className="editorial-link mt-5"><span>{category.pricing}</span><ArrowRight className="size-4 text-brand" aria-hidden="true" /></Link>
+              </div>
             </div>
             <ul className="border-b border-white/15">
               {group.items.map((item, index) => {
@@ -136,7 +134,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
                     <span className="type-index text-xs text-brand" aria-hidden="true">{String(index + 1 + (groupIndex === 1 ? 5 : additional ? 12 : 0)).padStart(2, "0")}</span>
                     <strong className="min-w-0 text-pretty font-display text-xl font-medium leading-snug tracking-normal text-white/90 sm:text-2xl">{item.title}</strong>
                     <span className="min-w-0 max-w-xl text-sm leading-relaxed text-white/65">{item.text}</span>
-                    {href ? <span className="grid size-11 shrink-0 place-items-center self-center text-white/65 transition-colors group-hover:text-brand group-focus-visible:text-brand"><span className="sr-only">{t.viewService}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></span> : <span aria-hidden="true" />}
+                    {href ? <span className="grid size-11 shrink-0 place-items-center self-center text-white/65 transition-colors group-hover:text-brand group-focus-visible:text-brand"><span className="sr-only">{additional || locale !== "pl" ? category.pricing : t.viewService}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></span> : <span aria-hidden="true" />}
                   </>
                 )
                 const rowClass = "service-index-row group transition-colors"
@@ -150,11 +148,11 @@ export function ServicesPage({ locale }: { locale: Locale }) {
       <section aria-labelledby="trusted-title" className="border-b border-white/10 bg-[#080809] py-14 sm:py-16">
         <div className="shell-wide">
           <div className="flex flex-col gap-4 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
-            <div><p className="eyebrow">BORUCH</p><h2 id="trusted-title" className="mt-5 font-display text-3xl font-black uppercase tracking-[-.02em]">{src.services.trustedTitle}</h2></div>
-            <p className="type-label text-white/65">{copy.trusted}</p>
+            <h2 id="trusted-title" className="font-display text-2xl font-medium leading-snug text-white/90 sm:text-3xl">{copy.trusted}</h2>
+            <p className="type-label text-white/65">Boruch Myjnia / PAZIM</p>
           </div>
           <ul className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
-            {clients.map((client) => <li key={client.file} className="flex min-h-24 items-center justify-center border-b border-r border-white/8 p-5"><img src={`/images/clients/${client.file}.webp`} alt={client.name} loading="lazy" decoding="async" className="max-h-10 max-w-full object-contain opacity-45 grayscale invert transition duration-300 hover:opacity-90" /></li>)}
+            {clients.map((client) => <li key={client.file} className="flex min-h-24 items-center justify-center border-b border-r border-white/8 p-5"><img src={`/images/clients/${client.file}.webp`} alt={client.name} loading="lazy" decoding="async" className="max-h-10 max-w-full object-contain opacity-65 grayscale invert" /></li>)}
           </ul>
         </div>
       </section>

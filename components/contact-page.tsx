@@ -1,6 +1,5 @@
 import { ArrowRight, CalendarCheck, Mail, Phone } from "lucide-react"
 import { SiteShell } from "./site-shell"
-import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, sources, ui, type Locale } from "@/lib/content"
@@ -17,7 +16,6 @@ const pageCopy = {
     location: "Lokalizacja",
     locationTitle: "W centrum Szczecina",
     directions: "Wjedź na parking podziemny PAZIM i zjedź na poziom -2.",
-    level: "PAZIM / poziom",
     booking: "Rezerwacja online",
   },
   en: {
@@ -29,7 +27,6 @@ const pageCopy = {
     location: "Location",
     locationTitle: "In central Szczecin",
     directions: "Enter the PAZIM underground car park and drive down to level -2.",
-    level: "PAZIM / level",
     booking: "Online booking",
   },
   de: {
@@ -41,7 +38,6 @@ const pageCopy = {
     location: "Standort",
     locationTitle: "Im Zentrum von Szczecin",
     directions: "Fahren Sie in die PAZIM-Tiefgarage und hinunter auf Ebene -2.",
-    level: "PAZIM / Ebene",
     booking: "Online-Buchung",
   },
   uk: {
@@ -53,7 +49,6 @@ const pageCopy = {
     location: "Розташування",
     locationTitle: "У центрі Щецина",
     directions: "Заїдьте на підземний паркінг PAZIM і спустіться на рівень -2.",
-    level: "PAZIM / рівень",
     booking: "Онлайн-бронювання",
   },
 } satisfies Record<Locale, Record<string, string>>
@@ -68,49 +63,33 @@ export function ContactPage({ locale }: { locale: Locale }) {
 
 
       <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#080809]">
-        <div className="shell-wide page-cover-grid">
+        <div className="shell-wide grid gap-10 pb-12 pt-[calc(var(--header-h)+4rem)] lg:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12 lg:pb-16">
           <div className="min-w-0">
             <p className="eyebrow mb-7">{t.nav.contact}</p>
             <h1 id="page-title" className="page-cover-title">{t.nav.contact}<span className="text-brand">.</span></h1>
-            <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{copy.directText}</p>
+            <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/70 sm:text-lg">{copy.directText}</p>
             <div className="mt-9 border-t border-white/10 pt-6">
               <p className="type-label text-white/60">{copy.direct}</p>
               <a href={contact.phoneHref} aria-label={`${t.phoneLabel}: ${contact.phone}`} className="contact-method group mt-4 inline-flex min-h-12 items-center gap-3 text-2xl font-semibold leading-relaxed tracking-normal text-white sm:text-3xl">
-                <Phone className="size-5 text-brand" aria-hidden="true" /><span className="link-draw">{contact.phone}</span>
+                <Phone className="size-5 shrink-0 text-brand" aria-hidden="true" /><span className="link-draw">{contact.phone}</span>
               </a>
-              <a href={`mailto:${contact.email}`} aria-label={`${t.emailLabel}: ${contact.email}`} className="contact-method group mt-2 flex min-h-11 w-fit items-center gap-3 text-base text-white/75"><Mail className="size-4 text-brand" aria-hidden="true" /><span className="link-draw [overflow-wrap:anywhere]">{contact.email}</span></a>
+              <a href={`mailto:${contact.email}`} aria-label={`${t.emailLabel}: ${contact.email}`} className="contact-method group mt-2 flex min-h-11 w-fit items-center gap-3 text-base text-white/75"><Mail className="size-4 shrink-0 text-brand" aria-hidden="true" /><span className="link-draw [overflow-wrap:anywhere]">{contact.email}</span></a>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary gap-3"><CalendarCheck className="size-4" aria-hidden="true" />Booksy</a>
+                <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.booking} - Booksy`} className="btn btn-primary gap-3"><CalendarCheck className="size-4" aria-hidden="true" />Booksy</a>
                 <a href="#wycena" className="group inline-flex min-h-12 items-center gap-3 text-sm font-semibold text-white/80"><span className="link-draw">{copy.formLabel}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></a>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-white/60">{copy.booking}</p>
-            </div>
-          </div>
-          <figure className="page-cover-portrait editorial-photo relative aspect-[4/5] w-full overflow-hidden">
-            <Photo id="p33" priority sizes="(min-width: 1024px) 432px, 92vw" position="50% 64%" />
-            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 bg-linear-to-t from-black/80 to-transparent px-6 pb-5 pt-16">
-              <span className="type-label text-white/85">{copy.level}</span><span className="text-4xl font-semibold leading-none text-white">-2</span>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section id="wycena" aria-labelledby="contact-form-title" className="section-lg border-b border-white/10 bg-[#101011]">
-        <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
-              <p className="eyebrow">{copy.formLabel}</p>
-              <h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7 max-w-full">{copy.formTitle}</h2>
-              <p className="mt-6 max-w-md text-base leading-relaxed text-white/65">{copy.formText}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="link-draw inline-flex min-h-11 items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white/75"><FacebookIcon className="size-4 text-brand" />Facebook</a>
                 <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="link-draw inline-flex min-h-11 items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white/75"><InstagramIcon className="size-4 text-brand" />Instagram</a>
               </div>
             </div>
           </div>
-          <div data-reveal="" className="lg:border-l lg:border-white/10 lg:col-span-7 lg:col-start-6 lg:pl-10">
+          <section id="wycena" aria-labelledby="contact-form-title" className="min-w-0 border-t border-white/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+            <p className="eyebrow">{copy.formLabel}</p>
+            <h2 id="contact-form-title" className="mt-5 text-pretty font-display text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold leading-snug tracking-normal text-white">{copy.formTitle}</h2>
+            <p className="mb-8 mt-4 max-w-xl text-base leading-relaxed text-white/65">{copy.formText}</p>
             <HomeContactForm locale={locale} />
-          </div>
+          </section>
         </div>
       </section>
 

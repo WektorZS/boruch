@@ -1,31 +1,77 @@
-import { Fragment } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo, photoSrc } from "./photo"
-import { contact, localeOrder, routes, sources, ui, type Locale } from "@/lib/content"
+import { contact, localeOrder, routes, ui, type Locale } from "@/lib/content"
 import { formatIndex, getService, serviceGroupTitle, servicePrice, type Service, type ServiceSlug } from "@/lib/content/services"
 import type { ServiceBlock, ServiceSection as Section, ServiceStep } from "@/lib/content/types"
 import { siteConfig } from "@/lib/site-config"
 import { cn } from "@/lib/utils"
+import { photos, type PhotoId } from "@/lib/photos"
 
-type ServiceFamily = "wash" | "interior" | "finish"
-const interiorServices: ServiceSlug[] = ["czyszczenie-wnetrza", "pranie-tapicerki", "czyszczenie-skor"]
-function serviceFamily(service: Service): ServiceFamily {
-  return interiorServices.includes(service.slug) ? "interior" : service.category === "myjnia" ? "wash" : "finish"
-}
-
-// Presentation only. Offer copy, prices and routing remain in their canonical sources.
-const serviceArtDirection: Partial<Record<ServiceSlug, { heroPosition: string; detailPosition: string }>> = {
-  "mycie-zewnatrz": { heroPosition: "50% 47%", detailPosition: "55% 52%" },
-  "czyszczenie-wnetrza": { heroPosition: "53% 43%", detailPosition: "50% 47%" },
-  "pranie-tapicerki": { heroPosition: "50% 50%", detailPosition: "50% 47%" },
-  "czyszczenie-skor": { heroPosition: "50% 43%", detailPosition: "50% 50%" },
-  "komplet": { heroPosition: "50% 54%", detailPosition: "50% 46%" },
-  "folia-ppf": { heroPosition: "50% 56%", detailPosition: "50% 53%" },
-  "powloka-ceramiczna": { heroPosition: "50% 60%", detailPosition: "50% 58%" },
-  "zmiana-koloru-dechroming": { heroPosition: "50% 57%", detailPosition: "50% 58%" },
+// Short introductions support the full technical scope below. Prices stay canonical.
+const servicePresentation: Record<ServiceSlug, { intro: string; detail: string; headings: string[]; heroPosition?: string; detailPhoto?: PhotoId }> = {
+  "mycie-zewnatrz": {
+    intro: "Ręczne mycie nadwozia, felg i szyb z dokładnym osuszeniem auta.",
+    detail: "Środki i sposób mycia dobieramy do powierzchni oraz istniejącego zabezpieczenia lakieru. Dodatkowe woskowanie możesz zamówić osobno.",
+    headings: ["Jak dbamy o nadwozie?", "Efekt mycia", "Cena"], heroPosition: "50% 47%", detailPhoto: "p01",
+  },
+  "czyszczenie-wnetrza": {
+    intro: "Odkurzanie kabiny i bagażnika, czyszczenie kokpitu, plastików oraz szyb.",
+    detail: "Zajmujemy się także trudno dostępnymi miejscami. Pranie tapicerki lub pielęgnację skór można dobrać do podstawowego zakresu.",
+    headings: ["Co zyskujesz?", "Cena"], heroPosition: "53% 43%", detailPhoto: "p29",
+  },
+  komplet: {
+    intro: "Mycie nadwozia i czyszczenie wnętrza podczas jednej wizyty.",
+    detail: "Komplet łączy dwa podstawowe zakresy myjni w niższej cenie niż zamawiane osobno. Pranie tapicerki i dodatkowe zabezpieczenie lakieru są opcjonalnym rozszerzeniem.",
+    headings: ["Co obejmuje Komplet?", "Kiedy wybrać pakiet?", "Cena"], heroPosition: "50% 54%", detailPhoto: "p67",
+  },
+  "pranie-tapicerki": {
+    intro: "Czyszczenie materiałowej tapicerki, które sięga głębiej niż odkurzanie.",
+    detail: "Odkurzamy, rozpuszczamy zabrudzenia i płuczemy materiał metodą ekstrakcyjną. Zakres obejmujący podsufitkę, dywaniki lub inne elementy ustalamy przy rezerwacji.",
+    headings: ["Zakres prania", "Co daje czyszczenie?", "Cena"], heroPosition: "50% 50%", detailPhoto: "p45",
+  },
+  "czyszczenie-skor": {
+    intro: "Czyszczenie i zabezpieczenie skórzanej tapicerki bez tłustego wykończenia.",
+    detail: "Usuwamy zabrudzenia, a następnie impregnujemy skórę. Preparaty i sposób pracy dobieramy do rodzaju oraz stanu tapicerki.",
+    headings: ["Zakres pielęgnacji", "Dlaczego warto?", "Cena"], heroPosition: "50% 43%", detailPhoto: "p31",
+  },
+  woskowanie: {
+    intro: "Ręczna aplikacja wosku na oczyszczony i przygotowany lakier.",
+    detail: "Wosk nadaje połysk i właściwości hydrofobowe. Dobieramy go do oczekiwanego efektu oraz sposobu użytkowania samochodu.",
+    headings: ["Co daje wosk?", "Przygotowanie i aplikacja", "Cena"], detailPhoto: "p52",
+  },
+  polerowanie: {
+    intro: "Odświeżenie lakieru przez usunięcie zmatowień i drobnych defektów.",
+    detail: "Przed pracą oceniamy powierzchnię i mierzymy grubość lakieru. Metodę oraz zakres polerowania dobieramy do jego stanu.",
+    headings: ["Efekt polerowania", "Kiedy warto?", "Cena", "Jak pracujemy"], detailPhoto: "p03",
+  },
+  "korekta-lakieru": {
+    intro: "Praca nad rysami i defektami, które odbierają lakierowi połysk.",
+    detail: "Zakres korekty ustalamy po inspekcji i pomiarze lakieru. Może być jedno- lub wieloetapowy, zależnie od stanu powierzchni i oczekiwanego efektu.",
+    headings: ["Efekt korekty", "Kiedy warto?", "Cena", "Jak pracujemy"], detailPhoto: "p24",
+  },
+  "powloka-ceramiczna": {
+    intro: "Zabezpieczenie przygotowanego lakieru powłoką ceramiczną.",
+    detail: "Powłoka ułatwia utrzymanie czystości i podkreśla połysk. Dobór wariantu, przygotowanie lakieru oraz późniejsza pielęgnacja są częścią ustalanego zakresu.",
+    headings: ["Warianty powłoki", "Co daje ceramika?", "Cena", "Jak pracujemy"], heroPosition: "50% 60%", detailPhoto: "p39",
+  },
+  "folia-ppf": {
+    intro: "Folia ochronna na wybrane elementy nadwozia lub całe auto.",
+    detail: "PPF tworzy dodatkową warstwę chroniącą lakier. Dobieramy zakres oklejania, przygotowujemy powierzchnię i kontrolujemy dopasowanie folii na krawędziach.",
+    headings: ["Zakres oklejania", "Jak pracujemy", "Cena", "Co daje folia PPF?"], heroPosition: "50% 56%",
+  },
+  "przyciemnianie-szyb-i-lamp": {
+    intro: "Dobór i aplikacja folii do szyb lub lamp samochodu.",
+    detail: "Stopień przyciemnienia oraz zakres prac ustalamy przed montażem. Poniżej znajdziesz osobno proces dla szyb i lamp.",
+    headings: ["Przyciemnianie lamp", "Folia na szybach", "Folia na lampach", "Cena", "Jak pracujemy"],
+  },
+  "zmiana-koloru-dechroming": {
+    intro: "Zmiana wyglądu nadwozia bez ponownego lakierowania.",
+    detail: "Możesz wybrać oklejenie auta folią kolorową lub zmianę wykończenia chromowanych detali. Kolor, fakturę i zakres ustalamy podczas konsultacji.",
+    headings: ["Zmiana koloru", "Dechroming", "Cena", "Jak pracujemy"], heroPosition: "50% 57%", detailPhoto: "p20",
+  },
 }
 
 const relatedServices: Record<ServiceSlug, [ServiceSlug, ServiceSlug]> = {
@@ -41,6 +87,11 @@ const relatedServices: Record<ServiceSlug, [ServiceSlug, ServiceSlug]> = {
   "folia-ppf": ["powloka-ceramiczna", "zmiana-koloru-dechroming"],
   "przyciemnianie-szyb-i-lamp": ["folia-ppf", "zmiana-koloru-dechroming"],
   "zmiana-koloru-dechroming": ["folia-ppf", "przyciemnianie-szyb-i-lamp"],
+}
+
+function servicePricingHref(slug: ServiceSlug) {
+  const anchor = ["mycie-zewnatrz", "czyszczenie-wnetrza", "komplet"].includes(slug) ? "mycie" : "detailing"
+  return `${routes.pl.pricing}#${anchor}`
 }
 
 export function serviceMetadata(slug: ServiceSlug): Metadata {
@@ -60,9 +111,8 @@ export function serviceMetadata(slug: ServiceSlug): Metadata {
 }
 export function ServicePage({ slug }: { slug: ServiceSlug }) {
   const service = getService(slug)
-  const family = serviceFamily(service)
   const { sections } = service.source
-  const breakAfter = Math.min(1, sections.length - 1)
+  const presentation = servicePresentation[slug]
   const alternates = Object.fromEntries(
     localeOrder.map((code) => [code, code === "pl" ? `/${slug}` : routes[code].services]),
   ) as Record<Locale, string>
@@ -85,21 +135,11 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
       <ServiceHero service={service} />
       <ServiceIntro service={service} />
       <ServiceProcess service={service} />
-      {sections.map((section, i) => (
-        <Fragment key={section.heading}>
-          <ServiceSection service={service} section={section} id={`section-${i + 1}`} />
-          {i === breakAfter && (
-            <div className="shell-wide grid py-8 lg:grid-cols-12 lg:py-12">
-              <figure className={family === "interior" ? "lg:col-span-8" : family === "wash" ? "lg:col-span-10 lg:col-start-3" : "lg:col-span-12"}>
-                <div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3]", family === "interior" ? "sm:aspect-[3/2]" : "sm:aspect-[16/9]")}>
-                  <Photo id={service.frames[2]} sizes={family === "finish" ? "(min-width: 1600px) 1480px, 92vw" : family === "interior" ? "(min-width: 1600px) 985px, (min-width: 1024px) 61vw, 92vw" : "(min-width: 1600px) 1230px, (min-width: 1024px) 77vw, 92vw"} />
-                </div>
-                <figcaption className="mt-4 flex flex-wrap justify-between gap-3 text-xs leading-relaxed text-white/55"><span>{service.navTitle}</span><span>Boruch Myjnia / PAZIM</span></figcaption>
-              </figure>
-            </div>
-          )}
-        </Fragment>
+      {presentation.detailPhoto && <ServiceDetail photo={presentation.detailPhoto} />}
+      {sections.map((section, i) => section.kind === "summary" || section.kind === "price" ? null : (
+        <ServiceSection key={section.heading} section={section} heading={presentation.headings[i] ?? section.heading} id={`section-${i + 1}`} />
       ))}
+      <PriceSection service={service} id="service-price" />
       <ServiceFaq service={service} />
       <ServiceRelated service={service} />
     </SiteShell>
@@ -110,40 +150,34 @@ function ServiceHero({ service }: { service: Service }) {
   const t = ui.pl
   const price = servicePrice("pl", service.slug)
   const group = serviceGroupTitle("pl", service.slug)
-  const art = serviceArtDirection[service.slug]
+  const presentation = servicePresentation[service.slug]
 
   return (
     <section aria-labelledby="service-title" className="bg-[#080809]">
       <div className="shell-wide service-cover">
         <div className="min-w-0">
-        <p className="eyebrow mb-7">{group}</p>
-        <h1 id="service-title" className="service-cover-title">{service.navTitle}</h1>
-          <div className="enter-fade mt-6 flex max-w-xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
-            <p className="type-label text-ash">{service.source.headingSub}</p>
-            <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
-          </div>
+          <p className="eyebrow mb-7">{group}</p>
+          <h1 id="service-title" className="service-cover-title">{service.navTitle}</h1>
+          <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{presentation.intro}</p>
           <div className="mt-8 border-t border-white/15 pt-5">
             <p className="text-xs text-white/60">{t.priceLabel}</p>
             <p className="mt-2 text-xl font-medium leading-relaxed text-white">{price ?? t.individualQuote}</p>
-            <div className="mt-5 flex flex-wrap items-center gap-6"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><a href="#service-process" className="editorial-link">{t.process}<ArrowRight className="size-4" aria-hidden="true" /></a></div>
+            <div className="mt-5 flex flex-wrap items-center gap-6"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link prefetch={false} href={servicePricingHref(service.slug)} className="editorial-link">Ceny i warianty<ArrowRight className="size-4" aria-hidden="true" /></Link></div>
           </div>
         </div>
-        <figure className="service-cover-visual editorial-photo enter-unmask"><Photo id={service.hero} priority sizes="(min-width: 1600px) 888px, (min-width: 1024px) 56vw, (min-width: 640px) 46vw, 92vw" position={art?.heroPosition ?? "50% 56%"} /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-6 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / {group}</figcaption></figure>
+        <figure className="service-cover-visual editorial-photo enter-unmask"><Photo id={service.hero} priority sizes="(min-width: 1600px) 888px, (min-width: 1024px) 56vw, (min-width: 640px) 46vw, 92vw" position={presentation.heroPosition ?? "50% 56%"} /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-6 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / {group}</figcaption></figure>
       </div>
     </section>
   )
 }
 function ServiceIntro({ service }: { service: Service }) {
-  const [first, ...rest] = service.source.intro
+  const { detail } = servicePresentation[service.slug]
   return (
     <section aria-label={service.navTitle} className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-2"><p className="eyebrow">{service.navTitle}</p></div>
-        <div className="min-w-0 lg:col-span-10">
-          <p data-reveal="" className="max-w-5xl font-display text-[clamp(1.5rem,2.5vw,2.5rem)] font-normal leading-[1.5] text-bone/90">{first}</p>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-10">
-            {rest.map((para, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/70">{para}</p>)}
-          </div>
+        <div className="lg:col-span-4"><p className="eyebrow">Zakres dopasowany do auta</p></div>
+        <div className="min-w-0 lg:col-span-8">
+          <p data-reveal="" className="max-w-3xl text-pretty font-display text-[clamp(1.25rem,1.7vw,1.75rem)] font-normal leading-relaxed text-bone/85">{detail}</p>
         </div>
       </div>
     </section>
@@ -152,24 +186,34 @@ function ServiceIntro({ service }: { service: Service }) {
 
 function ServiceProcess({ service }: { service: Service }) {
   const t = ui.pl
-  const { steps, processTitle } = service.source
+  const { steps } = service.source
   if (steps.length === 0) return null
 
   return (
     <section id="service-process" aria-labelledby="process-title" className="scroll-mt-24 bg-[#101011]">
       <div className="shell-wide section-lg">
-        <div className="service-process-layout">
-          <div className="service-process-image">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="min-w-0 lg:col-span-4">
             <p className="eyebrow">{t.process}</p>
-            <h2 id="process-title" data-reveal="" className="editorial-display mt-5">{processTitle ?? t.process}</h2>
-            <figure data-reveal="mask" className="relative mt-8 aspect-[4/5] overflow-hidden"><Photo id={service.frames[0]} sizes="(min-width: 1600px) 520px, (min-width: 640px) 42vw, 92vw" position={serviceArtDirection[service.slug]?.detailPosition} /></figure>
+            <h2 id="process-title" data-reveal="" className="editorial-display mt-5">{service.slug === "przyciemnianie-szyb-i-lamp" ? "Przyciemnianie szyb." : "Jak przebiega usługa?"}</h2>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">Zakres prac ustalamy przed rozpoczęciem. Opcjonalne zabiegi są oznaczone przy poszczególnych etapach.</p>
           </div>
-          <ol className="service-process-steps">
-            {steps.map((step, index) => <li key={step.title} data-reveal=""><span className="type-index pt-1 text-sm text-brand">{formatIndex(index + 1)}</span><div><h3>{step.title}</h3><div className="mt-4 grid gap-4">{step.body.map((paragraph, i) => <p key={i} className="type-body text-white/65">{paragraph}</p>)}</div></div></li>)}
+          <ol className="min-w-0 border-b border-white/15 lg:col-span-8">
+            {steps.map((step, index) => (
+              <li key={step.title} className="border-t border-white/15">
+                <details className="group" open={index === 0}>
+                  <summary className="grid cursor-pointer list-none grid-cols-[2rem_minmax(0,1fr)_1rem] items-start gap-4 py-6 [&::-webkit-details-marker]:hidden">
+                    <span className="type-index pt-1 text-xs text-brand" aria-hidden="true">{formatIndex(index + 1)}</span>
+                    <h3 className="text-pretty font-display text-lg font-medium leading-snug text-white/90 sm:text-xl">{step.title}</h3>
+                    <ChevronDown className="mt-1 size-4 text-brand transition-transform group-open:rotate-180" aria-hidden="true" />
+                  </summary>
+                  <div className="grid gap-4 pb-6 pl-12 sm:pr-8">{step.body.map((paragraph, i) => <p key={i} className="type-body text-white/65">{paragraph}</p>)}</div>
+                </details>
+              </li>
+            ))}
           </ol>
         </div>
       </div>
-      <div data-reveal="mask" className="relative aspect-[4/3] overflow-hidden sm:aspect-[21/8]"><Photo id={service.frames[1]} sizes="100vw" /></div>
     </section>
   )
 }
@@ -191,18 +235,28 @@ function StepList({ steps, start = 1, stepLabel, compact = false }: { steps: Ser
   )
 }
 
-function ServiceSection({ service, section, id }: { service: Service; section: Section; id: string }) {
-  if (section.kind === "price") return <PriceSection service={service} section={section} id={id} />
-  if (section.kind === "summary") return <SummarySection section={section} id={id} />
-  return <ListSection section={section} id={id} />
+function ServiceDetail({ photo }: { photo: PhotoId }) {
+  return (
+    <div className="border-b border-white/10 bg-[#0a0a0b]">
+      <figure className="shell-wide py-10 lg:py-14">
+        <div className="editorial-photo relative aspect-[4/3] overflow-hidden sm:aspect-[16/9]">
+          <Photo id={photo} sizes="(min-width: 1600px) 1480px, 92vw" position="50% 56%" />
+        </div>
+        <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs leading-relaxed text-white/60">
+          <span>{photos[photo].alt}</span>
+          <Link prefetch={false} href={routes.pl.gallery} className="group inline-flex min-h-11 items-center gap-3 font-medium text-white/80 hover:text-white">Zobacz realizacje<ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></Link>
+        </figcaption>
+      </figure>
+    </div>
+  )
 }
 
-function ListSection({ section, id }: { section: Section; id: string }) {
+function ServiceSection({ section, heading, id }: { section: Section; heading: string; id: string }) {
   return (
     <section aria-labelledby={id} className="section-md border-b border-white/10 bg-[#0a0a0b]">
-      <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="editorial-display max-w-full lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
-        <div className="lg:col-span-7">{section.kind === "process" && section.steps ? <StepList steps={section.steps} stepLabel={ui.pl.step} compact /> : <Blocks blocks={section.blocks} />}</div>
+      <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="min-w-0 lg:col-span-4"><h2 id={id} data-reveal="" className="editorial-display max-w-full">{heading}</h2></div>
+        <div className="min-w-0 lg:col-span-8">{section.kind === "process" && section.steps ? <StepList steps={section.steps} stepLabel={ui.pl.step} compact /> : <Blocks blocks={section.blocks} />}</div>
       </div>
     </section>
   )
@@ -219,40 +273,31 @@ function Blocks({ blocks }: { blocks: ServiceBlock[] }) {
     <div className="flex flex-col gap-8">
       {groups.map((group, g) => group.type === "item" ? (
         <ul key={g} className="border-b border-line">
-          {group.texts.map((text, i) => <li key={i} data-reveal="" style={{ "--d": i % 4 } as React.CSSProperties} className="group flex items-start gap-5 border-t border-line py-5 transition-colors hover:bg-ink-warm/60 md:px-2"><span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 bg-brand transition-transform group-hover:scale-150" /><span className="text-pretty text-base leading-relaxed text-bone md:text-lg">{text}</span></li>)}
+          {group.texts.map((text, i) => <li key={i} className="flex items-start gap-4 border-t border-line py-4"><span aria-hidden="true" className="mt-[0.65em] size-1 shrink-0 bg-brand" /><span className="text-pretty text-base leading-relaxed text-bone/85">{text}</span></li>)}
         </ul>
       ) : (
-        <div key={g} className="flex max-w-2xl flex-col gap-4">{group.texts.map((text, i) => <p key={i} data-reveal="" className="type-body text-pretty text-bone/75 md:text-lg md:leading-relaxed">{text}</p>)}</div>
+        <div key={g} className="flex max-w-2xl flex-col gap-4">{group.texts.map((text, i) => <p key={i} className="type-body text-pretty text-bone/70">{text}</p>)}</div>
       ))}
     </div>
   )
 }
 
-function PriceSection({ service, section, id }: { service: Service; section: Section; id: string }) {
+function PriceSection({ service, id }: { service: Service; id: string }) {
   const t = ui.pl
   const price = servicePrice("pl", service.slug)
-  const linkText = section.blocks.find((block) => block.type === "text")?.text
+  const pricingHref = servicePricingHref(service.slug)
   return (
     <section aria-labelledby={id} className="border-b border-white/10 bg-[#101011]">
-      <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
-        <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="editorial-display">Cena usługi: {service.navTitle}</h2></div>
-        <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
+      <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-16">
+        <div className="flex min-w-0 flex-col gap-5 lg:col-span-4"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} className="editorial-display">Ceny i warianty.</h2><p className="max-w-sm text-sm leading-relaxed text-white/60">Cena zależy od wielkości auta, jego stanu i wybranego zakresu. Warianty oraz szacunkowy czas znajdziesz w cenniku.</p></div>
+        <div className="flex min-w-0 flex-col items-start gap-5 lg:col-span-8">
           <p className={price ? "font-display text-[clamp(1.8rem,3vw,2.8rem)] font-bold leading-relaxed tracking-normal" : "font-display text-[clamp(1.5rem,2.4vw,2.3rem)] font-bold leading-relaxed text-bone/90"}>{price ?? t.individualQuote}</p>
-          {linkText && <Link prefetch={false} href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone"><span className="type-label link-draw">{linkText}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></Link>}
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Link prefetch={false} href={pricingHref} className="editorial-link">Zobacz pełny cennik<ArrowRight className="size-4 text-brand" aria-hidden="true" /></Link>
+            <Link prefetch={false} href={`${routes.pl.contact}#wycena`} className="inline-flex min-h-11 items-center text-sm text-white/70 transition-colors hover:text-white">Zapytaj o zakres</Link>
+          </div>
+          <a href={contact.phoneHref} className="inline-flex min-h-11 items-center gap-3 text-base font-medium tracking-wide text-white/85 transition-colors hover:text-white"><span className="text-xs font-normal text-white/60">Telefon</span>{contact.phone}</a>
         </div>
-      </div>
-    </section>
-  )
-}
-
-function SummarySection({ section, id }: { section: Section; id: string }) {
-  const [first, ...rest] = section.blocks.map((block) => block.text)
-  return (
-    <section aria-labelledby={id} className="section-lg border-b border-white/10 bg-[#101011]">
-      <div className="shell-wide flex flex-col gap-10">
-        <h2 id={id} className="eyebrow">{section.heading}</h2>
-        <p data-reveal="" className="type-lead max-w-4xl text-pretty [overflow-wrap:anywhere]">{first}</p>
-        {rest.length > 0 && <div className="grid gap-5 md:grid-cols-2 md:gap-10 lg:ml-[33%]">{rest.map((text, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/75 md:text-lg md:leading-relaxed">{text}</p>)}</div>}
       </div>
     </section>
   )
@@ -262,7 +307,7 @@ function ServiceFaq({ service }: { service: Service }) {
   const price = servicePrice("pl", service.slug)
   const questions = [
     ["Jak zarezerwować termin?", "Wybierz termin na naszym profilu Booksy albo zadzwoń pod numer +48 534 095 265. Jeśli nie wiesz, jaki zakres wybrać, opisz nam stan samochodu."],
-    ["Od czego zależy cena?", price ? `Cena początkowa tej usługi to ${price}. Ostateczna kwota zależy od wariantu, wielkości auta i zabrudzenia. Szczegóły oraz dopłaty znajdziesz w cenniku.` : "Tę usługę wyceniamy indywidualnie. Kwota zależy od stanu samochodu i zakresu prac. Skontaktuj się z nami, aby omówić swój samochód."],
+    ["Od czego zależy cena?", price ? `Usługa kosztuje ${price}. Ostateczna kwota zależy od wariantu, wielkości auta i zabrudzenia. Szczegóły oraz dopłaty znajdziesz w cenniku.` : "Tę usługę wyceniamy indywidualnie. Kwota zależy od stanu samochodu i zakresu prac. Skontaktuj się z nami, aby omówić swój samochód."],
     ["Ile czasu trzeba przeznaczyć na usługę?", "Czas zależy od zakresu prac oraz stanu samochodu. Szacunkowe czasy wybranych usług są podane w cenniku. Przy rezerwacji ustalimy szczegóły pozostawienia i odbioru auta."],
     ["Gdzie zostawić samochód?", "Znajdziesz nas na poziomie -2 parkingu podziemnego PAZIM przy placu Rodła 8 w Szczecinie. Wjedź na parking i kieruj się do Boruch Myjnia."],
   ]
@@ -275,17 +320,18 @@ function ServiceRelated({ service }: { service: Service }) {
   return (
     <section aria-labelledby="related-title" className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide flex flex-col gap-10">
-        <div className="flex items-end justify-between gap-6">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <h2 id="related-title" className="eyebrow">{t.related}</h2>
           <Link prefetch={false} href={routes.pl.services} className="group type-label flex items-center gap-3 text-bone"><span className="link-draw">{t.allServices}</span><ArrowRight className="arrow-shift size-4" aria-hidden="true" /></Link>
         </div>
-        <ul className="grid gap-px bg-line md:grid-cols-2">
+        <ul className="grid gap-x-12 border-b border-white/15 md:grid-cols-2">
           {neighbours.map((item) => (
-            <li key={item.slug} className="bg-background">
-              <Link prefetch={false} href={`/${item.slug}`} className="group relative flex min-h-56 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-72 lg:p-8">
-                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-90 transition-opacity duration-700 group-hover:opacity-100 group-focus-visible:opacity-100"><Photo id={item.hero} sizes="(min-width: 1600px) 730px, (min-width: 768px) 46vw, 92vw" className="scale-[1.03] transition-transform duration-700 group-hover:scale-100 group-focus-visible:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-black/10" /></span>
-                <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
-                <span className="relative max-w-full text-pretty font-display text-xl font-semibold leading-[1.3] sm:text-2xl">{item.navTitle}</span>
+            <li key={item.slug} className="border-t border-white/15">
+              <Link prefetch={false} href={`/${item.slug}`} className="group grid grid-cols-[minmax(0,1fr)_1.25rem] gap-x-6 gap-y-3 py-7">
+                <span className="type-label text-white/55">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span>
+                <ArrowRight className="arrow-shift row-span-3 mt-1 size-5 self-center text-brand" aria-hidden="true" />
+                <h3 className="min-w-0 text-pretty font-display text-xl font-medium leading-snug text-white/90 transition-colors group-hover:text-white sm:text-2xl">{item.navTitle}</h3>
+                <p className="min-w-0 max-w-xl text-sm leading-relaxed text-white/60">{servicePresentation[item.slug].intro}</p>
               </Link>
             </li>
           ))}

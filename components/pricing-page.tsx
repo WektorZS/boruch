@@ -2,8 +2,7 @@ import { Fragment } from "react"
 import Link from "next/link"
 import { ArrowRight, Clock3 } from "lucide-react"
 import { SiteShell } from "./site-shell"
-import { Photo } from "./photo"
-import { routes, sources, ui, type Locale } from "@/lib/content"
+import { sources, ui, type Locale } from "@/lib/content"
 import type { ServiceSlug } from "@/lib/content/services"
 
 type Localized = Record<Locale, string>
@@ -119,7 +118,7 @@ function duration(minutes: number, locale: Locale) {
 function PriceScope({ item, scope, locale }: { item: PriceItem; scope: string[]; locale: Locale }) {
   const copy = tableCopy[locale]
   return <details className="price-scope group">
-    <summary aria-label={`${copy.scope}: ${item.name[locale]}`} className="flex min-h-11 list-none items-center justify-between gap-4 text-sm font-semibold text-white/75 transition-colors hover:text-white">{copy.scope}<span aria-hidden="true" className="text-xl font-normal text-brand group-open:rotate-45">+</span></summary>
+    <summary aria-label={`${copy.scope}: ${item.name[locale]}`} className="flex min-h-11 list-none items-center justify-between gap-4 text-sm font-semibold text-white/75 transition-colors hover:text-white">{copy.scope}<span aria-hidden="true" className="shrink-0 text-xl font-normal text-brand transition-transform duration-200 group-open:rotate-45">+</span></summary>
     {scope.length > 0
       ? <ul className="grid gap-x-8 gap-y-2 pb-4 pt-2 text-sm leading-relaxed text-white/70 sm:grid-cols-2 lg:grid-cols-3">{scope.map(entry => <li key={entry} className="flex items-start gap-3"><span className="mt-2 size-1 shrink-0 bg-brand" aria-hidden="true" /><span>{entry}</span></li>)}</ul>
       : <p className="pb-4 pt-2 text-sm leading-relaxed text-white/70">{item.description?.[locale] ?? copy.scopeFallback}</p>}
@@ -219,9 +218,9 @@ export function PricingPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="pricing">
 
       <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
-        <div className="shell-wide page-cover-grid page-cover-pricing">
-          <div className="min-w-0"><p className="eyebrow mb-7">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1><p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/65">{copy.intro}</p></div>
-          <div><div className="editorial-photo relative aspect-[16/10] overflow-hidden"><Photo id="p47" priority sizes="(min-width: 1024px) 512px, 92vw" position="50% 52%" /></div></div>
+        <div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
+          <div className="min-w-0 lg:col-span-5"><p className="eyebrow mb-7">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1></div>
+          <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}</p>
         </div>
       </section>
 

@@ -151,7 +151,7 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
 
       <label className={labelClass}>
         {copy.message}
-        <textarea className={`${fieldClass} min-h-36 resize-y py-4 normal-case leading-relaxed tracking-normal`} name="message" maxLength={1200} required />
+        <textarea className={`${fieldClass} min-h-36 resize-y py-4 normal-case leading-relaxed tracking-normal`} name="message" minLength={5} maxLength={1200} required />
       </label>
 
       <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/65">
