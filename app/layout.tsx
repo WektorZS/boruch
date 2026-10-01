@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'AutoWash',
+  '@type': ['LocalBusiness', 'AutoWash'],
   '@id': `${siteConfig.sourceUrl}/#business`,
   name: siteConfig.legalName,
   alternateName: siteConfig.name,
@@ -71,7 +71,11 @@ const localBusinessJsonLd = {
     addressCountry: 'PL',
   },
   areaServed: siteConfig.city,
-  sameAs: [siteConfig.bookingUrl, 'https://www.facebook.com/Boruch-Myjnia-101966125989872', 'https://www.instagram.com/boruchmyjnia/'],
+  sameAs: [
+    siteConfig.bookingUrl,
+    'https://www.facebook.com/Boruch-Myjnia-101966125989872',
+    'https://www.instagram.com/boruchmyjnia/',
+  ],
 }
 
 export const viewport: Viewport = {
