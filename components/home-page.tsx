@@ -677,16 +677,16 @@ function HomeHero({ locale }: { locale: Locale }) {
     aria-label={copy.reviewsLabel}
   >
     <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Booksy</span>
-      <strong className="hero-trust-score">5.0 / 5</strong>
+      <span className="hero-trust-kicker">Opinie Booksy</span>
+      <strong className="hero-trust-score">5.0</strong>
       <span className="hero-trust-meta">{copy.booksyReviews}</span>
     </div>
 
     <div className="hero-trust-divider" />
 
     <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Google</span>
-      <strong className="hero-trust-score">5.0 / 5</strong>
+      <span className="hero-trust-kicker">Opinie Google</span>
+      <strong className="hero-trust-score">5.0</strong>
       <span className="hero-trust-meta">{copy.googleReviews}</span>
     </div>
   </div>
