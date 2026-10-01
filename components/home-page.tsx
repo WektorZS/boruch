@@ -1995,24 +1995,61 @@ function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="faq-title" className="section-lg border-b border-white/10 bg-[#111112]">
-      <div className="home-shell grid gap-14 lg:grid-cols-12">
+    <section
+      aria-labelledby="faq-title"
+      className="section-lg border-b border-white/10 bg-[#111112]"
+    >
+      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-20">
         <div className="lg:col-span-4">
-          <p className="home-kicker">{copy.faqLabel}</p>
-          <h2 id="faq-title" data-reveal="" className="editorial-display mt-7">{copy.faqTitle}</h2>
-          <p className="mt-7 max-w-sm text-base leading-relaxed text-white/65">{copy.faqIntro}</p>
+          <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+            <p className="home-kicker">{copy.faqLabel}</p>
+
+            <h2
+              id="faq-title"
+              data-reveal=""
+              className="editorial-display mt-7 max-w-[8ch]"
+            >
+              {copy.faqTitle}
+            </h2>
+
+            <p className="mt-7 max-w-sm text-base leading-relaxed text-white/62">
+              {copy.faqIntro}
+            </p>
+
+            <p className="mt-8 text-[.68rem] font-medium uppercase tracking-[.14em] text-white/38">
+              {copy.faq.length} {locale === "pl" ? "pytań i odpowiedzi" : ""}
+            </p>
+          </div>
         </div>
 
-        <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
-          {copy.faq.map(([question, answer]) => (
-            <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-medium normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
-                <span>{question}</span>
-                <span className="grid size-6 shrink-0 place-items-center text-brand transition-transform group-open:rotate-180">
+        <div className="border-t border-white/14 lg:col-span-7 lg:col-start-6">
+          {copy.faq.map(([question, answer], index) => (
+            <details
+              key={question}
+              className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
+            >
+              <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+                <span
+                  className="w-6 shrink-0 text-[.62rem] font-medium tracking-[.14em] text-white/32 transition-colors group-open:text-brand"
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
+                  {question}
+                </span>
+
+                <span className="grid size-8 shrink-0 place-items-center text-brand transition-transform duration-300 group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
                 </span>
               </summary>
-              <p className="max-w-2xl pb-8 pr-12 text-base leading-relaxed text-white/65">{answer}</p>
+
+              <div className="pb-7 pl-11 pr-10 sm:pr-14">
+                <p className="max-w-2xl text-[.95rem] leading-7 text-white/60">
+                  {answer}
+                </p>
+              </div>
             </details>
           ))}
         </div>
