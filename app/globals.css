@@ -3608,16 +3608,19 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: 2rem;
+  right: 1rem;
   bottom: 2rem;
   z-index: 12;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1.35rem;
+
   min-width: 9.5rem;
   padding: 0;
   text-align: right;
+
   background: transparent;
   border: 0;
   box-shadow: none;
@@ -4120,6 +4123,15 @@ a.service-index-row:hover { border-color: var(--brand); }
     min-height: calc(100svh - var(--header-h));
     padding-block: 3.5rem 9.5rem;
   }
+.hero-cinema-shade {
+  background:
+    linear-gradient(
+      0deg,
+      #080809 0%,
+      rgb(8 8 9 / 0.64) 55%,
+      rgb(8 8 9 / 0.34) 100%
+    );
+}
 
   .hero-editorial-bottom {
     position: static;
