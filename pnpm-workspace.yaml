@@ -1,4 +1,9 @@
 pmOnFail: ignore
+overrides:
+  'postcss@8': '^8.5.23'
+  'nanoid@3': '^3.3.18'
+  'browserslist@4': '^4.28.7'
+  'baseline-browser-mapping@2': '^2.11.0'
 
 minimumReleaseAgeExclude:
   - '@next/*'

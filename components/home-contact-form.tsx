@@ -111,7 +111,7 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
         }),
       })
 
-      if (!response.ok) throw new Error("Request failed")
+      if (!response.ok || (await response.json()).ok !== true) throw new Error("Request failed")
 
       setStatus("success")
       form.reset()
@@ -121,7 +121,7 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={status === "sending"} className="relative grid gap-5">
+    <form method="post" action={process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact"} onSubmit={handleSubmit} aria-busy={status === "sending"} className="relative grid gap-5">
       <div className="absolute -left-[10000px] top-auto size-px overflow-hidden" aria-hidden="true">
         <label htmlFor={`website-${locale}`}>Website</label>
         <input id={`website-${locale}`} name="website" type="text" tabIndex={-1} autoComplete="off" />
@@ -144,7 +144,7 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
           {copy.service}
           <select className={fieldClass} name="service" defaultValue="" required>
             <option value="" disabled>{copy.choose}</option>
-            {copy.services.map((service) => <option key={service} value={service}>{service}</option>)}
+            {copy.services.map((service, index) => <option key={service} value={`service-${index}`}>{service}</option>)}
           </select>
         </label>
       </div>

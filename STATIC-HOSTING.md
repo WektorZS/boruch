@@ -12,7 +12,7 @@ pnpm typecheck
 pnpm build
 ```
 
-`pnpm build` wykonuje `next build` i zapisuje gotową witrynę w `out`. Katalog zawiera HTML podstron we wszystkich czterech językach, `404.html`, `sitemap.xml`, `robots.txt`, fonty, fotografie i zasoby `_next`. Wszystkie trasy, także ukraińskie adresy i strony pojedynczych usług, są eksportowane podczas budowania.
+`pnpm build` wykonuje `next build`, zapisuje gotową witrynę w `out`, a następnie dodaje politykę CSP i sumy integralności skryptów. Katalog zawiera HTML podstron we wszystkich czterech językach, `404.html`, `sitemap.xml`, `robots.txt`, fonty, fotografie i zasoby `_next`. Wszystkie trasy, także ukraińskie adresy i strony pojedynczych usług, są eksportowane podczas budowania. Nie edytuj ręcznie JavaScript ani skryptów inline w gotowym eksporcie - po zmianach wykonaj ponowny build, aby przeliczyć hashe.
 
 ## Obecne wdrożenie na Vercel
 
@@ -64,14 +64,21 @@ Vercel ustawia roczny cache `immutable` dla fontów oraz zdjęć w `images/photo
 
 Nie nadpisuj zawartości pliku oznaczonego `immutable` pod tym samym adresem. Przy zmianie użyj nowej nazwy albo katalogu wersji i zaktualizuj odwołania oraz nagłówki. HTML powinien umożliwiać pobranie aktualnej wersji po publikacji.
 
-## Kopie przed dopracowaniem z 1 października 2026
+## Bezpieczeństwo i nagłówki po przeniesieniu
 
-W lokalnym katalogu `.backups` znajdują się:
+Każdy HTML ma własną politykę CSP. Uruchomienie JavaScript wymaga zgodnego hasha; zaufane skrypty Next.js mogą doładowywać własne moduły. Skrypty inline bez hasha, atrybuty typu `onclick` i `eval` są blokowane. Style inline pozostają dozwolone, ponieważ są używane do geometrii karuzel i animacji. Ta część zabezpieczeń nie wymaga konfiguracji serwera ani Node.js.
 
-- `boruch-before-editorial-2026-10-01-78ce9de.zip` - kopia źródeł i zasobów sprzed zmian;
-- `boruch-static-before-editorial-2026-10-01-78ce9de.zip` - gotowy wcześniejszy eksport w katalogu `out`, do szybkiego przywrócenia frontendu.
+Nagłówki HTTP w `vercel.json` ograniczają osadzanie strony w obcych ramkach, wyłączają niepotrzebne uprawnienia, chronią typy MIME i włączają HSTS. Eksport ma plik `_headers` obsługiwany przez Cloudflare Pages i Netlify. Na innym hostingu ustaw odpowiedniki tych nagłówków. Sama deklaracja CSP w HTML nie zastąpi `frame-ancestors` ani HSTS w odpowiedzi HTTP.
 
-Archiwa są lokalne i pomijane przez Git. Nie są automatycznie publikowane na Vercel. Przed przywracaniem rozpakuj kopię do osobnego katalogu i zachowaj obecną wersję. Statyczna kopia nie zastępuje konfiguracji i sekretów funkcji kontaktowej na hostingu.
+Przy osobnym endpointcie formularza ustaw jego adres HTTPS przed buildem w `NEXT_PUBLIC_CONTACT_ENDPOINT`. Jego origin zostanie automatycznie dopuszczony przez CSP. Nie publikuj sekretów w zmiennych `NEXT_PUBLIC_*`.
+
+Limit API jest lokalny dla instancji. Na Vercel korzysta z nadpisywanego przez platformę `x-vercel-forwarded-for`. Po przeniesieniu endpointu na inny hosting dostosuj odczyt IP do zaufanego reverse proxy. Bez Vercela endpoint używa wspólnego koszyka, zamiast ufać nagłówkom przekazanym przez klienta. Wspólny limit, WAF, ochrona DDoS i MFA kont wymagają konfiguracji infrastruktury. Honeypot i czas wypełniania nie zastępują takiej ochrony.
+
+W panelu Vercela warto ustawić ograniczenie częstotliwości `POST /api/contact`. Włącz MFA na kontach GitHub, Vercel i Resend, ogranicz uprawnienia klucza Resend do wysyłki oraz utrzymuj limit wydatków. Tych ustawień nie zmieniono automatycznie. Kod strony nie zabezpieczy przejętego konta administracyjnego.
+
+Origin i CORS ograniczają wywołania z obcych stron w przeglądarce. Nie uwierzytelniają bota, który sam wysyła HTTP i może zadeklarować dowolny Origin. Limit w pamięci procesu jest dodatkową barierą, nie ochroną przed rozproszonym atakiem. Nie wykonano agresywnych testów produkcyjnego hostingu ani prawdziwej wysyłki testowych maili. Po wdrożeniu trzeba potwierdzić konfigurację Resend i nagłówki docelowego serwera.
+
+Lokalne archiwa `.backups` i materiały tymczasowe zostały usunięte na prośbę właściciela. Poprzednie zatwierdzone wersje źródeł pozostają w historii Git; konfigurację i sekrety hostingu należy przechowywać osobno.
 
 ## Kontrola po publikacji
 

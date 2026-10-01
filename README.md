@@ -68,7 +68,8 @@ Endpoint sprawdza pochodzenie żądania, typ i wielkość danych, zgodę użytko
 
 - `pnpm typecheck` sprawdza TypeScript.
 - `pnpm build` sprawdza pełny eksport produkcyjny. Błędy TypeScript nie są ignorowane.
-- Kopia wersji sprzed audytu: `.backups/boruch-before-ui-audit-2026-09-30-3e2e37b.zip`. Backup i pliki roboczych testów są pomijane przez Git.
+- `pnpm test:security` uruchamia testy endpointu bez wysyłki prawdziwych wiadomości oraz sprawdza CSP i integralność skryptów w gotowym `out`. Najpierw wykonaj build.
+- Archiwa lokalnych kopii i pliki roboczych testów usunięto na prośbę właściciela. Poprzednie zatwierdzone wersje są dostępne w historii Git.
 - Widoki były sprawdzane na szerokościach 320, 390, 768, 1024, 1440 i 1920 px, dla wszystkich tras oraz czterech języków.
 - Formularz był testowany z atrapą odpowiedzi endpointu, bez wysyłania wiadomości do właściciela. Przed przekazaniem klientowi trzeba wykonać prawdziwy test Resend w skonfigurowanym środowisku produkcyjnym.
 

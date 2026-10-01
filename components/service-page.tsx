@@ -131,7 +131,7 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
 
   return (
     <SiteShell locale="pl" page="services" alternates={alternates} breadcrumbs={[{ name: ui.pl.nav.home, path: "/" }, { name: ui.pl.nav.services, path: "/uslugi" }, { name: service.navTitle, path: `/${slug}` }]}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <ServiceHero service={service} />
       <ServiceIntro service={service} />
       <ServiceProcess service={service} />
