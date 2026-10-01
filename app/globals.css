@@ -2020,14 +2020,14 @@ a.service-index-row:hover { border-color: var(--brand); }
   clip-path: none;
 }
 
-.hero-cinema-shade {
-  background:
-    linear-gradient(
-      0deg,
-      #080809 0%,
-      rgb(8 8 9 / 0.76) 48%,
-      rgb(8 8 9 / 0.48) 100%
-    );
+ .hero-cinema-shade {
+    background:
+      linear-gradient(
+        0deg,
+        #080809 0%,
+        rgb(8 8 9 / 0.88) 48%,
+        rgb(8 8 9 / 0.68) 100%
+      );
 }
 
 .hero-editorial-bottom {
