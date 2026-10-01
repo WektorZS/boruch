@@ -558,8 +558,6 @@ function HomeHero({ locale }: { locale: Locale }) {
   const [heroPaused, setHeroPaused] = useState(false)
   const [autoplay, setAutoplay] = useState(true)
   const heroRef = useRef<HTMLElement>(null)
-  const slide = copy.heroSlides[activeSlide]
-  const hasLongTitleWord = slide.title.split(/\s+/).some((word) => word.length >= 12)
 
   useEffect(() => {
     const hero = heroRef.current
@@ -631,15 +629,15 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
-  <div className="hero-copy-stage">
+ <div className="hero-copy-stage">
   {copy.heroSlides.map((heroSlide, index) => {
-    const longTitle = heroSlide.title
+    const hasLongTitleWord = heroSlide.title
       .split(/\s+/)
       .some((word) => word.length >= 12)
 
     return (
       <div
-        key={heroSlide.title}
+        key={`${heroSlide.label}-${heroSlide.title}`}
         className={cn(
           "hero-editorial-copy hero-copy-contrast hero-copy-slide",
           index === activeSlide
@@ -657,7 +655,7 @@ function HomeHero({ locale }: { locale: Locale }) {
           id={index === activeSlide ? "hero-title" : undefined}
           className={cn(
             "cinematic-title",
-            longTitle && "cinematic-title-long",
+            hasLongTitleWord && "cinematic-title-long",
           )}
         >
           {heroSlide.title}
