@@ -51,7 +51,7 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p43", position: "58% 55%" },
   { id: "p46", position: "50% 50%" },
 ]
-
+x
 const mapEmbedUrl = "https://www.google.com/maps?cid=3751270293210839842&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF&hl=pl&gl=PL&source=embed"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
