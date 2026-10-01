@@ -52,7 +52,7 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p46", position: "50% 50%" },
 ]
 
-const mapEmbedUrl = "https://www.google.com/maps?cid=3751270293210839842&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF&hl=pl&gl=PL&source=embed"
+const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3175.5081256882263!2d14.555991099999996!3d53.432913199999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e1!3m2!1spl!2spl!4v1790889823372!5m2!1spl!2spl"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
   pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
@@ -2021,9 +2021,10 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="border-t border-white/14 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details
-              key={question}
-              className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
-            >
+  key={question}
+  name="home-faq"
+  className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
+>
               <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
                   {question}
