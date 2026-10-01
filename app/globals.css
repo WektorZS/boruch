@@ -1746,18 +1746,18 @@
   font-family: var(--font-display);
   font-variation-settings: 'wdth' 75;
   font-weight: 800;
-  font-size: clamp(3.5rem, 6.2vw, 6.5rem);
+  font-size: clamp(3.4rem, 5.9vw, 6.2rem);
   line-height: 1.08;
   letter-spacing: -.025em;
-  max-width: 15ch;
+  max-width: 13.5ch;
   text-transform: uppercase;
   text-wrap: pretty;
   overflow-wrap: anywhere;
-  text-shadow: 0 2px 18px rgb(0 0 0 / .22), 0 0 40px rgb(0 0 0 / .12);
 }
 
 .cinematic-title-long {
-  font-size: clamp(3rem, 5.5vw, 5.8rem);
+  font-size: clamp(2.9rem, 5.2vw, 5.5rem);
+  max-width: 14ch;
   hyphens: auto;
 }
 
@@ -2020,15 +2020,16 @@ a.service-index-row:hover { border-color: var(--brand); }
 
   .hero-cinema-shade { background: linear-gradient(0deg, #080809 0%, rgb(8 8 9 / .45) 55%, rgb(8 8 9 / .2)), linear-gradient(90deg, rgb(8 8 9 / .6), transparent); }
 
- .cinematic-title {
-  font-size: clamp(2.75rem, 12.8vw, 4.5rem);
+.cinematic-title {
+  font-size: clamp(2.55rem, 11.6vw, 4.1rem);
   max-width: 13ch;
+  line-height: 1.06;
 }
 
 .cinematic-title-long {
-  font-size: clamp(2.35rem, 10.5vw, 3.75rem);
+  font-size: clamp(2.3rem, 10.2vw, 3.6rem);
   max-width: 15ch;
-  line-height: 1.05;
+  line-height: 1.04;
   overflow-wrap: normal;
 }
 
