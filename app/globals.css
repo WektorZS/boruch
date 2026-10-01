@@ -2076,17 +2076,6 @@ a.service-index-row:hover { border-color: var(--brand); }
   .hero-copy-stage {
     width: 100%;
   }
-
-  .hero-editorial-bottom {
-    position: static;
-    display: flex;
-    width: 100%;
-    margin-top: 1.4rem;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-
   .hero-cinema {
     inset: var(--header-h) 0 auto 0;
     width: 100%;
@@ -2242,7 +2231,9 @@ a.service-index-row:hover { border-color: var(--brand); }
   .service-index-cover > figure { margin-top: 2rem; aspect-ratio: 4 / 3; }
 
 }
-
+.hero-content-stack {
+  display: contents;
+}
 @media (max-width: 639px) {
 
   :root { --header-h: 5rem; --header-h-compact: 5rem; }
