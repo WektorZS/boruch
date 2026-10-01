@@ -75,7 +75,7 @@ const reviewDialogCopy: Record<Locale, { more: string; close: string; label: str
   uk: { more: "Показати більше", close: "Закрити відгук", label: "Відгук клієнта" },
 }
 
-const packageSaleCopy: Record<Locale, { title: string; without: string; save: string; sizeNote: string }> = {
+const packageSaleCopy: Record<Locale, { title: string; without: string; sizeNote: string }> = {
   pl: { title: "W komplecie taniej", without: "Cena bez pakietu", sizeNote: "W pakiecie Komplet obowiązują osobne warianty: średnie auto od 240 zł, duże auto od 260 zł." },
   en: { title: "Better value as a package", without: "Price without the package", sizeNote: "The Complete package has separate variants: medium car from PLN 240, large car from PLN 260." },
   de: { title: "Im Paket günstiger", without: "Preis ohne Paket", sizeNote: "Für das Komplettpaket gelten eigene Varianten: mittelgroßes Auto ab 240 PLN, großes Auto ab 260 PLN." },
