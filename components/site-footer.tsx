@@ -34,9 +34,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
         </div>
       </div>}
 
-      <div className="shell-wide">
-        <Link prefetch={false} href={routes[locale].home} aria-label={`Boruch Myjnia - ${t.nav.home}`} className="footer-signature"><span>BORUCH<span className="text-brand">.</span></span><span>Myjnia / Detailing<br />Szczecin / PAZIM</span></Link>
-      </div>
+      <></>
 
       <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-14 lg:grid-cols-12 lg:gap-8 lg:py-20">
         <div className="col-span-2 lg:col-span-4">

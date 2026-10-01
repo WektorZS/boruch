@@ -1638,15 +1638,15 @@ function Packages({ locale }: { locale: Locale }) {
   return (
     <section aria-labelledby="packages-title" className="section-xl bg-[#101011]">
       <div className="home-shell">
-        <div className="grid gap-7 border-b border-white/12 pb-7 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="home-kicker">{t.pricing}</p>
-            <h2 id="packages-title" data-reveal="" className="editorial-display mt-6">{src.home.packagesTitle}</h2>
-          </div>
-          <Link prefetch={false} href={routes[locale].pricing} className="editorial-link lg:col-span-4 lg:col-start-9 lg:justify-self-end">
-            {{ pl: "Pełny cennik", en: "Full price list", de: "Vollständige Preisliste", uk: "Повний прайс" }[locale]}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
-          </Link>
-        </div>
+  <div className="grid gap-7 pb-7 lg:grid-cols-12 lg:items-end">
+  <div className="lg:col-span-7">
+    <p className="home-kicker">{t.pricing}</p>
+    <h2 id="packages-title" data-reveal="" className="editorial-display mt-6">{src.home.packagesTitle}</h2>
+  </div>
+  <Link prefetch={false} href={routes[locale].pricing} className="editorial-link lg:col-span-4 lg:col-start-9 lg:justify-self-end">
+    {{ pl: "Pełny cennik", en: "Full price list", de: "Vollständige Preisliste", uk: "Повний прайс" }[locale]}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+  </Link>
+</div>
 
         <div className="mt-8">
           {packageOrder.map(index => {
@@ -1680,7 +1680,6 @@ function Packages({ locale }: { locale: Locale }) {
   {pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}
 </span>
                   {pkg.note && <span className="mt-3 block text-xs leading-relaxed text-white/60">{pkg.note}</span>}
-                  <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-5">{t.pricing}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
                 </div>
               </article>
             )
@@ -1744,7 +1743,6 @@ function TeamStory({ locale }: { locale: Locale }) {
 </figure>
 
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
-            <p className="home-kicker">{t.nav.about}</p>
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
 
@@ -1993,6 +1991,23 @@ function Reviews({ locale }: { locale: Locale }) {
 
 function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
+  const [showAll, setShowAll] = useState(false)
+
+  const visibleFaq = showAll ? copy.faq : copy.faq.slice(0, 4)
+
+  const moreLabel = {
+    pl: "Więcej pytań",
+    en: "More questions",
+    de: "Weitere Fragen",
+    uk: "Більше запитань",
+  }[locale]
+
+  const lessLabel = {
+    pl: "Pokaż mniej",
+    en: "Show less",
+    de: "Weniger anzeigen",
+    uk: "Показати менше",
+  }[locale]
 
   return (
     <section
@@ -2005,12 +2020,12 @@ function HomeFaq({ locale }: { locale: Locale }) {
             <p className="home-kicker">{copy.faqLabel}</p>
 
             <h2
-  id="faq-title"
-  data-reveal=""
-  className="editorial-display mt-7"
->
-  {copy.faqTitle}
-</h2>
+              id="faq-title"
+              data-reveal=""
+              className="editorial-display mt-7"
+            >
+              {copy.faqTitle}
+            </h2>
 
             <p className="mt-7 max-w-sm text-base leading-relaxed text-white/62">
               {copy.faqIntro}
@@ -2018,30 +2033,57 @@ function HomeFaq({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="border-t border-white/14 lg:col-span-7 lg:col-start-6">
-          {copy.faq.map(([question, answer]) => (
-            <details
-  key={question}
-  name="home-faq"
-  className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
->
-              <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
-                <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
-                  {question}
-                </span>
+        <div className="lg:col-span-7 lg:col-start-6">
+          <div className="border-t border-white/14">
+            {visibleFaq.map(([question, answer]) => (
+              <details
+                key={question}
+                name="home-faq"
+                className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
+              >
+                <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+                  <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
+                    {question}
+                  </span>
 
-                <span className="grid size-8 shrink-0 place-items-center text-brand transition-transform duration-300 group-open:rotate-180">
-                  <ChevronDown className="size-4" aria-hidden="true" />
-                </span>
-              </summary>
+                  <span className="grid size-8 shrink-0 place-items-center text-brand transition-transform duration-300 group-open:rotate-180">
+                    <ChevronDown
+                      className="size-4"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </summary>
 
-              <div className="pb-7 pr-10 sm:pr-14">
-                <p className="max-w-2xl text-[.95rem] leading-7 text-white/60">
-                  {answer}
-                </p>
-              </div>
-            </details>
-          ))}
+                <div className="pb-7 pr-10 sm:pr-14">
+                  <p className="max-w-2xl text-[.95rem] leading-7 text-white/60">
+                    {answer}
+                  </p>
+                </div>
+              </details>
+            ))}
+          </div>
+
+          {copy.faq.length > 4 && (
+            <button
+              type="button"
+              onClick={() => setShowAll((current) => !current)}
+              aria-expanded={showAll}
+              className="group mx-auto mt-8 flex min-h-14 flex-col items-center justify-center gap-2 text-[.7rem] font-bold uppercase tracking-[.15em] text-white/55 transition-colors hover:text-white"
+            >
+              <span>
+                {showAll ? lessLabel : moreLabel}
+              </span>
+
+              <ChevronDown
+                className={`size-5 text-brand transition-transform duration-300 ${
+                  showAll
+                    ? "rotate-180"
+                    : "animate-bounce"
+                }`}
+                aria-hidden="true"
+              />
+            </button>
+          )}
         </div>
       </div>
     </section>
@@ -2186,8 +2228,14 @@ function ContactSection({ locale }: { locale: Locale }) {
         </div>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
-            <div className="flex flex-col gap-5 border-t border-white/15 pt-6">
-              <a href={contact.phoneHref} className="editorial-contact-phone">{contact.phone}<ArrowUpRight className="size-5 text-brand" aria-hidden="true" /></a>
+            <div className="flex flex-col gap-5 pt-6">
+              <a
+  href={contact.phoneHref}
+  className="inline-flex w-fit items-center gap-3 text-white transition-colors hover:text-[#ef6267]"
+>
+  {contact.phone}
+  <ArrowUpRight className="size-5 text-brand" aria-hidden="true" />
+</a>
               <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
               <p className="mt-3 max-w-sm text-base leading-relaxed text-white/65">{copy.contactBooksy}</p>
               <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-2 w-fit">{ui[locale].pricing}<ArrowRight className="size-4" aria-hidden="true" /></Link>

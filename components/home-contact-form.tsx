@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react"
+import { ArrowRight, CheckCircle2, ChevronDown, LoaderCircle } from "lucide-react"
 
 import type { Locale } from "@/lib/content"
 
@@ -84,14 +84,21 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
   const copy = formCopy[locale]
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
   const [formLoadedAt] = useState(() => Date.now())
+  const [serviceOpen, setServiceOpen] = useState(false)
+  const [selectedService, setSelectedService] = useState("")
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (status === "sending" || status === "success") return
     const form = event.currentTarget
-    const formData = new FormData(form)
+const formData = new FormData(form)
 
-    setStatus("sending")
+if (!selectedService) {
+  setServiceOpen(true)
+  return
+}
+
+setStatus("sending")
 
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact", {
@@ -114,7 +121,9 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
       if (!response.ok || (await response.json()).ok !== true) throw new Error("Request failed")
 
       setStatus("success")
-      form.reset()
+form.reset()
+setSelectedService("")
+setServiceOpen(false)
     } catch {
       setStatus("error")
     }
@@ -140,13 +149,65 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
           {copy.email}
           <input className={fieldClass} name="email" type="email" autoComplete="email" maxLength={160} required />
         </label>
-        <label className={labelClass}>
-          {copy.service}
-          <select className={fieldClass} name="service" defaultValue="" required>
-            <option value="" disabled>{copy.choose}</option>
-            {copy.services.map((service, index) => <option key={service} value={`service-${index}`}>{service}</option>)}
-          </select>
-        </label>
+        <div className={labelClass}>
+  <span>{copy.service}</span>
+
+  <div className="relative">
+    <input
+      type="hidden"
+      name="service"
+      value={selectedService}
+    />
+
+    <button
+      type="button"
+      onClick={() => setServiceOpen((current) => !current)}
+      aria-haspopup="listbox"
+      aria-expanded={serviceOpen}
+      className={`${fieldClass} flex items-center justify-between gap-4 text-left`}
+    >
+      <span
+        className={
+          selectedService
+            ? "min-w-0 flex-1 truncate text-white"
+            : "min-w-0 flex-1 truncate text-white/65"
+        }
+      >
+        {selectedService || copy.choose}
+      </span>
+
+      <ChevronDown
+        className={`size-4 shrink-0 text-brand transition-transform duration-200 ${
+          serviceOpen ? "rotate-180" : ""
+        }`}
+        aria-hidden="true"
+      />
+    </button>
+
+    {serviceOpen && (
+      <div
+        role="listbox"
+        className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 max-h-[50svh] overflow-y-auto overscroll-contain border border-white/15 bg-[#0a0a0b] shadow-2xl"
+      >
+        {copy.services.map((service) => (
+          <button
+            key={service}
+            type="button"
+            role="option"
+            aria-selected={selectedService === service}
+            onClick={() => {
+              setSelectedService(service)
+              setServiceOpen(false)
+            }}
+            className="flex min-h-11 w-full items-center border-b border-white/8 px-4 py-2.5 text-left text-sm leading-snug text-white/75 transition-colors last:border-b-0 hover:bg-white/[.06] hover:text-white sm:min-h-12 sm:py-3 sm:text-base"
+          >
+            {service}
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
       </div>
 
       <label className={labelClass}>
