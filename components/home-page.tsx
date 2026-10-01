@@ -631,33 +631,7 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
-  <div
-    key={activeSlide}
-    className={cn(
-      "hero-editorial-copy hero-copy-contrast",
-      activeSlide > 0 && "home-hero-copy-animated",
-    )}
-  >
-    <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
-      <span className="h-px w-7 shrink-0 bg-brand" />
-      {slide.label}
-    </p>
-
-    <h1
-      id="hero-title"
-      className={cn(
-        "cinematic-title",
-        hasLongTitleWord && "cinematic-title-long",
-      )}
-    >
-      {slide.title}
-    </h1>
-
-    <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
-      {slide.text}
-    </p>
-
-   <div className="hero-copy-stage">
+  <div className="hero-copy-stage">
   {copy.heroSlides.map((heroSlide, index) => {
     const longTitle = heroSlide.title
       .split(/\s+/)
@@ -712,7 +686,6 @@ function HomeHero({ locale }: { locale: Locale }) {
     )
   })}
 </div>
-
   <div
     className="hero-trust-totem"
     aria-label={copy.reviewsLabel}
