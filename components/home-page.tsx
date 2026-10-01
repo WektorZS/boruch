@@ -660,54 +660,71 @@ function HomeHero({ locale }: { locale: Locale }) {
     </Link>
   </div>
 </div>
-        <div className="hero-editorial-bottom">
+                <div className="hero-editorial-bottom">
           <div className="flex items-center gap-3">
-            <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">{followCopy[locale]}</span>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand">
+            <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">
+              {followCopy[locale]}
+            </span>
+
+            <a
+              href={contact.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
+            >
               <FacebookIcon className="size-4.5" />
             </a>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand">
+
+            <a
+              href={contact.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
+            >
               <InstagramIcon className="size-4.5" />
             </a>
           </div>
+        </div>
       </div>
 
-    <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
-  {copy.benefits.map(([title, text], index) => {
-    const Icon = benefitIcons[index] ?? Car
+      <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+        {copy.benefits.map(([title, text], index) => {
+          const Icon = benefitIcons[index] ?? Car
 
-    return (
-      <li
-        key={title}
-        className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
-      >
-        <div className="flex w-full max-w-sm items-center justify-center gap-4">
-          <Icon
-            className="size-5 shrink-0 text-brand"
-            aria-hidden="true"
-          />
+          return (
+            <li
+              key={title}
+              className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
+            >
+              <div className="flex w-full max-w-sm items-center justify-center gap-4">
+                <Icon
+                  className="size-5 shrink-0 text-brand"
+                  aria-hidden="true"
+                />
 
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
-              {title}
-            </strong>
+                <div className="flex min-w-0 flex-col gap-1.5">
+                  <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
+                    {title}
+                  </strong>
 
-            <span className="text-[.8rem] leading-snug text-white/65">
-              {text}
-            </span>
-          </div>
-        </div>
-      </li>
-    )
-  })}
-</ul>
-</section>
+                  <span className="text-[.8rem] leading-snug text-white/65">
+                    {text}
+                  </span>
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
 
-<div className="border-b border-white/10 bg-[#080809]">
-  <div className="home-shell flex justify-end py-5">
-    <HeroRatings copy={copy} className="hero-ratings-inline" />
-  </div>
-</div>
+    <div className="border-b border-white/10 bg-[#080809]">
+      <div className="home-shell flex justify-end py-5">
+        <HeroRatings copy={copy} className="hero-ratings-inline" />
+      </div>
+    </div>
   )
 }
 
