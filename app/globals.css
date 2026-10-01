@@ -1834,6 +1834,7 @@
 
 }
 
+
 .hero-editorial-bottom {
 
   position: static;
@@ -1858,16 +1859,20 @@
 
 }
 
-.hero-editorial-bottom span,
-.hero-editorial-bottom a {
+.hero-editorial-bottom span {
+  color: #fff !important;
+  opacity: 1 !important;
+  text-shadow: 0 0 1px rgb(255 255 255 / 0.65);
+}
+
+.hero-editorial-bottom a,
+.hero-editorial-bottom a svg {
   color: #fff !important;
   opacity: 1 !important;
 }
 
 .hero-editorial-bottom a svg {
-  color: currentColor !important;
-  opacity: 1 !important;
-  stroke: currentColor;
+  filter: drop-shadow(0 0 0.5px rgb(255 255 255 / 0.7));
 }
 
 .hero-editorial-bottom a:hover,

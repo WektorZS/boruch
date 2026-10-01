@@ -693,7 +693,7 @@ function HomeHero({ locale }: { locale: Locale }) {
 
  <div className="hero-editorial-bottom">
   <div className="flex items-center gap-3 text-white">
-    <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white">
+    <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
       {followCopy[locale]}
     </span>
 
@@ -704,7 +704,7 @@ function HomeHero({ locale }: { locale: Locale }) {
       aria-label="Facebook"
       className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
     >
-      <FacebookIcon className="size-4.5" />
+      <FacebookIcon className="size-5" />
     </a>
 
     <a
@@ -714,7 +714,7 @@ function HomeHero({ locale }: { locale: Locale }) {
       aria-label="Instagram"
       className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
     >
-      <InstagramIcon className="size-4.5" />
+      <InstagramIcon className="size-5" />
     </a>
   </div>
 </div>
