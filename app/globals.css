@@ -2,11 +2,15 @@
 
 @import 'tw-animate-css';
 
+/* Local, licensed WOFF2 assets. Latin extensions cover Polish; Cyrillic covers Ukrainian. */
+
 @font-face { font-family: 'Roboto Flex'; font-style: normal; font-weight: 300 900; font-stretch: 75% 115%; font-display: swap; src: url('/fonts/roboto-flex-latin-full-normal.woff2') format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
 
 @font-face { font-family: 'Roboto Flex'; font-style: normal; font-weight: 300 900; font-stretch: 75% 115%; font-display: swap; src: url('/fonts/roboto-flex-latin-ext-full-normal.woff2') format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
 
 @font-face { font-family: 'Roboto Flex'; font-style: normal; font-weight: 300 900; font-stretch: 75% 115%; font-display: swap; src: url('/fonts/roboto-flex-cyrillic-full-normal.woff2') format('woff2'); unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+
+/* The frequently used Polish glyphs do not need the entire Latin extension set. */
 
 @font-face { font-family: 'Roboto Flex'; font-style: normal; font-weight: 300 900; font-stretch: 75% 115%; font-display: swap; src: url('/fonts/roboto-flex-polish-v2.woff2') format('woff2'); unicode-range: U+0104-0107,U+0118-0119,U+0141-0144,U+015A-015B,U+0179-017C; }
 
@@ -20,6 +24,8 @@
 
 @font-face { font-family: 'Alex Brush'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/alex-brush-signature-400-v2.woff2') format('woff2'); unicode-range: U+0020,U+0042,U+004B,U+0061,U+0063,U+0068,U+006C,U+006F,U+0072,U+0075; }
 
+/* BORUCH - one restrained editorial system, shared by every page. */
+
 :root {
 
   --font-flex: 'Roboto Flex';
@@ -27,6 +33,8 @@
   --font-mono-tech: 'JetBrains Mono';
 
   color-scheme: dark;
+
+  /* Palette */
 
   --ink: #070707;
 
@@ -50,11 +58,15 @@
 
   --ash: #a7a2a0;
 
+  /* Borders */
+
   --line: rgb(244 241 237 / 0.085);
 
   --line-strong: rgb(244 241 237 / 0.17);
 
   --line-wine: rgb(213 43 47 / 0.34);
+
+  /* Semantic (shadcn compatible) */
 
   --background: var(--ink);
 
@@ -92,7 +104,11 @@
 
   --ring: var(--highlight);
 
+  /* Radius - precise, near-sharp */
+
   --radius: 3px;
+
+  /* Containers & gutters */
 
   --container-wide: 1560px;
 
@@ -104,11 +120,15 @@
 
   --photo-cut: clamp(.625rem, 1.6vw, 1.25rem);
 
+  /* Section rhythm */
+
   --section-xl: clamp(5rem, 8vw, 7.5rem);
 
   --section-lg: clamp(4rem, 6.5vw, 6rem);
 
   --section-md: clamp(3rem, 5vw, 4.5rem);
+
+  /* Type rhythm leaves room for Polish and Ukrainian diacritics. */
 
   --type-title: clamp(2.1rem, 3.5vw, 3.6rem);
 
@@ -124,13 +144,19 @@
 
   --leading-card: 1.2;
 
+  /* Header */
+
   --header-h: 5.5rem;
 
   --header-h-compact: 4.5rem;
 
+  /* Shadows */
+
   --shadow-lift: 0 40px 80px -40px rgb(0 0 0 / 0.85);
 
   --shadow-panel: 0 1px 0 0 var(--line) inset;
+
+  /* Z-index scale */
 
   --z-base: 0;
 
@@ -145,6 +171,8 @@
   --z-lightbox: 70;
 
   --z-skip: 80;
+
+  /* Motion */
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -334,6 +362,12 @@
 
 }
 
+/* ---------- Layout ---------- */
+
+/* Keep offscreen copy in the HTML, but do not lay out the entire page at startup.
+
+   The review dialog stays outside its contained content so it remains viewport-fixed. */
+
 .home-main > section:not(.editorial-hero):not(.home-reviews) {
 
   content-visibility: auto;
@@ -399,6 +433,8 @@
   padding-block: var(--section-md);
 
 }
+
+/* ---------- Typography ---------- */
 
 @utility type-campaign {
 
@@ -582,6 +618,8 @@
 
 }
 
+/* ---------- Dividers & eyebrows ---------- */
+
 @utility rule {
 
   height: 1px;
@@ -641,6 +679,8 @@
   }
 
 }
+
+/* ---------- Buttons ---------- */
 
 @utility btn {
 
@@ -738,6 +778,8 @@
 
 }
 
+/* Directional arrow that travels on hover of its group */
+
 @utility arrow-shift {
 
   transition: transform var(--dur-base) var(--ease-out);
@@ -766,6 +808,8 @@
 
 }
 
+/* Underline that draws from left on hover and stays on the active item */
+
 @utility link-draw {
 
   background-image: linear-gradient(currentColor, currentColor);
@@ -791,6 +835,8 @@
   }
 
 }
+
+/* ---------- Image treatments ---------- */
 
 @utility frame {
 
@@ -854,6 +900,10 @@
 
 }
 
+/* ---------- Motion system ---------- */
+
+/* Reveal: only hidden when JS is running (html.js), so no-JS visitors always see content. */
+
 .js [data-reveal] {
 
   opacity: 0;
@@ -877,6 +927,12 @@
   transform: none;
 
 }
+
+/* Image mask reveal: a quiet wipe and a 1.035 scale settle.
+
+   The clip sits on the children, not the observed element, because Chromium's
+
+   IntersectionObserver treats a fully clipped target as never intersecting. */
 
 .js [data-reveal='mask'] {
 
@@ -917,6 +973,10 @@
   transform: scale(1);
 
 }
+
+/* Line-by-line heading reveal: each child line slides up from its own clip */
+
+/* Top padding gives Polish/Ukrainian diacritics (Ó, Ś, Ż, Й) room above tight display line-heights. */
 
 .lines > .line,
 
@@ -981,6 +1041,8 @@
   transform: none;
 
 }
+
+/* Hero entrance (runs on load, no observer needed) */
 
 @keyframes rise {
 
@@ -1120,6 +1182,8 @@
 
 }
 
+/* Service stage crossfade */
+
 .stage-img {
 
   opacity: 0;
@@ -1141,6 +1205,8 @@
   transform: scale(1);
 
 }
+
+/* ---------- Home 2026 - standalone editorial system ---------- */
 
 .home-root {
 
@@ -1498,6 +1564,8 @@
 
 }
 
+/* Editorial compositions. Layout lives with each page, not in card templates. */
+
 .editorial-display {
 
   font-family: var(--font-display);
@@ -1558,7 +1626,6 @@
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: auto auto;
   align-content: center;
-  row-gap: 1rem;
   position: relative;
   padding-block: 5rem 8rem;
 }
@@ -1577,14 +1644,15 @@
   z-index: -1;
   pointer-events: none;
   inset: -7rem -13rem -7rem -5rem;
-  background: radial-gradient(
-    ellipse 78% 72% at 32% 50%,
-    rgb(8 8 9 / 0.96) 0%,
-    rgb(8 8 9 / 0.88) 34%,
-    rgb(8 8 9 / 0.6) 56%,
-    rgb(8 8 9 / 0.28) 72%,
-    transparent 100%
-  );
+  background:
+    radial-gradient(
+      ellipse 78% 72% at 32% 50%,
+      rgb(8 8 9 / 0.96) 0%,
+      rgb(8 8 9 / 0.88) 34%,
+      rgb(8 8 9 / 0.6) 56%,
+      rgb(8 8 9 / 0.28) 72%,
+      transparent 100%
+    );
   filter: blur(10px);
 }
 
@@ -1594,7 +1662,7 @@
   font-weight: 800;
   font-size: clamp(3.4rem, 5.9vw, 6.2rem);
   line-height: 1.08;
-  letter-spacing: -0.025em;
+  letter-spacing: -.025em;
   max-width: 13.5ch;
   text-transform: uppercase;
   text-wrap: pretty;
@@ -1650,7 +1718,7 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: calc(50% - 50vw + 28px);
+  right: calc((100vw - 100%) / -2 + 28px);
   bottom: 2rem;
   z-index: 12;
   display: flex;
@@ -1689,13 +1757,15 @@
   line-height: 0.9;
   letter-spacing: -0.04em;
   color: rgb(255 255 255 / 0.97);
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.72), 0 0 2px rgb(0 0 0 / 0.82);
+  text-shadow:
+    0 2px 14px rgb(0 0 0 / 0.72),
+    0 0 2px rgb(0 0 0 / 0.82);
 }
 
 .hero-trust-meta {
   font-size: 0.74rem;
   line-height: 1.3;
-  color: rgb(255 255 255 / 0.76);
+  color: rgb(255 255 255 / 0.78);
   text-shadow: 0 1px 8px rgb(0 0 0 / 0.72);
 }
 
@@ -1708,21 +1778,19 @@
 }
 
 .hero-editorial-bottom {
-  position: static;
   grid-column: 1 / 8;
   grid-row: 2;
   justify-self: start;
+  margin-top: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 0.9rem;
   width: auto;
-  margin: 0;
 }
 
 .hero-editorial-bottom span {
   color: rgb(255 255 255 / 0.84);
-  font-weight: 600;
 }
 
 .hero-editorial-bottom a {
@@ -1939,14 +2007,13 @@ a.service-index-row:hover { border-color: var(--brand); }
 .service-index-category figure { position: relative; overflow: hidden; aspect-ratio: 16 / 9; }
 
 @media (max-width: 1023px) {
-.hero-editorial-copy { grid-column: 1 / 10; }
-.hero-editorial-bottom { grid-column: 1 / 10; }
-.hero-cinema { left: 18%; inset-block-end: 5rem; }
-.hero-cinema-shade {
-  background:
-    linear-gradient(90deg, #080809, rgb(8 8 9 / 0.68) 30%, rgb(8 8 9 / 0.35)),
-    linear-gradient(0deg, #080809, transparent 50%);
-}
+
+  .hero-editorial-copy,
+  .hero-editorial-bottom { grid-column: 1 / 10; }
+
+  .hero-cinema { left: 18%; inset-block-end: 5rem; }
+
+  .hero-cinema-shade { background: linear-gradient(90deg, #080809, rgb(8 8 9 / .68) 30%, rgb(8 8 9 / .35)), linear-gradient(0deg, #080809, transparent 50%); }
 
   .hero-photo-note { display: none; }
 
@@ -1987,129 +2054,118 @@ a.service-index-row:hover { border-color: var(--brand); }
 }
 
 @media (max-width: 639px) {
-.hero-editorial-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  min-height: calc(100svh - var(--header-h));
-  padding-block: 3.5rem 9.5rem;
-}
+  .hero-editorial-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: 3.5rem 9.5rem;
+  }
 
-.hero-editorial-copy {
-  width: 100%;
-}
+  .hero-cinema {
+    inset: var(--header-h) 0 auto 0;
+    width: 100%;
+    height: calc(100svh - var(--header-h));
+    clip-path: none;
+  }
 
-.hero-cinema {
-  inset: var(--header-h) 0 auto 0;
-  width: 100%;
-  height: calc(100svh - var(--header-h));
-  clip-path: none;
-}
+  .hero-cinema-shade {
+    background:
+      linear-gradient(
+        0deg,
+        #080809 0%,
+        rgb(8 8 9 / 0.64) 55%,
+        rgb(8 8 9 / 0.34) 100%
+      );
+  }
 
-.hero-cinema-shade {
-  background: linear-gradient(
-    0deg,
-    #080809 0%,
-    rgb(8 8 9 / 0.64) 55%,
-    rgb(8 8 9 / 0.34) 100%
-  );
-}
+  .hero-editorial-bottom {
+    position: static;
+    margin-top: 1.4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    row-gap: .5rem;
+  }
 
-.hero-editorial-bottom {
-  position: static;
-  width: 100%;
-  margin-top: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  row-gap: 0.5rem;
-}
+  .hero-trust-totem {
+    position: absolute;
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-width: 0;
+    width: auto;
+    padding: 0.9rem 0;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+    background: transparent;
+    box-shadow: none;
+  }
 
-.hero-editorial-bottom span {
-  color: rgb(255 255 255 / 0.84);
-}
+  .hero-trust-item {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "label label"
+      "score meta";
+    align-items: baseline;
+    justify-content: start;
+    gap: 0.15rem 0.5rem;
+    text-align: left;
+  }
 
-.hero-editorial-bottom a {
-  color: rgb(255 255 255 / 0.9);
-}
+  .hero-trust-item:last-child {
+    justify-self: end;
+    justify-content: end;
+    text-align: right;
+  }
 
-.hero-trust-totem {
-  position: absolute;
-  left: 1.25rem;
-  right: 1.25rem;
-  bottom: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  min-width: 0;
-  width: auto;
-  padding: 0.9rem 0;
-  border-top: 1px solid rgb(255 255 255 / 0.14);
-  background: transparent;
-  box-shadow: none;
-}
+  .hero-trust-item:last-child .hero-trust-kicker {
+    text-align: right;
+  }
 
-.hero-trust-item {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-areas:
-    "label label"
-    "score meta";
-  align-items: baseline;
-  justify-content: start;
-  gap: 0.15rem 0.5rem;
-  text-align: left;
-}
+  .hero-trust-kicker {
+    grid-area: label;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
 
-.hero-trust-item:last-child {
-  justify-self: end;
-  justify-content: end;
-  text-align: right;
-}
+  .hero-trust-score {
+    grid-area: score;
+    font-size: 1.75rem;
+    line-height: 1;
+  }
 
-.hero-trust-item:last-child .hero-trust-kicker {
-  text-align: right;
-}
+  .hero-trust-meta {
+    grid-area: meta;
+    align-self: end;
+    padding-bottom: 0.12rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
 
-.hero-trust-kicker {
-  grid-area: label;
-  font-size: 0.58rem;
-  letter-spacing: 0.18em;
-}
+  .hero-trust-divider {
+    display: none;
+  }
 
-.hero-trust-score {
-  grid-area: score;
-  font-size: 1.75rem;
-  line-height: 1;
-}
+  .cinematic-title {
+    font-size: clamp(2.55rem, 11.6vw, 4.1rem);
+    max-width: 13ch;
+    line-height: 1.06;
+  }
 
-.hero-trust-meta {
-  grid-area: meta;
-  align-self: end;
-  padding-bottom: 0.12rem;
-  font-size: 0.68rem;
-  white-space: nowrap;
-}
-
-.hero-trust-divider {
-  display: none;
-}
-
-.cinematic-title {
-  font-size: clamp(2.55rem, 11.6vw, 4.1rem);
-  max-width: 13ch;
-  line-height: 1.06;
-}
-
-.cinematic-title-long {
-  font-size: clamp(2.3rem, 10.2vw, 3.6rem);
-  max-width: 15ch;
-  line-height: 1.04;
-  overflow-wrap: normal;
-}
+  .cinematic-title-long {
+    font-size: clamp(2.3rem, 10.2vw, 3.6rem);
+    max-width: 15ch;
+    line-height: 1.04;
+    overflow-wrap: normal;
+  }
 
   .hero-slide-controls { margin-left: auto; }
 
@@ -2171,6 +2227,8 @@ a.service-index-row:hover { border-color: var(--brand); }
 
     object-position: 62% 50% !important;
 
+    /* The first hero frame should not need an extra filtered, scaled surface. */
+
     transform: none;
 
     filter: none;
@@ -2204,6 +2262,8 @@ a.service-index-row:hover { border-color: var(--brand); }
   }
 
 }
+
+/* One editorial grid, shared by every page. */
 
 .page-hero {
 
@@ -2376,6 +2436,8 @@ a.service-index-row:hover { border-color: var(--brand); }
   }
 
 }
+
+/* Final hero optical polish */
 
 @media (max-width: 639px) {
 
