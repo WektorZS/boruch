@@ -380,7 +380,6 @@ const homeCopy = {
     { label: "Detailing ohne Kompromisse", title: "Professionelle Fahrzeugpflegeprodukte", text: "Wir arbeiten mit bewährten Produkten, die sowohl für den Lack als auch für den Innenraum sicher sind." },
     { label: "Günstige Lage", title: "Im Zentrum von Stettin", text: "Sie finden uns auf Ebene -2 der PAZIM Tiefgarage, unter dem Radisson Hotel." },
   ],
-    ],
     whyLabel: "Warum BORUCH",
     whyTitle: "Manuelle Fahrzeugpflege von der Wäsche bis zum Lackschutz.",
     whyIntro: "Ein Ort für die komplette Pflege des Fahrzeugs innen und außen.",
