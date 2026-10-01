@@ -1861,8 +1861,12 @@
 
 .hero-editorial-bottom span {
   color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
   opacity: 1 !important;
-  text-shadow: 0 0 1px rgb(255 255 255 / 0.65);
+  font-weight: 700 !important;
+  text-shadow:
+    0 0 1px rgb(255 255 255 / 0.9),
+    0 0 6px rgb(255 255 255 / 0.12);
 }
 
 .hero-editorial-bottom a,
