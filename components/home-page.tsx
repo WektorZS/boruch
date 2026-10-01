@@ -629,79 +629,110 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
- <div className="hero-copy-stage">
-  {copy.heroSlides.map((heroSlide, index) => {
-    const hasLongTitleWord = heroSlide.title
-      .split(/\s+/)
-      .some((word) => word.length >= 12)
+ <div className="hero-content-stack">
+  <div className="hero-copy-stage">
+    {copy.heroSlides.map((heroSlide, index) => {
+      const hasLongTitleWord = heroSlide.title
+        .split(/\s+/)
+        .some((word) => word.length >= 12)
 
-    return (
-      <div
-        key={`${heroSlide.label}-${heroSlide.title}`}
-        className={cn(
-          "hero-editorial-copy hero-copy-contrast hero-copy-slide",
-          index === activeSlide
-            ? "hero-copy-slide-active"
-            : "hero-copy-slide-inactive",
-        )}
-        aria-hidden={index !== activeSlide}
-      >
-        <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
-          <span className="h-px w-7 shrink-0 bg-brand" />
-          {heroSlide.label}
-        </p>
-
-        <h1
-          id={index === activeSlide ? "hero-title" : undefined}
+      return (
+        <div
+          key={`${heroSlide.label}-${heroSlide.title}`}
           className={cn(
-            "cinematic-title",
-            hasLongTitleWord && "cinematic-title-long",
+            "hero-editorial-copy hero-copy-contrast hero-copy-slide",
+            index === activeSlide
+              ? "hero-copy-slide-active"
+              : "hero-copy-slide-inactive",
           )}
+          aria-hidden={index !== activeSlide}
         >
-          {heroSlide.title}
-        </h1>
+          <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+            <span className="h-px w-7 shrink-0 bg-brand" />
+            {heroSlide.label}
+          </p>
 
-        <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
-          {heroSlide.text}
-        </p>
-
-        <div className="mt-9 flex flex-wrap items-center gap-7">
-          <a href="#wycena" className="home-button home-button-red">
-            {t.nav.contact}
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </a>
-
-          <Link
-            prefetch={false}
-            href={routes[locale].services}
-            className="editorial-link"
+          <h1
+            id={index === activeSlide ? "hero-title" : undefined}
+            className={cn(
+              "cinematic-title",
+              hasLongTitleWord && "cinematic-title-long",
+            )}
           >
-            {t.nav.services}
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
+            {heroSlide.title}
+          </h1>
+
+          <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+            {heroSlide.text}
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-7">
+            <a href="#wycena" className="home-button home-button-red">
+              {t.nav.contact}
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </a>
+
+            <Link
+              prefetch={false}
+              href={routes[locale].services}
+              className="editorial-link"
+            >
+              {t.nav.services}
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
-      </div>
-    )
-  })}
-</div>
-  <div
-    className="hero-trust-totem"
-    aria-label={copy.reviewsLabel}
-  >
-    <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Opinie Booksy</span>
-      <strong className="hero-trust-score">5.0</strong>
-      <span className="hero-trust-meta">{copy.booksyReviews}</span>
-    </div>
+      )
+    })}
+  </div>
 
-    <div className="hero-trust-divider" />
+  <div className="hero-editorial-bottom sm:hidden">
+    <div className="flex items-center gap-3 text-white">
+      <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+        {followCopy[locale]}
+      </span>
 
-    <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Opinie Google</span>
-      <strong className="hero-trust-score">5.0</strong>
-      <span className="hero-trust-meta">{copy.googleReviews}</span>
+      <a
+        href={contact.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+      >
+        <FacebookIcon className="size-5" />
+      </a>
+
+      <a
+        href={contact.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+      >
+        <InstagramIcon className="size-5" />
+      </a>
     </div>
   </div>
+</div>
+
+<div
+  className="hero-trust-totem"
+  aria-label={copy.reviewsLabel}
+>
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">Opinie Booksy</span>
+    <strong className="hero-trust-score">5.0</strong>
+    <span className="hero-trust-meta">{copy.booksyReviews}</span>
+  </div>
+
+  <div className="hero-trust-divider" />
+
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">Opinie Google</span>
+    <strong className="hero-trust-score">5.0</strong>
+    <span className="hero-trust-meta">{copy.googleReviews}</span>
+  </div>
+</div>
 
  <div className="hero-editorial-bottom sm:hidden">
   <div className="flex items-center gap-3 text-white">
