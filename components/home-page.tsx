@@ -76,10 +76,10 @@ const reviewDialogCopy: Record<Locale, { more: string; close: string; label: str
 }
 
 const packageSaleCopy: Record<Locale, { title: string; without: string; save: string; sizeNote: string }> = {
-  pl: { title: "W komplecie taniej", without: "Cena bez pakietu", save: "20 zł taniej", sizeNote: "W pakiecie Komplet obowiązują osobne warianty: średnie auto od 240 zł, duże auto od 260 zł." },
-  en: { title: "Better value as a package", without: "Price without the package", save: "Save PLN 20", sizeNote: "The Complete package has separate variants: medium car from PLN 240, large car from PLN 260." },
-  de: { title: "Im Paket günstiger", without: "Preis ohne Paket", save: "20 PLN günstiger", sizeNote: "Für das Komplettpaket gelten eigene Varianten: mittelgroßes Auto ab 240 PLN, großes Auto ab 260 PLN." },
-  uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", save: "На 20 PLN дешевше", sizeNote: "Для пакета Комплекс діють окремі варіанти: середнє авто від 240 PLN, велике авто від 260 PLN." },
+  pl: { title: "W komplecie taniej", without: "Cena bez pakietu", sizeNote: "W pakiecie Komplet obowiązują osobne warianty: średnie auto od 240 zł, duże auto od 260 zł." },
+  en: { title: "Better value as a package", without: "Price without the package", sizeNote: "The Complete package has separate variants: medium car from PLN 240, large car from PLN 260." },
+  de: { title: "Im Paket günstiger", without: "Preis ohne Paket", sizeNote: "Für das Komplettpaket gelten eigene Varianten: mittelgroßes Auto ab 240 PLN, großes Auto ab 260 PLN." },
+  uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", sizeNote: "Для пакета Комплекс діють окремі варіанти: середнє авто від 240 PLN, велике авто від 260 PLN." },
 }
 
 const salesPackageCopy: Record<Locale, {
@@ -1592,7 +1592,7 @@ function Packages({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <div className="mt-8 border-t border-white/15">
+        <div className="mt-8">
           {packageOrder.map(index => {
             const pkg = src.pricing.packages[index]
             if (!pkg) return null
@@ -1617,11 +1617,10 @@ function Packages({ locale }: { locale: Locale }) {
                       <strong className="block text-xs font-semibold text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
                       <div className="mt-2 flex flex-col gap-1 text-sm">
                         <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 {locale === "pl" ? "zł" : "PLN"}</s></span>
-                        <span className="font-semibold text-white">{packageSaleCopy[locale].save}</span>
                       </div>
                     </div>
                   )}
-                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold uppercase leading-[1.14] tracking-normal">{pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}</span>
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold uppercase leading-[1.14] tracking-normal">{pkg.price?.replace(/(\d)\s(zł|PLN)/g, "$1 $2")}</span>
                   {pkg.note && <span className="mt-3 block text-xs leading-relaxed text-white/60">{pkg.note}</span>}
                   <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-5">{t.pricing}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
                 </div>
