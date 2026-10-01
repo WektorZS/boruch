@@ -328,10 +328,21 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     faqTitle: "Zanim zostawisz nam auto.",
     faqIntro: "Krótko i konkretnie. Jeśli nie znajdziesz odpowiedzi, zadzwoń lub napisz.",
     faq: [
-      ["Czy trzeba rezerwować termin?", "Rezerwacja przez Booksy daje pewny termin. Przy prostszych usługach możesz też zadzwonić i zapytać o najbliższe wolne miejsce."],
-      ["Ile trwa usługa?", "Czas zależy od zakresu i stanu samochodu. Mycie trwa krócej, a detailing, powłoka ceramiczna lub folia PPF wymagają pozostawienia auta na dłużej."],
-      ["Czy cena zależy od wielkości auta?", "Tak. Ceny podstawowe dotyczą mniejszych aut, a dopłata za większy samochód jest opisana w cenniku. Usługi detailingowe wyceniamy po ocenie zakresu prac."],
-      ["Jak trafić do myjni?", "Wjedź na parking podziemny PAZIM przy placu Rodła 8 i zjedź na poziom -2. Na miejscu znajdziesz oznaczenia BORUCH."],
+      ["Czy muszę zostawić auto na cały dzień?", "To zależy od wybranej usługi. Podstawowe mycie i czyszczenie zajmuje mniej czasu, natomiast detailing, korekta lakieru, powłoka ceramiczna czy oklejanie folią PPF mogą wymagać pozostawienia auta na dłużej."],
+
+["Czy mogę otrzymać wycenę przed wizytą?", "Tak. Przy prostszych usługach cena jest określona w cenniku, a przy detailingu, korekcie lakieru, PPF czy innych pracach indywidualnych wycena zależy od stanu auta i zakresu prac."],
+
+["Czym różni się zwykłe mycie od detailingu?", "Mycie skupia się przede wszystkim na dokładnym oczyszczeniu auta, natomiast detailing obejmuje bardziej precyzyjną pielęgnację, renowację i zabezpieczenie wnętrza lub lakieru."],
+
+["Czy folia PPF chroni lakier przed uszkodzeniami?", "Folia PPF tworzy warstwę ochronną na lakierze i pomaga zabezpieczyć go przed drobnymi zarysowaniami, odpryskami i innymi śladami codziennego użytkowania."],
+
+["Czy korekta lakieru usuwa wszystkie rysy?", "Zakres korekty zależy od stanu i grubości lakieru. Przed wykonaniem usługi oceniamy powierzchnię i dobieramy taki zakres pracy, który pozwoli poprawić wygląd lakieru w bezpieczny sposób."],
+
+["Czy po detailingu dostanę zalecenia dotyczące pielęgnacji auta?", "Tak. Po wykonaniu usługi podpowiadamy, jak myć i pielęgnować samochód, aby jak najdłużej utrzymać uzyskany efekt."],
+
+["Czy zajmujecie się również wnętrzem samochodu?", "Tak. Oferujemy m.in. dokładne odkurzanie, czyszczenie kokpitu i elementów plastikowych, mycie szyb, pranie tapicerki materiałowej oraz czyszczenie i impregnację skór."],
+
+["Czy można zabezpieczyć tylko wybrane elementy auta folią PPF?", "Oferujemy oklejanie całego auta folią PPF lub wybrane elementy karoserii, wnętrza jak i wybranych elementów."],
     ],
     contactLabel: "Kontakt i wycena",
     contactTitle: "Opowiedz nam, czego potrzebuje Twoje auto.",
@@ -372,10 +383,21 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     faqTitle: "Before you leave your car with us.",
     faqIntro: "Short and specific. If your question is not here, call or write to us.",
     faq: [
-      ["Do I need to book?", "Booking through Booksy secures your appointment. For simpler services, you can also call and ask about the nearest available time."],
-      ["How long does a service take?", "It depends on the scope and condition of the car. A wash is quicker, while detailing, ceramic coating or PPF requires more time."],
-      ["Does the price depend on car size?", "Yes. Base prices apply to smaller cars and the surcharge for larger vehicles is listed in the price list. Detailing is quoted after assessing the scope."],
-      ["How do I find the car wash?", "Enter the PAZIM underground car park at Plac Rodła 8 and drive down to level -2. BORUCH signs will guide you on site."],
+     ["Do I need to leave my car for the whole day?", "It depends on the service. A basic wash and cleaning takes less time, while detailing, paint correction, ceramic coating or PPF installation may require leaving the car with us for longer."],
+
+  ["Can I get a quote before my visit?", "Yes. Simpler services have fixed prices in the price list, while detailing, paint correction, PPF and other individual work is priced according to the condition of the car and the scope of work."],
+
+  ["What is the difference between a regular wash and detailing?", "A regular wash focuses mainly on thoroughly cleaning the car, while detailing involves more precise care, restoration and protection of the interior or paintwork."],
+
+  ["Does PPF protect the paint from damage?", "PPF creates a protective layer over the paint and helps protect it against minor scratches, stone chips and other signs of everyday use."],
+
+  ["Does paint correction remove all scratches?", "The extent of the correction depends on the condition and thickness of the paint. Before the service, we assess the surface and choose a safe level of correction to improve the appearance of the paintwork."],
+
+  ["Will I get advice on how to care for my car after detailing?", "Yes. After the service, we explain how to wash and maintain your car so that the result lasts as long as possible."],
+
+  ["Do you also work on car interiors?", "Yes. We offer services including thorough vacuuming, dashboard and plastic cleaning, window cleaning, fabric upholstery cleaning, as well as leather cleaning and protection."],
+
+  ["Can I protect only selected parts of the car with PPF?", "Yes. We can apply PPF to the entire car or only to selected exterior panels, interior elements or other chosen parts."],
     ],
     contactLabel: "Contact and quote",
     contactTitle: "Tell us what your car needs.",
@@ -416,10 +438,21 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     faqTitle: "Bevor Sie Ihr Fahrzeug abgeben.",
     faqIntro: "Kurz und konkret. Wenn Ihre Frage fehlt, rufen Sie uns an oder schreiben Sie uns.",
     faq: [
-      ["Muss ich einen Termin buchen?", "Eine Buchung über Booksy sichert Ihren Termin. Bei einfacheren Leistungen können Sie auch anrufen und nach dem nächsten freien Termin fragen."],
-      ["Wie lange dauert eine Leistung?", "Das hängt vom Umfang und Zustand des Fahrzeugs ab. Eine Wäsche dauert kürzer, während Detailing, Keramikversiegelung oder PPF mehr Zeit benötigen."],
-      ["Hängt der Preis von der Fahrzeuggröße ab?", "Ja. Die Grundpreise gelten für kleinere Fahrzeuge. Zuschläge für größere Fahrzeuge stehen in der Preisliste. Detailing wird nach Prüfung des Umfangs kalkuliert."],
-      ["Wie finde ich die Waschanlage?", "Fahren Sie in die PAZIM Tiefgarage am Plac Rodła 8 und hinunter auf Ebene -2. Vor Ort weisen BORUCH Schilder den Weg."],
+       ["Muss ich mein Auto den ganzen Tag bei Ihnen lassen?", "Das hängt von der gewählten Leistung ab. Eine Basiswäsche und Reinigung dauert kürzer, während Detailing, Lackkorrektur, Keramikversiegelung oder PPF-Folierung mehr Zeit in Anspruch nehmen können."],
+
+  ["Kann ich vor dem Termin einen Kostenvoranschlag erhalten?", "Ja. Für einfachere Leistungen gelten feste Preise aus der Preisliste. Detailing, Lackkorrektur, PPF und andere individuelle Arbeiten werden je nach Fahrzeugzustand und Arbeitsumfang kalkuliert."],
+
+  ["Was ist der Unterschied zwischen einer normalen Wäsche und Detailing?", "Eine normale Wäsche konzentriert sich vor allem auf die gründliche Reinigung des Fahrzeugs, während Detailing eine präzisere Pflege, Aufbereitung und den Schutz von Innenraum oder Lack umfasst."],
+
+  ["Schützt PPF den Lack vor Beschädigungen?", "PPF bildet eine Schutzschicht auf dem Lack und hilft dabei, ihn vor feinen Kratzern, Steinschlägen und anderen Gebrauchsspuren zu schützen."],
+
+  ["Entfernt eine Lackkorrektur alle Kratzer?", "Der Umfang der Lackkorrektur hängt vom Zustand und von der Lackstärke ab. Vor der Behandlung prüfen wir die Oberfläche und wählen einen sicheren Arbeitsumfang, der das Erscheinungsbild des Lacks verbessert."],
+
+  ["Bekomme ich nach dem Detailing Pflegehinweise für mein Auto?", "Ja. Nach der Behandlung erklären wir Ihnen, wie Sie Ihr Fahrzeug richtig waschen und pflegen, damit das Ergebnis möglichst lange erhalten bleibt."],
+
+  ["Bieten Sie auch Innenraumreinigung an?", "Ja. Wir bieten unter anderem gründliches Staubsaugen, die Reinigung von Armaturenbrett und Kunststoffteilen, Scheibenreinigung, Polsterreinigung sowie Lederreinigung und -pflege an."],
+
+  ["Kann man nur ausgewählte Fahrzeugteile mit PPF schützen?", "Ja. Wir bieten PPF für das gesamte Fahrzeug oder nur für ausgewählte Karosserieteile, Innenraumelemente oder andere gewünschte Bereiche an."],
     ],
     contactLabel: "Kontakt und Angebot",
     contactTitle: "Sagen Sie uns, was Ihr Fahrzeug benötigt.",
@@ -438,9 +471,22 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     whyTitle: "Ручний догляд за авто від миття до захисту лаку.",
     whyIntro: "Одне місце для повного догляду за автомобілем зовні та всередині.",
     benefits: [
-       ["Ручний догляд", "Точна ручна робота дозволяє нам приділити увагу деталям, які легко залишити непоміченими."],
-    ["Повний спектр", "Комплексний догляд за автомобілем - від базового миття до професійного захисту лакофарбового покриття."],
-    ["Центр Щецина", "У самому центрі міста - залиште авто у нас і скористайтеся часом, щоб відвідати найближчі торгові центри."],
+    ["Чи потрібно залишати авто на весь день?", "Це залежить від обраної послуги. Базове миття та очищення займає менше часу, тоді як детейлінг, корекція лаку, керамічне покриття або нанесення PPF можуть потребувати більше часу."],
+
+  ["Чи можу я отримати попередню оцінку вартості?", "Так. Для простіших послуг діють фіксовані ціни з прайсу, а детейлінг, корекція лаку, PPF та інші індивідуальні роботи оцінюються залежно від стану автомобіля та обсягу робіт."],
+
+  ["Чим відрізняється звичайне миття від детейлінгу?", "Звичайне миття зосереджене насамперед на ретельному очищенні автомобіля, тоді як детейлінг включає більш точний догляд, відновлення та захист салону або лакофарбового покриття."],
+
+  ["Чи захищає PPF лак від пошкоджень?", "PPF створює захисний шар на лакофарбовому покритті та допомагає захистити його від дрібних подряпин, сколів від каміння та інших слідів щоденної експлуатації."],
+
+  ["Чи видаляє корекція лаку всі подряпини?", "Обсяг корекції залежить від стану та товщини лакофарбового покриття. Перед виконанням послуги ми оцінюємо поверхню та підбираємо безпечний обсяг робіт, який дозволяє покращити вигляд лаку."],
+
+  ["Чи отримаю я рекомендації щодо догляду після детейлінгу?", "Так. Після виконання послуги ми підкажемо, як правильно мити та доглядати за автомобілем, щоб результат зберігався якомога довше."],
+
+  ["Чи займаєтеся ви також салоном автомобіля?", "Так. Ми пропонуємо, зокрема, ретельне прибирання пилососом, очищення панелі приладів і пластикових елементів, миття скла, хімчистку тканинної оббивки, а також очищення й захист шкіри."],
+
+  ["Чи можна захистити PPF лише окремі елементи автомобіля?", "Так. Ми можемо обклеїти PPF весь автомобіль або лише окремі елементи кузова, салону чи інші вибрані деталі."],
+
     ],
     servicesIntro: "Оберіть базовий догляд або повний захист автомобіля.",
     galleryCaptions: ["Корекція лаку", "Захисна плівка PPF", "Детейлінг салону", "Ручне миття", "Захист лаку"],
@@ -1697,7 +1743,7 @@ function TeamStory({ locale }: { locale: Locale }) {
   </figcaption>
 </figure>
 
-          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
+          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <p className="home-kicker">{t.nav.about}</p>
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
