@@ -1266,7 +1266,9 @@
 
 }
 
-
+.home-hero-copy-animated {
+  animation: home-hero-copy-in 900ms var(--ease-out) 400ms both;
+}
 
 .home-photo-panel {
 
@@ -1307,42 +1309,25 @@
   transform-origin: left center;
 
 }
-.hero-copy-stage {
-  position: relative;
-  grid-column: 1 / 8;
-  grid-row: 1;
-  width: 100%;
-}
 
-.hero-copy-slide {
-  width: 100%;
-  transition:
-    opacity 1200ms ease-in-out,
-    transform 1200ms ease-in-out;
-}
+@keyframes home-hero-copy-in {
 
-.hero-copy-slide-active {
-  position: relative;
-  z-index: 2;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+  from {
 
-.hero-copy-slide-inactive {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
-}
+    opacity: 0;
 
-@media (prefers-reduced-motion: reduce) {
-  .hero-copy-slide {
-    transition: none;
-    transform: none;
+    transform: translateY(1.25rem);
+
   }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
 }
 
 .home-section-title {
@@ -2057,25 +2042,14 @@ a.service-index-row:hover { border-color: var(--brand); }
 
 @media (max-width: 639px) {
   .hero-editorial-grid {
-    position: relative;
     display: flex;
-    min-height: calc(100svh - var(--header-h));
-    align-items: stretch;
-    justify-content: flex-start;
-    padding-block: 0;
-  }
-
-  .hero-content-stack {
-    display: flex;
-    width: 100%;
-    min-height: calc(100svh - var(--header-h) - 7.5rem);
     flex-direction: column;
+    align-items: start;
     justify-content: center;
+    min-height: calc(100svh - var(--header-h));
+    padding-block: 3.5rem 9.5rem;
   }
 
-  .hero-copy-stage {
-    width: 100%;
-  }
   .hero-cinema {
     inset: var(--header-h) 0 auto 0;
     width: 100%;
@@ -2231,9 +2205,7 @@ a.service-index-row:hover { border-color: var(--brand); }
   .service-index-cover > figure { margin-top: 2rem; aspect-ratio: 4 / 3; }
 
 }
-.hero-content-stack {
-  display: contents;
-}
+
 @media (max-width: 639px) {
 
   :root { --header-h: 5rem; --header-h-compact: 5rem; }
