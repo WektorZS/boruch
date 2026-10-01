@@ -727,7 +727,7 @@ function HomeHero({ locale }: { locale: Locale }) {
           return (
             <li
               key={title}
-              className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
+              className="flex min-h-20 items-center justify-center border-b border-white/10 px-6 py-3.5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
             >
               <div className="flex w-full max-w-sm items-center justify-center gap-4">
                 <Icon
