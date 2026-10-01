@@ -1778,28 +1778,7 @@
 }
 
 .hero-editorial-bottom {
-  grid-column: 1 / 8;
-  grid-row: 2;
-  justify-self: start;
-  margin-top: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.9rem;
-  width: auto;
-}
-
-.hero-editorial-bottom span {
-  color: rgb(255 255 255 / 0.84);
-}
-
-.hero-editorial-bottom a {
-  color: rgb(255 255 255 / 0.9);
-}
-
-.hero-editorial-bottom a:hover,
-.hero-editorial-bottom a:focus-visible {
-  color: white;
+  display: none;
 }
 
 .hero-photo-note {
