@@ -10,11 +10,11 @@ import {
   ArrowUpRight,
   Brush,
   Car,
-  CarFront,
   ChevronDown,
   CircleDot,
   Clock3,
   Droplets,
+  Droplet,
   Gem,
   Layers3,
   MapPin,
@@ -949,7 +949,7 @@ function serviceMenuIcon(
 
   return (
     icons[slug as keyof typeof icons] ??
-    (category === "myjnia" ? Droplets : ShieldCheck)
+    (category === "myjnia" ? Droplets : Gem)
   )
 }
 
@@ -1023,7 +1023,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     category,
     title: category === "myjnia" ? copy.wash : copy.detailing,
     description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
-    Icon: category === "myjnia" ? CarFront : Gem,
+    Icon: category === "myjnia" ? Droplets : ShieldCheck,
     items: serviceConfigs
       .filter((service) => service.category === category)
       .map((service) => {
@@ -1067,6 +1067,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
               </header>
 
               <ul className="sr-list">
+              <ul className="sr-list" role="list">
                 {group.items.map((item) => (
                   <li key={item.slug}>
                     <details className="sr-item" name={accordionId + "-" + group.category + "-services"}>
@@ -1183,10 +1184,20 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           display: grid;
           grid-template-columns: repeat(2,minmax(0,1fr));
           gap: clamp(2rem,5vw,5rem);
+          gap: 0 clamp(2rem,5vw,5rem);
         }
         .service-rebuild .sr-group {
           min-width: 0;
-       
+        
+        }
+        .service-rebuild .sr-group:only-child { grid-column: 1 / -1; }
+        @supports (grid-template-rows:subgrid) {
+          .service-rebuild .sr-group {
+            display: grid;
+            grid-template-rows: subgrid;
+            grid-row: span 2;
+          }
+          .service-rebuild .sr-list { align-self: start; }
         }
         .service-rebuild .sr-group-header {
           padding-block: 1.75rem;
@@ -1409,6 +1420,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           .service-rebuild .sr-header { grid-template-columns: 1fr; gap: 1.25rem; }
           .service-rebuild .sr-intro { max-width: 54ch; }
           .service-rebuild .sr-columns { grid-template-columns: 1fr; gap: 2.5rem; }
+          .service-rebuild .sr-group { display: block; grid-row: auto; }
           .service-rebuild .sr-group-header { min-height: 0; padding-block: 1.5rem; }
           .service-rebuild .sr-summary { min-height: 4.5rem; }
           .service-rebuild .sr-footer { flex-direction: column; gap: 1.25rem; }
@@ -1942,5 +1954,4 @@ function ContactSection({ locale }: { locale: Locale }) {
 function HomeFooter({ locale }: { locale: Locale }) {
   return <SiteFooter locale={locale} alternates={Object.fromEntries(localeOrder.map(code => [code, routes[code].home])) as Record<Locale, string>} showContactCta={false} />
 }
-
 
