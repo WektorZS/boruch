@@ -744,60 +744,69 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
 
           <div
-            className="hero-trust-totem"
-            aria-label={copy.reviewsLabel}
-          >
-            <div className="hero-trust-item">
-              <span className="hero-trust-kicker">
-                Opinie Booksy
-              </span>
-              <strong className="hero-trust-score">5.0</strong>
-              <span className="hero-trust-meta">
-                {copy.booksyReviews}
-              </span>
-            </div>
+  className="hero-trust-totem"
+  aria-label={copy.reviewsLabel}
+>
+  <div className="hero-editorial-bottom sm:hidden">
+    <div className="flex items-center justify-center gap-3 text-white">
+      <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+        {followCopy[locale]}
+      </span>
 
-            <div className="hero-trust-divider" />
+      <a
+        href={contact.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+      >
+        <FacebookIcon className="size-5" />
+      </a>
 
-            <div className="hero-trust-item">
-              <span className="hero-trust-kicker">
-                Opinie Google
-              </span>
-              <strong className="hero-trust-score">5.0</strong>
-              <span className="hero-trust-meta">
-                {copy.googleReviews}
-              </span>
-            </div>
-          </div>
+      <a
+        href={contact.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+      >
+        <InstagramIcon className="size-5" />
+      </a>
+    </div>
+  </div>
 
-          <div className="hero-editorial-bottom sm:hidden">
-            <div className="flex items-center gap-3 text-white">
-              <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
-                {followCopy[locale]}
-              </span>
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">
+      Opinie Booksy
+    </span>
 
-              <a
-                href={contact.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-              >
-                <FacebookIcon className="size-5" />
-              </a>
+    <strong className="hero-trust-score">
+      5.0
+    </strong>
 
-              <a
-                href={contact.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-              >
-                <InstagramIcon className="size-5" />
-              </a>
-            </div>
-          </div>
-        </div>
+    <span className="hero-trust-meta">
+      {copy.booksyReviews}
+    </span>
+  </div>
+
+  <div className="hero-trust-divider" />
+
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">
+      Opinie Google
+    </span>
+
+    <strong className="hero-trust-score">
+      5.0
+    </strong>
+
+    <span className="hero-trust-meta">
+      {copy.googleReviews}
+    </span>
+  </div>
+</div>
+
+      
 
         <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
           {copy.benefits.map(([title, text], index) => {
