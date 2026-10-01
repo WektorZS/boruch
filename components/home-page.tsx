@@ -903,7 +903,33 @@ function WhyBoruch({ locale }: { locale: Locale }) {
 function ServiceMenu({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const copy = homeCopy[locale]
+
+  const sectionCopy = {
+    pl: {
+      eyebrow: "Usługi",
+      title: "Dwa zakresy. Jeden standard.",
+      intro:
+        "Od regularnej pielęgnacji po korektę, zabezpieczenie i zmianę wyglądu samochodu.",
+    },
+    en: {
+      eyebrow: "Services",
+      title: "Two areas. One standard.",
+      intro:
+        "From regular care to paint correction, protection and complete visual transformation.",
+    },
+    de: {
+      eyebrow: "Leistungen",
+      title: "Zwei Bereiche. Ein Standard.",
+      intro:
+        "Von regelmäßiger Pflege bis zu Lackkorrektur, Schutz und optischer Veränderung.",
+    },
+    uk: {
+      eyebrow: "Послуги",
+      title: "Два напрямки. Один стандарт.",
+      intro:
+        "Від регулярного догляду до корекції, захисту та зміни зовнішнього вигляду автомобіля.",
+    },
+  }[locale]
 
   const groups = (["myjnia", "detailing"] as const).map(
     (category, groupIndex) => ({
@@ -912,21 +938,14 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       description: serviceGroupCopy[locale][category],
       items: serviceConfigs
         .filter((service) => service.category === category)
-        .map((service) => {
-          const summary = serviceSummary(locale, service.slug)
-
-          return {
-            slug: service.slug,
-            title:
-              locale === "pl"
-                ? service.navTitle
-                : (summary?.title ?? service.navTitle),
-            href:
-              locale === "pl"
-                ? `/${service.slug}`
-                : routes[locale].services,
-          }
-        }),
+        .map((service) => ({
+          slug: service.slug,
+          title: service.navTitle,
+          href:
+            locale === "pl"
+              ? `/${service.slug}`
+              : routes[locale].services,
+        })),
     }),
   )
 
@@ -934,68 +953,77 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     <section
       id="services"
       aria-labelledby="services-title"
-      className="bg-[#111112] py-16 md:py-20 lg:py-24"
+      className="overflow-hidden bg-[#111112] py-16 md:py-20 lg:py-24"
     >
       <div className="home-shell">
-        <div className="grid gap-7 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <p className="home-kicker text-white/62">
-              {t.nav.services}
+        <header className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="home-kicker text-white/55">
+              {sectionCopy.eyebrow}
             </p>
 
             <h2
               id="services-title"
               data-reveal=""
-              className="editorial-display mt-5"
+              className="mt-5 max-w-[13ch] font-display text-4xl font-semibold uppercase leading-[.98] tracking-[-.03em] text-white sm:text-5xl lg:text-6xl"
             >
-              {src.services.groups
-                .map((group) => group.title)
-                .join(" / ")}
+              {sectionCopy.title}
             </h2>
           </div>
 
           <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-sm leading-relaxed text-white/58 sm:text-base">
-              {copy.servicesIntro}
+            <p className="max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
+              {sectionCopy.intro}
             </p>
 
             <Link
               prefetch={false}
               href={routes[locale].services}
-              className="mt-5 inline-flex w-fit items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-brand"
+              className="group mt-5 inline-flex items-center gap-3 text-[.7rem] font-bold uppercase tracking-[.16em] text-white"
             >
-              {t.allServices}
+              <span className="border-b border-white/30 pb-1 transition-colors group-hover:border-brand">
+                {t.allServices}
+              </span>
 
-              <ArrowRight
-                className="size-4 text-brand"
+              <ArrowUpRight
+                className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 aria-hidden="true"
               />
             </Link>
           </div>
-        </div>
+        </header>
 
-        <div className="mt-10 grid border-t border-white/15 lg:grid-cols-2 lg:divide-x lg:divide-white/15">
+        <div className="mt-10 border-t border-white/15 md:mt-12">
           {groups.map((group, groupIndex) => (
-            <div
+            <article
               key={group.category}
               className={cn(
-                "min-w-0",
-                groupIndex === 0
-                  ? "border-b border-white/15 py-8 lg:border-b-0 lg:py-10 lg:pr-12 xl:pr-16"
-                  : "pt-8 lg:py-10 lg:pl-12 xl:pl-16",
+                "grid gap-7 py-8 lg:grid-cols-12 lg:gap-10 lg:py-10",
+                groupIndex > 0 && "border-t border-white/15",
               )}
             >
-              <div className="mb-6">
-                <h3 className="font-display text-2xl font-semibold uppercase leading-none tracking-tight text-white sm:text-3xl">
+              <div className="lg:col-span-3">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="font-mono text-[.62rem] font-bold tracking-[.16em] text-brand"
+                    aria-hidden="true"
+                  >
+                    0{groupIndex + 1}
+                  </span>
+
+                  <span className="h-px w-8 bg-brand/70" />
+                </div>
+
+                <h3 className="mt-4 font-display text-3xl font-semibold uppercase leading-none tracking-[-.02em] text-white">
                   {group.title}
                 </h3>
 
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/50">
+                <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">
                   {group.description}
                 </p>
               </div>
 
-              <ol>
+              <ol className="grid min-w-0 gap-x-8 lg:col-span-9 lg:grid-cols-2">
                 {group.items.map((item) => {
                   const serviceIndex =
                     serviceConfigs.findIndex(
@@ -1010,21 +1038,21 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                       <Link
                         prefetch={false}
                         href={item.href}
-                        className="group grid min-h-14 grid-cols-[2rem_minmax(0,1fr)_1rem] items-center gap-3 py-3.5 sm:min-h-16 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4 sm:py-4"
+                        className="group grid min-h-14 grid-cols-[2rem_minmax(0,1fr)_1rem] items-center gap-3 py-3 sm:min-h-16 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4"
                       >
                         <span
-                          className="font-mono text-[.62rem] font-bold tracking-[.12em] text-white/30 transition-colors group-hover:text-brand group-focus-visible:text-brand"
+                          className="font-mono text-[.6rem] font-bold tracking-[.12em] text-white/25 transition-colors duration-300 group-hover:text-brand"
                           aria-hidden="true"
                         >
                           {String(serviceIndex).padStart(2, "0")}
                         </span>
 
-                        <span className="min-w-0 font-display text-lg font-semibold leading-tight text-white/78 transition-colors group-hover:text-white group-focus-visible:text-white sm:text-xl">
+                        <span className="min-w-0 font-display text-lg font-semibold leading-tight text-white/72 transition-[color,transform] duration-300 group-hover:translate-x-1 group-hover:text-white sm:text-xl">
                           {item.title}
                         </span>
 
                         <ArrowUpRight
-                          className="size-3.5 shrink-0 text-white/28 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
+                          className="size-3.5 shrink-0 text-white/25 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
                           aria-hidden="true"
                         />
                       </Link>
@@ -1032,7 +1060,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                   )
                 })}
               </ol>
-            </div>
+            </article>
           ))}
         </div>
       </div>
