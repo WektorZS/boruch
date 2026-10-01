@@ -1620,7 +1620,9 @@ function Packages({ locale }: { locale: Locale }) {
                       </div>
                     </div>
                   )}
-                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold uppercase leading-[1.14] tracking-normal">{pkg.price?.replace(/(\d)\s(zł|PLN)/g, "$1 $2")}</span>
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold leading-[1.14] tracking-normal">
+  {pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}
+</span>
                   {pkg.note && <span className="mt-3 block text-xs leading-relaxed text-white/60">{pkg.note}</span>}
                   <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-5">{t.pricing}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
                 </div>
@@ -1637,32 +1639,125 @@ function Packages({ locale }: { locale: Locale }) {
 function SalesPackage({ locale }: { locale: Locale }) {
   const copy = salesPackageCopy[locale]
   const currency = locale === "pl" ? "zł" : "PLN"
+
   const offers = [
-    { title: copy.standard, price: 1000, items: copy.standardItems },
-    { title: copy.premium, price: 1400, items: copy.premiumItems },
+    {
+      title: copy.standard,
+      price: 1000,
+      items: copy.standardItems,
+      featured: false,
+    },
+    {
+      title: copy.premium,
+      price: 1400,
+      items: copy.premiumItems,
+      featured: true,
+    },
   ]
 
   return (
-    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
-      <div className="home-shell grid gap-10 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-5">
+    <section
+      id="pakiet-sprzedaz"
+      aria-labelledby="sales-package-title"
+      className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]"
+    >
+      <div className="home-shell grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-20">
+        <div className="lg:col-span-4">
           <p className="home-kicker">{copy.label}</p>
-          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
-          <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
-        </div>
-        <div className="lg:col-span-7">
-          <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
-            {offers.map((offer) => <article key={offer.title} className="flex flex-col border-b border-white/10 py-7 last:border-b-0 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
-              <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
-              <ul className="mb-7 mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1 shrink-0 bg-brand" aria-hidden="true" />{item}</li>)}</ul>
-              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
-                <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
-                <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
-              </div>
-            </article>)}
-          </div>
 
+          <h2
+            id="sales-package-title"
+            data-reveal=""
+            className="editorial-display mt-6"
+          >
+            {copy.title}
+          </h2>
+
+          <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
+            {copy.intro}
+          </p>
+
+          <Link
+            prefetch={false}
+            href={`${routes[locale].pricing}#pakiet-sprzedaz`}
+            className="editorial-link mt-8"
+          >
+            {copy.details}
+            <ArrowRight className="size-4 text-brand" aria-hidden="true" />
+          </Link>
+        </div>
+
+        <div className="lg:col-span-8">
+          <div className="border-y border-white/15">
+            {offers.map((offer, index) => (
+              <article
+                key={offer.title}
+                data-reveal=""
+                className={cn(
+                  "relative grid gap-7 py-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:gap-10",
+                  index !== offers.length - 1 && "border-b border-white/12",
+                  offer.featured && "bg-white/2.5",
+                )}
+              >
+                {offer.featured && (
+                  <span
+                    className="absolute inset-y-0 left-0 w-0.5 bg-brand"
+                    aria-hidden="true"
+                  />
+                )}
+
+                <div className={cn(offer.featured && "pl-5 sm:pl-6")}>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-[.62rem] font-medium tracking-[.16em] text-white/38">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3 className="font-display text-xl font-semibold leading-[1.25] tracking-normal text-white sm:text-2xl">
+                      {offer.title}
+                    </h3>
+                  </div>
+
+                  <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">
+                    {offer.items.map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <span
+                          className="mt-[.55em] size-1.5 shrink-0 rounded-full bg-brand"
+                          aria-hidden="true"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div
+                  className={cn(
+                    "flex min-w-40 flex-col items-start sm:items-end",
+                    offer.featured && "pl-5 sm:pl-0 sm:pr-6",
+                  )}
+                >
+                  <span className="mb-2 flex items-center gap-2 text-[.68rem] font-medium uppercase tracking-[.12em] text-white/45">
+                    <Clock3 className="size-3.5 text-brand" aria-hidden="true" />
+                    {copy.time}
+                  </span>
+
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm font-medium text-white/50">
+                      {copy.from}
+                    </span>
+
+                    <strong className="font-display text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-none tracking-tight text-white">
+                      {offer.price}
+                    </strong>
+
+                    <span className="font-display text-base font-semibold text-white/70">
+                      {currency}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
