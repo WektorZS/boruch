@@ -1700,8 +1700,8 @@ function TeamStory({ locale }: { locale: Locale }) {
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
 
-            <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
-              <p>{copy.teamBody}</p>
+           <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
+  <p className="whitespace-pre-line">{copy.teamBody}</p>
             </div>
 
             <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
