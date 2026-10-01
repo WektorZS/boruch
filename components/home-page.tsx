@@ -1,9 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import useEmblaCarousel from "embla-carousel-react"
-import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, MapPin, Pause, Play, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
+import { Armchair, Brush, Droplets, Layers3, Paintbrush, ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, MapPin, Pause, Play, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { SiteHeader } from "./site-header"
@@ -900,223 +900,502 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   )
 }
 
-function ServiceMenu({ locale }: { locale: Locale }) {
-  const src = sources[locale]
-  const t = ui[locale]
-  const copy = homeCopy[locale]
+function serviceMenuIcon(slug: string, title: string, category: "myjnia" | "detailing") {
+  // Existing data has no icon field. Match familiar service names and keep a category fallback.
+  const name = (slug + " " + title).toLowerCase()
+  if (/tapicer|sk[oó]r/.test(name)) return Brush
+  if (/wn[eę]trz/.test(name)) return Armchair
+  if (/komplet/.test(name)) return Layers3
+  if (/dechrom|kolor/.test(name)) return Paintbrush
+  if (/foli|ppf|przyciemn/.test(name)) return Layers3
+  if (/ceramic|pow[lł]ok/.test(name)) return ShieldCheck
+  if (/poler|korekt|wosk/.test(name)) return Sparkles
+  if (/mycie|zewn/.test(name)) return Droplets
+  return category === "myjnia" ? Droplets : ShieldCheck
+}
 
-  const sectionCopy = {
+function ServiceMenu({ locale }: { locale: Locale }) {
+  const accordionId = useId()
+  const t = ui[locale]
+  const copy = {
     pl: {
       eyebrow: "Usługi",
-      title: "Od mycia po pełne zabezpieczenie.",
-      secondary:
-        "Dobieramy zakres do stanu auta i efektu, którego oczekujesz.",
+      title: "Od mycia po ochronę lakieru.",
+      intro: "Wybierz to, czego potrzebuje Twoje auto. Rozwiń usługę, żeby poznać jej zakres.",
+      wash: "Myjnia",
+      detailing: "Detailing",
+      washDescription: "Czyste nadwozie, świeże wnętrze i regularna pielęgnacja.",
+      detailingDescription: "Przywracanie połysku, ochrona lakieru i zmiana wyglądu auta.",
+      details: "Poznaj usługę",
+      expand: "Rozwiń zakres usługi",
+      pricing: "Zobacz cennik",
+      advice: "Nie wiesz, od czego zacząć?",
+      adviceText: "Opisz nam auto i oczekiwany efekt. Pomożemy dobrać zakres prac.",
+      contact: "Zapytaj o swoje auto",
     },
     en: {
       eyebrow: "Services",
-      title: "From washing to complete protection.",
-      secondary:
-        "We match the scope to your car's condition and the result you expect.",
+      title: "From a clean car to protected paint.",
+      intro: "Choose what your car needs. Open a service to see what is included.",
+      wash: "Car wash",
+      detailing: "Detailing",
+      washDescription: "Clean bodywork, a fresh interior and regular care.",
+      detailingDescription: "Restoring shine, protecting paint and changing the look of your car.",
+      details: "Explore the service",
+      expand: "Show the service scope",
+      pricing: "View pricing",
+      advice: "Not sure where to start?",
+      adviceText: "Tell us about your car and the result you want. We will help you choose the scope.",
+      contact: "Ask about your car",
     },
     de: {
       eyebrow: "Leistungen",
-      title: "Von der Wäsche bis zum vollständigen Schutz.",
-      secondary:
-        "Wir stimmen den Umfang auf den Zustand Ihres Fahrzeugs und das gewünschte Ergebnis ab.",
+      title: "Von der Wäsche bis zum Lackschutz.",
+      intro: "Wählen Sie, was Ihr Auto braucht. Öffnen Sie eine Leistung, um den Umfang zu sehen.",
+      wash: "Autowäsche",
+      detailing: "Detailing",
+      washDescription: "Saubere Karosserie, frischer Innenraum und regelmäßige Pflege.",
+      detailingDescription: "Glanz wiederherstellen, den Lack schützen und die Optik verändern.",
+      details: "Leistung ansehen",
+      expand: "Leistungsumfang anzeigen",
+      pricing: "Preise ansehen",
+      advice: "Sie wissen nicht, wo Sie anfangen sollen?",
+      adviceText: "Beschreiben Sie Ihr Auto und das gewünschte Ergebnis. Wir helfen bei der Auswahl.",
+      contact: "Zum Fahrzeug anfragen",
     },
     uk: {
       eyebrow: "Послуги",
-      title: "Від миття до повного захисту.",
-      secondary:
-        "Підбираємо обсяг робіт відповідно до стану авто та бажаного результату.",
+      title: "Від чистого авто до захисту лаку.",
+      intro: "Оберіть те, що потрібно вашому авто. Розгорніть послугу, щоб переглянути її обсяг.",
+      wash: "Мийка",
+      detailing: "Детейлінг",
+      washDescription: "Чистий кузов, свіжий салон і регулярний догляд.",
+      detailingDescription: "Відновлення блиску, захист лаку та зміна вигляду авто.",
+      details: "Дізнатися про послугу",
+      expand: "Показати обсяг послуги",
+      pricing: "Переглянути ціни",
+      advice: "Не знаєте, з чого почати?",
+      adviceText: "Розкажіть про авто й бажаний результат. Допоможемо підібрати обсяг робіт.",
+      contact: "Запитати про своє авто",
     },
   }[locale]
 
-  const groups = (["myjnia", "detailing"] as const).map(
-    (category, groupIndex) => ({
-      category,
-      title: src.services.groups[groupIndex]?.title ?? category,
-      description: serviceGroupCopy[locale][category],
-      items: serviceConfigs
-        .filter((service) => service.category === category)
-        .map((service) => {
-          const summary = serviceSummary(locale, service.slug)
-
-          return {
-            slug: service.slug,
-            title:
-              locale === "pl"
-                ? service.navTitle
-                : (summary?.title ?? service.navTitle),
-            description:
-              summary?.text ?? serviceGroupCopy[locale][category],
-            href:
-              locale === "pl"
-                ? `/${service.slug}`
-                : routes[locale].services,
-          }
-        }),
-    }),
-  )
+  const groups = (["myjnia", "detailing"] as const).map((category) => ({
+    category,
+    title: category === "myjnia" ? copy.wash : copy.detailing,
+    description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
+    Icon: category === "myjnia" ? Droplets : ShieldCheck,
+    items: serviceConfigs
+      .filter((service) => service.category === category)
+      .map((service) => {
+        const summary = serviceSummary(locale, service.slug)
+        return {
+          slug: service.slug,
+          title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
+          description: summary?.text ?? serviceGroupCopy[locale][category],
+          href: locale === "pl" ? "/" + service.slug : routes[locale].services,
+          Icon: serviceMenuIcon(service.slug, service.navTitle, category),
+        }
+      }),
+  })).filter((group) => group.items.length > 0)
 
   return (
-    <section
-      id="services"
-      aria-labelledby="services-title"
-      className="overflow-hidden bg-[#111112] py-16 md:py-20 lg:py-24"
-    >
-      <div className="home-shell">
-        <header className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <p className="home-kicker text-white/55">
-              {sectionCopy.eyebrow}
-            </p>
-
-            <h2
-              id="services-title"
-              data-reveal=""
-              className="mt-5 max-w-[16ch] font-display text-4xl font-semibold uppercase leading-[.96] tracking-[-.035em] text-white sm:text-5xl lg:text-[3.75rem]"
-            >
-              {sectionCopy.title}
-            </h2>
+    <section id="services" aria-labelledby="services-title" className="service-rebuild">
+      <div className="home-shell sr-shell">
+        <header className="sr-header">
+          <div>
+            <p className="sr-eyebrow"><span aria-hidden="true" />{copy.eyebrow}</p>
+            <h2 id="services-title" className="sr-title">{copy.title}</h2>
           </div>
-
-          <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-base leading-relaxed text-white/60">
-              {copy.servicesIntro}
-            </p>
-
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-white/38">
-              {sectionCopy.secondary}
-            </p>
-
-            <Link
-              prefetch={false}
-              href={routes[locale].services}
-              className="group mt-6 inline-flex w-fit items-center gap-3 text-[.7rem] font-bold uppercase tracking-[.16em] text-white"
-            >
-              <span className="border-b border-white/25 pb-1.5 transition-colors duration-300 group-hover:border-brand">
-                {t.allServices}
-              </span>
-
-              <ArrowUpRight
-                className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          </div>
+          <p className="sr-intro">{copy.intro}</p>
         </header>
 
-        <div className="mt-11 border-t border-white/15 md:mt-14">
-          {groups.map((group, groupIndex) => {
-            const firstServiceIndex =
-              serviceConfigs.findIndex(
-                service => service.slug === group.items[0]?.slug,
-              ) + 1
-
-            const lastServiceIndex =
-              firstServiceIndex + group.items.length - 1
-
-            return (
-              <article
-                key={group.category}
-                data-reveal=""
-                className={cn(
-                  "grid gap-8 py-9 lg:grid-cols-12 lg:gap-12 lg:py-12",
-                  groupIndex > 0 && "border-t border-white/15",
-                )}
-              >
-                <div className="lg:col-span-3">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="font-mono text-[.62rem] font-bold tracking-[.16em] text-brand"
-                      aria-hidden="true"
-                    >
-                      0{groupIndex + 1}
-                    </span>
-
-                    <span className="h-px w-8 bg-brand/70" />
-                  </div>
-
-                  <h3 className="mt-5 font-display text-3xl font-semibold uppercase leading-none tracking-[-.025em] text-white sm:text-4xl">
+        <div className="sr-columns">
+          {groups.map((group) => (
+            <article
+              key={group.category}
+              className="sr-group"
+              aria-labelledby={accordionId + "-" + group.category}
+            >
+              <header className="sr-group-header">
+                <div className="sr-group-heading">
+                  <group.Icon className="sr-group-icon" aria-hidden="true" strokeWidth={1.4} />
+                  <h3 id={accordionId + "-" + group.category} className="sr-group-title">
                     {group.title}
                   </h3>
-
-                  <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/52">
-                    {group.description}
-                  </p>
-
-                  <div className="mt-6 flex items-center gap-3 font-mono text-[.6rem] font-bold uppercase tracking-[.15em] text-white/25">
-                    <span>
-                      {String(firstServiceIndex).padStart(2, "0")}
-                    </span>
-
-                    <span className="h-px w-5 bg-white/15" />
-
-                    <span>
-                      {String(lastServiceIndex).padStart(2, "0")}
-                    </span>
-                  </div>
                 </div>
+                <p className="sr-group-description">{group.description}</p>
+              </header>
 
-                <ol className="grid min-w-0 gap-x-10 lg:col-span-9 lg:grid-cols-2">
-                  {group.items.map((item, itemIndex) => {
-                    const serviceIndex =
-                      serviceConfigs.findIndex(
-                        service => service.slug === item.slug,
-                      ) + 1
-
-                    const isRightColumn = itemIndex % 2 === 1
-
-                    return (
-                      <li
-                        key={item.slug}
-                        className={cn(
-                          "border-t border-white/10",
-                          isRightColumn
-                            ? "lg:border-l lg:border-white/8 lg:pl-8"
-                            : "lg:pr-8",
-                        )}
-                      >
-                        <Link
-                          prefetch={false}
-                          href={item.href}
-                          className="group relative grid min-h-24 grid-cols-[2rem_minmax(0,1fr)_1rem] items-start gap-3 py-5 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4"
-                        >
-                          <span
-                            className="pt-1 font-mono text-[.6rem] font-bold tracking-[.12em] text-white/28 transition-colors duration-300 group-hover:text-brand group-focus-visible:text-brand"
-                            aria-hidden="true"
-                          >
-                            {String(serviceIndex).padStart(2, "0")}
-                          </span>
-
-                          <span className="min-w-0">
-                            <span className="block font-display text-lg font-semibold leading-tight text-white/86 transition-colors duration-300 group-hover:text-white group-focus-visible:text-white sm:text-xl">
-                              {item.title}
-                            </span>
-
-                            <span className="mt-2 hidden max-w-xl text-sm leading-relaxed text-white/42 sm:block">
-                              {item.description}
-                            </span>
-                          </span>
-
-                          <ArrowUpRight
-                            className="mt-1 size-3.5 shrink-0 text-white/25 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
-                            aria-hidden="true"
-                          />
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ol>
-              </article>
-            )
-          })}
+              <ul className="sr-list">
+                {group.items.map((item) => (
+                  <li key={item.slug}>
+                    <details className="sr-item" name={accordionId + "-" + group.category + "-services"}>
+                      <summary className="sr-summary">
+                        <span className="sr-service-icon" aria-hidden="true">
+                          <item.Icon strokeWidth={1.5} />
+                        </span>
+                        <span className="sr-service-title">
+                          {item.title}
+                          <span className="sr-accessible"> - {copy.expand}</span>
+                        </span>
+                        <ChevronDown className="sr-chevron" aria-hidden="true" strokeWidth={1.6} />
+                      </summary>
+                      <div className="sr-detail">
+                        <div className="sr-detail-inner">
+                          <p className="sr-service-description">{item.description}</p>
+                          <Link prefetch={false} href={item.href} className="sr-link sr-service-link">
+                            {copy.details}
+                            <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+                            <span className="sr-accessible">: {item.title}</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
+
+        <footer className="sr-footer">
+          <div className="sr-advice">
+            <span className="sr-advice-marker" aria-hidden="true"><Car strokeWidth={1.5} /></span>
+            <div>
+              <p className="sr-advice-title">{copy.advice}</p>
+              <p className="sr-advice-text">{copy.adviceText}</p>
+            </div>
+          </div>
+          <div className="sr-footer-links">
+            <Link prefetch={false} href={routes[locale].pricing} className="sr-link">
+              {copy.pricing}<ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+            </Link>
+            <a href="#wycena" className="sr-contact-link">
+              {copy.contact}<ArrowRight aria-hidden="true" strokeWidth={1.6} />
+            </a>
+          </div>
+        </footer>
       </div>
+
+      <style>{`
+        .service-rebuild {
+          --sr-accent: var(--color-brand, #d52b32);
+          --sr-ink: #f3f1ed;
+          --sr-muted: #a4a4a8;
+          --sr-line: rgba(255,255,255,.13);
+          --sr-ease: cubic-bezier(.22,.61,.36,1);
+          background: #111112;
+          color: var(--sr-ink);
+          padding-block: clamp(3.5rem, 6vw, 6rem);
+          scroll-margin-top: calc(var(--header-h, 5rem) + 1rem);
+          isolation: isolate;
+        }
+        .service-rebuild *, .service-rebuild *::before, .service-rebuild *::after {
+          box-sizing: border-box;
+        }
+        .service-rebuild :is(h2,h3,p,ul) { margin: 0; }
+        .service-rebuild .sr-shell { min-width: 0; }
+        .service-rebuild .sr-header {
+          display: grid;
+          grid-template-columns: minmax(0,1.5fr) minmax(0,1fr);
+          align-items: end;
+          gap: 2rem 4rem;
+          padding-bottom: clamp(2rem,4vw,3.25rem);
+        }
+        .service-rebuild .sr-eyebrow {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+          font-size: .75rem;
+          font-weight: 600;
+          line-height: 1.5;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          color: #b9b9bc;
+        }
+        .service-rebuild .sr-eyebrow > span {
+          width: 1.75rem;
+          height: 1px;
+          background: var(--sr-accent);
+        }
+        .service-rebuild .sr-title {
+          max-width: 25ch;
+          margin-top: 1.25rem;
+          font-family: inherit;
+          font-size: clamp(1.875rem,3.5vw,3.25rem);
+          font-weight: 600;
+          line-height: 1.16;
+          letter-spacing: -.025em;
+          text-transform: none;
+          text-wrap: balance;
+          overflow-wrap: anywhere;
+          color: var(--sr-ink);
+        }
+        .service-rebuild .sr-intro {
+          max-width: 38ch;
+          font-size: 1rem;
+          line-height: 1.75;
+          font-weight: 400;
+          letter-spacing: normal;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-columns {
+          display: grid;
+          grid-template-columns: repeat(2,minmax(0,1fr));
+          gap: clamp(2rem,5vw,5rem);
+        }
+        .service-rebuild .sr-group {
+          min-width: 0;
+          border-top: 1px solid var(--sr-line);
+        }
+        .service-rebuild .sr-group-header {
+          padding-block: 1.75rem;
+          min-height: 9rem;
+        }
+        .service-rebuild .sr-group-heading {
+          display: flex;
+          align-items: center;
+          gap: .875rem;
+        }
+        .service-rebuild .sr-group-icon {
+          width: 1.75rem;
+          height: 1.75rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-group-title {
+          font-family: inherit;
+          font-size: clamp(1.5rem,2.1vw,2rem);
+          line-height: 1.25;
+          font-weight: 600;
+          letter-spacing: -.02em;
+          text-transform: none;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-group-description {
+          margin-top: .875rem;
+          max-width: 46ch;
+          font-size: .9375rem;
+          line-height: 1.7;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-list {
+          padding: 0;
+          list-style: none;
+          border-top: 1px solid var(--sr-line);
+        }
+        .service-rebuild .sr-list > li { border-bottom: 1px solid var(--sr-line); }
+        .service-rebuild .sr-item { min-width: 0; }
+        .service-rebuild .sr-summary {
+          display: grid;
+          grid-template-columns: 2rem minmax(0,1fr) 1.125rem;
+          align-items: center;
+          gap: 1rem;
+          min-height: 5rem;
+          padding: 1.125rem .25rem;
+          cursor: pointer;
+          list-style: none;
+          color: #dfdfe1;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-summary::-webkit-details-marker { display: none; }
+        .service-rebuild .sr-summary::marker { content: ""; }
+        .service-rebuild .sr-service-icon {
+          display: grid;
+          place-items: center;
+          width: 2rem;
+          height: 2rem;
+          color: #939397;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-service-icon > svg { width: 1.375rem; height: 1.375rem; }
+        .service-rebuild .sr-service-title {
+          font-size: clamp(1rem,1.1vw,1.125rem);
+          line-height: 1.5;
+          font-weight: 500;
+          letter-spacing: -.005em;
+          text-transform: none;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-chevron {
+          width: 1.125rem;
+          height: 1.125rem;
+          color: #939397;
+          transition: transform 220ms var(--sr-ease), color 180ms ease;
+        }
+        .service-rebuild .sr-item[open] .sr-summary { color: var(--sr-ink); }
+        .service-rebuild .sr-item[open] :is(.sr-service-icon,.sr-chevron) {
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-item[open] .sr-chevron { transform: rotate(180deg); }
+        .service-rebuild .sr-detail { padding: 0 2.375rem 1.5rem 3.25rem; }
+        .service-rebuild .sr-item[open] .sr-detail-inner {
+          animation: sr-service-reveal 220ms var(--sr-ease) both;
+        }
+        .service-rebuild .sr-service-description {
+          max-width: 52ch;
+          font-size: .9375rem;
+          line-height: 1.8;
+          font-weight: 400;
+          letter-spacing: normal;
+          color: #b8b8bc;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-link {
+          display: inline-flex;
+          align-items: center;
+          gap: .625rem;
+          width: fit-content;
+          min-height: 2.75rem;
+          color: var(--sr-ink);
+          font-size: .875rem;
+          font-weight: 500;
+          line-height: 1.5;
+          letter-spacing: normal;
+          text-transform: none;
+          text-decoration: none;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-link > svg {
+          width: 1rem;
+          height: 1rem;
+          flex: none;
+          color: var(--sr-accent);
+          transition: transform 220ms var(--sr-ease);
+        }
+        .service-rebuild .sr-service-link { margin-top: .75rem; }
+        .service-rebuild .sr-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem 3rem;
+          border-top: 1px solid var(--sr-line);
+          margin-top: clamp(2.5rem,4vw,4rem);
+          padding-top: 1.75rem;
+        }
+        .service-rebuild .sr-advice {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          max-width: 32rem;
+        }
+        .service-rebuild .sr-advice-marker {
+          display: grid;
+          place-items: center;
+          width: 2rem;
+          height: 2rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-advice-marker > svg { width: 1.5rem; height: 1.5rem; }
+        .service-rebuild .sr-advice-title {
+          font-size: 1rem;
+          font-weight: 500;
+          line-height: 1.6;
+          letter-spacing: normal;
+          color: #dfdfe1;
+        }
+        .service-rebuild .sr-advice-text {
+          margin-top: .375rem;
+          font-size: .875rem;
+          line-height: 1.75;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-footer-links {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1.25rem 1.75rem;
+          flex: none;
+        }
+        .service-rebuild .sr-contact-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.25rem;
+          min-height: 3rem;
+          padding: .75rem 1rem;
+          border: 1px solid rgba(255,255,255,.28);
+          background: transparent;
+          color: var(--sr-ink);
+          font-size: .875rem;
+          line-height: 1.5;
+          font-weight: 500;
+          letter-spacing: normal;
+          text-transform: none;
+          text-decoration: none;
+          transition: border-color 180ms ease, background-color 180ms ease;
+        }
+        .service-rebuild .sr-contact-link > svg {
+          width: 1rem;
+          height: 1rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild :is(.sr-summary,.sr-link,.sr-contact-link):focus-visible {
+          outline: 2px solid var(--sr-ink);
+          outline-offset: 4px;
+        }
+        .service-rebuild .sr-accessible {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+          padding: 0;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+          border: 0;
+        }
+        @media (hover:hover) {
+          .service-rebuild .sr-summary:hover { color: #fff; }
+          .service-rebuild .sr-summary:hover .sr-service-icon { color: var(--sr-accent); }
+          .service-rebuild .sr-link:hover { color: #fff; text-decoration: underline; text-underline-offset: .3em; }
+          .service-rebuild .sr-link:hover > svg { transform: translate(2px,-2px); }
+          .service-rebuild .sr-contact-link:hover {
+            border-color: var(--sr-accent);
+            background: rgba(255,255,255,.035);
+          }
+        }
+        @media (max-width:1100px) {
+          .service-rebuild .sr-footer { align-items: flex-start; }
+          .service-rebuild .sr-footer-links {
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 0 1 auto;
+          }
+        }
+        @media (max-width:900px) {
+          .service-rebuild .sr-header { grid-template-columns: 1fr; gap: 1.25rem; }
+          .service-rebuild .sr-intro { max-width: 54ch; }
+          .service-rebuild .sr-columns { grid-template-columns: 1fr; gap: 2.5rem; }
+          .service-rebuild .sr-group-header { min-height: 0; padding-block: 1.5rem; }
+          .service-rebuild .sr-summary { min-height: 4.5rem; }
+          .service-rebuild .sr-footer { flex-direction: column; gap: 1.25rem; }
+          .service-rebuild .sr-footer-links { flex-direction: row; gap: .75rem 1.5rem; }
+        }
+        @media (max-width:420px) {
+          .service-rebuild .sr-summary { grid-template-columns: 1.75rem minmax(0,1fr) 1rem; gap: .75rem; }
+          .service-rebuild .sr-detail { padding-left: 2.75rem; padding-right: .25rem; }
+          .service-rebuild .sr-contact-link { width: 100%; }
+          .service-rebuild .sr-footer-links { width: 100%; }
+        }
+        @keyframes sr-service-reveal {
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion:reduce) {
+          .service-rebuild *, .service-rebuild *::before, .service-rebuild *::after {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }
+
 function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
@@ -1624,3 +1903,5 @@ function ContactSection({ locale }: { locale: Locale }) {
 function HomeFooter({ locale }: { locale: Locale }) {
   return <SiteFooter locale={locale} alternates={Object.fromEntries(localeOrder.map(code => [code, routes[code].home])) as Record<Locale, string>} showContactCta={false} />
 }
+
+
