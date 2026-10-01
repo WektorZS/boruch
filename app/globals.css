@@ -1781,8 +1781,17 @@
 
 .hero-cinema-shade {
   background:
-    linear-gradient(90deg, #080809 0%, rgb(8 8 9 / .58) 20%, rgb(8 8 9 / .1) 48%),
-    linear-gradient(0deg, rgb(8 8 9 / .72), transparent 32%);
+    linear-gradient(
+      0deg,
+      #080809 0%,
+      rgb(8 8 9 / .56) 55%,
+      rgb(8 8 9 / .28)
+    ),
+    linear-gradient(
+      90deg,
+      rgb(8 8 9 / .68),
+      transparent
+    );
 }
 
 .hero-editorial-bottom {
