@@ -1267,7 +1267,7 @@
 }
 
 .home-hero-copy-animated {
-  animation: home-hero-copy-in 1500ms var(--ease-out) 400ms both;
+  animation: home-hero-copy-in 1500ms var(--ease-out) 0ms both;
 }
 
 .home-photo-panel {
