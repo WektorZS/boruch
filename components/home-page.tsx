@@ -2036,11 +2036,11 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="lg:col-span-7 lg:col-start-6">
           <div className="border-t border-white/14">
             {visibleFaq.map(([question, answer]) => (
-              <details
-                key={question}
-                name="home-faq"
-                className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
-              >
+             <details
+  key={question}
+  name="home-faq"
+  className="group relative border-b border-white/12"
+>
                 <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                   <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
                     {question}
@@ -2055,10 +2055,12 @@ function HomeFaq({ locale }: { locale: Locale }) {
                 </summary>
 
                 <div className="pb-7 pr-10 sm:pr-14">
-                  <p className="max-w-2xl text-[.95rem] leading-7 text-white/60">
-                    {answer}
-                  </p>
-                </div>
+  <div className="max-w-2xl border-l border-brand/55 pl-5">
+    <p className="text-[.95rem] leading-7 text-white/58">
+      {answer}
+    </p>
+  </div>
+</div>
               </details>
             ))}
           </div>
@@ -2204,7 +2206,7 @@ function Location({ locale }: { locale: Locale }) {
               src={mapEmbedUrl}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(1)_invert(.92)_contrast(1.15)_brightness(.72)]"
+              className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(.45)_invert(.88)_contrast(1.05)]"
             />
 
             <></>

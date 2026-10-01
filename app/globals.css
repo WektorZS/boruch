@@ -1942,7 +1942,13 @@
 
 .editorial-price-row { position: relative; display: grid; grid-template-columns: 1fr 1.55fr .8fr; align-items: start; gap: 2.5rem; border-bottom: 1px solid var(--line-strong); padding-block: 2.5rem; }
 
-.editorial-price-featured { padding-inline: 1.5rem; margin-inline: -1.5rem; background: #19191a; border-left: 2px solid var(--brand); }
+.editorial-price-featured {
+  padding-inline: 1.5rem;
+  margin-inline: -1.5rem;
+  background: transparent;
+  border-left: 2px solid var(--brand);
+  border-bottom: 0;
+}
 
 .package-scope { display: block; columns: 2; column-gap: 1.5rem; }
 
