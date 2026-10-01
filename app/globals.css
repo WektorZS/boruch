@@ -1000,7 +1000,9 @@ a.service-index-row:hover { border-color: var(--brand); }
   :root { --header-h: 5rem; --header-h-compact: 5rem; }
   .home-hero-photo {
     object-position: 62% 50% !important;
-    transform: scale(1.025);
+    /* The first hero frame should not need an extra filtered, scaled surface. */
+    transform: none;
+    filter: none;
   }
   .home-hero-title {
     max-width: 100%;

@@ -13,7 +13,7 @@ function photoSizes(id: PhotoId) {
 export function photoSrc(id: PhotoId, width?: number, format: "webp" | "avif" = "webp") {
   const sizes = photoSizes(id)
   const size = width ? (sizes.find((s) => s >= width) ?? sizes[sizes.length - 1]) : sizes[sizes.length - 1]
-  const folder = id === "p60" ? "optimized-v2/" : id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
+  const folder = id === "p60" ? "optimized-v3/" : id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
   return `/images/photos/${folder}${id}-${size}.${format}`
 }
 
@@ -52,7 +52,7 @@ export function Photo({ id, sizes, className, alt, priority = false, eager = fal
         alt={alt ?? meta.alt}
         loading={priority || eager ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : "auto"}
-        decoding="async"
+        decoding={priority ? "auto" : "async"}
         draggable={false}
         style={position ? { objectPosition: position } : undefined}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}

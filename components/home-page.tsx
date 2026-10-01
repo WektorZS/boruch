@@ -530,6 +530,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
   const [activeSlide, setActiveSlide] = useState(0)
   const [loadedSlides, setLoadedSlides] = useState([0])
+  const [transitionsReady, setTransitionsReady] = useState(false)
   const [heroVisible, setHeroVisible] = useState(true)
   const [heroPaused, setHeroPaused] = useState(false)
   const [autoplay, setAutoplay] = useState(true)
@@ -554,12 +555,16 @@ function HomeHero({ locale }: { locale: Locale }) {
     if (!heroVisible || heroPaused || !autoplay || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const next = (activeSlide + 1) % copy.heroSlides.length
     // Keep the next slide out of the critical loading window on a slow mobile connection.
-    const preload = window.setTimeout(() => setLoadedSlides(current => current.includes(next) ? current : [...current, next]), 5500)
+    const preload = window.setTimeout(() => {
+      setTransitionsReady(true)
+      setLoadedSlides(current => current.includes(next) ? current : [...current, next])
+    }, 5500)
     const advance = window.setTimeout(() => setActiveSlide(next), 7500)
     return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
   }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused, autoplay])
 
   const changeSlide = (direction: number) => {
+    setTransitionsReady(true)
     const next = (activeSlide + direction + heroPhotos.length) % heroPhotos.length
     setLoadedSlides(current => current.includes(next) ? current : [...current, next])
     setActiveSlide(next)
@@ -572,8 +577,9 @@ function HomeHero({ locale }: { locale: Locale }) {
           <div
             key={photo.id}
             className={cn(
-              "absolute inset-0 transition-[opacity,transform] duration-[1000ms] ease-out motion-reduce:transition-none",
-              index === activeSlide ? "scale-100 opacity-100" : "scale-[1.035] opacity-0",
+              "absolute inset-0",
+              transitionsReady && "transition-[opacity,transform] duration-[700ms] ease-out motion-reduce:transition-none",
+              transitionsReady && (index === activeSlide ? "scale-100 opacity-100" : "scale-[1.035] opacity-0"),
             )}
           >
             <Photo
