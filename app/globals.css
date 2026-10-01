@@ -3607,8 +3607,8 @@
 
 
 .hero-trust-totem {
-  position: absolute;
-  right: calc((100vw - 100%) / -2 + 12px);
+  right: calc((100vw - 100%) / -2 + 28px);
+
 
   bottom: 2rem;
   z-index: 12;
@@ -3683,7 +3683,6 @@
 
 .hero-editorial-bottom {
   position: static;
-
   grid-column: 1 / 8;
   grid-row: 2;
   justify-self: start;
@@ -3693,9 +3692,22 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
+  gap: 0.9rem;
 
   width: auto;
+}
+
+.hero-editorial-bottom span {
+  color: rgb(255 255 255 / 0.72);
+}
+
+.hero-editorial-bottom a {
+  color: rgb(255 255 255 / 0.78);
+}
+
+.hero-editorial-bottom a:hover,
+.hero-editorial-bottom a:focus-visible {
+  color: white;
 }
 
 
