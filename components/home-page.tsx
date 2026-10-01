@@ -3,7 +3,34 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import useEmblaCarousel from "embla-carousel-react"
-import { Armchair, Brush, Droplets, Layers3, Paintbrush, ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, MapPin, Pause, Play, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
+import {
+  Armchair,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Brush,
+  Car,
+  CarFront,
+  ChevronDown,
+  CircleDot,
+  Clock3,
+  Droplets,
+  Gem,
+  Layers3,
+  MapPin,
+  PackageCheck,
+  Palette,
+  Pause,
+  Play,
+  Quote,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  SunMedium,
+  WandSparkles,
+  Waves,
+  X,
+} from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { SiteHeader } from "./site-header"
@@ -900,18 +927,30 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   )
 }
 
-function serviceMenuIcon(slug: string, title: string, category: "myjnia" | "detailing") {
-  // Existing data has no icon field. Match familiar service names and keep a category fallback.
-  const name = (slug + " " + title).toLowerCase()
-  if (/tapicer|sk[oó]r/.test(name)) return Brush
-  if (/wn[eę]trz/.test(name)) return Armchair
-  if (/komplet/.test(name)) return Layers3
-  if (/dechrom|kolor/.test(name)) return Paintbrush
-  if (/foli|ppf|przyciemn/.test(name)) return Layers3
-  if (/ceramic|pow[lł]ok/.test(name)) return ShieldCheck
-  if (/poler|korekt|wosk/.test(name)) return Sparkles
-  if (/mycie|zewn/.test(name)) return Droplets
-  return category === "myjnia" ? Droplets : ShieldCheck
+function serviceMenuIcon(
+  slug: string,
+  _title: string,
+  category: "myjnia" | "detailing",
+) {
+  const icons = {
+    "mycie-zewnatrz": Droplets,
+    "czyszczenie-wnetrza": Armchair,
+    komplet: PackageCheck,
+    "pranie-tapicerki": Waves,
+    "czyszczenie-skor": Brush,
+    woskowanie: Sparkles,
+    polerowanie: CircleDot,
+    "korekta-lakieru": WandSparkles,
+    "powloka-ceramiczna": ShieldCheck,
+    "folia-ppf": Layers3,
+    "przyciemnianie-szyb-i-lamp": SunMedium,
+    "zmiana-koloru-dechroming": Palette,
+  } as const
+
+  return (
+    icons[slug as keyof typeof icons] ??
+    (category === "myjnia" ? Droplets : ShieldCheck)
+  )
 }
 
 function ServiceMenu({ locale }: { locale: Locale }) {
@@ -984,7 +1023,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     category,
     title: category === "myjnia" ? copy.wash : copy.detailing,
     description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
-    Icon: category === "myjnia" ? Droplets : ShieldCheck,
+    Icon: category === "myjnia" ? CarFront : Gem,
     items: serviceConfigs
       .filter((service) => service.category === category)
       .map((service) => {
@@ -1147,7 +1186,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
         }
         .service-rebuild .sr-group {
           min-width: 0;
-          border-top: 1px solid var(--sr-line);
+       
         }
         .service-rebuild .sr-group-header {
           padding-block: 1.75rem;
