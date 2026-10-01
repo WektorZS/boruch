@@ -594,7 +594,18 @@ function HomeHero({ locale }: { locale: Locale }) {
   }
 
   return (
-    <section ref={heroRef} onFocusCapture={() => setHeroPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(document.hidden) }} aria-labelledby="hero-title" className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)">
+  <>
+    <section
+      ref={heroRef}
+      onFocusCapture={() => setHeroPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setHeroPaused(document.hidden)
+        }
+      }}
+      aria-labelledby="hero-title"
+      className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)"
+    >
       <div className="hero-cinema" aria-hidden="true">
         {heroPhotos.map((photo, index) => loadedSlides.includes(index) && (
           <div
@@ -717,7 +728,7 @@ function HomeHero({ locale }: { locale: Locale }) {
             </li>
           )
         })}
-      </ul>
+          </ul>
     </section>
 
     <div className="border-b border-white/10 bg-[#080809]">
@@ -725,7 +736,8 @@ function HomeHero({ locale }: { locale: Locale }) {
         <HeroRatings copy={copy} className="hero-ratings-inline" />
       </div>
     </div>
-  )
+  </>
+)
 }
 
 function WhyBoruch({ locale }: { locale: Locale }) {
