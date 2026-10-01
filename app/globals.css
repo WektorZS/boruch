@@ -2071,7 +2071,7 @@ a.service-index-row:hover { border-color: var(--brand); }
     min-height: calc(100svh - var(--header-h) - 7.5rem);
     flex-direction: column;
     justify-content: center;
-  }xxx
+  }
 
   .hero-copy-stage {
     width: 100%;
