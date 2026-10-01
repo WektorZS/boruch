@@ -2020,9 +2020,17 @@ a.service-index-row:hover { border-color: var(--brand); }
 
   .hero-cinema-shade { background: linear-gradient(0deg, #080809 0%, rgb(8 8 9 / .45) 55%, rgb(8 8 9 / .2)), linear-gradient(90deg, rgb(8 8 9 / .6), transparent); }
 
-  .cinematic-title { font-size: clamp(2.75rem, 12.8vw, 4.5rem); max-width: 13ch; }
+ .cinematic-title {
+  font-size: clamp(2.75rem, 12.8vw, 4.5rem);
+  max-width: 13ch;
+}
 
-  .cinematic-title-long { font-size: clamp(1.7rem, 7.8vw, 2.75rem); max-width: 100%; overflow-wrap: normal; }
+.cinematic-title-long {
+  font-size: clamp(2.35rem, 10.5vw, 3.75rem);
+  max-width: 15ch;
+  line-height: 1.05;
+  overflow-wrap: normal;
+}
 
   .hero-editorial-bottom { bottom: 3.75rem; flex-wrap: wrap; row-gap: .5rem; }
 
