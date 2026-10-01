@@ -1763,14 +1763,14 @@
 
 .hero-cinema {
   position: absolute;
-  inset: var(--header-h) var(--gutter) 5rem 34%;
+  inset: var(--header-h) 0 5rem 34%;
   overflow: hidden;
-
   clip-path: none;
   border: 0;
   outline: 0;
   box-shadow: none;
 }
+
 .hero-cinema > div,
 .hero-cinema picture,
 .hero-cinema img {

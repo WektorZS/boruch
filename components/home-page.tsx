@@ -709,20 +709,35 @@ function HomeHero({ locale }: { locale: Locale }) {
         <div className="hero-photo-note" aria-hidden="true"><span>BORUCH / PAZIM</span><span>{editorialCopy[locale].studio}</span></div>
       </div>
 
-      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
-        {copy.benefits.map(([title, text], index) => {
-          const Icon = benefitIcons[index] ?? Car
-          return (
-            <li key={title} className="flex min-h-0 items-center gap-3 border-b border-white/10 px-5 py-3.5 last:border-b-0 sm:min-h-20 sm:gap-4 sm:border-b-0 sm:border-r sm:px-6 sm:py-4 sm:last:border-r-0 lg:px-8">
-              <Icon className="size-4.5 shrink-0 text-brand" aria-hidden="true" />
-              <span className="flex flex-col gap-1">
-                <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/84">{title}</strong>
-                <span className="text-[.8rem] leading-snug text-white/65">{text}</span>
-              </span>
-            </li>
-          )
-        })}
-      </ul>
+     <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+  {copy.benefits.map(([title, text], index) => {
+    const Icon = benefitIcons[index] ?? Car
+
+    return (
+      <li
+        key={title}
+        className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:min-h-24 lg:px-10"
+      >
+        <div className="flex w-full max-w-sm items-center justify-center gap-4">
+          <Icon
+            className="size-5 shrink-0 text-brand"
+            aria-hidden="true"
+          />
+
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
+              {title}
+            </strong>
+
+            <span className="text-[.8rem] leading-snug text-white/65">
+              {text}
+            </span>
+          </div>
+        </div>
+      </li>
+    )
+  })}
+</ul>
 
       <div className="relative z-10 border-b border-white/10 bg-[#080809]">
         <div className="home-shell flex justify-end py-5">
