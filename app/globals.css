@@ -3608,7 +3608,8 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: 0.2rem;
+  right: calc((100vw - 100%) / -2 + 12px);
+
   bottom: 2rem;
   z-index: 12;
 
@@ -3672,9 +3673,22 @@
 
 
 
+.hero-editorial-copy {
+  grid-column: 1 / 8;
+  grid-row: 1;
+  min-width: 0;
+  position: relative;
+  isolation: isolate;
+}
+
 .hero-editorial-bottom {
   position: static;
-  margin-top: 1.4rem;
+
+  grid-column: 1 / 8;
+  grid-row: 2;
+  justify-self: start;
+
+  margin-top: 1.25rem;
 
   display: flex;
   align-items: center;
@@ -4117,6 +4131,11 @@ a.service-index-row:hover { border-color: var(--brand); }
     min-height: calc(100svh - var(--header-h));
     padding-block: 3.5rem 9.5rem;
   }
+  .hero-cinema {
+  inset: var(--header-h) 0 auto 0;
+  height: calc(100svh - var(--header-h));
+  clip-path: none;
+}
 .hero-cinema-shade {
   background:
     linear-gradient(
@@ -4126,6 +4145,7 @@ a.service-index-row:hover { border-color: var(--brand); }
       rgb(8 8 9 / 0.34) 100%
     );
 }
+
 
   .hero-editorial-bottom {
     position: static;
