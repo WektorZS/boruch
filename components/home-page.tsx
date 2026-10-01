@@ -2052,47 +2052,144 @@ function Location({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const slide = src.slides[3]
   const copy = homeCopy[locale]
-  const locationTitle = { pl: "W centrum Szczecina", en: "In central Szczecin", de: "Im Zentrum von Szczecin", uk: "У центрі Щецина" }[locale]
+
+  const locationTitle = {
+    pl: "W centrum Szczecina",
+    en: "In central Szczecin",
+    de: "Im Zentrum von Szczecin",
+    uk: "У центрі Щецина",
+  }[locale]
+
+  const levelLabel = {
+    pl: "Poziom parkingu",
+    en: "Parking level",
+    de: "Parkebene",
+    uk: "Рівень паркінгу",
+  }[locale]
+
+  const routeLabel = {
+    pl: "Jak do nas trafić",
+    en: "How to find us",
+    de: "So finden Sie uns",
+    uk: "Як нас знайти",
+  }[locale]
 
   return (
-    <section aria-labelledby="location-title" className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-20">
+    <section
+      aria-labelledby="location-title"
+      className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-24"
+    >
       <div className="home-shell">
-        <div className="relative grid overflow-hidden lg:grid-cols-[.42fr_.83fr_.95fr]">
-          <div className="relative flex min-h-40 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10 lg:min-h-80">
-          <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
-          <span className="text-[.72rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(5rem,8vw,7.25rem)] font-black leading-[.9] tracking-normal text-[#ee343e]">-2</strong>
+        <div className="grid overflow-hidden border-y border-white/12 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)]">
+          <div className="relative flex flex-col justify-between bg-[#0a0a0b] px-6 py-8 sm:px-10 sm:py-10 lg:min-h-[34rem] lg:px-12 lg:py-12">
+            <span
+              className="absolute inset-y-0 left-0 w-0.5 bg-brand"
+              aria-hidden="true"
+            />
+
+            <div>
+              <p className="home-kicker text-[#ef6267]">
+                {slide.kicker}
+              </p>
+
+              <h2
+                id="location-title"
+                data-reveal=""
+                className="mt-7 max-w-lg font-display text-[clamp(2.25rem,3.5vw,4rem)] font-semibold leading-[1.02] tracking-[-.025em] text-white"
+              >
+                {locationTitle}
+              </h2>
+
+              <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
+                {copy.routeHint}
+              </p>
+            </div>
+
+            <div className="mt-12">
+              <div className="grid gap-0 border-y border-white/12 sm:grid-cols-[.7fr_1.3fr]">
+                <div className="flex flex-col justify-between border-b border-white/12 py-6 sm:border-b-0 sm:border-r sm:pr-7">
+                  <span className="text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                    {levelLabel}
+                  </span>
+
+                  <div className="mt-5 flex items-end gap-3">
+                    <strong className="font-display text-[clamp(3.75rem,6vw,5.5rem)] font-semibold leading-none tracking-[-.04em] text-brand">
+                      -2
+                    </strong>
+
+                    <span className="pb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/55">
+                      PAZIM
+                    </span>
+                  </div>
+                </div>
+
+                <address className="flex items-start gap-4 py-6 not-italic sm:pl-7">
+                  <span className="mt-0.5 grid size-9 shrink-0 place-items-center border border-white/12 text-brand">
+                    <MapPin className="size-4" aria-hidden="true" />
+                  </span>
+
+                  <div>
+                    <span className="mb-2 block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                      {routeLabel}
+                    </span>
+
+                    <span className="flex flex-col text-sm leading-relaxed text-white/72">
+                      {src.address.lines.map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                    </span>
+                  </div>
+                </address>
+              </div>
+
+              <a
+                href={contact.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mt-7 inline-flex min-h-12 items-center gap-4 border border-white/14 px-5 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:border-brand hover:bg-brand"
+              >
+                {t.openMap}
+
+                <ArrowUpRight
+                  className="size-4 text-brand transition-colors group-hover:text-white"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
           </div>
-          <div className="relative flex flex-col justify-between overflow-hidden bg-[#111112] p-8 sm:p-10 lg:min-h-80">
-          <div>
-            <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
-            <h2 id="location-title" data-reveal="" className="mt-6 font-display text-[clamp(1.8rem,2.5vw,2.65rem)] font-semibold leading-[1.2] tracking-normal">{locationTitle}</h2>
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/64">{copy.routeHint}</p>
-          </div>
-          <address className="relative mt-8 flex items-start gap-3 border-t border-brand/25 pt-5 not-italic text-sm leading-relaxed text-white/72">
-            <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-            <span className="flex flex-col">{src.address.lines.map((line) => <span key={line}>{line}</span>)}</span>
-          </address>
-          </div>
-          <div className="group relative min-h-64 overflow-hidden border-t border-white/10 bg-[#151516] lg:min-h-80 lg:border-l lg:border-t-0">
-          <iframe
-            title={`${t.openMap} - BORUCH Myjnia Szczecin`}
-            src={mapEmbedUrl}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/42 via-transparent to-transparent" aria-hidden="true" />
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b] px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:bg-brand">
-            {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
-          </a>
+
+          <div className="group relative min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
+            <iframe
+              title={`${t.openMap} - BORUCH Myjnia Szczecin`}
+              src={mapEmbedUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
+            />
+
+            <div
+              className="pointer-events-none absolute inset-0 bg-linear-to-r from-[#0a0a0b]/28 via-transparent to-transparent"
+              aria-hidden="true"
+            />
+
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black/35 to-transparent"
+              aria-hidden="true"
+            />
+
+            <div className="pointer-events-none absolute bottom-5 left-5 flex items-center gap-3 border border-white/12 bg-[#0a0a0b]/90 px-4 py-3 backdrop-blur-sm sm:bottom-6 sm:left-6">
+              <span className="size-2 bg-brand" aria-hidden="true" />
+
+              <span className="text-[.68rem] font-bold uppercase tracking-[.14em] text-white/80">
+                PAZIM · {t.level} -2
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </section>
   )
 }
-
 function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
