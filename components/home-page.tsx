@@ -52,7 +52,7 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p46", position: "50% 50%" },
 ]
 
-const mapEmbedUrl = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
+const mapEmbedUrl = "https://https://www.google.com/maps?cid=3751270293210839842&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF&hl=pl&gl=PL&source=embed"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
   pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
