@@ -1690,10 +1690,12 @@ function TeamStory({ locale }: { locale: Locale }) {
     <section aria-labelledby="team-title" className="section-lg border-y border-white/10 bg-[#111112]">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] self-start overflow-hidden">
-            <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
-            <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
-          </figure>
+          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] self-center overflow-hidden">
+  <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
+  <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">
+    BORUCH Myjnia Szczecin
+  </figcaption>
+</figure>
 
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
             <p className="home-kicker">{t.nav.about}</p>
