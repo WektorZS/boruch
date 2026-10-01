@@ -55,7 +55,7 @@ export const plSource: LocaleSource = {
   "home": {
     "sourceH1": "Profesjonalna Myjnia Ręczna i Detailing w Szczecinie - BORUCH",
     "projectsTitle": "Nasze realizacje",
-    "projectsText": "Poniżej możesz zobaczyć zdjęcia w trakcie czyszczenia na naszej myjni jak i efekt końcowy.",
+    "projectsText": "To tylko część zdjęć aut naszych klientów w trakcie mycia.. i po myciu.",
     "features": [
       "Doświadczona ekipa",
       "Lokalizacja w centrum",

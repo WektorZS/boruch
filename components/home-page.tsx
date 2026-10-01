@@ -104,7 +104,7 @@ const salesPackageCopy: Record<Locale, {
     premiumItems: ["Pełny zakres pakietu Standard", "Glinkowanie lakieru", "Korekta lakieru dobrana po oględzinach"],
     from: "od",
     time: "około 4 godz.",
-    details: "Zobacz zakres i ceny",
+    details: "Zobacz pełny cennik",
   },
   en: {
     label: "Sales Package",
@@ -177,19 +177,19 @@ const careSteps: Record<Locale, Array<[string, string]>> = {
     ["Ustalamy dalszą pielęgnację", "Podpowiadamy, jak myć i pielęgnować auto po wykonanej usłudze."],
   ],
   en: [
-    ["Agree on the scope", "We inspect the car and discuss what it needs, from a regular wash to paint correction and protection."],
-    ["Work on the details", "We match products to each surface, cleaning the interior, bodywork and easily overlooked areas."],
-    ["Plan future care", "We explain how to wash and care for your car after the service."],
+    ["We choose the right scope", "We assess the condition of your car and select the right treatments, from basic care to paint protection."],
+  ["We focus on the details", "We take care of the interior, bodywork and details that are often overlooked during a regular wash."],
+  ["We plan further care", "We advise you on how to wash and maintain your car after the service."],
   ],
   de: [
-    ["Umfang abstimmen", "Wir sehen uns das Auto an und besprechen den Bedarf, von der Wäsche bis zur Lackkorrektur und zum Schutz."],
-    ["Details bearbeiten", "Wir stimmen die Produkte auf jede Oberfläche ab und reinigen Innenraum, Karosserie und leicht übersehene Stellen."],
-    ["Weitere Pflege besprechen", "Wir erklären, wie Sie Ihr Auto nach der Behandlung waschen und pflegen können."],
+    ["Wir wählen den passenden Umfang", "Wir prüfen den Zustand Ihres Fahrzeugs und wählen die passenden Maßnahmen – von der Basispflege bis zum Lackschutz."],
+  ["Wir achten auf die Details", "Wir kümmern uns um Innenraum, Karosserie und Details, die bei einer normalen Wäsche oft übersehen werden."],
+  ["Wir planen die weitere Pflege", "Wir beraten Sie, wie Sie Ihr Fahrzeug nach der Behandlung richtig waschen und pflegen."],
   ],
   uk: [
-    ["Узгоджуємо обсяг", "Оглядаємо авто й визначаємо потреби: від звичайного миття до корекції та захисту лаку."],
-    ["Працюємо над деталями", "Підбираємо засоби до поверхні. Очищаємо салон, кузов і місця, які легко не помітити."],
-    ["Обговорюємо подальший догляд", "Пояснюємо, як мити та доглядати за авто після виконаної послуги."],
+     ["Підбираємо обсяг робіт", "Оцінюємо стан автомобіля та підбираємо відповідні процедури — від базового догляду до захисту лакофарбового покриття."],
+  ["Працюємо над деталями", "Дбаємо про салон, кузов і деталі, які під час звичайного миття часто залишаються непоміченими."],
+  ["Плануємо подальший догляд", "Підказуємо, як правильно мити та доглядати за автомобілем після виконаної послуги."],
   ],
 }
 
@@ -294,7 +294,7 @@ const homeCopy = {
     ],
     whyLabel: "Dlaczego BORUCH",
     whyTitle: "Ręczna pielęgnacja auta od mycia po zabezpieczenie lakieru.",
-    whyIntro: "Jedno miejsce, w którym zajmiemy się wyglądem samochodu wewnątrz i na zewnątrz.",
+    whyIntro: "Dbamy o samochód kompleksowo - od wnętrza po lakier. Każdy etap wykonujemy ręcznie, zwracając uwagę na detale i dobierając zakres pielęgnacji do konkretnego auta.",
     benefits: [
       ["Ręczna pielęgnacja", "Precyzyjna praca ręczna pozwala nam zadbać o miejsca, które łatwo pominąć."],
       ["Pełny zakres", "Kompleksowa pielęgnacja auta od podstawowego mycia po zaawansowaną ochronę lakieru."],
@@ -303,11 +303,21 @@ const homeCopy = {
     servicesIntro: "Wybierz podstawową pielęgnację albo pełne zabezpieczenie samochodu.",
     galleryCaptions: ["Korekta lakieru", "Folia PPF", "Detailing wnętrza", "Mycie ręczne", "Zabezpieczenie lakieru"],
     teamTitle: "Za każdym autem stoi konkretna ekipa.",
-    teamBody: "BORUCH powstał z pasji do czystych i zadbanych samochodów. Pracujemy dokładnie, bez pośpiechu i z pełną odpowiedzialnością za efekt.",
+    teamBody: `Każdego dnia budzimy się z myślą o tym, aby dziś nadać blask kolejnej maszynie.
+Kochamy auta, zdecydowanie bardziej te czyste i lśniące.
+Stąd pomysł o założeniu myjni, gdzie dokładamy wszelkich starań,
+aby Państwa 'perełki' wyglądały jak nowe!
+
+Usługi naszej myjni to m.in. detailingowe mycie zewnątrz, nabłyszczanie opon, czyszczenie wnętrza: odkurzanie, czyszczenie i pielęgnacja kokpitu, mycie szyb, pranie tapicerki materiałowej, czyszczenie i impregnacja skór.
+Oferujemy również takie usługi jak oklejanie folią PPF, zmiana koloru auta lub pojedynczych elementów (np. dechroming), a nawet przyciemnianie szyb i reflektorów.
+
+Na liście naszych usług jest również polerowanie, korekta lakieru, aplikacja powłoki ceramicznej czy ręczne woskowanie pojazdu.
+Oprócz miłości do aut łączy nas również przyjaźń i wspaniała atmosfera w zespole, co myślimy jest drugim najważniejszym spoiwem, które wpływa na doskonałą jakość i dokładność wykonania przez nas usług!
+Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi :)`,
     routeHint: "Wjedź na parking PAZIM i zjedź na poziom -2.",
     reviewsLabel: "Opinie klientów",
     reviewsTitle: "Efekt, do którego chce się wracać.",
-    reviewsIntro: "Najlepiej mówią o nas kierowcy, którzy odebrali od nas swoje samochody.",
+    reviewsIntro: "Zobacz, co o efektach naszej pracy mówią klienci, którzy oddali nam swoje samochody.",
     reviewsSwipe: "Przesuń, aby zobaczyć kolejne opinie",
     reviewsLink: "Zobacz opinie i terminy",
     booksyReviews: "150 opinii",
@@ -342,7 +352,7 @@ const homeCopy = {
     benefits: [
        ["Hand care", "Precise hands-on work allows us to take care of details that are easy to overlook."],
     ["Full range", "Complete car care, from a basic wash to advanced paint protection."],
-    ["Central Szczecin", "Right in the city centre — leave your car with us and enjoy the nearby shopping centres while we work."],
+    ["Central Szczecin", "Right in the city centre - leave your car with us and enjoy the nearby shopping centres while we work."],
     ],
     servicesIntro: "Choose essential care or complete protection for your car.",
     galleryCaptions: ["Paint correction", "PPF protection", "Interior detailing", "Hand wash", "Paint protection"],
@@ -351,7 +361,7 @@ const homeCopy = {
     routeHint: "Enter the PAZIM car park and drive down to level -2.",
     reviewsLabel: "Customer reviews",
     reviewsTitle: "Results worth coming back for.",
-    reviewsIntro: "The best account of our work comes from drivers collecting their cars.",
+    reviewsIntro: "See what our customers say about the results after leaving their cars in our care.",
     reviewsSwipe: "Swipe to see more reviews",
     reviewsLink: "See reviews and appointments",
     booksyReviews: "150 reviews",
@@ -386,7 +396,7 @@ const homeCopy = {
     benefits: [
     ["Handarbeit", "Präzise Handarbeit ermöglicht es uns, auch Details zu pflegen, die leicht übersehen werden."],
     ["Komplettes Angebot", "Umfassende Fahrzeugpflege von der Basiswäsche bis zum hochwertigen Lackschutz."],
-    ["Zentrum Stettins", "Mitten im Stadtzentrum — lassen Sie Ihr Auto bei uns und nutzen Sie die Zeit für einen Besuch in den nahegelegenen Einkaufszentren."],
+    ["Zentrum Stettins", "Mitten im Stadtzentrum - lassen Sie Ihr Auto bei uns und nutzen Sie die Zeit für einen Besuch in den nahegelegenen Einkaufszentren."],
     ],
     servicesIntro: "Wählen Sie eine Basispflege oder den vollständigen Schutz Ihres Fahrzeugs.",
     galleryCaptions: ["Lackkorrektur", "PPF Schutzfolie", "Innenraumdetailing", "Handwäsche", "Lackschutz"],
@@ -395,7 +405,7 @@ const homeCopy = {
     routeHint: "Fahren Sie in die PAZIM Tiefgarage und hinunter auf Ebene -2.",
     reviewsLabel: "Kundenmeinungen",
     reviewsTitle: "Ein Ergebnis, für das man gerne wiederkommt.",
-    reviewsIntro: "Am besten berichten die Fahrer über uns, die ihr Fahrzeug bei uns abgeholt haben.",
+    reviewsIntro: "Lesen Sie, was unsere Kunden über die Ergebnisse sagen, nachdem sie ihr Fahrzeug in unsere Hände gegeben haben.",
     reviewsSwipe: "Wischen Sie für weitere Bewertungen",
     reviewsLink: "Bewertungen und Termine ansehen",
     booksyReviews: "150 Bewertungen",
@@ -429,8 +439,8 @@ const homeCopy = {
     whyIntro: "Одне місце для повного догляду за автомобілем зовні та всередині.",
     benefits: [
        ["Ручний догляд", "Точна ручна робота дозволяє нам приділити увагу деталям, які легко залишити непоміченими."],
-    ["Повний спектр", "Комплексний догляд за автомобілем — від базового миття до професійного захисту лакофарбового покриття."],
-    ["Центр Щецина", "У самому центрі міста — залиште авто у нас і скористайтеся часом, щоб відвідати найближчі торгові центри."],
+    ["Повний спектр", "Комплексний догляд за автомобілем - від базового миття до професійного захисту лакофарбового покриття."],
+    ["Центр Щецина", "У самому центрі міста - залиште авто у нас і скористайтеся часом, щоб відвідати найближчі торгові центри."],
     ],
     servicesIntro: "Оберіть базовий догляд або повний захист автомобіля.",
     galleryCaptions: ["Корекція лаку", "Захисна плівка PPF", "Детейлінг салону", "Ручне миття", "Захист лаку"],
@@ -439,7 +449,7 @@ const homeCopy = {
     routeHint: "Заїдьте на паркінг PAZIM і спустіться на рівень -2.",
     reviewsLabel: "Відгуки клієнтів",
     reviewsTitle: "Результат, за яким хочеться повернутися.",
-    reviewsIntro: "Найкраще про нашу роботу розповідають водії, які забрали у нас свої автомобілі.",
+    reviewsIntro: "Дізнайтеся, що наші клієнти говорять про результат після того, як довірили нам свої автомобілі.",
     reviewsSwipe: "Гортайте, щоб переглянути більше відгуків",
     reviewsLink: "Переглянути відгуки та вільні години",
     booksyReviews: "150 відгуків",
@@ -1651,7 +1661,7 @@ function SalesPackage({ locale }: { locale: Locale }) {
           <p className="home-kicker">{copy.label}</p>
           <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
-          <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+          <Link prefetch={false} href={`${routes[locale].pricing}`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
         </div>
         <div className="lg:col-span-7">
           <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
