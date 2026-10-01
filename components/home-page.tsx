@@ -581,8 +581,8 @@ function HomeHero({ locale }: { locale: Locale }) {
     const preload = window.setTimeout(() => {
       setTransitionsReady(true)
       setLoadedSlides(current => current.includes(next) ? current : [...current, next])
-    }, 5500)
-    const advance = window.setTimeout(() => setActiveSlide(next), 7500)
+    }, 3500)
+    const advance = window.setTimeout(() => setActiveSlide(next), 5000)
     return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
   }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused, autoplay])
 
