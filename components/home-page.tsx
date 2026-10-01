@@ -52,7 +52,7 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p46", position: "50% 50%" },
 ]
 
-const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3175.5081256882263!2d14.555991099999996!3d53.432913199999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e1!3m2!1spl!2spl!4v1790889823372!5m2!1spl!2spl"
+const mapEmbedUrl = "<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1188.4880132657092!2d14.555602179682984!3d53.43313691416123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e0!3m2!1spl!2spl!4v1790893337748!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
   pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
@@ -2125,93 +2125,85 @@ function Location({ locale }: { locale: Locale }) {
       className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-24"
     >
       <div className="home-shell">
-        <div className="grid overflow-hidden border-y border-white/12 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)]">
-          <div className="relative flex flex-col justify-between bg-[#0a0a0b] px-6 py-8 sm:px-10 sm:py-10 lg:min-h-[34rem] lg:px-12 lg:py-12">
-            <></>
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,.78fr)_minmax(0,1.22fr)] lg:items-stretch lg:gap-16">
+          <div className="flex flex-col justify-center">
+            <p className="home-kicker text-[#ef6267]">
+              {slide.kicker}
+            </p>
 
-            <div>
-              <p className="home-kicker text-[#ef6267]">
-                {slide.kicker}
-              </p>
+            <h2
+              id="location-title"
+              data-reveal=""
+              className="mt-7 max-w-lg font-display text-[clamp(2.4rem,3.8vw,4.4rem)] font-semibold leading-[1.02] tracking-[-.03em] text-white"
+            >
+              {locationTitle}
+            </h2>
 
-              <h2
-                id="location-title"
-                data-reveal=""
-                className="mt-7 max-w-lg font-display text-[clamp(2.25rem,3.5vw,4rem)] font-semibold leading-[1.02] tracking-[-.025em] text-white"
-              >
-                {locationTitle}
-              </h2>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
+              {copy.routeHint}
+            </p>
 
-              <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
-                {copy.routeHint}
-              </p>
-            </div>
+            <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
+              <div>
+                <span className="block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                  {levelLabel}
+                </span>
 
-            <div className="mt-12">
-              <div className="grid gap-0 border-y border-white/12 sm:grid-cols-[.7fr_1.3fr]">
-                <div className="flex flex-col justify-between border-b border-white/12 py-6 sm:border-b-0 sm:border-r sm:pr-7">
-                  <span className="text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
-                    {levelLabel}
+                <div className="mt-3 flex items-end gap-3">
+                  <strong className="font-display text-[clamp(3.6rem,5vw,5.25rem)] font-semibold leading-none tracking-[-.04em] text-brand">
+                    -2
+                  </strong>
+
+                  <span className="pb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/55">
+                    PAZIM
                   </span>
-
-                  <div className="mt-5 flex items-end gap-3">
-                    <strong className="font-display text-[clamp(3.75rem,6vw,5.5rem)] font-semibold leading-none tracking-[-.04em] text-brand">
-                      -2
-                    </strong>
-
-                    <span className="pb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/55">
-                      PAZIM
-                    </span>
-                  </div>
                 </div>
-
-                <address className="flex items-start gap-4 py-6 not-italic sm:pl-7">
-                  <span className="mt-0.5 grid size-9 shrink-0 place-items-center border border-white/12 text-brand">
-                    <MapPin className="size-4" aria-hidden="true" />
-                  </span>
-
-                  <div>
-                    <span className="mb-2 block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
-                      {routeLabel}
-                    </span>
-
-                    <span className="flex flex-col text-sm leading-relaxed text-white/72">
-                      {src.address.lines.map((line) => (
-                        <span key={line}>{line}</span>
-                      ))}
-                    </span>
-                  </div>
-                </address>
               </div>
 
-              <a
-                href={contact.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-7 inline-flex min-h-12 items-center gap-4 border border-white/14 px-5 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:border-brand hover:bg-brand"
-              >
-                {t.openMap}
-
-                <ArrowUpRight
-                  className="size-4 text-brand transition-colors group-hover:text-white"
+              <address className="flex items-start gap-4 not-italic">
+                <MapPin
+                  className="mt-1 size-4 shrink-0 text-brand"
                   aria-hidden="true"
                 />
-              </a>
+
+                <div>
+                  <span className="mb-2 block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                    {routeLabel}
+                  </span>
+
+                  <span className="flex flex-col text-sm leading-relaxed text-white/72">
+                    {src.address.lines.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </span>
+                </div>
+              </address>
             </div>
+
+            <a
+              href={contact.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="editorial-link mt-9 w-fit"
+            >
+              {t.openMap}
+              <ArrowUpRight
+                className="size-4 text-brand"
+                aria-hidden="true"
+              />
+            </a>
           </div>
 
-          <div className="group relative min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
-            <iframe
-              title={`${t.openMap} - BORUCH Myjnia Szczecin`}
-              src={mapEmbedUrl}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(.45)_invert(.88)_contrast(1.05)]"
-            />
-
-            <></>
-
-            <></>
+          <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[34rem] lg:border-l lg:border-white/10 lg:pl-8">
+            <div className="relative h-full min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
+              <iframe
+                title={`${t.openMap} - BORUCH Myjnia Szczecin`}
+                src={mapEmbedUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(.45)_invert(.88)_contrast(1.05)]"
+              />
+            </div>
           </div>
         </div>
       </div>
