@@ -761,19 +761,66 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <section aria-labelledby="why-title" className="section-xl overflow-hidden bg-[#080809]">
-      <div className="home-shell why-editorial">
-        <div className="why-editorial-heading">
-          <p className="home-kicker">{copy.whyLabel}</p>
-          <h2 id="why-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].why}</h2>
-          <p className="mt-7 max-w-md text-base leading-relaxed text-white/65">{copy.whyIntro}</p>
-          <Link prefetch={false} href={routes[locale].about} className="editorial-link mt-7">{t.nav.about}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+    <section
+      aria-labelledby="why-title"
+      className="section-xl overflow-hidden bg-[#080809]"
+    >
+      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-20">
+        <div className="lg:col-span-5">
+          <p className="home-kicker">
+            {copy.whyLabel}
+          </p>
+
+          <h2
+            id="why-title"
+            data-reveal=""
+            className="editorial-display mt-7 max-w-[11ch]"
+          >
+            {editorialCopy[locale].why}
+          </h2>
+
+          <p className="mt-7 max-w-md text-base leading-relaxed text-white/62">
+            {copy.whyIntro}
+          </p>
+
+          <Link
+            prefetch={false}
+            href={routes[locale].about}
+            className="editorial-link mt-8 w-fit"
+          >
+            {t.nav.about}
+            <ArrowUpRight
+              className="size-4 text-brand"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
-        <ol className="why-editorial-steps">
-          {careSteps[locale].map(([title, text], index) => <li key={title}>
-            <span className="type-label pt-1 text-brand" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-            <div><h3 className="font-display text-xl font-medium leading-snug sm:text-2xl">{title}</h3><p className="mt-3 max-w-xl text-base leading-relaxed text-white/65">{text}</p></div>
-          </li>)}
+
+        <ol className="border-t border-white/15 lg:col-span-6 lg:col-start-7">
+          {careSteps[locale].map(([title, text], index) => (
+            <li
+              key={title}
+              data-reveal=""
+              className="group grid grid-cols-[2.25rem_minmax(0,1fr)] gap-5 border-b border-white/15 py-7 sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-7 sm:py-8"
+            >
+              <span
+                className="type-label pt-1 text-brand"
+                aria-hidden="true"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <div className="min-w-0">
+                <h3 className="font-display text-xl font-semibold leading-snug tracking-normal text-white sm:text-2xl">
+                  {title}
+                </h3>
+
+                <p className="mt-3 max-w-xl text-base leading-relaxed text-white/58">
+                  {text}
+                </p>
+              </div>
+            </li>
+          ))}
         </ol>
       </div>
     </section>
