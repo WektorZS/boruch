@@ -2390,7 +2390,28 @@ a.service-index-row:hover { border-color: var(--brand); }
   }
 
 }
+@media (min-width: 640px) {
+  .hero-editorial-bottom,
+  .hero-editorial-bottom * {
+    opacity: 1 !important;
+  }
 
+  .hero-editorial-bottom span {
+    color: rgb(255 255 255 / 0.92) !important;
+  }
+
+  .hero-editorial-bottom a,
+  .hero-editorial-bottom svg {
+    color: rgb(255 255 255 / 0.94) !important;
+  }
+
+  .hero-editorial-bottom a:hover,
+  .hero-editorial-bottom a:focus-visible,
+  .hero-editorial-bottom a:hover svg,
+  .hero-editorial-bottom a:focus-visible svg {
+    color: #fff !important;
+  }
+}
 @media (max-width: 639px) {
 
   .hero-copy-contrast::before {
@@ -2413,4 +2434,5 @@ a.service-index-row:hover { border-color: var(--brand); }
 
   }
 
+  
 }
