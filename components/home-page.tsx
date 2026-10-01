@@ -749,11 +749,11 @@ function HomeHero({ locale }: { locale: Locale }) {
 >
   <div className="hero-editorial-bottom sm:hidden">
    <div className="flex items-center justify-center text-white">
-  <span className="mr-4 text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+  <span className="mr-2 text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
     {followCopy[locale]}
   </span>
 
-  <div className="flex items-center gap-1.5">
+  <div className="flex items-center gap-0.5">
     <a
       href={contact.facebook}
       target="_blank"
