@@ -968,9 +968,10 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       details: "Poznaj usługę",
       expand: "Rozwiń zakres usługi",
       pricing: "Zobacz cennik",
-      advice: "Nie wiesz, od czego zacząć?",
-      adviceText: "Opisz nam auto i oczekiwany efekt. Pomożemy dobrać zakres prac.",
-      contact: "Zapytaj o swoje auto",
+allServices: "Wszystkie usługi",
+advice: "Nie wiesz, od czego zacząć?",
+adviceText: "Opisz nam auto i oczekiwany efekt. Pomożemy dobrać zakres prac.",
+contact: "Zapytaj o swoje auto",
     },
     en: {
       eyebrow: "Services",
@@ -983,6 +984,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       details: "Explore the service",
       expand: "Show the service scope",
       pricing: "View pricing",
+      allServices: "All services",
       advice: "Not sure where to start?",
       adviceText: "Tell us about your car and the result you want. We will help you choose the scope.",
       contact: "Ask about your car",
@@ -998,6 +1000,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       details: "Leistung ansehen",
       expand: "Leistungsumfang anzeigen",
       pricing: "Preise ansehen",
+      allServices: "Alle Leistungen",
       advice: "Sie wissen nicht, wo Sie anfangen sollen?",
       adviceText: "Beschreiben Sie Ihr Auto und das gewünschte Ergebnis. Wir helfen bei der Auswahl.",
       contact: "Zum Fahrzeug anfragen",
@@ -1013,6 +1016,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       details: "Дізнатися про послугу",
       expand: "Показати обсяг послуги",
       pricing: "Переглянути ціни",
+      allServices: "Усі послуги",
       advice: "Не знаєте, з чого почати?",
       adviceText: "Розкажіть про авто й бажаний результат. Допоможемо підібрати обсяг робіт.",
       contact: "Запитати про своє авто",
@@ -1107,14 +1111,30 @@ function ServiceMenu({ locale }: { locale: Locale }) {
               <p className="sr-advice-text">{copy.adviceText}</p>
             </div>
           </div>
-          <div className="sr-footer-links">
-            <Link prefetch={false} href={routes[locale].pricing} className="sr-link">
-              {copy.pricing}<ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
-            </Link>
-            <a href="#wycena" className="sr-contact-link">
-              {copy.contact}<ArrowRight aria-hidden="true" strokeWidth={1.6} />
-            </a>
-          </div>
+         <div className="sr-footer-links">
+  <Link
+    prefetch={false}
+    href={routes[locale].services}
+    className="sr-link"
+  >
+    {copy.allServices}
+    <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+  </Link>
+
+  <Link
+    prefetch={false}
+    href={routes[locale].pricing}
+    className="sr-link"
+  >
+    {copy.pricing}
+    <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+  </Link>
+
+  <a href="#wycena" className="sr-contact-link">
+    {copy.contact}
+    <ArrowRight aria-hidden="true" strokeWidth={1.6} />
+  </a>
+</div>
         </footer>
       </div>
 
