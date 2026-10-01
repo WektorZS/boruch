@@ -11,7 +11,7 @@ import { SiteFooter } from "./site-footer"
 import { useModalFocus } from "./use-modal-focus"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { serviceConfigs, serviceSummary, type ServiceSlug } from "@/lib/content/services"
+import { serviceConfigs, serviceSummary } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
 import { clsx as cn } from "clsx"
 
@@ -903,31 +903,32 @@ function WhyBoruch({ locale }: { locale: Locale }) {
 function ServiceMenu({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
+  const copy = homeCopy[locale]
 
   const sectionCopy = {
     pl: {
       eyebrow: "Usługi",
-      title: "Dwa zakresy. Jeden standard.",
-      intro:
-        "Od regularnej pielęgnacji po korektę, zabezpieczenie i zmianę wyglądu samochodu.",
+      title: "Od mycia po pełne zabezpieczenie.",
+      secondary:
+        "Dobieramy zakres do stanu auta i efektu, którego oczekujesz.",
     },
     en: {
       eyebrow: "Services",
-      title: "Two areas. One standard.",
-      intro:
-        "From regular care to paint correction, protection and complete visual transformation.",
+      title: "From washing to complete protection.",
+      secondary:
+        "We match the scope to your car's condition and the result you expect.",
     },
     de: {
       eyebrow: "Leistungen",
-      title: "Zwei Bereiche. Ein Standard.",
-      intro:
-        "Von regelmäßiger Pflege bis zu Lackkorrektur, Schutz und optischer Veränderung.",
+      title: "Von der Wäsche bis zum vollständigen Schutz.",
+      secondary:
+        "Wir stimmen den Umfang auf den Zustand Ihres Fahrzeugs und das gewünschte Ergebnis ab.",
     },
     uk: {
       eyebrow: "Послуги",
-      title: "Два напрямки. Один стандарт.",
-      intro:
-        "Від регулярного догляду до корекції, захисту та зміни зовнішнього вигляду автомобіля.",
+      title: "Від миття до повного захисту.",
+      secondary:
+        "Підбираємо обсяг робіт відповідно до стану авто та бажаного результату.",
     },
   }[locale]
 
@@ -938,14 +939,23 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       description: serviceGroupCopy[locale][category],
       items: serviceConfigs
         .filter((service) => service.category === category)
-        .map((service) => ({
-          slug: service.slug,
-          title: service.navTitle,
-          href:
-            locale === "pl"
-              ? `/${service.slug}`
-              : routes[locale].services,
-        })),
+        .map((service) => {
+          const summary = serviceSummary(locale, service.slug)
+
+          return {
+            slug: service.slug,
+            title:
+              locale === "pl"
+                ? service.navTitle
+                : (summary?.title ?? service.navTitle),
+            description:
+              summary?.text ?? serviceGroupCopy[locale][category],
+            href:
+              locale === "pl"
+                ? `/${service.slug}`
+                : routes[locale].services,
+          }
+        }),
     }),
   )
 
@@ -957,7 +967,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     >
       <div className="home-shell">
         <header className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-8">
             <p className="home-kicker text-white/55">
               {sectionCopy.eyebrow}
             </p>
@@ -965,23 +975,27 @@ function ServiceMenu({ locale }: { locale: Locale }) {
             <h2
               id="services-title"
               data-reveal=""
-              className="mt-5 max-w-[13ch] font-display text-4xl font-semibold uppercase leading-[.98] tracking-[-.03em] text-white sm:text-5xl lg:text-6xl"
+              className="mt-5 max-w-[16ch] font-display text-4xl font-semibold uppercase leading-[.96] tracking-[-.035em] text-white sm:text-5xl lg:text-[3.75rem]"
             >
               {sectionCopy.title}
             </h2>
           </div>
 
           <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-              {sectionCopy.intro}
+            <p className="max-w-md text-base leading-relaxed text-white/60">
+              {copy.servicesIntro}
+            </p>
+
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-white/38">
+              {sectionCopy.secondary}
             </p>
 
             <Link
               prefetch={false}
               href={routes[locale].services}
-              className="group mt-5 inline-flex items-center gap-3 text-[.7rem] font-bold uppercase tracking-[.16em] text-white"
+              className="group mt-6 inline-flex w-fit items-center gap-3 text-[.7rem] font-bold uppercase tracking-[.16em] text-white"
             >
-              <span className="border-b border-white/30 pb-1 transition-colors group-hover:border-brand">
+              <span className="border-b border-white/25 pb-1.5 transition-colors duration-300 group-hover:border-brand">
                 {t.allServices}
               </span>
 
@@ -993,75 +1007,111 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </header>
 
-        <div className="mt-10 border-t border-white/15 md:mt-12">
-          {groups.map((group, groupIndex) => (
-            <article
-              key={group.category}
-              className={cn(
-                "grid gap-7 py-8 lg:grid-cols-12 lg:gap-10 lg:py-10",
-                groupIndex > 0 && "border-t border-white/15",
-              )}
-            >
-              <div className="lg:col-span-3">
-                <div className="flex items-center gap-3">
-                  <span
-                    className="font-mono text-[.62rem] font-bold tracking-[.16em] text-brand"
-                    aria-hidden="true"
-                  >
-                    0{groupIndex + 1}
-                  </span>
+        <div className="mt-11 border-t border-white/15 md:mt-14">
+          {groups.map((group, groupIndex) => {
+            const firstServiceIndex =
+              serviceConfigs.findIndex(
+                service => service.slug === group.items[0]?.slug,
+              ) + 1
 
-                  <span className="h-px w-8 bg-brand/70" />
+            const lastServiceIndex =
+              firstServiceIndex + group.items.length - 1
+
+            return (
+              <article
+                key={group.category}
+                data-reveal=""
+                className={cn(
+                  "grid gap-8 py-9 lg:grid-cols-12 lg:gap-12 lg:py-12",
+                  groupIndex > 0 && "border-t border-white/15",
+                )}
+              >
+                <div className="lg:col-span-3">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="font-mono text-[.62rem] font-bold tracking-[.16em] text-brand"
+                      aria-hidden="true"
+                    >
+                      0{groupIndex + 1}
+                    </span>
+
+                    <span className="h-px w-8 bg-brand/70" />
+                  </div>
+
+                  <h3 className="mt-5 font-display text-3xl font-semibold uppercase leading-none tracking-[-.025em] text-white sm:text-4xl">
+                    {group.title}
+                  </h3>
+
+                  <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/52">
+                    {group.description}
+                  </p>
+
+                  <div className="mt-6 flex items-center gap-3 font-mono text-[.6rem] font-bold uppercase tracking-[.15em] text-white/25">
+                    <span>
+                      {String(firstServiceIndex).padStart(2, "0")}
+                    </span>
+
+                    <span className="h-px w-5 bg-white/15" />
+
+                    <span>
+                      {String(lastServiceIndex).padStart(2, "0")}
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="mt-4 font-display text-3xl font-semibold uppercase leading-none tracking-[-.02em] text-white">
-                  {group.title}
-                </h3>
+                <ol className="grid min-w-0 gap-x-10 lg:col-span-9 lg:grid-cols-2">
+                  {group.items.map((item, itemIndex) => {
+                    const serviceIndex =
+                      serviceConfigs.findIndex(
+                        service => service.slug === item.slug,
+                      ) + 1
 
-                <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">
-                  {group.description}
-                </p>
-              </div>
+                    const isRightColumn = itemIndex % 2 === 1
 
-              <ol className="grid min-w-0 gap-x-8 lg:col-span-9 lg:grid-cols-2">
-                {group.items.map((item) => {
-                  const serviceIndex =
-                    serviceConfigs.findIndex(
-                      service => service.slug === item.slug,
-                    ) + 1
-
-                  return (
-                    <li
-                      key={item.slug}
-                      className="border-t border-white/10"
-                    >
-                      <Link
-                        prefetch={false}
-                        href={item.href}
-                        className="group grid min-h-14 grid-cols-[2rem_minmax(0,1fr)_1rem] items-center gap-3 py-3 sm:min-h-16 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4"
+                    return (
+                      <li
+                        key={item.slug}
+                        className={cn(
+                          "border-t border-white/10",
+                          isRightColumn
+                            ? "lg:border-l lg:border-white/8 lg:pl-8"
+                            : "lg:pr-8",
+                        )}
                       >
-                        <span
-                          className="font-mono text-[.6rem] font-bold tracking-[.12em] text-white/25 transition-colors duration-300 group-hover:text-brand"
-                          aria-hidden="true"
+                        <Link
+                          prefetch={false}
+                          href={item.href}
+                          className="group relative grid min-h-24 grid-cols-[2rem_minmax(0,1fr)_1rem] items-start gap-3 py-5 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4"
                         >
-                          {String(serviceIndex).padStart(2, "0")}
-                        </span>
+                          <span
+                            className="pt-1 font-mono text-[.6rem] font-bold tracking-[.12em] text-white/28 transition-colors duration-300 group-hover:text-brand group-focus-visible:text-brand"
+                            aria-hidden="true"
+                          >
+                            {String(serviceIndex).padStart(2, "0")}
+                          </span>
 
-                        <span className="min-w-0 font-display text-lg font-semibold leading-tight text-white/72 transition-[color,transform] duration-300 group-hover:translate-x-1 group-hover:text-white sm:text-xl">
-                          {item.title}
-                        </span>
+                          <span className="min-w-0">
+                            <span className="block font-display text-lg font-semibold leading-tight text-white/86 transition-colors duration-300 group-hover:text-white group-focus-visible:text-white sm:text-xl">
+                              {item.title}
+                            </span>
 
-                        <ArrowUpRight
-                          className="size-3.5 shrink-0 text-white/25 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
-                          aria-hidden="true"
-                        />
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ol>
-            </article>
-          ))}
+                            <span className="mt-2 hidden max-w-xl text-sm leading-relaxed text-white/42 sm:block">
+                              {item.description}
+                            </span>
+                          </span>
+
+                          <ArrowUpRight
+                            className="mt-1 size-3.5 shrink-0 text-white/25 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
+                            aria-hidden="true"
+                          />
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ol>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
