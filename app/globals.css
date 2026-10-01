@@ -1677,7 +1677,7 @@
 
 .hero-cinema {
   position: absolute;
-  inset: var(--header-h) 0 5rem 34%;
+  inset: var(--header-h) 0 5rem 0;
   overflow: hidden;
   clip-path: none;
   border: 0;
@@ -1698,49 +1698,43 @@
     linear-gradient(
       90deg,
       #080809 0%,
-      rgb(8 8 9 / 0.98) 12%,
-      rgb(8 8 9 / 0.9) 24%,
-      rgb(8 8 9 / 0.72) 38%,
-      rgb(8 8 9 / 0.48) 52%,
-      rgb(8 8 9 / 0.22) 66%,
+      rgb(8 8 9 / 0.98) 18%,
+      rgb(8 8 9 / 0.94) 28%,
+      rgb(8 8 9 / 0.82) 38%,
+      rgb(8 8 9 / 0.62) 48%,
+      rgb(8 8 9 / 0.4) 58%,
+      rgb(8 8 9 / 0.18) 68%,
       transparent 80%
     ),
     linear-gradient(
       270deg,
-      rgb(8 8 9 / 0.46) 0%,
-      rgb(8 8 9 / 0.24) 16%,
+      rgb(8 8 9 / 0.42) 0%,
+      rgb(8 8 9 / 0.18) 18%,
       transparent 34%
     ),
     linear-gradient(
       0deg,
-      rgb(8 8 9 / 0.7) 0%,
-      rgb(8 8 9 / 0.24) 32%,
-      transparent 62%
+      rgb(8 8 9 / 0.72) 0%,
+      rgb(8 8 9 / 0.26) 30%,
+      transparent 60%
     );
 }
 
 .hero-trust-totem {
   position: absolute;
-  top: 50%;
-  right: calc((100vw - 100%) / -2 + 24px);
-  bottom: auto;
+  right: calc((100vw - 100%) / -2 + 40px);
+  bottom: 4rem;
   z-index: 12;
-
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1.35rem;
-
   min-width: 9.5rem;
   padding: 0;
-
   text-align: right;
-
   background: transparent;
   border: 0;
   box-shadow: none;
-
-  transform: translateY(-50%);
 }
 
 .hero-trust-item {
