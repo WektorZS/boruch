@@ -672,14 +672,14 @@ function HomeHero({ locale }: { locale: Locale }) {
           </div>
       </div>
 
-     <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+    <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
   {copy.benefits.map(([title, text], index) => {
     const Icon = benefitIcons[index] ?? Car
 
     return (
       <li
         key={title}
-        className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:min-h-24 lg:px-10"
+        className="flex min-h-24 items-center justify-center border-b border-white/10 px-6 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
       >
         <div className="flex w-full max-w-sm items-center justify-center gap-4">
           <Icon
@@ -701,13 +701,13 @@ function HomeHero({ locale }: { locale: Locale }) {
     )
   })}
 </ul>
+</section>
 
-      <div className="relative z-10 border-b border-white/10 bg-[#080809]">
-        <div className="home-shell flex justify-end py-5">
-          <HeroRatings copy={copy} className="hero-ratings-inline" />
-        </div>
-      </div>
-    </section>
+<div className="border-b border-white/10 bg-[#080809]">
+  <div className="home-shell flex justify-end py-5">
+    <HeroRatings copy={copy} className="hero-ratings-inline" />
+  </div>
+</div>
   )
 }
 
