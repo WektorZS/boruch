@@ -1662,17 +1662,23 @@
   font-weight: 800;
   font-size: clamp(3.4rem, 5.9vw, 6.2rem);
   line-height: 1.08;
-  letter-spacing: -.025em;
+  letter-spacing: -0.025em;
   max-width: 13.5ch;
   text-transform: uppercase;
-  text-wrap: pretty;
-  overflow-wrap: anywhere;
+
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
 }
 
 .cinematic-title-long {
   font-size: clamp(2.9rem, 5.2vw, 5.5rem);
-  max-width: 14ch;
-  hyphens: auto;
+  max-width: 16ch;
+
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .hero-cinema {
