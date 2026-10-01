@@ -618,21 +618,48 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
-        <div key={activeSlide} className={cn("hero-editorial-copy", activeSlide > 0 && "home-hero-copy-animated")}>
-          <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/75">
-            <span className="h-px w-7 shrink-0 bg-brand" />{slide.label}
-          </p>
-          <h1 id="hero-title" className={cn("cinematic-title", hasLongTitleWord && "cinematic-title-long")}>{slide.title}</h1>
-          <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/70 sm:text-lg">{slide.text}</p>
-          <div className="mt-9 flex flex-wrap items-center gap-7">
-            <a href="#wycena" className="home-button home-button-red">
-              {t.nav.contact}<ArrowRight className="size-4" aria-hidden="true" />
-            </a>
-            <Link prefetch={false} href={routes[locale].services} className="editorial-link">
-              {t.nav.services}<ArrowUpRight className="size-4" aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
+        <div
+  key={activeSlide}
+  className={cn(
+    "hero-editorial-copy hero-copy-contrast",
+    activeSlide > 0 && "home-hero-copy-animated",
+  )}
+>
+  <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+    <span className="h-px w-7 shrink-0 bg-brand" />
+    {slide.label}
+  </p>
+
+  <h1
+    id="hero-title"
+    className={cn(
+      "cinematic-title",
+      hasLongTitleWord && "cinematic-title-long",
+    )}
+  >
+    {slide.title}
+  </h1>
+
+  <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+    {slide.text}
+  </p>
+
+  <div className="mt-9 flex flex-wrap items-center gap-7">
+    <a href="#wycena" className="home-button home-button-red">
+      {t.nav.contact}
+      <ArrowRight className="size-4" aria-hidden="true" />
+    </a>
+
+    <Link
+      prefetch={false}
+      href={routes[locale].services}
+      className="editorial-link"
+    >
+      {t.nav.services}
+      <ArrowUpRight className="size-4" aria-hidden="true" />
+    </Link>
+  </div>
+</div>
         <div className="hero-editorial-bottom">
           <div className="flex items-center gap-3">
             <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">{followCopy[locale]}</span>
@@ -646,9 +673,37 @@ function HomeHero({ locale }: { locale: Locale }) {
 
           <div className="hero-slide-controls">
             <div className="hero-progress" aria-hidden="true"><span key={activeSlide} style={{ animationPlayState: heroPaused || !heroVisible || !autoplay ? "paused" : "running" }} /></div>
-            <button type="button" onClick={() => changeSlide(-1)} aria-label={editorialCopy[locale].previous}><ArrowLeft className="size-4" aria-hidden="true" /></button>
-            <button type="button" onClick={() => changeSlide(1)} aria-label={editorialCopy[locale].next}><ArrowRight className="size-4" aria-hidden="true" /></button>
-            <button type="button" onClick={() => setAutoplay(value => !value)} aria-label={autoplay ? editorialCopy[locale].pause : editorialCopy[locale].play}>{autoplay ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}</button>
+            <button
+  type="button"
+  onClick={() => changeSlide(-1)}
+  aria-label={editorialCopy[locale].previous}
+>
+  <ArrowLeft className="size-4.5" aria-hidden="true" />
+</button>
+
+<button
+  type="button"
+  onClick={() => changeSlide(1)}
+  aria-label={editorialCopy[locale].next}
+>
+  <ArrowRight className="size-4.5" aria-hidden="true" />
+</button>
+
+<button
+  type="button"
+  onClick={() => setAutoplay(value => !value)}
+  aria-label={
+    autoplay
+      ? editorialCopy[locale].pause
+      : editorialCopy[locale].play
+  }
+>
+  {autoplay ? (
+    <Pause className="size-4" aria-hidden="true" />
+  ) : (
+    <Play className="size-4" aria-hidden="true" />
+  )}
+</button>
           </div>
         </div>
         <div className="hero-photo-note" aria-hidden="true"><span>BORUCH / PAZIM</span><span>{editorialCopy[locale].studio}</span></div>

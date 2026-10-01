@@ -86,28 +86,32 @@ export function SiteHeader({
           "data-[scrolled=true]:bg-ink-2",
         )}
       >
-        <div className="shell-wide flex h-(--header-h) items-center justify-between gap-4 transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
-          <Wordmark href={homeHref} label={homeLabel} />
+        <div className="shell-wide flex h-(--header-h) items-center gap-4 transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+  <Wordmark href={homeHref} label={homeLabel} />
 
-          <nav aria-label={labels.navigation} className="hidden lg:ml-auto lg:block">
-            <ul className="flex items-center gap-5 xl:gap-8">
-              {nav
-                .filter((item) => item.key !== "home")
-                .map((item) => (
-                  <li key={item.key}>
-                    <Link prefetch={false}
-                      href={item.href}
-                      aria-current={item.active ? "page" : undefined}
-                      className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-medium uppercase tracking-[.12em] text-white/68 hover:text-white aria-[current=page]:text-white"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-            </ul>
-          </nav>
+  <nav
+    aria-label={labels.navigation}
+    className="hidden lg:ml-12 lg:mr-auto lg:block xl:ml-20 2xl:ml-28"
+  >
+    <ul className="flex items-center gap-5 xl:gap-8">
+      {nav
+        .filter((item) => item.key !== "home")
+        .map((item) => (
+          <li key={item.key}>
+            <Link
+              prefetch={false}
+              href={item.href}
+              aria-current={item.active ? "page" : undefined}
+              className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-medium uppercase tracking-[.12em] text-white/68 hover:text-white aria-[current=page]:text-white"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+    </ul>
+  </nav>
 
-          <div className="flex items-center gap-5 lg:ml-5 lg:border-l lg:border-white/15 lg:pl-5 xl:ml-7 xl:pl-7">
+  <div className="flex items-center gap-5 lg:border-l lg:border-white/15 lg:pl-5 xl:pl-7">
             <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
               {languages.map((lang) => (
                 <li key={lang.code}>
@@ -237,18 +241,46 @@ export function SiteHeader({
   )
 }
 
-function Wordmark({ href, label, className, onClick }: { href: string; label: string; className?: string; onClick?: () => void }) {
+function Wordmark({
+  href,
+  label,
+  className,
+  onClick,
+}: {
+  href: string
+  label: string
+  className?: string
+  onClick?: () => void
+}) {
   return (
-    <Link prefetch={false} href={href} onClick={onClick} aria-label={`Boruch Myjnia / Detailing - ${label}`} className={cn("group flex shrink-0 items-center gap-2 min-[360px]:gap-3", className)}>
+    <Link
+      prefetch={false}
+      href={href}
+      onClick={onClick}
+      aria-label={`Boruch Myjnia / Detailing - ${label}`}
+      className={cn(
+        "group flex shrink-0 items-center gap-3",
+        className,
+      )}
+    >
       <span
         aria-hidden="true"
-        className="grid size-10 place-items-center bg-brand font-display text-[2rem] font-black uppercase leading-none text-bone min-[360px]:size-12 [font-stretch:75%] [font-variation-settings:'wdth'_75]"
+        className="grid size-11 place-items-center bg-brand font-display text-[2rem] font-black uppercase leading-none text-bone min-[360px]:size-13 [font-stretch:75%] [font-variation-settings:'wdth'_75]"
       >
         B
       </span>
-      <span aria-hidden="true" className="flex flex-col gap-0.5 leading-none">
-        <span className="font-display text-[1.55rem] font-black uppercase tracking-[-0.02em] text-bone [font-stretch:80%] [font-variation-settings:'wdth'_80]">Boruch</span>
-        <span className="mt-1 whitespace-nowrap text-[.625rem] font-semibold uppercase tracking-[.17em] text-white/65 min-[360px]:text-[.72rem]">Myjnia / detailing</span>
+
+      <span
+        aria-hidden="true"
+        className="flex flex-col leading-none"
+      >
+        <span className="font-display text-[1.65rem] font-black uppercase tracking-[-0.025em] text-bone [font-stretch:80%] [font-variation-settings:'wdth'_80]">
+          Boruch
+        </span>
+
+        <span className="mt-1.5 whitespace-nowrap text-[.68rem] font-semibold uppercase tracking-[.17em] text-white/72 min-[360px]:text-[.75rem]">
+          Myjnia / detailing
+        </span>
       </span>
     </Link>
   )
