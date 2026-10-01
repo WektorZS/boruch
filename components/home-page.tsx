@@ -921,8 +921,6 @@ function ServiceMenu({ locale }: { locale: Locale }) {
               locale === "pl"
                 ? service.navTitle
                 : (summary?.title ?? service.navTitle),
-            description:
-              summary?.text ?? serviceGroupCopy[locale][category],
             href:
               locale === "pl"
                 ? `/${service.slug}`
@@ -936,10 +934,10 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     <section
       id="services"
       aria-labelledby="services-title"
-      className="section-xl bg-[#111112]"
+      className="bg-[#111112] py-16 md:py-20 lg:py-24"
     >
       <div className="home-shell">
-        <div className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-7 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
             <p className="home-kicker text-white/62">
               {t.nav.services}
@@ -948,7 +946,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
             <h2
               id="services-title"
               data-reveal=""
-              className="editorial-display mt-6"
+              className="editorial-display mt-5"
             >
               {src.services.groups
                 .map((group) => group.title)
@@ -957,14 +955,14 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
 
           <div className="lg:col-span-4 lg:col-start-9">
-            <p className="max-w-md text-base leading-relaxed text-white/58">
+            <p className="max-w-md text-sm leading-relaxed text-white/58 sm:text-base">
               {copy.servicesIntro}
             </p>
 
             <Link
               prefetch={false}
               href={routes[locale].services}
-              className="mt-6 inline-flex w-fit items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-[#ef6267]"
+              className="mt-5 inline-flex w-fit items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white transition-colors hover:text-brand"
             >
               {t.allServices}
 
@@ -976,38 +974,28 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-white/15">
+        <div className="mt-10 grid border-t border-white/15 lg:grid-cols-2 lg:divide-x lg:divide-white/15">
           {groups.map((group, groupIndex) => (
             <div
               key={group.category}
-              data-reveal=""
               className={cn(
-                "min-w-0 py-10 lg:py-14",
+                "min-w-0",
                 groupIndex === 0
-                  ? "border-b border-white/15 lg:border-b-0 lg:pr-12 xl:pr-16"
-                  : "lg:pl-12 xl:pl-16",
+                  ? "border-b border-white/15 py-8 lg:border-b-0 lg:py-10 lg:pr-12 xl:pr-16"
+                  : "pt-8 lg:py-10 lg:pl-12 xl:pl-16",
               )}
             >
-              <div className="mb-8">
-                <div className="flex items-baseline justify-between gap-6">
-                  <h3 className="font-display text-3xl font-semibold uppercase leading-none tracking-tight text-white sm:text-4xl">
-                    {group.title}
-                  </h3>
+              <div className="mb-6">
+                <h3 className="font-display text-2xl font-semibold uppercase leading-none tracking-tight text-white sm:text-3xl">
+                  {group.title}
+                </h3>
 
-                  <span
-                    className="font-mono text-[.65rem] font-bold uppercase tracking-[.18em] text-brand"
-                    aria-hidden="true"
-                  >
-                    {String(group.items.length).padStart(2, "0")}
-                  </span>
-                </div>
-
-                <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/58 sm:text-base">
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/50">
                   {group.description}
                 </p>
               </div>
 
-              <ol className="border-t border-white/15">
+              <ol>
                 {group.items.map((item) => {
                   const serviceIndex =
                     serviceConfigs.findIndex(
@@ -1017,29 +1005,26 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                   return (
                     <li
                       key={item.slug}
-                      className="border-b border-white/15"
+                      className="border-t border-white/10"
                     >
                       <Link
                         prefetch={false}
                         href={item.href}
-                        className="group flex min-h-20 items-center gap-4 py-5 sm:gap-6"
+                        className="group grid min-h-14 grid-cols-[2rem_minmax(0,1fr)_1rem] items-center gap-3 py-3.5 sm:min-h-16 sm:grid-cols-[2.5rem_minmax(0,1fr)_1rem] sm:gap-4 sm:py-4"
                       >
-                        <span className="w-7 shrink-0 font-mono text-[.65rem] font-bold tracking-[.12em] text-white/35 transition-colors group-hover:text-brand group-focus-visible:text-brand">
+                        <span
+                          className="font-mono text-[.62rem] font-bold tracking-[.12em] text-white/30 transition-colors group-hover:text-brand group-focus-visible:text-brand"
+                          aria-hidden="true"
+                        >
                           {String(serviceIndex).padStart(2, "0")}
                         </span>
 
-                        <span className="min-w-0 flex-1">
-                          <span className="block font-display text-xl font-semibold leading-tight text-white/82 transition-colors group-hover:text-white group-focus-visible:text-white sm:text-2xl">
-                            {item.title}
-                          </span>
-
-                          <span className="mt-2 hidden max-w-xl text-sm leading-relaxed text-white/45 sm:block">
-                            {item.description}
-                          </span>
+                        <span className="min-w-0 font-display text-lg font-semibold leading-tight text-white/78 transition-colors group-hover:text-white group-focus-visible:text-white sm:text-xl">
+                          {item.title}
                         </span>
 
                         <ArrowUpRight
-                          className="size-4 shrink-0 text-white/35 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
+                          className="size-3.5 shrink-0 text-white/28 transition-[color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5 group-focus-visible:text-brand"
                           aria-hidden="true"
                         />
                       </Link>
@@ -1047,19 +1032,6 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                   )
                 })}
               </ol>
-
-              <Link
-                prefetch={false}
-                href={routes[locale].services}
-                className="editorial-link mt-7 w-fit"
-              >
-                {t.allServices}
-
-                <ArrowUpRight
-                  className="size-4 text-brand"
-                  aria-hidden="true"
-                />
-              </Link>
             </div>
           ))}
         </div>
