@@ -111,7 +111,7 @@ export function SiteHeader({
     </ul>
   </nav>
 
-  <div className="flex items-center gap-5 lg:border-l lg:border-white/15 lg:pl-5 xl:pl-7">
+  <div className="ml-auto flex items-center gap-5 lg:border-l lg:border-white/15 lg:pl-5 xl:pl-7">
             <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
               {languages.map((lang) => (
                 <li key={lang.code}>
