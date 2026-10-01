@@ -2005,37 +2005,26 @@ function HomeFaq({ locale }: { locale: Locale }) {
             <p className="home-kicker">{copy.faqLabel}</p>
 
             <h2
-              id="faq-title"
-              data-reveal=""
-              className="editorial-display mt-7 max-w-[8ch]"
-            >
-              {copy.faqTitle}
-            </h2>
+  id="faq-title"
+  data-reveal=""
+  className="editorial-display mt-7"
+>
+  {copy.faqTitle}
+</h2>
 
             <p className="mt-7 max-w-sm text-base leading-relaxed text-white/62">
               {copy.faqIntro}
-            </p>
-
-            <p className="mt-8 text-[.68rem] font-medium uppercase tracking-[.14em] text-white/38">
-              {copy.faq.length} {locale === "pl" ? "pytań i odpowiedzi" : ""}
             </p>
           </div>
         </div>
 
         <div className="border-t border-white/14 lg:col-span-7 lg:col-start-6">
-          {copy.faq.map(([question, answer], index) => (
+          {copy.faq.map(([question, answer]) => (
             <details
               key={question}
               className="group relative border-b border-white/12 transition-colors open:bg-white/[.018]"
             >
               <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
-                <span
-                  className="w-6 shrink-0 text-[.62rem] font-medium tracking-[.14em] text-white/32 transition-colors group-open:text-brand"
-                  aria-hidden="true"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
                 <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
                   {question}
                 </span>
@@ -2045,7 +2034,7 @@ function HomeFaq({ locale }: { locale: Locale }) {
                 </span>
               </summary>
 
-              <div className="pb-7 pl-11 pr-10 sm:pr-14">
+              <div className="pb-7 pr-10 sm:pr-14">
                 <p className="max-w-2xl text-[.95rem] leading-7 text-white/60">
                   {answer}
                 </p>
