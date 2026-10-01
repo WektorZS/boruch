@@ -3608,7 +3608,7 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: 1rem;
+  right: 0.2rem;
   bottom: 2rem;
   z-index: 12;
 
@@ -3673,21 +3673,15 @@
 
 
 .hero-editorial-bottom {
-
-  position: absolute;
-
-  inset-inline: var(--gutter);
-
-  bottom: 2rem;
+  position: static;
+  margin-top: 1.4rem;
 
   display: flex;
-
   align-items: center;
-
-  justify-content: space-between;
-
+  justify-content: flex-start;
   gap: 1rem;
 
+  width: auto;
 }
 
 
