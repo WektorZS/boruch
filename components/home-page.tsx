@@ -1470,40 +1470,105 @@ contact: "Zapytaj o swoje auto",
 function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const copy = homeCopy[locale]
-  const projects: { id: PhotoId; position: string; label: string }[] = [
-    { id: "p21", position: "50% 58%", label: copy.galleryCaptions[0] },
-    { id: "p62", position: "50% 58%", label: copy.galleryCaptions[1] },
-    { id: "p29", position: "50% 50%", label: copy.galleryCaptions[2] },
-    { id: "p39", position: "50% 55%", label: copy.galleryCaptions[4] },
+
+  const projects: Array<{
+    id: PhotoId
+    position: string
+  }> = [
+    { id: "p21", position: "50% 58%" },
+    { id: "p62", position: "50% 58%" },
+    { id: "p29", position: "50% 50%" },
+    { id: "p39", position: "50% 55%" },
+    { id: "p52", position: "50% 55%" },
+    { id: "p46", position: "50% 52%" },
+    { id: "p58", position: "50% 55%" },
+    { id: "p11", position: "50% 55%" },
   ]
 
   return (
-    <section aria-labelledby="work-title" className="section-xl overflow-hidden bg-[#080809]">
-      <div className="home-shell mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
-          <p className="home-kicker">{t.nav.gallery}</p>
-          <h2 id="work-title" data-reveal="" className="editorial-display mt-6">{src.home.projectsTitle}</h2>
+    <section
+      aria-labelledby="work-title"
+      className="section-xl overflow-hidden bg-[#080809]"
+    >
+      <div className="home-shell">
+        <header className="mb-10 grid gap-7 lg:grid-cols-12 lg:items-end lg:gap-10">
+          <div className="lg:col-span-7">
+            <p className="home-kicker">
+              {t.nav.gallery}
+            </p>
+
+            <h2
+              id="work-title"
+              data-reveal=""
+              className="editorial-display mt-6"
+            >
+              {src.home.projectsTitle}
+            </h2>
+          </div>
+
+          <div className="max-w-md lg:col-span-4 lg:col-start-9">
+            <p className="text-pretty text-base leading-relaxed text-white/62">
+              {src.home.projectsText}
+            </p>
+
+            <Link
+              prefetch={false}
+              href={routes[locale].gallery}
+              className="group mt-5 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white"
+            >
+              <span className="border-b border-white/25 pb-1 transition-colors duration-300 group-hover:border-brand">
+                {t.allPhotos}
+              </span>
+
+              <ArrowUpRight
+                className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4 lg:gap-4">
+          {projects.map((project, index) => (
+            <Link
+              key={project.id}
+              prefetch={false}
+              href={routes[locale].gallery}
+              aria-label={`${t.allPhotos} ${index + 1}`}
+              className="group relative isolate aspect-[4/3] overflow-hidden bg-white/3"
+            >
+              <Photo
+                id={project.id}
+                sizes="(min-width: 1280px) 25vw, (min-width: 768px) 25vw, 50vw"
+                position={project.position}
+                className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.045] group-focus-visible:scale-[1.045]"
+              />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-black/12 transition-colors duration-500 group-hover:bg-black/2 group-focus-visible:bg-black/2"
+              />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/65 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+              />
+
+              <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-3 sm:p-4">
+                <span className="font-mono text-[.6rem] font-bold tracking-[.16em] text-white/60">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span className="grid size-8 place-items-center border border-white/20 bg-black/20 text-white/80 backdrop-blur-sm transition-[border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-brand/70 group-hover:text-white">
+                  <ArrowUpRight
+                    className="size-3.5"
+                    aria-hidden="true"
+                  />
+                </span>
+              </span>
+            </Link>
+          ))}
         </div>
-        <div className="max-w-md lg:col-span-4 lg:col-start-9">
-          <p className="text-pretty text-base leading-relaxed text-white/65">{src.home.projectsText}</p>
-          <Link prefetch={false} href={routes[locale].gallery} className="mt-6 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white">
-            {t.allPhotos}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-      <div className="home-shell portfolio-editorial">
-        {projects.map((project, index) => <figure key={project.id} className="portfolio-project">
-          <Link prefetch={false} href={routes[locale].gallery} aria-label={`${project.label} - ${t.allPhotos}`} className="group block">
-            <div className="portfolio-image relative overflow-hidden">
-              <Photo id={project.id} sizes="(min-width: 1600px) 740px, (min-width: 640px) 46vw, 92vw" position={project.position} className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.035] group-focus-visible:scale-[1.035]" />
-              <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-black/5 transition-colors duration-500 group-hover:bg-transparent group-focus-visible:bg-transparent" />
-            </div>
-            <figcaption className="flex items-center justify-between gap-4 border-b border-white/15 py-5">
-              <span className="flex min-w-0 items-baseline gap-4"><span className="text-xs tabular-nums text-white/45" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><span className="text-sm font-medium tracking-[.03em]">{project.label}</span></span><ArrowUpRight className="size-4 shrink-0 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-focus-visible:-translate-y-0.5 group-focus-visible:translate-x-0.5" aria-hidden="true" />
-            </figcaption>
-          </Link>
-        </figure>)}
       </div>
     </section>
   )
