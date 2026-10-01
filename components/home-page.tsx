@@ -632,12 +632,12 @@ function HomeHero({ locale }: { locale: Locale }) {
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
   <div
-    key={activeSlide}
-    className={cn(
-      "hero-editorial-copy hero-copy-contrast",
-      activeSlide > 0 && "home-hero-copy-animated",
-    )}
-  >
+  key={activeSlide}
+  className={cn(
+    "hero-editorial-copy hero-copy-contrast",
+    transitionsReady && "home-hero-copy-animated",
+  )}
+>
     <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
       <span className="h-px w-7 shrink-0 bg-brand" />
       {slide.label}
