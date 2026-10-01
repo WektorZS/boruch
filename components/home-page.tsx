@@ -551,23 +551,37 @@ function HomeHero({ locale }: { locale: Locale }) {
   const t = ui[locale]
   const copy = homeCopy[locale]
   const benefitIcons = [Sparkles, ShieldCheck, MapPin]
-  const [activeSlide, setActiveSlide] = useState(0)
+
+  const [activeImageSlide, setActiveImageSlide] = useState(0)
+  const [activeTextSlide, setActiveTextSlide] = useState(0)
   const [loadedSlides, setLoadedSlides] = useState([0])
-  const [transitionsReady, setTransitionsReady] = useState(false)
+  const [imageTransitionsReady, setImageTransitionsReady] = useState(false)
+  const [textTransitionsReady, setTextTransitionsReady] = useState(false)
   const [heroVisible, setHeroVisible] = useState(true)
   const [heroPaused, setHeroPaused] = useState(false)
-  const [autoplay, setAutoplay] = useState(true)
+
   const heroRef = useRef<HTMLElement>(null)
-  const slide = copy.heroSlides[activeSlide]
-  const hasLongTitleWord = slide.title.split(/\s+/).some((word) => word.length >= 12)
+
+  const slide = copy.heroSlides[activeTextSlide]
+  const hasLongTitleWord = slide.title
+    .split(/\s+/)
+    .some((word) => word.length >= 12)
 
   useEffect(() => {
     const hero = heroRef.current
     if (!hero) return
-    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting))
-    const onVisibility = () => setHeroPaused(document.hidden)
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroVisible(entry.isIntersecting)
+    })
+
+    const onVisibility = () => {
+      setHeroPaused(document.hidden)
+    }
+
     observer.observe(hero)
     document.addEventListener("visibilitychange", onVisibility)
+
     return () => {
       observer.disconnect()
       document.removeEventListener("visibilitychange", onVisibility)
@@ -575,185 +589,248 @@ function HomeHero({ locale }: { locale: Locale }) {
   }, [])
 
   useEffect(() => {
-    if (!heroVisible || heroPaused || !autoplay || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    const next = (activeSlide + 1) % copy.heroSlides.length
-    // Keep the next slide out of the critical loading window on a slow mobile connection.
-    const preload = window.setTimeout(() => {
-      setTransitionsReady(true)
-      setLoadedSlides(current => current.includes(next) ? current : [...current, next])
-    }, 3500)
-    const advance = window.setTimeout(() => setActiveSlide(next), 5000)
-    return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
-  }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused, autoplay])
+    if (activeTextSlide === activeImageSlide) return
 
-  const changeSlide = (direction: number) => {
-    setTransitionsReady(true)
-    const next = (activeSlide + direction + heroPhotos.length) % heroPhotos.length
-    setLoadedSlides(current => current.includes(next) ? current : [...current, next])
-    setActiveSlide(next)
-  }
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    const textChange = window.setTimeout(
+      () => {
+        setTextTransitionsReady(true)
+        setActiveTextSlide(activeImageSlide)
+      },
+      reduceMotion ? 0 : 280,
+    )
+
+    return () => {
+      window.clearTimeout(textChange)
+    }
+  }, [activeImageSlide, activeTextSlide])
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    if (!heroVisible || heroPaused || reduceMotion) return
+
+    const next = (activeImageSlide + 1) % copy.heroSlides.length
+
+    const preload = window.setTimeout(() => {
+      setImageTransitionsReady(true)
+      setLoadedSlides((current) =>
+        current.includes(next) ? current : [...current, next],
+      )
+    }, 3500)
+
+    const advance = window.setTimeout(() => {
+      setImageTransitionsReady(true)
+      setLoadedSlides((current) =>
+        current.includes(next) ? current : [...current, next],
+      )
+      setActiveImageSlide(next)
+    }, 5000)
+
+    return () => {
+      window.clearTimeout(preload)
+      window.clearTimeout(advance)
+    }
+  }, [
+    activeImageSlide,
+    copy.heroSlides.length,
+    heroVisible,
+    heroPaused,
+  ])
 
   return (
-  <>
-    <section
-      ref={heroRef}
-      onFocusCapture={() => setHeroPaused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) {
-          setHeroPaused(document.hidden)
-        }
-      }}
-      aria-labelledby="hero-title"
-      className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)"
-    >
-      <div className="hero-cinema" aria-hidden="true">
-        {heroPhotos.map((photo, index) => loadedSlides.includes(index) && (
-          <div
-            key={photo.id}
-            className={cn(
-  "absolute inset-0",
-  transitionsReady &&
-    "transition-opacity duration-[1600ms] ease-in-out motion-reduce:transition-none",
-  transitionsReady &&
-    (index === activeSlide ? "opacity-100" : "opacity-0"),
-)}
-          >
-            <Photo
-              id={photo.id}
-              priority={index === 0}
-              sizes="(min-width: 1024px) 66vw, (min-width: 640px) 82vw, 100vw"
-              position={photo.position}
-              className="home-hero-photo saturate-[.88] contrast-[1.04]"
-            />
-          </div>
-        ))}
-        <div className="hero-cinema-shade absolute inset-0" />
-      </div>
-
-      <div className="home-hero-shell hero-editorial-grid relative z-10">
-  <div
-  key={activeSlide}
-  className={cn(
-    "hero-editorial-copy hero-copy-contrast",
-    transitionsReady && "home-hero-copy-animated",
-  )}
->
-    <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
-      <span className="h-px w-7 shrink-0 bg-brand" />
-      {slide.label}
-    </p>
-
-    <h1
-      id="hero-title"
-      className={cn(
-        "cinematic-title",
-        hasLongTitleWord && "cinematic-title-long",
-      )}
-    >
-      {slide.title}
-    </h1>
-
-    <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
-      {slide.text}
-    </p>
-
-    <div className="mt-9 flex flex-wrap items-center gap-7">
-      <a href="#wycena" className="home-button home-button-red">
-        {t.nav.contact}
-        <ArrowRight className="size-4" aria-hidden="true" />
-      </a>
-
-      <Link
-        prefetch={false}
-        href={routes[locale].services}
-        className="editorial-link"
+    <>
+      <section
+        ref={heroRef}
+        onFocusCapture={() => setHeroPaused(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setHeroPaused(document.hidden)
+          }
+        }}
+        aria-labelledby="hero-title"
+        className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)"
       >
-        {t.nav.services}
-        <ArrowUpRight className="size-4" aria-hidden="true" />
-      </Link>
-    </div>
-  </div>
+        <div className="hero-cinema" aria-hidden="true">
+          {heroPhotos.map(
+            (photo, index) =>
+              loadedSlides.includes(index) && (
+                <div
+                  key={photo.id}
+                  className={cn(
+                    "absolute inset-0",
+                    imageTransitionsReady &&
+                      "transition-opacity duration-[1600ms] ease-in-out motion-reduce:transition-none",
+                    index === activeImageSlide
+                      ? "opacity-100"
+                      : "opacity-0",
+                  )}
+                >
+                  <Photo
+                    id={photo.id}
+                    priority={index === 0}
+                    sizes="(min-width: 1024px) 66vw, (min-width: 640px) 82vw, 100vw"
+                    position={photo.position}
+                    className="home-hero-photo saturate-[.88] contrast-[1.04]"
+                  />
+                </div>
+              ),
+          )}
 
-  <div
-    className="hero-trust-totem"
-    aria-label={copy.reviewsLabel}
-  >
-    <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Opinie Booksy</span>
-      <strong className="hero-trust-score">5.0</strong>
-      <span className="hero-trust-meta">{copy.booksyReviews}</span>
-    </div>
+          <div className="hero-cinema-shade absolute inset-0" />
+        </div>
 
-    <div className="hero-trust-divider" />
+        <div className="home-hero-shell hero-editorial-grid relative z-10">
+          <div
+            key={activeTextSlide}
+            className={cn(
+              "hero-editorial-copy hero-copy-contrast",
+              textTransitionsReady && "home-hero-copy-animated",
+            )}
+            style={
+              textTransitionsReady
+                ? { animationDelay: "0ms" }
+                : undefined
+            }
+          >
+            <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+              <span className="h-px w-7 shrink-0 bg-brand" />
+              {slide.label}
+            </p>
 
-    <div className="hero-trust-item">
-      <span className="hero-trust-kicker">Opinie Google</span>
-      <strong className="hero-trust-score">5.0</strong>
-      <span className="hero-trust-meta">{copy.googleReviews}</span>
-    </div>
-  </div>
-
- <div className="hero-editorial-bottom sm:hidden">
-  <div className="flex items-center gap-3 text-white">
-    <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
-      {followCopy[locale]}
-    </span>
-
-    <a
-      href={contact.facebook}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Facebook"
-      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-    >
-      <FacebookIcon className="size-5" />
-    </a>
-
-    <a
-      href={contact.instagram}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Instagram"
-      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
-    >
-      <InstagramIcon className="size-5" />
-    </a>
-  </div>
-</div>
-</div>
-
-      <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
-        {copy.benefits.map(([title, text], index) => {
-          const Icon = benefitIcons[index] ?? Car
-
-          return (
-            <li
-              key={title}
-              className="flex min-h-20 items-center justify-center border-b border-white/10 px-6 py-3.5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
+            <h1
+              id="hero-title"
+              className={cn(
+                "cinematic-title",
+                hasLongTitleWord && "cinematic-title-long",
+              )}
             >
-              <div className="flex w-full max-w-sm items-center justify-center gap-4">
-                <Icon
-                  className="size-5 shrink-0 text-brand"
+              {slide.title}
+            </h1>
+
+            <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+              {slide.text}
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-7">
+              <a
+                href="#wycena"
+                className="home-button home-button-red"
+              >
+                {t.nav.contact}
+                <ArrowRight
+                  className="size-4"
                   aria-hidden="true"
                 />
+              </a>
 
-                <div className="flex min-w-0 flex-col gap-1.5">
-                  <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
-                    {title}
-                  </strong>
+              <Link
+                prefetch={false}
+                href={routes[locale].services}
+                className="editorial-link"
+              >
+                {t.nav.services}
+                <ArrowUpRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          </div>
 
-                  <span className="text-[.8rem] leading-snug text-white/65">
-                    {text}
-                  </span>
+          <div
+            className="hero-trust-totem"
+            aria-label={copy.reviewsLabel}
+          >
+            <div className="hero-trust-item">
+              <span className="hero-trust-kicker">
+                Opinie Booksy
+              </span>
+              <strong className="hero-trust-score">5.0</strong>
+              <span className="hero-trust-meta">
+                {copy.booksyReviews}
+              </span>
+            </div>
+
+            <div className="hero-trust-divider" />
+
+            <div className="hero-trust-item">
+              <span className="hero-trust-kicker">
+                Opinie Google
+              </span>
+              <strong className="hero-trust-score">5.0</strong>
+              <span className="hero-trust-meta">
+                {copy.googleReviews}
+              </span>
+            </div>
+          </div>
+
+          <div className="hero-editorial-bottom sm:hidden">
+            <div className="flex items-center gap-3 text-white">
+              <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+                {followCopy[locale]}
+              </span>
+
+              <a
+                href={contact.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+              >
+                <FacebookIcon className="size-5" />
+              </a>
+
+              <a
+                href={contact.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+              >
+                <InstagramIcon className="size-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+          {copy.benefits.map(([title, text], index) => {
+            const Icon = benefitIcons[index] ?? Car
+
+            return (
+              <li
+                key={title}
+                className="flex min-h-20 items-center justify-center border-b border-white/10 px-6 py-3.5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
+              >
+                <div className="flex w-full max-w-sm items-center justify-center gap-4">
+                  <Icon
+                    className="size-5 shrink-0 text-brand"
+                    aria-hidden="true"
+                  />
+
+                  <div className="flex min-w-0 flex-col gap-1.5">
+                    <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
+                      {title}
+                    </strong>
+
+                    <span className="text-[.8rem] leading-snug text-white/65">
+                      {text}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          )
-        })}
-          </ul>
-    </section>
-  </>
-)
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    </>
+  )
 }
 
 function WhyBoruch({ locale }: { locale: Locale }) {
