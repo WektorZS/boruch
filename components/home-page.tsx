@@ -2083,10 +2083,7 @@ function Location({ locale }: { locale: Locale }) {
       <div className="home-shell">
         <div className="grid overflow-hidden border-y border-white/12 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)]">
           <div className="relative flex flex-col justify-between bg-[#0a0a0b] px-6 py-8 sm:px-10 sm:py-10 lg:min-h-[34rem] lg:px-12 lg:py-12">
-            <span
-              className="absolute inset-y-0 left-0 w-0.5 bg-brand"
-              aria-hidden="true"
-            />
+            <></>
 
             <div>
               <p className="home-kicker text-[#ef6267]">
@@ -2165,26 +2162,12 @@ function Location({ locale }: { locale: Locale }) {
               src={mapEmbedUrl}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
+              className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(1)_invert(.92)_contrast(1.15)_brightness(.72)]"
             />
 
-            <div
-              className="pointer-events-none absolute inset-0 bg-linear-to-r from-[#0a0a0b]/28 via-transparent to-transparent"
-              aria-hidden="true"
-            />
+            <></>
 
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black/35 to-transparent"
-              aria-hidden="true"
-            />
-
-            <div className="pointer-events-none absolute bottom-5 left-5 flex items-center gap-3 border border-white/12 bg-[#0a0a0b]/90 px-4 py-3 backdrop-blur-sm sm:bottom-6 sm:left-6">
-              <span className="size-2 bg-brand" aria-hidden="true" />
-
-              <span className="text-[.68rem] font-bold uppercase tracking-[.14em] text-white/80">
-                PAZIM · {t.level} -2
-              </span>
-            </div>
+            <></>
           </div>
         </div>
       </div>
