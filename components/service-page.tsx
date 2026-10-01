@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo, photoSrc } from "./photo"
 import { contact, localeOrder, routes, sources, ui, type Locale } from "@/lib/content"
@@ -100,6 +100,7 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
           )}
         </Fragment>
       ))}
+      <ServiceFaq service={service} />
       <ServiceRelated service={service} />
     </SiteShell>
   )
@@ -109,53 +110,41 @@ function ServiceHero({ service }: { service: Service }) {
   const t = ui.pl
   const price = servicePrice("pl", service.slug)
   const group = serviceGroupTitle("pl", service.slug)
-  const family = serviceFamily(service)
   const art = serviceArtDirection[service.slug]
 
   return (
-    <section aria-labelledby="service-title" className={cn("page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)", `service-hero-${family}`)}>
-      <div className={cn("enter-unmask absolute inset-0", family === "interior" && "lg:left-1/3")}><Photo id={service.hero} priority sizes={family === "interior" ? "(min-width: 1024px) 67vw, 100vw" : "100vw"} position={art?.heroPosition ?? "50% 56%"} /></div>
-      <div aria-hidden="true" className={family === "interior" ? "absolute inset-0 bg-[linear-gradient(90deg,#080809_0%,rgba(8,8,9,.8)_32%,rgba(8,8,9,.2)_74%,rgba(8,8,9,.12)_100%)]" : "absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.65)_0%,rgba(6,6,7,.3)_58%,rgba(6,6,7,.08)_100%)]"} />
-      <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
-      <div className="shell-wide relative z-10 grid gap-9 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-        <div className="lg:col-span-9">
+    <section aria-labelledby="service-title" className="bg-[#080809]">
+      <div className="shell-wide service-cover">
+        <div className="min-w-0">
         <p className="eyebrow mb-7">{group}</p>
-        <h1 id="service-title" className="page-hero-title type-h1 max-w-4xl">{service.navTitle}</h1>
-          <div className="enter-fade mt-7 flex max-w-2xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
+        <h1 id="service-title" className="service-cover-title">{service.navTitle}</h1>
+          <div className="enter-fade mt-6 flex max-w-xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
           </div>
+          <div className="mt-8 border-t border-white/15 pt-5">
+            <p className="text-xs text-white/60">{t.priceLabel}</p>
+            <p className="mt-2 text-xl font-medium leading-relaxed text-white">{price ?? t.individualQuote}</p>
+            <div className="mt-5 flex flex-wrap items-center gap-6"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><a href="#service-process" className="editorial-link">{t.process}<ArrowRight className="size-4" aria-hidden="true" /></a></div>
+          </div>
         </div>
-        <div className="enter-fade border-l border-brand pl-6 lg:col-span-3 lg:col-start-10" style={{ "--i": 3 } as React.CSSProperties}>
-          <p className="type-label text-brand">{t.priceLabel}</p>
-          <p className="mt-4 font-display text-[clamp(1.25rem,2vw,1.7rem)] font-bold leading-relaxed tracking-normal text-white">{price ?? t.individualQuote}</p>
-          <div className="mt-6 flex flex-col gap-3"><a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary group">{t.book}<ArrowUpRight className="arrow-lift size-4" aria-hidden="true" /></a><Link prefetch={false} href={routes.pl.pricing} className="btn btn-outline">{t.pricing}</Link></div>
-        </div>
+        <figure className="service-cover-visual editorial-photo enter-unmask"><Photo id={service.hero} priority sizes="(min-width: 640px) 56vw, 92vw" position={art?.heroPosition ?? "50% 56%"} /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-6 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH MYJNIA / {group}</figcaption></figure>
       </div>
     </section>
   )
 }
 function ServiceIntro({ service }: { service: Service }) {
   const [first, ...rest] = service.source.intro
-  const family = serviceFamily(service)
-  const art = serviceArtDirection[service.slug]
-  const finish = family === "finish"
   return (
     <section aria-label={service.navTitle} className="section-lg border-b border-white/10 bg-[#0a0a0b]">
-      <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
-        <div className={cn("flex min-w-0 flex-col gap-7", family === "interior" ? "lg:col-span-6 lg:col-start-7 lg:order-2 lg:py-8" : finish ? "lg:col-span-5 lg:col-start-8 lg:order-2 lg:py-8" : "lg:col-span-7 lg:py-8")}>
-          <p className="eyebrow">{service.navTitle}</p>
-          <p data-reveal="" className="type-lead max-w-3xl text-pretty text-bone/90">{first}</p>
-          <div className="flex max-w-2xl flex-col gap-5">
+      <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-2"><p className="eyebrow">{service.navTitle}</p></div>
+        <div className="min-w-0 lg:col-span-10">
+          <p data-reveal="" className="max-w-5xl font-display text-[clamp(1.5rem,2.5vw,2.5rem)] font-normal leading-[1.5] text-bone/90">{first}</p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-10">
             {rest.map((para, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/70">{para}</p>)}
           </div>
         </div>
-        <figure className={cn("min-w-0", family === "interior" ? "lg:col-span-5 lg:order-1" : finish ? "lg:col-span-6 lg:order-1" : "lg:col-span-4 lg:col-start-9")}>
-          <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
-            <div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3]", family === "interior" ? "sm:aspect-[4/5]" : finish ? "lg:aspect-[3/4]" : "lg:aspect-[4/5]")}><Photo id={service.frames[0]} sizes={finish ? "(min-width: 1600px) 720px, (min-width: 1024px) 46vw, 92vw" : family === "interior" ? "(min-width: 1600px) 600px, (min-width: 1024px) 38vw, 92vw" : "(min-width: 1600px) 480px, (min-width: 1024px) 30vw, 92vw"} position={art?.detailPosition} /></div>
-            <figcaption className="mt-4 flex flex-wrap justify-between gap-3 text-xs leading-relaxed text-white/55"><span>{service.navTitle}</span><span>Boruch Myjnia</span></figcaption>
-          </div>
-        </figure>
       </div>
     </section>
   )
@@ -165,27 +154,22 @@ function ServiceProcess({ service }: { service: Service }) {
   const t = ui.pl
   const { steps, processTitle } = service.source
   if (steps.length === 0) return null
-  const family = serviceFamily(service)
-  const split = family !== "wash" && steps.length > 3 ? Math.ceil(steps.length / 2) : steps.length
-  const before = steps.slice(0, split)
-  const after = steps.slice(split)
 
   return (
-    <section aria-labelledby="process-title" className="border-b border-white/10 bg-[#101011]">
+    <section id="service-process" aria-labelledby="process-title" className="scroll-mt-24 bg-[#101011]">
       <div className="shell-wide section-lg">
-        <div className="mb-12 grid gap-7 lg:mb-16 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3"><p className="eyebrow">{t.process}</p></div>
-          <div className="lg:col-span-8 lg:col-start-5"><h2 id="process-title" data-reveal="" className="type-h2 max-w-3xl text-pretty">{processTitle ?? t.process}</h2></div>
+        <div className="service-process-layout">
+          <div className="service-process-image">
+            <p className="eyebrow">{t.process}</p>
+            <h2 id="process-title" data-reveal="" className="editorial-display mt-5">{processTitle ?? t.process}</h2>
+            <figure data-reveal="mask" className="relative mt-8 aspect-[4/5] overflow-hidden"><Photo id={service.frames[0]} sizes="(min-width: 1024px) 36vw, 92vw" position={serviceArtDirection[service.slug]?.detailPosition} /></figure>
+          </div>
+          <ol className="service-process-steps">
+            {steps.map((step, index) => <li key={step.title} data-reveal=""><span className="type-index pt-1 text-sm text-brand">{formatIndex(index + 1)}</span><div><h3>{step.title}</h3><div className="mt-4 grid gap-4">{step.body.map((paragraph, i) => <p key={i} className="type-body text-white/65">{paragraph}</p>)}</div></div></li>)}
+          </ol>
         </div>
-        <StepList steps={before} stepLabel={t.step} />
       </div>
-      {family === "wash" && <div className="shell-wide pb-12 sm:pb-16"><div data-reveal="mask" className="frame editorial-photo aspect-[4/3] sm:aspect-[16/8]"><Photo id={service.frames[1]} sizes="(min-width: 1600px) 1480px, 92vw" /></div></div>}
-      {after.length > 0 && (
-        <>
-          <div className={family === "interior" ? "shell-wide" : ""}><div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3] sm:aspect-[16/9]", family === "interior" ? "lg:aspect-[16/8]" : "lg:aspect-[5/2]")}><Photo id={service.frames[1]} sizes={family === "interior" ? "(min-width: 1600px) 1480px, 92vw" : "100vw"} /></div></div>
-          <div className="shell-wide section-lg"><StepList steps={after} start={split + 1} stepLabel={t.step} /></div>
-        </>
-      )}
+      <div data-reveal="mask" className="relative aspect-[4/3] overflow-hidden sm:aspect-[21/8]"><Photo id={service.frames[1]} sizes="100vw" /></div>
     </section>
   )
 }
@@ -217,7 +201,7 @@ function ListSection({ section, id }: { section: Section; id: string }) {
   return (
     <section aria-labelledby={id} className="section-md border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="type-h2 max-w-full text-balance lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
+        <div className="lg:col-span-5"><h2 id={id} data-reveal="" className="editorial-display max-w-full lg:sticky lg:top-[calc(var(--header-h)+2rem)]">{section.heading}</h2></div>
         <div className="lg:col-span-7">{section.kind === "process" && section.steps ? <StepList steps={section.steps} stepLabel={ui.pl.step} compact /> : <Blocks blocks={section.blocks} />}</div>
       </div>
     </section>
@@ -251,7 +235,7 @@ function PriceSection({ service, section, id }: { service: Service; section: Sec
   return (
     <section aria-labelledby={id} className="border-b border-white/10 bg-[#101011]">
       <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
-        <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="type-h2 text-pretty">Cena usługi: {service.navTitle}</h2></div>
+        <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="editorial-display">Cena usługi: {service.navTitle}</h2></div>
         <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
           <p className={price ? "font-display text-[clamp(1.8rem,3vw,2.8rem)] font-bold leading-relaxed tracking-normal" : "font-display text-[clamp(1.5rem,2.4vw,2.3rem)] font-bold leading-relaxed text-bone/90"}>{price ?? t.individualQuote}</p>
           {linkText && <Link prefetch={false} href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone"><span className="type-label link-draw">{linkText}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></Link>}
@@ -272,6 +256,17 @@ function SummarySection({ section, id }: { section: Section; id: string }) {
       </div>
     </section>
   )
+}
+
+function ServiceFaq({ service }: { service: Service }) {
+  const price = servicePrice("pl", service.slug)
+  const questions = [
+    ["Jak zarezerwować termin?", "Wybierz termin na naszym profilu Booksy albo zadzwoń pod numer +48 534 095 265. Jeśli nie wiesz, jaki zakres wybrać, opisz nam stan samochodu."],
+    ["Od czego zależy cena?", price ? `Cena początkowa tej usługi to ${price}. Ostateczna kwota zależy od wariantu, wielkości auta i zabrudzenia. Szczegóły oraz dopłaty znajdziesz w cenniku.` : "Tę usługę wyceniamy indywidualnie. Kwota zależy od stanu samochodu i zakresu prac. Skontaktuj się z nami, aby omówić swój samochód."],
+    ["Ile czasu trzeba przeznaczyć na usługę?", "Czas zależy od zakresu prac oraz stanu samochodu. Szacunkowe czasy wybranych usług są podane w cenniku. Przy rezerwacji ustalimy szczegóły pozostawienia i odbioru auta."],
+    ["Gdzie zostawić samochód?", "Znajdziesz nas na poziomie -2 parkingu podziemnego PAZIM przy placu Rodła 8 w Szczecinie. Wjedź na parking i kieruj się do Boruch Myjnia."],
+  ]
+  return <section aria-labelledby="service-faq-title" className="section-lg bg-[#080809]"><div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-20"><div className="lg:col-span-5"><p className="eyebrow">Przed wizytą</p><h2 id="service-faq-title" className="editorial-display mt-6">Dobrze wiedzieć.</h2></div><div className="border-t border-white/15 lg:col-span-7">{questions.map(([question, answer]) => <details key={question} className="group border-b border-white/15"><summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-5 text-base font-medium [&::-webkit-details-marker]:hidden">{question}<ChevronDown className="size-4 shrink-0 text-brand transition-transform group-open:rotate-180" aria-hidden="true" /></summary><p className="max-w-2xl pb-6 pr-8 text-sm leading-relaxed text-white/65">{answer}</p></details>)}</div></div></section>
 }
 
 function ServiceRelated({ service }: { service: Service }) {

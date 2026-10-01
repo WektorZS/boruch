@@ -82,15 +82,15 @@ export function SiteHeader({
       <header
         data-scrolled={scrolled}
         className={cn(
-          "group/header fixed inset-x-0 top-0 z-(--z-header) border-b border-white/10 bg-[#080809] transition-colors duration-300",
+          "group/header fixed inset-x-0 top-0 z-(--z-header) border-b border-white/10 bg-[#080809] transition-colors duration-500",
           "data-[scrolled=true]:bg-ink-2",
         )}
       >
         <div className="shell-wide flex h-(--header-h) items-center justify-between gap-4 transition-[height] duration-500 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
           <Wordmark href={homeHref} label={homeLabel} />
 
-          <nav aria-label={labels.navigation} className="hidden lg:block">
-            <ul className="flex items-center gap-5 xl:gap-7">
+          <nav aria-label={labels.navigation} className="hidden lg:ml-auto lg:block">
+            <ul className="flex items-center gap-5 xl:gap-8">
               {nav
                 .filter((item) => item.key !== "home")
                 .map((item) => (
@@ -98,7 +98,7 @@ export function SiteHeader({
                     <Link prefetch={false}
                       href={item.href}
                       aria-current={item.active ? "page" : undefined}
-                      className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-semibold uppercase tracking-[.14em] text-white/68 hover:text-white aria-[current=page]:text-white"
+                      className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-medium uppercase tracking-[.12em] text-white/68 hover:text-white aria-[current=page]:text-white"
                     >
                       {item.label}
                     </Link>
@@ -107,7 +107,7 @@ export function SiteHeader({
             </ul>
           </nav>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5 lg:ml-5 lg:border-l lg:border-white/15 lg:pl-5 xl:ml-7 xl:pl-7">
             <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
               {languages.map((lang) => (
                 <li key={lang.code}>
@@ -117,7 +117,7 @@ export function SiteHeader({
                     lang={lang.htmlLang}
                     aria-label={`${lang.short} - ${lang.name}`}
                     aria-current={lang.active ? "true" : undefined}
-                    className="relative grid size-8 place-items-center text-[.72rem] font-bold text-white/65 transition-colors hover:text-white aria-[current=true]:bg-white aria-[current=true]:text-black"
+                    className="relative grid size-8 place-items-center text-[.65rem] font-medium text-white/65 transition-colors hover:text-white aria-[current=true]:border-b aria-[current=true]:border-brand aria-[current=true]:text-white"
                   >
                     {lang.short}
                   </Link>
@@ -129,7 +129,7 @@ export function SiteHeader({
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.72rem] font-bold uppercase tracking-[.14em] transition-colors hover:bg-[#aa1921] sm:flex"
+              className="group hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.7rem] font-medium uppercase tracking-[.12em] transition-colors hover:bg-[#aa1921] sm:flex"
             >
               {labels.book}
               <ArrowUpRight className="arrow-lift size-3.5" aria-hidden="true" />

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import useEmblaCarousel from "embla-carousel-react"
-import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Droplets, Mail, MapPin, Phone, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, MapPin, Pause, Play, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { SiteHeader } from "./site-header"
@@ -150,6 +150,13 @@ const serviceVisuals: Record<ServiceSlug, { id: PhotoId; position: string }> = {
   "przyciemnianie-szyb-i-lamp": { id: "p22", position: "50% 55%" },
   "zmiana-koloru-dechroming": { id: "p51", position: "50% 55%" },
 }
+
+const editorialCopy = {
+  pl: { previous: "Poprzedni slajd", next: "Następny slajd", pause: "Zatrzymaj slajdy", play: "Wznów slajdy", select: "Wybierz usługę", detail: "Poznaj usługę", why: "Każdy etap ręcznie.", studio: "Myjnia / Detailing / Szczecin", portfolio: "Wybrane realizacje", scope: "Zakres pielęgnacji", talk: "Porozmawiajmy o Twoim aucie." },
+  en: { previous: "Previous slide", next: "Next slide", pause: "Pause slides", play: "Resume slides", select: "Choose a service", detail: "Explore the service", why: "Every stage by hand.", studio: "Car wash / Detailing / Szczecin", portfolio: "Selected work", scope: "Care included", talk: "Let's talk about your car." },
+  de: { previous: "Vorherige Folie", next: "Nächste Folie", pause: "Folien pausieren", play: "Folien fortsetzen", select: "Leistung wählen", detail: "Leistung entdecken", why: "Jeder Schritt von Hand.", studio: "Autowäsche / Detailing / Szczecin", portfolio: "Ausgewählte Arbeiten", scope: "Pflegeumfang", talk: "Sprechen wir über Ihr Auto." },
+  uk: { previous: "Попередній слайд", next: "Наступний слайд", pause: "Зупинити слайди", play: "Продовжити слайди", select: "Оберіть послугу", detail: "Дізнатися про послугу", why: "Кожен етап вручну.", studio: "Мийка / Детейлінг / Щецин", portfolio: "Вибрані роботи", scope: "Обсяг догляду", talk: "Поговорімо про ваше авто." },
+} satisfies Record<Locale, Record<string, string>>
 
 type VerifiedReview = {
   name: string
@@ -524,6 +531,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   const [loadedSlides, setLoadedSlides] = useState([0])
   const [heroVisible, setHeroVisible] = useState(true)
   const [heroPaused, setHeroPaused] = useState(false)
+  const [autoplay, setAutoplay] = useState(true)
   const heroRef = useRef<HTMLElement>(null)
   const slide = copy.heroSlides[activeSlide]
   const hasLongTitleWord = slide.title.split(/\s+/).some((word) => word.length >= 12)
@@ -542,17 +550,23 @@ function HomeHero({ locale }: { locale: Locale }) {
   }, [])
 
   useEffect(() => {
-    if (!heroVisible || heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (!heroVisible || heroPaused || !autoplay || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const next = (activeSlide + 1) % copy.heroSlides.length
     // Keep the next slide out of the critical loading window on a slow mobile connection.
     const preload = window.setTimeout(() => setLoadedSlides(current => current.includes(next) ? current : [...current, next]), 5500)
     const advance = window.setTimeout(() => setActiveSlide(next), 7500)
     return () => { window.clearTimeout(preload); window.clearTimeout(advance) }
-  }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused])
+  }, [activeSlide, copy.heroSlides.length, heroVisible, heroPaused, autoplay])
+
+  const changeSlide = (direction: number) => {
+    const next = (activeSlide + direction + heroPhotos.length) % heroPhotos.length
+    setLoadedSlides(current => current.includes(next) ? current : [...current, next])
+    setActiveSlide(next)
+  }
 
   return (
-    <section ref={heroRef} onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(document.hidden)} onFocusCapture={() => setHeroPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(document.hidden) }} aria-labelledby="hero-title" className="relative isolate flex flex-col overflow-hidden bg-[#080809] pt-(--header-h) sm:min-h-svh">
-      <div className="absolute inset-x-0 top-0 h-svh sm:inset-0 sm:h-full" aria-hidden="true">
+    <section ref={heroRef} onFocusCapture={() => setHeroPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(document.hidden) }} aria-labelledby="hero-title" className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)">
+      <div className="hero-cinema" aria-hidden="true">
         {heroPhotos.map((photo, index) => loadedSlides.includes(index) && (
           <div
             key={photo.id}
@@ -566,44 +580,48 @@ function HomeHero({ locale }: { locale: Locale }) {
               priority={index === 0}
               sizes="100vw"
               position={photo.position}
-              className="home-hero-photo saturate-[.78] contrast-[1.08]"
+              className="home-hero-photo saturate-[.88] contrast-[1.04]"
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,6,.3)_0%,rgba(5,5,6,.58)_48%,rgba(5,5,6,.94)_100%)] sm:bg-[linear-gradient(90deg,rgba(5,5,6,.92)_0%,rgba(5,5,6,.72)_34%,rgba(5,5,6,.18)_68%,rgba(5,5,6,.08)_100%)]" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-[#080809]/75 sm:to-[#080809]/90" />
+        <div className="hero-cinema-shade absolute inset-0" />
       </div>
 
-      <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-var(--header-h))] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-var(--header-h)-5rem)] sm:py-20">
-        <div key={activeSlide} className={cn("home-hero-copy flex flex-col items-start", activeSlide > 0 && "home-hero-copy-animated")}>
-          <p className="mb-7 flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.2em] text-white/85">
-            <span className="h-px w-9 bg-brand" />{slide.label}
+      <div className="home-hero-shell hero-editorial-grid relative z-10">
+        <div key={activeSlide} className={cn("hero-editorial-copy", activeSlide > 0 && "home-hero-copy-animated")}>
+          <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/75">
+            <span className="h-px w-7 shrink-0 bg-brand" />{slide.label}
           </p>
-          <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord && "home-hero-title-long")}>{slide.title}</h1>
-          <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">{slide.text}</p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <h1 id="hero-title" className={cn("cinematic-title", hasLongTitleWord && "cinematic-title-long")}>{slide.title}</h1>
+          <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/70 sm:text-lg">{slide.text}</p>
+          <div className="mt-9 flex flex-wrap items-center gap-7">
             <a href="#wycena" className="home-button home-button-red">
               {t.nav.contact}<ArrowRight className="size-4" aria-hidden="true" />
             </a>
-            <Link prefetch={false} href={routes[locale].services} className="home-button home-button-dark">
-              {t.nav.services}<ArrowRight className="size-4" aria-hidden="true" />
+            <Link prefetch={false} href={routes[locale].services} className="editorial-link">
+              {t.nav.services}<ArrowUpRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
-
-        <div className="mt-10 flex w-full flex-col-reverse items-start gap-4 sm:absolute sm:inset-x-(--gutter) sm:bottom-8 sm:mt-0 sm:w-auto sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:bottom-10">
+        <div className="hero-editorial-bottom">
           <div className="flex items-center gap-3">
-            <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{followCopy[locale]}</span>
-            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center border border-white/14 text-white/68 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">{followCopy[locale]}</span>
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand">
               <FacebookIcon className="size-4.5" />
             </a>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-10 place-items-center border border-white/14 text-white/68 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand">
               <InstagramIcon className="size-4.5" />
             </a>
           </div>
 
-          <HeroRatings copy={copy} className="hidden sm:flex" />
+          <div className="hero-slide-controls">
+            <div className="hero-progress" aria-hidden="true"><span key={activeSlide} style={{ animationPlayState: heroPaused || !heroVisible || !autoplay ? "paused" : "running" }} /></div>
+            <button type="button" onClick={() => changeSlide(-1)} aria-label={editorialCopy[locale].previous}><ArrowLeft className="size-4" aria-hidden="true" /></button>
+            <button type="button" onClick={() => changeSlide(1)} aria-label={editorialCopy[locale].next}><ArrowRight className="size-4" aria-hidden="true" /></button>
+            <button type="button" onClick={() => setAutoplay(value => !value)} aria-label={autoplay ? editorialCopy[locale].pause : editorialCopy[locale].play}>{autoplay ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}</button>
+          </div>
         </div>
+        <div className="hero-photo-note" aria-hidden="true"><span>BORUCH / PAZIM</span><span>{editorialCopy[locale].studio}</span></div>
       </div>
 
       <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
@@ -621,9 +639,9 @@ function HomeHero({ locale }: { locale: Locale }) {
         })}
       </ul>
 
-      <div className="relative z-10 border-b border-white/10 bg-[#080809] sm:hidden">
-        <div className="home-shell py-5">
-          <HeroRatings copy={copy} />
+      <div className="relative z-10 border-b border-white/10 bg-[#080809]">
+        <div className="home-shell flex justify-end py-5">
+          <HeroRatings copy={copy} className="hero-ratings-inline" />
         </div>
       </div>
     </section>
@@ -636,23 +654,22 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   const t = ui[locale]
 
   return (
-    <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
-      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:items-stretch">
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo order-2 relative aspect-[4/3] overflow-hidden sm:aspect-[16/11] lg:order-none lg:col-span-6 lg:aspect-[4/5]">
-          <Photo id="p60" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 46vw, 92vw" position="50% 52%" />
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
-          <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 px-6 py-5">
-            <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
-            <span className="h-px w-16 bg-brand" />
-          </figcaption>
-        </figure>
-
-        <div className="order-1 flex flex-col justify-center lg:order-none lg:col-span-5 lg:col-start-8">
+    <section aria-labelledby="why-title" className="section-xl overflow-hidden bg-[#080809]">
+      <div className="home-shell why-editorial">
+        <div className="why-editorial-heading">
           <p className="home-kicker">{copy.whyLabel}</p>
-          <h2 id="why-title" data-reveal="" className="home-section-title mt-7">{copy.whyTitle}</h2>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/65">{copy.whyIntro}</p>
-          <p data-reveal="" className="mt-8 max-w-xl border-l border-brand pl-6 text-base leading-relaxed text-white/65">{src.home.teamParas[2]}</p>
-          <Link prefetch={false} href={routes[locale].services} className="home-button home-button-dark mt-10 w-fit">{t.allServices}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+          <h2 id="why-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].why}</h2>
+          <p className="mt-7 max-w-md text-lg leading-relaxed text-white/70">{copy.whyTitle}</p>
+        </div>
+        <figure data-reveal="mask" className="why-editorial-photo relative aspect-[4/5] overflow-hidden">
+          <Photo id="p60" sizes="(min-width: 1024px) 51vw, 92vw" position="50% 52%" />
+          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-6 pb-6 pt-16 text-xs tracking-widest text-white/75">BORUCH MYJNIA / SZCZECIN</figcaption>
+        </figure>
+        <figure className="why-editorial-detail relative aspect-[4/3] overflow-hidden" data-reveal="mask"><Photo id="p43" sizes="(min-width: 1024px) 22vw, 45vw" position="50% 58%" /></figure>
+        <div className="why-editorial-story">
+          <p className="max-w-lg text-lg leading-relaxed text-white/80">{copy.whyIntro}</p>
+          <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/65">{src.home.teamParas[2]}</p>
+          <Link prefetch={false} href={routes[locale].about} className="editorial-link mt-7">{t.nav.about}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
         </div>
       </div>
     </section>
@@ -666,6 +683,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   const [activeService, setActiveService] = useState<ServiceSlug>("mycie-zewnatrz")
   const [previousService, setPreviousService] = useState<ServiceSlug>("mycie-zewnatrz")
   const [readyService, setReadyService] = useState<ServiceSlug>("mycie-zewnatrz")
+  const [category, setCategory] = useState<"myjnia" | "detailing">("myjnia")
   const selectService = (slug: ServiceSlug) => {
     if (slug === activeService) return
     setPreviousService(readyService)
@@ -680,20 +698,26 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       return {
         slug: service.slug,
         title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
+        description: summary?.text ?? service.source.tagline,
         href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
       }
     }),
   }))
   const activeItem = groups.flatMap(group => group.items).find(item => item.slug === activeService) ?? groups[0].items[0]
   const visual = serviceVisuals[activeService]
+  const activeGroup = groups.find(group => group.category === category) ?? groups[0]
+  const changeCategory = (next: "myjnia" | "detailing") => {
+    setCategory(next)
+    selectService(services.find(service => service.category === next)!.slug)
+  }
 
   return (
-    <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
+    <section id="services" aria-labelledby="services-title" className="section-xl service-explorer bg-[#111112]">
       <div className="home-shell">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
+        <div className="mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
             <p className="home-kicker text-white/62">{t.nav.services}</p>
-            <h2 id="services-title" data-reveal="" className="mt-6 font-display text-[clamp(1.7rem,6.9vw,3rem)] font-black uppercase leading-[1.14] tracking-normal">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
+            <h2 id="services-title" data-reveal="" className="editorial-display mt-6">{src.services.groups.map((group) => group.title).join(" / ")}</h2>
           </div>
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="max-w-md text-base leading-relaxed text-white/58">{copy.servicesIntro}</p>
@@ -703,42 +727,35 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-10 sm:mt-14 lg:grid-cols-12 lg:gap-12">
-        <div className="grid gap-10 sm:grid-cols-2 sm:gap-8 lg:col-span-7 lg:gap-12">
-          {groups.map((group, groupIndex) => (
-            <article key={group.category} className={cn("min-w-0", groupIndex === 1 && "border-t border-white/10 pt-8 sm:border-t-0 sm:pt-0")}>
-              <header className="border-b border-white/15 pb-6">
-                <h3 className="font-display text-2xl font-bold uppercase leading-tight tracking-wide">{group.title}</h3>
-                <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/65">{group.description}</p>
-              </header>
-
-              <div className="grid content-start">
-                {group.items.map((item) => {
-                  return (
-                    <Link prefetch={false} key={item.slug} href={item.href} onMouseEnter={() => selectService(item.slug)} onFocus={() => selectService(item.slug)} className="group/item flex min-h-16 items-center justify-between gap-5 border-b border-white/10 py-4 transition-colors hover:border-brand/45 focus-visible:border-brand/45">
-                      <strong className="min-w-0 hyphens-auto font-display text-lg font-semibold leading-snug tracking-normal text-white/80 transition-colors group-hover/item:text-white group-focus-visible/item:text-white">{item.title}</strong>
-                      <ArrowUpRight className="size-4 shrink-0 text-white/50 transition-[color,transform] group-hover/item:-translate-y-0.5 group-hover/item:translate-x-0.5 group-hover/item:text-brand group-focus-visible/item:text-brand" aria-hidden="true" />
-                    </Link>
-                  )
-                })}
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="lg:col-span-5">
-          <figure className="editorial-photo relative aspect-[16/10] overflow-hidden bg-[#171718] lg:sticky lg:top-28 lg:aspect-[3/4]">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="min-w-0 lg:col-span-5">
+            <div className="explorer-categories" aria-label={editorialCopy[locale].select}>
+              {groups.map(group => <button key={group.category} type="button" aria-pressed={category === group.category} onClick={() => changeCategory(group.category)}>{group.title}</button>)}
+            </div>
+            <p className="mb-7 mt-5 max-w-md text-sm leading-relaxed text-white/65">{activeGroup.description}</p>
+            <label className="block lg:hidden"><span className="sr-only">{editorialCopy[locale].select}</span><select value={activeService} onChange={event => selectService(event.target.value as ServiceSlug)} className="mb-6 w-full border-b border-white/25 bg-transparent py-4 text-base text-white">{activeGroup.items.map(item => <option key={item.slug} value={item.slug}>{item.title}</option>)}</select></label>
+            <ol className="hidden border-t border-white/15 lg:block">
+              {activeGroup.items.map(item => <li key={item.slug}>
+                <button type="button" onMouseEnter={() => selectService(item.slug)} onFocus={() => selectService(item.slug)} onClick={() => selectService(item.slug)} aria-pressed={activeService === item.slug} className="explorer-service">
+                  <span className="type-index text-xs">{String(services.find(service => service.slug === item.slug)!.index).padStart(2, "0")}</span>
+                  <span>{item.title}</span><ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
+                </button>
+              </li>)}
+            </ol>
+          </div>
+          <div className="min-w-0 lg:col-span-7">
+          <figure className="explorer-stage relative aspect-[4/3] overflow-hidden bg-[#171718] lg:aspect-[5/4]">
             {previousService !== activeService && <Photo id={serviceVisuals[previousService].id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={serviceVisuals[previousService].position} />}
             <div key={activeService} onLoadCapture={() => setReadyService(activeService)} className={cn("absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none", readyService === activeService ? "opacity-100" : "opacity-0")}>
               <Photo id={visual.id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={visual.position} eager={activeService !== "mycie-zewnatrz"} />
             </div>
-            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
-            <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-              <span className="mb-3 block h-px w-8 bg-brand" aria-hidden="true" />
-              <span className="block text-lg font-semibold leading-snug">{activeItem.title}</span>
-              <span className="mt-2 block text-xs tracking-wide text-white/65">BORUCH Myjnia / PAZIM</span>
-            </figcaption>
+            <figcaption className="absolute left-0 top-0 bg-[#111112] pb-3 pr-5 text-[.65rem] uppercase tracking-[.18em] text-white/70">{activeGroup.title} / BORUCH</figcaption>
           </figure>
-        </div>
+          <div key={activeService} className="explorer-description home-hero-copy-animated mt-6 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div><h3 className="font-display text-2xl font-semibold leading-snug">{activeItem.title}</h3><p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">{activeItem.description}</p></div>
+            <Link prefetch={false} href={activeItem.href} className="editorial-link w-fit">{editorialCopy[locale].detail}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+          </div>
+          </div>
         </div>
       </div>
     </section>
@@ -749,13 +766,14 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
+  const projects: { id: PhotoId; position: string }[] = [{ id: "p20", position: "50% 58%" }, { id: "p62", position: "50% 58%" }, { id: "p43", position: "50% 60%" }, { id: "p46", position: "50% 50%" }, { id: "p39", position: "50% 55%" }]
 
   return (
-    <section aria-labelledby="work-title" className="overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-24">
+    <section aria-labelledby="work-title" className="section-xl overflow-hidden bg-[#080809]">
       <div className="home-shell mb-12 grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <p className="home-kicker">{t.nav.gallery}</p>
-          <h2 id="work-title" data-reveal="" className="home-section-title mt-6">{src.home.projectsTitle}</h2>
+          <h2 id="work-title" data-reveal="" className="editorial-display mt-6">{src.home.projectsTitle}</h2>
         </div>
         <div className="max-w-md lg:col-span-4 lg:col-start-9">
           <p className="text-pretty text-base leading-relaxed text-white/65">{src.home.projectsText}</p>
@@ -764,32 +782,13 @@ function WorkShowcase({ locale }: { locale: Locale }) {
           </Link>
         </div>
       </div>
-      <div className="home-shell grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[16rem_16rem_auto]">
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[16/10] lg:col-span-8 lg:row-span-2 lg:aspect-auto">
-          <Photo id="p20" sizes="(min-width: 1600px) 970px, (min-width: 1024px) 64vw, 92vw" position="50% 58%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-6 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[0]}</figcaption>
-        </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-4 lg:aspect-auto">
-          <Photo id="p62" sizes="(min-width: 1600px) 475px, (min-width: 1024px) 32vw, 46vw" position="50% 58%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[1]}</figcaption>
-        </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-4 lg:aspect-auto">
-          <Photo id="p43" sizes="(min-width: 1600px) 475px, (min-width: 1024px) 32vw, 46vw" position="50% 65%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[2]}</figcaption>
-        </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-6 lg:aspect-[16/9]">
-          <Photo id="p46" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 48vw, 46vw" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[3]}</figcaption>
-        </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-6 lg:aspect-[16/9]">
-          <Photo id="p39" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 48vw, 46vw" position="50% 55%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
-          <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[4]}</figcaption>
-        </figure>
+      <div className="home-shell portfolio-editorial">
+        {projects.map((project, index) => <figure key={project.id} className={`portfolio-project portfolio-project-${index}`}>
+          <Link prefetch={false} href={routes[locale].gallery} aria-label={`${copy.galleryCaptions[index]} - ${t.allPhotos}`} className="group block">
+            <div data-reveal="mask" className="portfolio-image relative overflow-hidden"><Photo id={project.id} sizes={index === 0 ? "(min-width: 1024px) 62vw, 92vw" : index === 4 ? "92vw" : "(min-width: 1024px) 45vw, 92vw"} position={project.position} className="transition-transform duration-1000 group-hover:scale-[1.035] group-focus-visible:scale-[1.035]" /></div>
+            <figcaption className="mt-4 flex items-center justify-between gap-5 border-b border-white/15 pb-4 text-xs uppercase tracking-[.14em]"><span>{copy.galleryCaptions[index]}</span><ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden="true" /></figcaption>
+          </Link>
+        </figure>)}
       </div>
     </section>
   )
@@ -798,14 +797,10 @@ function WorkShowcase({ locale }: { locale: Locale }) {
 function Packages({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const packageOrder = [
-    { index: 1, icon: Droplets },
-    { index: 0, icon: Armchair },
-    { index: 2, icon: Car },
-  ]
+  const packageOrder = [1, 0, 2]
 
   return (
-    <section aria-labelledby="packages-title" className="border-b border-white/10 bg-[#101011] py-16 lg:py-20">
+    <section aria-labelledby="packages-title" className="section-xl bg-[#101011]">
       <div className="home-shell">
         <div className="grid gap-7 border-b border-white/12 pb-7 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
@@ -817,43 +812,38 @@ function Packages({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <div className="mt-8 grid border-t border-white/10 lg:grid-cols-3 lg:divide-x lg:divide-white/10">
-          {packageOrder.map(({ index, icon: PackageIcon }) => {
+        <div className="mt-8 border-t border-white/15">
+          {packageOrder.map(index => {
             const pkg = src.pricing.packages[index]
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[#1a1a1c]")}>
-                {featured && <span className="absolute inset-x-0 top-0 h-0.5 bg-brand" aria-hidden="true" />}
+              <article key={pkg.title} data-reveal="" className={cn("editorial-price-row", featured && "editorial-price-featured")}>
                 <div>
-                  <div className="mb-5 flex items-center justify-between gap-5">
-                    {pkg.popular ? <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-brand">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
-                    <span className="grid size-9 place-items-center text-white/55">
-                      <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
-                    </span>
-                  </div>
-                  <h3 className="max-w-full font-display text-[clamp(1.5rem,2vw,1.9rem)] font-black uppercase leading-[1.14] tracking-[-.012em]">{pkg.title}</h3>
-                  <p className="mt-3 min-h-9 max-w-sm text-sm leading-relaxed text-white/65">{pkg.tagline}</p>
+                  {pkg.popular && <span className="mb-3 block text-xs font-medium uppercase tracking-[.16em] text-brand">{pkg.popular}</span>}
+                  <h3 className="max-w-full font-display text-[clamp(1.4rem,1.8vw,1.85rem)] font-bold uppercase leading-[1.16] tracking-normal">{pkg.title}</h3>
+                  <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/65">{pkg.tagline}</p>
                 </div>
-                <div className="mt-5 border-t border-white/10 pt-5">
-                  {pkg.includedLabel && <p className="mb-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
-                  <ul className="grid gap-y-2 text-[.875rem] leading-snug text-white/68">
+                <div>
+                  <p className="mb-4 text-[.65rem] font-medium uppercase tracking-[.14em] text-white/50">{editorialCopy[locale].scope}</p>
+                  <ul className="package-scope text-sm leading-relaxed text-white/75">
                     {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />{item}</li>)}
                   </ul>
                   {pkg.discount && <p className="mt-4 text-[.875rem] leading-relaxed text-white/65">{pkg.discount}</p>}
                 </div>
-                <div className="mt-auto pt-6">
+                <div className="package-price">
                   {featured && (
-                    <div className="mb-5 border-l-2 border-brand py-1 pl-4">
-                      <strong className="block text-[.72rem] font-bold uppercase tracking-[.13em] text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
-                      <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[.72rem] font-semibold tracking-[.025em]">
+                    <div className="mb-5">
+                      <strong className="block text-xs font-semibold text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
+                      <div className="mt-2 flex flex-col gap-1 text-sm">
                         <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 zł</s></span>
-                        <span className="font-bold uppercase tracking-[.08em] text-white">{packageSaleCopy[locale].save}</span>
+                        <span className="font-semibold text-white">{packageSaleCopy[locale].save}</span>
                       </div>
                     </div>
                   )}
-                  <span className="block whitespace-nowrap font-display text-[clamp(1.85rem,2.3vw,2.3rem)] font-black uppercase leading-[1.14] tracking-[.005em]">{pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}</span>
-                  {pkg.note && <span className="mt-3 block text-[.72rem] font-bold uppercase tracking-[.13em] text-white/65">{pkg.note}</span>}
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold uppercase leading-[1.14] tracking-normal">{pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}</span>
+                  {pkg.note && <span className="mt-3 block text-xs leading-relaxed text-white/60">{pkg.note}</span>}
+                  <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-5">{t.pricing}<ArrowUpRight className="size-4" aria-hidden="true" /></Link>
                 </div>
               </article>
             )
@@ -988,27 +978,26 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false, 
   return (
     <figure
       className={cn(
-        "relative flex flex-col overflow-hidden border-y p-7 transition-[background-color,border-color] duration-500 lg:p-9",
+        "editorial-quote relative flex flex-col overflow-hidden p-6 transition-opacity duration-500 lg:p-9",
         mobileCarousel
           ? isActive
-            ? "min-h-[25rem] md:min-h-[23rem] scale-100 border-white/18 bg-[#151516] opacity-100"
-            : "min-h-[25rem] md:min-h-[20rem] border-white/12 bg-[#18181a]"
+            ? "min-h-[25rem] md:min-h-[23rem] scale-100 opacity-100"
+            : "min-h-[25rem] md:min-h-[20rem]"
           : isActive
-            ? "min-h-[23rem] border-white/18 bg-[#151516]"
-            : "hidden min-h-[20rem] border-white/10 bg-white/[.025] md:flex",
+            ? "min-h-[23rem]"
+            : "hidden min-h-[20rem] md:flex",
       )}
     >
-      <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
       <div className="relative flex items-center justify-between gap-5">
         <div className="flex gap-1 text-brand" role="img" aria-label="5 / 5">
           {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
         </div>
         <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source}</span>
       </div>
-      <Quote className="mt-10 size-8 text-white/12" strokeWidth={1.3} aria-hidden="true" />
-      <div className="relative mt-5 pb-8">
-        <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-medium leading-relaxed", isActive ? "text-base text-white/84 sm:text-lg" : "text-sm text-white/64")}>„{review.text}”</blockquote>
-        {measure && <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-medium leading-relaxed", isActive ? "text-base sm:text-lg" : "text-sm")}>„{review.text}”</p>}
+      <Quote className="mt-8 size-9 text-brand" strokeWidth={1} aria-hidden="true" />
+      <div className="relative mt-5 pb-9">
+        <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-display font-normal leading-[1.5]", isActive ? "text-xl text-white/90 sm:text-[1.6rem]" : "text-lg text-white/64")}>„{review.text}”</blockquote>
+        {measure && <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-display font-normal leading-[1.5]", isActive ? "text-xl sm:text-[1.6rem]" : "text-lg")}>„{review.text}”</p>}
         {isTruncated && (
           <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
             {reviewDialogCopy[locale].more}
@@ -1016,8 +1005,8 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false, 
           </button>
         )}
       </div>
-      <figcaption className="mt-auto border-t border-white/10 pt-6">
-        <strong className="text-sm font-bold uppercase tracking-[.1em] text-white/88">{review.name}</strong>
+      <figcaption className="mt-auto flex flex-col gap-1 border-t border-white/15 pt-6">
+        <strong className="text-base font-semibold tracking-normal text-white/88">{review.name}</strong>
         <span className="mt-1.5 block text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source} / BORUCH Myjnia Szczecin</span>
       </figcaption>
     </figure>
@@ -1079,12 +1068,14 @@ function Reviews({ locale }: { locale: Locale }) {
   const showNextReview = () => desktopEmblaApi?.scrollNext(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 
   return (
-    <section ref={sectionRef} aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
+    <section ref={sectionRef} aria-labelledby="reviews-title" className="section-xl relative overflow-hidden bg-[#0a0a0b]">
       <div className="home-shell relative">
-        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
+        <div className="grid gap-7 border-b border-white/10 pb-9 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
           <p className="home-kicker">{copy.reviewsLabel}</p>
-          <h2 id="reviews-title" data-reveal="" className="home-section-title mt-7 max-w-[18ch]">{copy.reviewsTitle}</h2>
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/65">{copy.reviewsIntro}</p>
+          <h2 id="reviews-title" data-reveal="" className="editorial-display mt-7 max-w-[25ch]">{copy.reviewsTitle}</h2>
+          </div>
+          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.reviewsIntro}</p>
         </div>
 
         <div className="relative mt-10 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-14 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
@@ -1254,23 +1245,24 @@ function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section id="wycena" aria-labelledby="contact-form-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
-      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-5">
-          <div className="lg:sticky lg:top-32">
-            <p className="home-kicker">{copy.contactLabel}</p>
-            <h2 id="contact-form-title" data-reveal="" className="home-section-title mt-7">{copy.contactTitle}</h2>
-            <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/55">{copy.contactIntro}</p>
-
-            <div className="mt-10 grid gap-4 border-t border-white/10 pt-8 text-sm text-white/58">
-              <p className="flex items-start gap-3"><Clock3 className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" /><span><strong className="block text-white/86">{copy.contactDirect}</strong>{copy.contactBooksy}</span></p>
-              <a href={contact.phoneHref} className="flex items-center gap-3 transition-colors hover:text-white"><Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}</a>
-              <a href={`mailto:${contact.email}`} className="flex items-center gap-3 break-all transition-colors hover:text-white"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
+    <section id="wycena" aria-labelledby="contact-form-title" className="section-xl bg-[#111112]">
+      <div className="home-shell">
+        <div className="mb-12 grid gap-7 border-b border-white/15 pb-10 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8"><p className="home-kicker">{copy.contactLabel}</p><h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].talk}</h2></div>
+          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.contactIntro}</p>
+        </div>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
+          <div className="lg:col-span-5">
+            <figure className="relative aspect-[16/10] overflow-hidden" data-reveal="mask"><Photo id="p51" sizes="(min-width: 1024px) 38vw, 92vw" position="50% 57%" /></figure>
+            <div className="mt-7 flex flex-col gap-4">
+              <a href={contact.phoneHref} className="editorial-contact-phone">{contact.phone}<ArrowUpRight className="size-5 text-brand" aria-hidden="true" /></a>
+              <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/60">{copy.contactBooksy}</p>
             </div>
           </div>
-        </div>
-        <div data-reveal="" className="border-t border-white/10 pt-8 lg:col-span-7 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+        <div data-reveal="" className="lg:col-span-7">
           <HomeContactForm locale={locale} />
+        </div>
         </div>
       </div>
     </section>

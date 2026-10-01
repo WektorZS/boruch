@@ -17,20 +17,23 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
         <div className="shell-wide grid gap-9 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
           <div className="lg:col-span-7">
             <p className="eyebrow">{t.nav.contact}</p>
-            <h2 className="mt-6 type-h2">{src.home.contactTitle}</h2>
+            <h2 className="editorial-display mt-6">{src.home.contactTitle}</h2>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/65">{src.home.contactText}</p>
           </div>
-          <div className="flex min-w-0 flex-col gap-3 sm:flex-row lg:col-span-4 lg:col-start-9 lg:flex-col xl:col-span-5 xl:col-start-8 xl:items-end">
-            <a href={contact.phoneHref} className="home-button home-button-red"><Phone className="size-4" aria-hidden="true" />{contact.phone}</a>
-            <a href={`mailto:${contact.email}`} className="home-button home-button-dark"><Mail className="size-4 text-brand" aria-hidden="true" />{contact.email}</a>
+          <div className="flex min-w-0 flex-col gap-3 lg:col-span-4 lg:col-start-9">
+            <a href={contact.phoneHref} className="editorial-contact-phone">{contact.phone}<ArrowUpRight className="size-5 text-brand" aria-hidden="true" /></a>
+            <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
           </div>
         </div>
       </div>}
 
+      <div className="shell-wide">
+        <Link prefetch={false} href={routes[locale].home} aria-label={`Boruch Myjnia - ${t.nav.home}`} className="footer-signature"><span>BORUCH<span className="text-brand">.</span></span><span>Myjnia / Detailing<br />Szczecin / PAZIM</span></Link>
+      </div>
+
       <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-14 lg:grid-cols-12 lg:gap-8 lg:py-20">
         <div className="col-span-2 lg:col-span-4">
-          <Link prefetch={false} href={routes[locale].home} className="inline-flex flex-col font-display font-black uppercase tracking-normal"><span className="footer-wordmark">Boruch</span><span className="mt-2 text-xs font-semibold tracking-[.25em] text-white/65">Myjnia / Detailing</span></Link>
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">{src.meta.home.description}</p>
+          <p className="max-w-sm text-sm leading-relaxed text-white/65">{src.meta.home.description}</p>
           <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="group mt-8 flex max-w-sm items-center gap-5 border-l border-brand pl-5 text-sm leading-relaxed text-white/65 transition-colors hover:text-white">
             <span className="shrink-0 font-display text-4xl font-bold leading-none text-brand" aria-hidden="true">-2</span>
             <span>
@@ -71,7 +74,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
         </div>
       </div>
 
-      <div className="border-t border-white/8 bg-[#111112]">
+      <div className="border-t border-white/8">
         <div className="shell-wide flex flex-col gap-4 py-5 text-[.72rem] font-semibold uppercase tracking-[.14em] text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <span>© {new Date().getFullYear()} BORUCH MYJNIA</span>
           <span>Szczecin / Plac Rodła 8 / PAZIM</span>

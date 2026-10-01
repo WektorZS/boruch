@@ -94,21 +94,16 @@ export function ServicesPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="services">
 
 
-      <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
-        <div className="enter-unmask absolute inset-0"><Photo id="p62" priority sizes="100vw" position="65% 52%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.7)_0%,rgba(6,6,7,.35)_55%,rgba(6,6,7,.05)_100%)]" />
-        <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
-        <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-9">
+      <section aria-labelledby="page-title" className="bg-[#080809]">
+        <div className="shell-wide service-index-cover">
+          <div className="min-w-0">
             <p className="eyebrow mb-7">{copy.intro}</p>
-            <h1 id="page-title" className="page-hero-title type-h1">{t.nav.services}</h1>
-            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{src.meta.services.description}</p>
+            <h1 id="page-title" className="cinematic-title">{t.nav.services}<span className="text-brand">.</span></h1>
+            <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/75">{copy.introText}</p>
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.meta.services.description}</p>
+            <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-8">{t.pricing}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></Link>
           </div>
-          <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
-            <p className="type-label text-brand">{copy.choose}</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/55">{copy.introText}</p>
-            <Link prefetch={false} href={routes[locale].pricing} className="mt-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand">{t.pricing}<ArrowRight className="size-4 text-brand" /></Link>
-          </div>
+          <figure className="enter-unmask overflow-hidden"><Photo id="p62" priority sizes="(min-width: 1024px) 55vw, 92vw" position="65% 52%" /><figcaption className="absolute bottom-0 right-0 bg-[#080809] pl-5 pt-3 text-[.65rem] uppercase tracking-[.16em] text-white/65">BORUCH / PAZIM / -2</figcaption></figure>
         </div>
       </section>
 
@@ -120,37 +115,31 @@ export function ServicesPage({ locale }: { locale: Locale }) {
 
       {groups.map((group, groupIndex) => {
         const additional = groupIndex === groups.length - 1
-        const reverse = groupIndex === 1
         const visual: PhotoId = groupIndex === 0 ? "p46" : "p20"
         return (
         <section id={`service-group-${groupIndex}`} key={group.title} aria-labelledby={`group-${groupIndex}`} className={`scroll-mt-28 border-b border-white/10 section-lg ${groupIndex % 2 === 0 ? "bg-[#0a0a0b]" : "bg-[#101011]"}`}>
-          <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-12">
-            <div className={additional ? "lg:col-span-4" : reverse ? "lg:order-2 lg:col-span-4" : "lg:col-span-4"}>
-              <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+          <div className="shell-wide">
+            <div className="service-index-category">
+              <div>
                 <p className="eyebrow">{t.nav.services}</p>
-                <h2 id={`group-${groupIndex}`} className="mt-5 type-h2">{group.title}</h2>
+                <h2 id={`group-${groupIndex}`} className="editorial-display mt-5">{group.title}</h2>
                 <p className="mt-5 max-w-md text-base leading-relaxed text-white/65">{additional ? category.additional : groupIndex === 0 ? category.wash : category.detailing}</p>
-                {!additional && <figure className="mt-8">
-                  <div data-reveal="mask" className={`frame editorial-photo ${reverse ? "aspect-[4/5]" : "aspect-[4/3]"}`}><Photo id={visual} sizes="(min-width: 1600px) 480px, (min-width: 1024px) 32vw, 92vw" position={reverse ? "50% 56%" : "55% 50%"} /></div>
-                  <figcaption className="mt-4 type-label text-white/55">{category.photo}</figcaption>
-                </figure>}
                 <Link prefetch={false} href={routes[locale].pricing} className="group mt-7 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white/80 hover:text-white"><span className="link-draw">{category.pricing}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></Link>
               </div>
+              {!additional && <figure data-reveal="mask"><Photo id={visual} sizes="(min-width: 1024px) 55vw, 92vw" position={groupIndex === 1 ? "50% 56%" : "55% 50%"} /><figcaption className="absolute bottom-0 right-0 bg-[#101011] pl-5 pt-3 text-[.65rem] uppercase tracking-[.14em] text-white/65">{category.photo}</figcaption></figure>}
             </div>
-            <ul className={`border-b border-white/10 lg:col-span-8 ${reverse ? "lg:order-1" : ""}`}>
+            <ul className="border-b border-white/15">
               {group.items.map((item, index) => {
                 const href = item.href
                 const content = (
                   <>
-                    <span className="mt-2 size-1.5 shrink-0 bg-brand" aria-hidden="true" />
-                    <span className="min-w-0">
-                      <strong className="block text-pretty font-display text-xl font-bold leading-snug tracking-normal text-white/90 transition-colors group-hover:text-white sm:text-2xl">{item.title}</strong>
-                      <span className="mt-2 block max-w-2xl text-sm leading-relaxed text-white/65 sm:text-base">{item.text}</span>
-                    </span>
-                    {href && <span className="grid size-11 shrink-0 place-items-center self-center text-white/65 transition-colors group-hover:text-brand group-focus-visible:text-brand"><span className="sr-only">{t.viewService}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></span>}
+                    <span className="type-index text-xs text-brand" aria-hidden="true">{String(index + 1 + (groupIndex === 1 ? 5 : additional ? 12 : 0)).padStart(2, "0")}</span>
+                    <strong className="min-w-0 text-pretty font-display text-xl font-medium leading-snug tracking-normal text-white/90 sm:text-2xl">{item.title}</strong>
+                    <span className="min-w-0 max-w-xl text-sm leading-relaxed text-white/65">{item.text}</span>
+                    {href ? <span className="grid size-11 shrink-0 place-items-center self-center text-white/65 transition-colors group-hover:text-brand group-focus-visible:text-brand"><span className="sr-only">{t.viewService}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></span> : <span aria-hidden="true" />}
                   </>
                 )
-                const rowClass = `group grid items-start gap-4 border-t border-white/10 py-6 lg:py-7 ${href ? "grid-cols-[.375rem_minmax(0,1fr)_2.75rem] transition-colors hover:border-brand/40 focus-visible:border-brand" : "grid-cols-[.375rem_minmax(0,1fr)]"}`
+                const rowClass = "service-index-row group transition-colors"
                 return <li key={item.id} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link prefetch={false} href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
               })}
             </ul>
