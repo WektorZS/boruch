@@ -670,43 +670,6 @@ function HomeHero({ locale }: { locale: Locale }) {
               <InstagramIcon className="size-4.5" />
             </a>
           </div>
-
-          <div className="hero-slide-controls">
-            <div className="hero-progress" aria-hidden="true"><span key={activeSlide} style={{ animationPlayState: heroPaused || !heroVisible || !autoplay ? "paused" : "running" }} /></div>
-            <button
-  type="button"
-  onClick={() => changeSlide(-1)}
-  aria-label={editorialCopy[locale].previous}
->
-  <ArrowLeft className="size-4.5" aria-hidden="true" />
-</button>
-
-<button
-  type="button"
-  onClick={() => changeSlide(1)}
-  aria-label={editorialCopy[locale].next}
->
-  <ArrowRight className="size-4.5" aria-hidden="true" />
-</button>
-
-<button
-  type="button"
-  onClick={() => setAutoplay(value => !value)}
-  aria-label={
-    autoplay
-      ? editorialCopy[locale].pause
-      : editorialCopy[locale].play
-  }
->
-  {autoplay ? (
-    <Pause className="size-4" aria-hidden="true" />
-  ) : (
-    <Play className="size-4" aria-hidden="true" />
-  )}
-</button>
-          </div>
-        </div>
-        <div className="hero-photo-note" aria-hidden="true"><span>BORUCH / PAZIM</span><span>{editorialCopy[locale].studio}</span></div>
       </div>
 
      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
