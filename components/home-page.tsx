@@ -526,19 +526,19 @@ function HomeHeader({ locale }: { locale: Locale }) {
 function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
   return (
     <div className={cn("flex w-full items-stretch border-l border-white/14 bg-[#101011] sm:w-auto", className)}>
-      <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
+      <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">5.0/5</span>
       <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
         <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
           <span className="min-w-0 flex-1">
             <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
-            <span className="mt-0.5 block text-[.72rem] text-white/65">4.9 / 5 - {copy.booksyReviews}</span>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.booksyReviews}</span>
           </span>
           <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
         <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
           <span className="min-w-0 flex-1">
             <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
-            <span className="mt-0.5 block text-[.72rem] text-white/65">4.9 / 5 - {copy.googleReviews}</span>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.googleReviews}</span>
           </span>
           <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
@@ -678,7 +678,7 @@ function HomeHero({ locale }: { locale: Locale }) {
   >
     <div className="hero-trust-item">
       <span className="hero-trust-kicker">Booksy</span>
-      <strong className="hero-trust-score">4.9</strong>
+      <strong className="hero-trust-score">5.0 / 5</strong>
       <span className="hero-trust-meta">{copy.booksyReviews}</span>
     </div>
 
@@ -686,7 +686,7 @@ function HomeHero({ locale }: { locale: Locale }) {
 
     <div className="hero-trust-item">
       <span className="hero-trust-kicker">Google</span>
-      <strong className="hero-trust-score">4.9</strong>
+      <strong className="hero-trust-score">5.0 / 5</strong>
       <span className="hero-trust-meta">{copy.googleReviews}</span>
     </div>
   </div>
@@ -1217,12 +1217,12 @@ function Reviews({ locale }: { locale: Locale }) {
 
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
           <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
-            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">5.0/5</span>
             <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Booksy</strong><span className="mt-1 block text-xs text-white/65">{copy.booksyReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
           <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
-            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">4.9/5</span>
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">5.0/5</span>
             <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Google</strong><span className="mt-1 block text-xs text-white/65">{copy.googleReviews}</span></span>
             <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
