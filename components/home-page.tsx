@@ -2197,7 +2197,7 @@ function Location({ locale }: { locale: Locale }) {
           <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[34rem] lg:border-l lg:border-white/10 lg:pl-8">
             <div className="relative h-full min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
               <iframe
-                title={`${t.openMap} - BORUCH Myjnia xSzczecin`}
+                title={`${t.openMap} - BORUCH Myjnia Szczecin`}
                 src={mapEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
