@@ -629,76 +629,96 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
-        <div
-  key={activeSlide}
-  className={cn(
-    "hero-editorial-copy hero-copy-contrast",
-    activeSlide > 0 && "home-hero-copy-animated",
-  )}
->
-  <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
-    <span className="h-px w-7 shrink-0 bg-brand" />
-    {slide.label}
-  </p>
-
-  <h1
-    id="hero-title"
+  <div
+    key={activeSlide}
     className={cn(
-      "cinematic-title",
-      hasLongTitleWord && "cinematic-title-long",
+      "hero-editorial-copy hero-copy-contrast",
+      activeSlide > 0 && "home-hero-copy-animated",
     )}
   >
-    {slide.title}
-  </h1>
+    <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+      <span className="h-px w-7 shrink-0 bg-brand" />
+      {slide.label}
+    </p>
 
-  <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
-    {slide.text}
-  </p>
-
-  <div className="mt-9 flex flex-wrap items-center gap-7">
-    <a href="#wycena" className="home-button home-button-red">
-      {t.nav.contact}
-      <ArrowRight className="size-4" aria-hidden="true" />
-    </a>
-
-    <Link
-      prefetch={false}
-      href={routes[locale].services}
-      className="editorial-link"
+    <h1
+      id="hero-title"
+      className={cn(
+        "cinematic-title",
+        hasLongTitleWord && "cinematic-title-long",
+      )}
     >
-      {t.nav.services}
-      <ArrowUpRight className="size-4" aria-hidden="true" />
-    </Link>
+      {slide.title}
+    </h1>
+
+    <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+      {slide.text}
+    </p>
+
+    <div className="mt-9 flex flex-wrap items-center gap-7">
+      <a href="#wycena" className="home-button home-button-red">
+        {t.nav.contact}
+        <ArrowRight className="size-4" aria-hidden="true" />
+      </a>
+
+      <Link
+        prefetch={false}
+        href={routes[locale].services}
+        className="editorial-link"
+      >
+        {t.nav.services}
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </Link>
+    </div>
+  </div>
+
+  <div
+    className="hero-trust-totem"
+    aria-label={copy.reviewsLabel}
+  >
+    <div className="hero-trust-item">
+      <span className="hero-trust-kicker">Booksy</span>
+      <strong className="hero-trust-score">4.9</strong>
+      <span className="hero-trust-meta">{copy.booksyReviews}</span>
+    </div>
+
+    <div className="hero-trust-divider" />
+
+    <div className="hero-trust-item">
+      <span className="hero-trust-kicker">Google</span>
+      <strong className="hero-trust-score">4.9</strong>
+      <span className="hero-trust-meta">{copy.googleReviews}</span>
+    </div>
+  </div>
+
+  <div className="hero-editorial-bottom">
+    <div className="flex items-center gap-3">
+      <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">
+        {followCopy[locale]}
+      </span>
+
+      <a
+        href={contact.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
+      >
+        <FacebookIcon className="size-4.5" />
+      </a>
+
+      <a
+        href={contact.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
+      >
+        <InstagramIcon className="size-4.5" />
+      </a>
+    </div>
   </div>
 </div>
-                <div className="hero-editorial-bottom">
-          <div className="flex items-center gap-3">
-            <span className="text-[.68rem] font-medium uppercase tracking-[.13em] text-white/65">
-              {followCopy[locale]}
-            </span>
-
-            <a
-              href={contact.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
-            >
-              <FacebookIcon className="size-4.5" />
-            </a>
-
-            <a
-              href={contact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="grid size-10 place-items-center text-white/75 transition-colors hover:text-brand"
-            >
-              <InstagramIcon className="size-4.5" />
-            </a>
-          </div>
-        </div>
-      </div>
 
       <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
         {copy.benefits.map(([title, text], index) => {
@@ -730,12 +750,6 @@ function HomeHero({ locale }: { locale: Locale }) {
         })}
           </ul>
     </section>
-
-    <div className="border-b border-white/10 bg-[#080809]">
-      <div className="home-shell flex justify-end py-5">
-        <HeroRatings copy={copy} className="hero-ratings-inline" />
-      </div>
-    </div>
   </>
 )
 }

@@ -1781,8 +1781,80 @@
 
 .hero-cinema-shade {
   background:
-    linear-gradient(90deg, #080809 0%, rgb(8 8 9 / .58) 20%, rgb(8 8 9 / .1) 48%),
-    linear-gradient(0deg, rgb(8 8 9 / .72), transparent 32%);
+    linear-gradient(
+      90deg,
+      rgb(8 8 9 / 0.96) 0%,
+      rgb(8 8 9 / 0.74) 22%,
+      rgb(8 8 9 / 0.28) 46%,
+      transparent 62%
+    ),
+    linear-gradient(
+      270deg,
+      rgb(8 8 9 / 0.58) 0%,
+      rgb(8 8 9 / 0.28) 16%,
+      transparent 34%
+    ),
+    linear-gradient(
+      0deg,
+      rgb(8 8 9 / 0.78) 0%,
+      rgb(8 8 9 / 0.24) 30%,
+      transparent 58%
+    );
+}
+.hero-trust-totem {
+  position: absolute;
+  right: 2.25rem;
+  bottom: 2rem;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 10.5rem;
+  padding: 1.1rem 1rem 1rem;
+  background: linear-gradient(
+    180deg,
+    rgb(152 31 31 / 0.92) 0%,
+    rgb(118 22 22 / 0.96) 100%
+  );
+  border: 1px solid rgb(255 255 255 / 0.08);
+  box-shadow:
+    0 20px 40px rgb(0 0 0 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+.hero-trust-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hero-trust-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgb(255 243 214 / 0.86);
+}
+
+.hero-trust-score {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 2.2vw, 2.75rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #f6df9b;
+}
+
+.hero-trust-meta {
+  font-size: 0.76rem;
+  line-height: 1.3;
+  color: rgb(255 243 214 / 0.82);
+}
+
+.hero-trust-divider {
+  height: 1px;
+  background: rgb(255 243 214 / 0.18);
 }
 
 .hero-editorial-bottom {
@@ -2032,6 +2104,23 @@ a.service-index-row:hover { border-color: var(--brand); }
       rgb(8 8 9 / .22) 68%,
       transparent 100%
     );
+}
+
+.hero-trust-totem {
+  right: 1rem;
+  bottom: 1rem;
+  min-width: auto;
+  width: 8.5rem;
+  padding: 0.85rem 0.8rem 0.8rem;
+  gap: 0.75rem;
+}
+
+.hero-trust-score {
+  font-size: 1.7rem;
+}
+
+.hero-trust-meta {
+  font-size: 0.7rem;
 }
 
 .cinematic-title {
