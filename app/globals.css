@@ -1650,7 +1650,7 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: calc(50% - 50vw + 28px);
+  right: calc(50% - 50vw + 40px);
   bottom: 2rem;
   z-index: 12;
   display: flex;
@@ -1720,13 +1720,26 @@
   margin: 0;
 }
 
-.hero-editorial-bottom span {
-  color: rgb(255 255 255 / 0.84);
-  font-weight: 600;
-}
+@media (min-width: 640px) {
+  .hero-editorial-bottom span {
+    color: rgb(255 255 255 / 0.88);
+    opacity: 1;
+  }
 
-.hero-editorial-bottom a {
-  color: rgb(255 255 255 / 0.9);
+  .hero-editorial-bottom a {
+    color: rgb(255 255 255 / 0.9);
+    opacity: 1;
+  }
+
+  .hero-editorial-bottom a svg {
+    color: rgb(255 255 255 / 0.9);
+    opacity: 1;
+  }
+
+  .hero-editorial-bottom a:hover,
+  .hero-editorial-bottom a:focus-visible {
+    color: #fff;
+  }
 }
 
 .hero-editorial-bottom a:hover,
@@ -2008,12 +2021,13 @@ a.service-index-row:hover { border-color: var(--brand); }
 }
 
 .hero-cinema-shade {
-  background: linear-gradient(
-    0deg,
-    #080809 0%,
-    rgb(8 8 9 / 0.64) 55%,
-    rgb(8 8 9 / 0.34) 100%
-  );
+  background:
+    linear-gradient(
+      0deg,
+      #080809 0%,
+      rgb(8 8 9 / 0.76) 48%,
+      rgb(8 8 9 / 0.48) 100%
+    );
 }
 
 .hero-editorial-bottom {
