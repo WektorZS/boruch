@@ -2057,42 +2057,35 @@ a.service-index-row:hover { border-color: var(--brand); }
 
 @media (max-width: 639px) {
   .hero-editorial-grid {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
     min-height: calc(100svh - var(--header-h));
-    padding-block: 3.5rem 9.5rem;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-block: 0;
   }
 
-  .hero-cinema {
-    inset: var(--header-h) 0 auto 0;
+  .hero-content-stack {
+    display: flex;
     width: 100%;
-    height: calc(100svh - var(--header-h));
-    clip-path: none;
+    min-height: calc(100svh - var(--header-h) - 7.5rem);
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .hero-cinema-shade {
-    background:
-      linear-gradient(
-        0deg,
-        #080809 0%,
-        rgb(8 8 9 / 0.64) 55%,
-        rgb(8 8 9 / 0.34) 100%
-      );
+  .hero-copy-stage {
+    width: 100%;
   }
 
   .hero-editorial-bottom {
     position: static;
-    margin-top: 1.4rem;
-    width: 100%;
     display: flex;
+    width: 100%;
+    margin-top: 1.4rem;
     align-items: center;
     justify-content: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-    row-gap: .5rem;
   }
+}
 
   .hero-trust-totem {
     position: absolute;
