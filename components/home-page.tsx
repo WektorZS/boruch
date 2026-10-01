@@ -1628,7 +1628,7 @@ function Packages({ locale }: { locale: Locale }) {
             )
           })}
         </div>
-        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
+        <p className="mt-7 text-xs leading-relaxed text-white/65"> {src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
       </div>
     </section>
   )
