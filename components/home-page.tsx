@@ -691,7 +691,7 @@ function HomeHero({ locale }: { locale: Locale }) {
     </div>
   </div>
 
- <div className="hero-editorial-bottom">
+ <div className="hero-editorial-bottom sm:hidden">
   <div className="flex items-center gap-3 text-white">
     <span className="text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
       {followCopy[locale]}
