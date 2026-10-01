@@ -122,7 +122,7 @@ export const enSource: LocaleSource = {
           "Washing windows"
         ],
         "includedLabel": "What’s included in the package?",
-        "price": "from 130PLN*",
+        "price": "from 130PLN",
         "note": "depending on the size of car",
         "tagline": "We’ll thoroughly take care of your car’s interior"
       },
@@ -138,7 +138,7 @@ export const enSource: LocaleSource = {
           "Wheel Washing"
         ],
         "includedLabel": "What’s included in the package?",
-        "price": "from 110PLN*",
+        "price": "from 110PLN",
         "note": "depending on the size of car",
         "tagline": "Your car will be as clean as new"
       },
@@ -147,7 +147,7 @@ export const enSource: LocaleSource = {
         "items": [
           "Detailing interior cleaning along with an exterior cleaning package"
         ],
-        "price": "from 220PLN*",
+        "price": "from 220PLN",
         "popular": "POPULAR",
         "note": "depending on the size of car",
         "tagline": "Comprehensive cleaning inside and out",

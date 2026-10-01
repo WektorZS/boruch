@@ -122,7 +122,7 @@ export const deSource: LocaleSource = {
           "Fenster waschen"
         ],
         "includedLabel": "Was ist im Paket enthalten?",
-        "price": "ab 130PLN*",
+        "price": "ab 130PLN",
         "note": "abhängig von der Größe des Autos",
         "tagline": "Wir kümmern uns gründlich um das Interieur Ihres Fahrzeugs"
       },
@@ -138,7 +138,7 @@ export const deSource: LocaleSource = {
           "Reinigung der Felgen"
         ],
         "includedLabel": "Was ist im Paket enthalten?",
-        "price": "ab 110PLN*",
+        "price": "ab 110PLN",
         "note": "abhängig von der Größe des Autos",
         "tagline": ""
       },
@@ -148,7 +148,7 @@ export const deSource: LocaleSource = {
           "Detailreinigung des Innenraums zusammen mit einem Außenreinigungspaket"
         ],
         "popular": "BELIEBT",
-        "price": "ab 220PLN*",
+        "price": "ab 220PLN",
         "note": "abhängig von der Größe des Autos",
         "tagline": "Umfassende Reinigung innen und außen",
         "discount": "Das Komplettpaket beinhaltet einen Rabatt auf sowohl Innen- als auch Außenreinigung"

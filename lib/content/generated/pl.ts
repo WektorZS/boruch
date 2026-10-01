@@ -124,7 +124,7 @@ export const plSource: LocaleSource = {
           "Mycie szyb"
         ],
         "includedLabel": "Co wchodzi w skład zestawu?",
-        "price": "od 130 zł*",
+        "price": "od 130 zł",
         "note": "w zależności od wielkości auta",
         "tagline": "Zajmiemy się wnętrzem auta od A do Z"
       },
@@ -140,7 +140,7 @@ export const plSource: LocaleSource = {
           "Mycie felg"
         ],
         "includedLabel": "Co wchodzi w skład zestawu?",
-        "price": "od 110zł*",
+        "price": "od 110zł",
         "note": "w zależności od wielkości auta",
         "tagline": "Twoje auto będzie czyste jak z salonu"
       },
@@ -149,7 +149,7 @@ export const plSource: LocaleSource = {
         "items": [
           "Czyszczenie detailingowe wnętrza wraz z pakietem czyszczenia zewnątrz"
         ],
-        "price": "od 220zł*",
+        "price": "od 220zł",
         "popular": "POPULARNE",
         "note": "w zależności od wielkości auta",
         "tagline": "Kompleksowe czyszczenie wewnątrz jak i zewnątrz",
