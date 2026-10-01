@@ -3608,7 +3608,7 @@
 
 .hero-trust-totem {
   position: absolute;
-  right: calc(1rem - max((100vw - var(--container-wide)) / 2, 0px));
+  right: 2rem;
   bottom: 2rem;
   z-index: 12;
   display: flex;
