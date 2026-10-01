@@ -1697,40 +1697,50 @@
   background:
     linear-gradient(
       90deg,
-      rgb(8 8 9 / 0.96) 0%,
-      rgb(8 8 9 / 0.76) 24%,
-      rgb(8 8 9 / 0.32) 48%,
-      transparent 64%
+      #080809 0%,
+      rgb(8 8 9 / 0.98) 12%,
+      rgb(8 8 9 / 0.9) 24%,
+      rgb(8 8 9 / 0.72) 38%,
+      rgb(8 8 9 / 0.48) 52%,
+      rgb(8 8 9 / 0.22) 66%,
+      transparent 80%
     ),
     linear-gradient(
       270deg,
-      rgb(8 8 9 / 0.68) 0%,
-      rgb(8 8 9 / 0.38) 18%,
-      transparent 38%
+      rgb(8 8 9 / 0.46) 0%,
+      rgb(8 8 9 / 0.24) 16%,
+      transparent 34%
     ),
     linear-gradient(
       0deg,
-      rgb(8 8 9 / 0.78) 0%,
-      rgb(8 8 9 / 0.28) 32%,
-      transparent 60%
+      rgb(8 8 9 / 0.7) 0%,
+      rgb(8 8 9 / 0.24) 32%,
+      transparent 62%
     );
 }
 
 .hero-trust-totem {
   position: absolute;
-  right: calc((100vw - 100%) / -2 + 28px);
-  bottom: 2rem;
+  top: 50%;
+  right: calc((100vw - 100%) / -2 + 24px);
+  bottom: auto;
   z-index: 12;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1.35rem;
+
   min-width: 9.5rem;
   padding: 0;
+
   text-align: right;
+
   background: transparent;
   border: 0;
   box-shadow: none;
+
+  transform: translateY(-50%);
 }
 
 .hero-trust-item {
