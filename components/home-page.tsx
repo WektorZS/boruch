@@ -933,7 +933,7 @@ function serviceMenuIcon(
   category: "myjnia" | "detailing",
 ) {
   const icons = {
-    "mycie-zewnatrz": Droplets,
+    "mycie-zewnatrz": Droplet,
     "czyszczenie-wnetrza": Armchair,
     komplet: PackageCheck,
     "pranie-tapicerki": Waves,
@@ -949,7 +949,7 @@ function serviceMenuIcon(
 
   return (
     icons[slug as keyof typeof icons] ??
-    (category === "myjnia" ? Droplet : Gem)
+    (category === "myjnia" ? Droplets : Gem)
   )
 }
 
@@ -1023,7 +1023,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     category,
     title: category === "myjnia" ? copy.wash : copy.detailing,
     description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
-    Icon: category === "myjnia" ? Droplet : Gem,
+    Icon: category === "myjnia" ? Droplets : Gem,
     items: serviceConfigs
       .filter((service) => service.category === category)
       .map((service) => {
