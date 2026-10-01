@@ -949,7 +949,7 @@ function serviceMenuIcon(
 
   return (
     icons[slug as keyof typeof icons] ??
-    (category === "myjnia" ? Droplets : Gem)
+    (category === "myjnia" ? Droplet : Gem)
   )
 }
 
@@ -1023,7 +1023,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     category,
     title: category === "myjnia" ? copy.wash : copy.detailing,
     description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
-    Icon: category === "myjnia" ? Droplets : ShieldCheck,
+    Icon: category === "myjnia" ? Droplet : Gem,
     items: serviceConfigs
       .filter((service) => service.category === category)
       .map((service) => {
@@ -1066,7 +1066,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
                 <p className="sr-group-description">{group.description}</p>
               </header>
 
-              <ul className="sr-list">
+          
               <ul className="sr-list" role="list">
                 {group.items.map((item) => (
                   <li key={item.slug}>
