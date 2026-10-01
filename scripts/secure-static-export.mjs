@@ -36,7 +36,7 @@ async function securePage(file) {
     "default-src 'self'",
     "base-uri 'none'",
     "object-src 'none'",
-    `script-src 'self' 'strict-dynamic' ${[...hashes].join(" ")}`,
+    `script-src 'self' ${[...hashes].join(" ")}`,
     "script-src-attr 'none'",
     // React uses inline style attributes for carousel geometry and transitions.
     "style-src 'self' 'unsafe-inline'",
