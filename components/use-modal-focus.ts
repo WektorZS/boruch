@@ -6,7 +6,7 @@ const openModals: HTMLElement[] = []
 let savedOverflow = ""
 
 /** Shared keyboard, focus and background behaviour for the site's modal windows. */
-export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>, onClose?: () => void) {
+export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>, onClose?: () => void, contentKey?: string) {
   useEffect(() => {
     const dialog = ref.current
     if (!open || !dialog) return
@@ -52,5 +52,5 @@ export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>,
       if (openModals.length === 0) document.body.style.overflow = savedOverflow
       if (previousFocus?.isConnected && !previousFocus.closest("[inert]")) previousFocus.focus({ preventScroll: true })
     }
-  }, [open, ref, onClose])
+  }, [open, ref, onClose, contentKey])
 }

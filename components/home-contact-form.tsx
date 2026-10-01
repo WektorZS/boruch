@@ -77,7 +77,8 @@ const formCopy = {
   error: string
 }>
 
-const fieldClass = "min-h-12 w-full min-w-0 border border-white/20 bg-[#0a0a0b] px-3 text-base font-normal normal-case leading-relaxed tracking-normal text-white outline-none transition placeholder:text-white/65 hover:border-white/35 focus:border-brand focus:ring-2 focus:ring-brand/25"
+const fieldClass = "min-h-12 w-full min-w-0 border border-white/20 bg-[#0a0a0b] px-4 text-base font-normal normal-case leading-relaxed tracking-normal text-white outline-none transition-colors placeholder:text-white/65 hover:border-white/35 focus:border-brand focus:ring-2 focus:ring-brand/25"
+const labelClass = "grid gap-2.5 text-sm font-medium normal-case leading-relaxed tracking-normal text-white/75"
 
 export function HomeContactForm({ locale }: { locale: Locale }) {
   const copy = formCopy[locale]
@@ -127,19 +128,19 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
       </div>
 
       <div className="grid min-w-0 gap-5 sm:grid-cols-2">
-        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className={labelClass}>
           {copy.name}
           <input className={fieldClass} name="name" type="text" autoComplete="name" minLength={2} maxLength={100} required />
         </label>
-        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className={labelClass}>
           {copy.phone}
           <input className={fieldClass} name="phone" type="tel" inputMode="tel" autoComplete="tel" minLength={7} maxLength={20} required />
         </label>
-        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className={labelClass}>
           {copy.email}
           <input className={fieldClass} name="email" type="email" autoComplete="email" maxLength={160} required />
         </label>
-        <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
+        <label className={labelClass}>
           {copy.service}
           <select className={fieldClass} name="service" defaultValue="" required>
             <option value="" disabled>{copy.choose}</option>
@@ -148,13 +149,13 @@ export function HomeContactForm({ locale }: { locale: Locale }) {
         </label>
       </div>
 
-      <label className="grid gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-white/62">
+      <label className={labelClass}>
         {copy.message}
         <textarea className={`${fieldClass} min-h-36 resize-y py-4 normal-case leading-relaxed tracking-normal`} name="message" maxLength={1200} required />
       </label>
 
       <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/65">
-        <input name="privacyConsent" type="checkbox" required className="mt-1 size-4 shrink-0 accent-[#d52b32]" />
+        <input name="privacyConsent" type="checkbox" required className="mt-1 size-5 shrink-0 accent-[#d52b32]" />
         <span>{copy.consent}</span>
       </label>
 

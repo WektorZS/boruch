@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { routes, sources, ui, type Locale } from "@/lib/content"
+import type { PhotoId } from "@/lib/photos"
 import { services, serviceSummary } from "@/lib/content/services"
 
 const clients = [
@@ -21,6 +22,13 @@ const pageCopy = {
   en: { intro: "Complete car care", introText: "From regular washing to advanced paint protection. Choose a service or contact us and we will match it to your car.", trusted: "Trusted by", choose: "Choose a service" },
   de: { intro: "Komplette Fahrzeugpflege", introText: "Von der regelmäßigen Wäsche bis zum hochwertigen Lackschutz. Wählen Sie eine Leistung oder lassen Sie sich beraten.", trusted: "Unsere Kunden", choose: "Leistung wählen" },
   uk: { intro: "Повний догляд за авто", introText: "Від регулярного миття до професійного захисту лаку. Оберіть послугу або зверніться до нас за порадою.", trusted: "Нам довіряють", choose: "Оберіть послугу" },
+} satisfies Record<Locale, Record<string, string>>
+
+const categoryCopy = {
+  pl: { wash: "Regularna pielęgnacja nadwozia i wnętrza. Od ręcznego mycia po czyszczenie tapicerki i skór.", detailing: "Praca nad wykończeniem auta. Renowacja lakieru, ochrona powierzchni i indywidualne zmiany wyglądu.", additional: "Zadbaj o ochronę szyb, odśwież powłokę lub przygotuj samochód do sprzedaży.", pricing: "Zakres i ceny", photo: "Z naszej hali w PAZIM" },
+  en: { wash: "Regular care for the exterior and interior. From hand washing to upholstery and leather cleaning.", detailing: "Attention to the finish. Paint restoration, surface protection and individual changes to the car's appearance.", additional: "Protect the glass, maintain a coating or prepare your car for sale.", pricing: "Scope and prices", photo: "Inside our PAZIM studio" },
+  de: { wash: "Regelmäßige Pflege von Karosserie und Innenraum. Von der Handwäsche bis zur Polster- und Lederreinigung.", detailing: "Arbeit am Finish. Lackaufbereitung, Oberflächenschutz und individuelle Veränderungen am Fahrzeug.", additional: "Scheiben schützen, eine Beschichtung pflegen oder das Auto für den Verkauf vorbereiten.", pricing: "Umfang und Preise", photo: "In unserer Halle im PAZIM" },
+  uk: { wash: "Регулярний догляд за кузовом і салоном. Від ручного миття до чищення оббивки та шкіри.", detailing: "Увага до оздоблення. Відновлення лаку, захист поверхонь та індивідуальні зміни вигляду авто.", additional: "Захистіть скло, оновіть покриття або підготуйте автомобіль до продажу.", pricing: "Обсяг та ціни", photo: "У нашій студії в PAZIM" },
 } satisfies Record<Locale, Record<string, string>>
 
 const extraServiceGroup = {
@@ -66,6 +74,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = pageCopy[locale]
+  const category = categoryCopy[locale]
   const groups = [
     ...src.services.groups.map((group) => ({
       title: group.title,
@@ -86,8 +95,8 @@ export function ServicesPage({ locale }: { locale: Locale }) {
 
 
       <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
-        <div className="enter-unmask absolute inset-0"><Photo id="p47" priority sizes="100vw" position="50% 65%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.6)_48%,rgba(6,6,7,.15)_100%)]" />
+        <div className="enter-unmask absolute inset-0"><Photo id="p62" priority sizes="100vw" position="65% 52%" /></div>
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.7)_0%,rgba(6,6,7,.35)_55%,rgba(6,6,7,.05)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
         <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
           <div className="lg:col-span-9">
@@ -103,36 +112,51 @@ export function ServicesPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {groups.map((group, groupIndex) => (
-        <section key={group.title} aria-labelledby={`group-${groupIndex}`} className={`border-b border-white/10 py-16 sm:py-20 lg:py-28 ${groupIndex % 2 === 0 ? "bg-[#0a0a0b]" : "bg-[#101011]"}`}>
-          <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-10">
-            <div className="lg:col-span-4">
+      <nav aria-label={copy.choose} className="border-b border-white/10 bg-[#101011]">
+        <div className="shell-wide flex flex-wrap gap-x-8 gap-y-1 py-4 sm:gap-x-12">
+          {groups.map((group, index) => <a key={group.title} href={`#service-group-${index}`} className="group inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white/70 transition-colors hover:text-white"><span className="link-draw">{group.title}</span><ArrowRight className="size-3.5 text-brand transition-transform group-hover:translate-x-1" aria-hidden="true" /></a>)}
+        </div>
+      </nav>
+
+      {groups.map((group, groupIndex) => {
+        const additional = groupIndex === groups.length - 1
+        const reverse = groupIndex === 1
+        const visual: PhotoId = groupIndex === 0 ? "p46" : "p20"
+        return (
+        <section id={`service-group-${groupIndex}`} key={group.title} aria-labelledby={`group-${groupIndex}`} className={`scroll-mt-28 border-b border-white/10 section-lg ${groupIndex % 2 === 0 ? "bg-[#0a0a0b]" : "bg-[#101011]"}`}>
+          <div className="shell-wide grid gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className={additional ? "lg:col-span-4" : reverse ? "lg:order-2 lg:col-span-4" : "lg:col-span-4"}>
               <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
                 <p className="eyebrow">{t.nav.services}</p>
-                <h2 id={`group-${groupIndex}`} className="mt-7 type-h2">{group.title}</h2>
-                <p className="mt-7 max-w-sm text-sm leading-relaxed text-white/65">{copy.introText}</p>
+                <h2 id={`group-${groupIndex}`} className="mt-5 type-h2">{group.title}</h2>
+                <p className="mt-5 max-w-md text-base leading-relaxed text-white/65">{additional ? category.additional : groupIndex === 0 ? category.wash : category.detailing}</p>
+                {!additional && <figure className="mt-8">
+                  <div data-reveal="mask" className={`frame editorial-photo ${reverse ? "aspect-[4/5]" : "aspect-[4/3]"}`}><Photo id={visual} sizes="(min-width: 1600px) 480px, (min-width: 1024px) 32vw, 92vw" position={reverse ? "50% 56%" : "55% 50%"} /></div>
+                  <figcaption className="mt-4 type-label text-white/55">{category.photo}</figcaption>
+                </figure>}
+                <Link prefetch={false} href={routes[locale].pricing} className="group mt-7 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-white/80 hover:text-white"><span className="link-draw">{category.pricing}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></Link>
               </div>
             </div>
-            <ol className="border-b border-white/10 lg:col-span-8">
+            <ul className={`border-b border-white/10 lg:col-span-8 ${reverse ? "lg:order-1" : ""}`}>
               {group.items.map((item, index) => {
                 const href = item.href
                 const content = (
                   <>
-                    <span className="mt-1 size-2 shrink-0 bg-brand" aria-hidden="true" />
+                    <span className="mt-2 size-1.5 shrink-0 bg-brand" aria-hidden="true" />
                     <span className="min-w-0">
-                      <strong className="[overflow-wrap:anywhere] hyphens-auto font-display text-[clamp(1.2rem,1.5vw,1.5rem)] font-bold uppercase leading-[1.2] tracking-normal text-white/90 transition-colors group-hover:text-white">{item.title}</strong>
-                      <span className="mt-3 block max-w-2xl text-sm leading-relaxed text-white/65">{item.text}</span>
+                      <strong className="block text-pretty font-display text-xl font-bold leading-snug tracking-normal text-white/90 transition-colors group-hover:text-white sm:text-2xl">{item.title}</strong>
+                      <span className="mt-2 block max-w-2xl text-sm leading-relaxed text-white/65 sm:text-base">{item.text}</span>
                     </span>
-                    {href && <span className="flex shrink-0 items-center gap-4 self-end text-[.72rem] font-bold uppercase tracking-[.14em] text-white/65 transition-colors group-hover:text-white lg:self-center"><span className="sr-only">{t.viewService}</span><span className="grid size-11 place-items-center border border-white/12 transition-colors group-hover:border-brand group-hover:bg-brand group-hover:text-white"><ArrowRight className="size-4" /></span></span>}
+                    {href && <span className="grid size-11 shrink-0 place-items-center self-center text-white/65 transition-colors group-hover:text-brand group-focus-visible:text-brand"><span className="sr-only">{t.viewService}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></span>}
                   </>
                 )
-                const rowClass = "group grid grid-cols-[.5rem_minmax(0,1fr)_2.75rem] items-start gap-4 border-t border-white/10 py-6 transition-colors hover:border-brand/40 lg:items-center"
+                const rowClass = `group grid items-start gap-4 border-t border-white/10 py-6 lg:py-7 ${href ? "grid-cols-[.375rem_minmax(0,1fr)_2.75rem] transition-colors hover:border-brand/40 focus-visible:border-brand" : "grid-cols-[.375rem_minmax(0,1fr)]"}`
                 return <li key={item.id} data-reveal="" style={{ "--d": index % 3 } as React.CSSProperties}>{href ? <Link prefetch={false} href={href} className={rowClass}>{content}</Link> : <div className={rowClass}>{content}</div>}</li>
               })}
-            </ol>
+            </ul>
           </div>
         </section>
-      ))}
+      )})}
 
       <section aria-labelledby="trusted-title" className="border-b border-white/10 bg-[#080809] py-14 sm:py-16">
         <div className="shell-wide">

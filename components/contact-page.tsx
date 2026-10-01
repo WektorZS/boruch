@@ -1,9 +1,9 @@
-import { ArrowRight, CalendarCheck, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, CalendarCheck, Mail, Phone } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
-import { contact, routes, sources, ui, type Locale } from "@/lib/content"
+import { contact, sources, ui, type Locale } from "@/lib/content"
 
 const MAP_EMBED = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
 
@@ -67,32 +67,31 @@ export function ContactPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="contact">
 
 
-      <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
-        <div className="enter-unmask absolute inset-0"><Photo id="p28" priority sizes="100vw" position="48% 68%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.65)_45%,rgba(6,6,7,.18)_100%)]" />
-        <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/55" />
-        <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-9">
+      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#0a0a0b] pt-(--header-h)">
+        <div className="shell-wide grid gap-10 pb-12 pt-20 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-20 lg:pt-24">
+          <div className="lg:col-span-6">
             <p className="eyebrow mb-7">{t.nav.contact}</p>
             <h1 id="page-title" className="page-hero-title type-h1">{t.nav.contact}</h1>
-            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{copy.directText}</p>
+            <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{copy.directText}</p>
+            <div className="mt-9 border-t border-white/10 pt-6">
+              <p className="type-label text-white/60">{copy.direct}</p>
+              <a href={contact.phoneHref} aria-label={`${t.phoneLabel}: ${contact.phone}`} className="contact-method group mt-4 inline-flex min-h-12 items-center gap-3 text-2xl font-semibold leading-relaxed tracking-normal text-white sm:text-3xl">
+                <Phone className="size-5 text-brand" aria-hidden="true" /><span className="link-draw">{contact.phone}</span>
+              </a>
+              <a href={`mailto:${contact.email}`} aria-label={`${t.emailLabel}: ${contact.email}`} className="contact-method group mt-2 flex min-h-11 w-fit items-center gap-3 text-base text-white/75"><Mail className="size-4 text-brand" aria-hidden="true" /><span className="link-draw [overflow-wrap:anywhere]">{contact.email}</span></a>
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary gap-3"><CalendarCheck className="size-4" aria-hidden="true" />Booksy</a>
+                <a href="#wycena" className="group inline-flex min-h-12 items-center gap-3 text-sm font-semibold text-white/80"><span className="link-draw">{copy.formLabel}</span><ArrowRight className="arrow-shift size-4 text-brand" aria-hidden="true" /></a>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-white/60">{copy.booking}</p>
+            </div>
           </div>
-          <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
-            <p className="type-label text-brand">{copy.direct}</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/65">{copy.directions}</p>
-            <a href={contact.phoneHref} className="mt-6 inline-flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-brand">
-              <Phone className="size-4 text-brand" aria-hidden="true" />{contact.phone}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section aria-label={copy.direct} className="border-b border-white/10 bg-[#0b0b0c]">
-        <div className="shell-wide grid sm:grid-cols-2 lg:grid-cols-4">
-          <ContactLink icon={<Phone className="size-5" />} label={t.phoneLabel} value={contact.phone} href={contact.phoneHref} />
-          <ContactLink icon={<Mail className="size-5" />} label={t.emailLabel} value={contact.email} href={`mailto:${contact.email}`} />
-          <ContactLink icon={<CalendarCheck className="size-5" />} label={copy.booking} value="Booksy" href={contact.bookingUrl} external />
-          <ContactLink icon={<MapPin className="size-5" />} label={copy.location} value="Plac Rodła 8" href={contact.mapsUrl} external />
+          <figure className="editorial-photo relative aspect-[16/11] overflow-hidden lg:col-span-5 lg:col-start-8 lg:aspect-[4/5]">
+            <Photo id="p33" priority sizes="(min-width: 1600px) 640px, (min-width: 1024px) 42vw, 92vw" position="50% 64%" />
+            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 bg-linear-to-t from-black/80 to-transparent px-6 pb-5 pt-16">
+              <span className="type-label text-white/85">{copy.level}</span><span className="text-4xl font-semibold leading-none text-white">-2</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
@@ -101,11 +100,11 @@ export function ContactPage({ locale }: { locale: Locale }) {
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
               <p className="eyebrow">{copy.formLabel}</p>
-              <h2 id="contact-form-title" data-reveal="" className="mt-7 type-h2">{copy.formTitle}</h2>
+              <h2 id="contact-form-title" data-reveal="" className="mt-7 type-h2 max-w-full">{copy.formTitle}</h2>
               <p className="mt-6 max-w-md text-base leading-relaxed text-white/65">{copy.formText}</p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><FacebookIcon className="size-4 text-brand" />Facebook</a>
-                <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 border-b border-white/20 pb-2 text-xs font-bold uppercase tracking-[.14em] text-white/68 transition-colors hover:border-brand hover:text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
+                <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="link-draw inline-flex min-h-11 items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white/75"><FacebookIcon className="size-4 text-brand" />Facebook</a>
+                <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="link-draw inline-flex min-h-11 items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white/75"><InstagramIcon className="size-4 text-brand" />Instagram</a>
               </div>
             </div>
           </div>
@@ -116,21 +115,17 @@ export function ContactPage({ locale }: { locale: Locale }) {
       </section>
 
       <section aria-labelledby="location-title" className="relative overflow-hidden border-b border-white/10 bg-[#080809] py-16 sm:py-20 lg:py-24">
-        <div className="shell-wide relative grid gap-0 overflow-hidden lg:grid-cols-[.35fr_.85fr_1.2fr]">
-          <div className="relative flex items-center justify-between gap-4 border-l-4 border-brand py-6 pl-6 lg:flex-col lg:items-start lg:justify-between lg:py-9 lg:pr-6">
-            <p className="type-label text-white/65">{copy.level}</p>
-            <span className="font-display text-[clamp(3.5rem,6vw,6rem)] font-black leading-none tracking-[-.06em] text-brand">-2</span>
-          </div>
-          <div className="flex flex-col justify-center bg-[#111112] p-6 sm:p-8 lg:p-9">
+        <div className="shell-wide relative grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="flex flex-col justify-center lg:col-span-5">
             <p className="eyebrow">{copy.location}</p>
             <h2 id="location-title" className="mt-7 type-h2 max-w-full">{copy.locationTitle}</h2>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">{copy.directions}</p>
-            <address className="mt-8 border-t border-brand/35 pt-6 not-italic text-sm leading-relaxed text-white/72">
+            <p className="mt-6 max-w-md border-l-2 border-brand pl-5 text-base leading-relaxed text-white/80">{copy.directions}</p>
+            <address className="mt-7 not-italic text-sm leading-relaxed text-white/70">
               {src.address.lines.map((line) => <span key={line} className="block">{line}</span>)}
             </address>
-            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex w-fit items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand">{t.openMap}<ArrowRight className="size-4 text-brand" /></a>
+            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="group mt-7 inline-flex min-h-11 w-fit items-center gap-3 text-xs font-bold uppercase tracking-widest text-white"><span className="link-draw">{t.openMap}</span><ArrowRight className="arrow-shift size-4 text-brand" /></a>
           </div>
-          <div className="relative min-h-72 overflow-hidden lg:min-h-80">
+          <div className="relative min-h-80 overflow-hidden lg:col-span-7 lg:min-h-96">
             <iframe
               src={MAP_EMBED}
               title={`${t.openMap} - ${src.address.lines.join(", ")}`}
@@ -138,22 +133,9 @@ export function ContactPage({ locale }: { locale: Locale }) {
               referrerPolicy="no-referrer-when-downgrade"
               className="absolute inset-0 h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
             />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-linear-to-r from-[#120a0b] to-transparent" />
           </div>
         </div>
       </section>
     </SiteShell>
-  )
-}
-
-function ContactLink({ icon, label, value, href, external = false }: { icon: React.ReactNode; label: string; value: string; href: string; external?: boolean }) {
-  return (
-    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="group flex min-h-24 items-center justify-between gap-4 border-b border-white/10 py-5 sm:px-5 lg:border-b-0 lg:border-r lg:last:border-r-0">
-      <span className="min-w-0">
-        <span className="type-label text-white/65">{label}</span>
-        <strong className="mt-3 block [overflow-wrap:anywhere] text-base font-semibold text-white/84 transition-colors group-hover:text-white">{value}</strong>
-      </span>
-      <span className="grid size-11 shrink-0 place-items-center border border-white/12 text-brand transition-colors group-hover:border-brand group-hover:bg-brand group-hover:text-white">{icon}</span>
-    </a>
   )
 }

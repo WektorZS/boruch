@@ -2,7 +2,7 @@ import { SiteShell } from "./site-shell"
 import { Photo } from "./photo"
 import { GalleryPortfolio } from "./gallery-portfolio"
 import { InstagramIcon } from "./social-icons"
-import { contact, routes, sources, ui, type Locale } from "@/lib/content"
+import { contact, sources, ui, type Locale } from "@/lib/content"
 import { galleryOrder } from "@/lib/photos"
 
 export function GalleryPage({ locale }: { locale: Locale }) {
@@ -13,29 +13,27 @@ export function GalleryPage({ locale }: { locale: Locale }) {
     <SiteShell locale={locale} page="gallery">
 
 
-      <section aria-labelledby="page-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
-        <div className="enter-unmask absolute inset-0"><Photo id="p25" priority sizes="100vw" position="50% 60%" /></div>
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.6)_50%,rgba(6,6,7,.15)_100%)]" />
-        <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
-        <div className="shell-wide relative z-10 grid gap-10 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
-          <div className="lg:col-span-9">
+      <section aria-labelledby="page-title" className="editorial-hero relative border-b border-white/10 bg-[#0a0a0b] pt-(--header-h)">
+        <div className="shell-wide grid gap-10 pb-12 pt-20 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-20 lg:pt-24">
+          <div className="lg:col-span-5">
             <p className="eyebrow mb-7">{t.nav.gallery}</p>
             <h1 id="page-title" className="page-hero-title type-h1">{src.home.projectsTitle}</h1>
-            <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/62">{src.gallery.sub}</p>
+            <p className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-white/70">{src.gallery.sub}</p>
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60">{src.home.projectsText}</p>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="link-draw mt-8 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white"><InstagramIcon className="size-4 text-brand" />Instagram</a>
           </div>
-          <div className="border-l border-brand pl-6 lg:col-span-3 lg:col-start-10">
-            <p className="type-label text-brand">Boruch Myjnia</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/55">{src.home.projectsText}</p>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.14em] text-white transition-colors hover:text-brand"><InstagramIcon className="size-4 text-brand" />Instagram</a>
-          </div>
+          <figure className="editorial-photo relative aspect-[4/3] overflow-hidden lg:col-span-7 lg:aspect-[16/11]">
+            <Photo id="p52" priority sizes="(min-width: 1600px) 850px, (min-width: 1024px) 56vw, 92vw" position="54% 58%" />
+            <figcaption className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/65 to-transparent px-6 pb-5 pt-12 type-label text-white/80">Boruch Myjnia / PAZIM / Szczecin</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section aria-label={src.gallery.sub} className="border-b border-white/10 bg-[#0a0a0b] py-14 sm:py-16 lg:py-20">
+      <section aria-label={src.gallery.sub} className="border-b border-white/10 bg-[#080809] py-12 sm:py-16 lg:py-20">
         <div className="shell-wide">
-          <div className="mb-10 flex flex-col gap-6 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
-            <div><p className="eyebrow">{t.nav.gallery}</p><h2 className="mt-5 font-display text-[clamp(2rem,3.5vw,3.4rem)] font-black uppercase leading-[1.15] tracking-normal">{src.home.projectsTitle}</h2></div>
-            <p className="max-w-xl text-sm leading-relaxed text-white/65">{src.home.projectsText}</p>
+          <div className="mb-8 flex items-center justify-between gap-5 border-b border-white/10 pb-5">
+            <h2 className="type-label text-white/70">{{ pl: "Kadry z naszej myjni", en: "From our workshop", de: "Aus unserer Werkstatt", uk: "Кадри з нашої мийки" }[locale]}</h2>
+            <span className="type-label text-white/45">Boruch Myjnia</span>
           </div>
           <GalleryPortfolio
             ids={galleryOrder}

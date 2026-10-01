@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import useEmblaCarousel from "embla-carousel-react"
-import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, BrushCleaning, Car, ChevronDown, Clock3, Droplets, Layers, Mail, MapPin, Paintbrush, PanelTop, Phone, Quote, ShieldCheck, Sparkles, SprayCan, Star, SunMedium, WandSparkles, X } from "lucide-react"
+import { Armchair, ArrowLeft, ArrowRight, ArrowUpRight, Car, ChevronDown, Clock3, Droplets, Mail, MapPin, Phone, Quote, ShieldCheck, Sparkles, Star, X } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { SiteHeader } from "./site-header"
@@ -48,11 +48,11 @@ const reviewDialogCopy: Record<Locale, { more: string; close: string; label: str
   uk: { more: "Показати більше", close: "Закрити відгук", label: "Відгук клієнта" },
 }
 
-const packageSaleCopy: Record<Locale, { title: string; without: string; save: string }> = {
-  pl: { title: "W komplecie taniej", without: "Cena bez pakietu", save: "20 zł taniej" },
-  en: { title: "Better value as a package", without: "Price without the package", save: "Save PLN 20" },
-  de: { title: "Im Paket günstiger", without: "Preis ohne Paket", save: "20 PLN günstiger" },
-  uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", save: "На 20 PLN дешевше" },
+const packageSaleCopy: Record<Locale, { title: string; without: string; save: string; sizeNote: string }> = {
+  pl: { title: "W komplecie taniej", without: "Cena bez pakietu", save: "20 zł taniej", sizeNote: "W pakiecie Komplet obowiązują osobne warianty: średnie auto od 240 zł, duże auto od 260 zł." },
+  en: { title: "Better value as a package", without: "Price without the package", save: "Save PLN 20", sizeNote: "The Complete package has separate variants: medium car from PLN 240, large car from PLN 260." },
+  de: { title: "Im Paket günstiger", without: "Preis ohne Paket", save: "20 PLN günstiger", sizeNote: "Für das Komplettpaket gelten eigene Varianten: mittelgroßes Auto ab 240 PLN, großes Auto ab 260 PLN." },
+  uk: { title: "У комплекті вигідніше", without: "Ціна без пакета", save: "На 20 PLN дешевше", sizeNote: "Для пакета Комплекс діють окремі варіанти: середнє авто від 240 PLN, велике авто від 260 PLN." },
 }
 
 const salesPackageCopy: Record<Locale, {
@@ -136,19 +136,19 @@ const serviceGroupCopy: Record<Locale, { myjnia: string; detailing: string }> = 
   },
 }
 
-const serviceIcons: Record<ServiceSlug, typeof Car> = {
-  "mycie-zewnatrz": Droplets,
-  "czyszczenie-wnetrza": BrushCleaning,
-  komplet: Car,
-  "pranie-tapicerki": Armchair,
-  "czyszczenie-skor": SprayCan,
-  woskowanie: SunMedium,
-  polerowanie: WandSparkles,
-  "korekta-lakieru": Sparkles,
-  "powloka-ceramiczna": ShieldCheck,
-  "folia-ppf": Layers,
-  "przyciemnianie-szyb-i-lamp": PanelTop,
-  "zmiana-koloru-dechroming": Paintbrush,
+const serviceVisuals: Record<ServiceSlug, { id: PhotoId; position: string }> = {
+  "mycie-zewnatrz": { id: "p46", position: "50% 55%" },
+  "czyszczenie-wnetrza": { id: "p43", position: "50% 50%" },
+  komplet: { id: "p11", position: "48% 55%" },
+  "pranie-tapicerki": { id: "p44", position: "50% 55%" },
+  "czyszczenie-skor": { id: "p68", position: "50% 50%" },
+  woskowanie: { id: "p39", position: "50% 55%" },
+  polerowanie: { id: "p21", position: "50% 58%" },
+  "korekta-lakieru": { id: "p20", position: "50% 58%" },
+  "powloka-ceramiczna": { id: "p58", position: "50% 55%" },
+  "folia-ppf": { id: "p52", position: "50% 55%" },
+  "przyciemnianie-szyb-i-lamp": { id: "p22", position: "50% 55%" },
+  "zmiana-koloru-dechroming": { id: "p51", position: "50% 55%" },
 }
 
 type VerifiedReview = {
@@ -466,8 +466,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         <WorkShowcase locale={locale} />
         <Packages locale={locale} />
         <SalesPackage locale={locale} />
-        <TeamStory locale={locale} />
         <Reviews locale={locale} />
+        <TeamStory locale={locale} />
         <HomeFaq locale={locale} />
         <Location locale={locale} />
         <ContactSection locale={locale} />
@@ -494,7 +494,7 @@ function HomeHeader({ locale }: { locale: Locale }) {
 
 function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
   return (
-    <div className={cn("flex w-full items-stretch border border-white/14 bg-[#0b0b0c]/90 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-md sm:w-auto", className)}>
+    <div className={cn("flex w-full items-stretch border-l border-white/14 bg-[#101011] sm:w-auto", className)}>
       <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">4.9/5</span>
       <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
         <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
@@ -570,14 +570,13 @@ function HomeHero({ locale }: { locale: Locale }) {
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,6,.34)_0%,rgba(5,5,6,.68)_48%,rgba(5,5,6,.97)_100%)] sm:bg-[linear-gradient(90deg,rgba(5,5,6,.94)_0%,rgba(5,5,6,.82)_34%,rgba(5,5,6,.36)_68%,rgba(5,5,6,.2)_100%)]" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/15 via-transparent to-[#080809]/80 sm:from-black/25 sm:to-[#080809]" />
-        <div className="absolute right-[8%] top-[16%] hidden h-px w-36 bg-linear-to-r from-transparent via-brand/70 to-transparent lg:block" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,6,.3)_0%,rgba(5,5,6,.58)_48%,rgba(5,5,6,.94)_100%)] sm:bg-[linear-gradient(90deg,rgba(5,5,6,.92)_0%,rgba(5,5,6,.72)_34%,rgba(5,5,6,.18)_68%,rgba(5,5,6,.08)_100%)]" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-[#080809]/75 sm:to-[#080809]/90" />
       </div>
 
       <div className="home-hero-shell relative z-10 flex min-h-[calc(100svh-var(--header-h))] flex-1 flex-col justify-center pb-8 pt-12 sm:min-h-[calc(100svh-var(--header-h)-5rem)] sm:py-20">
         <div key={activeSlide} className={cn("home-hero-copy flex flex-col items-start", activeSlide > 0 && "home-hero-copy-animated")}>
-          <p className="mb-7 flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.2em] text-[#ef4a50]">
+          <p className="mb-7 flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.2em] text-white/85">
             <span className="h-px w-9 bg-brand" />{slide.label}
           </p>
           <h1 id="hero-title" className={cn("home-hero-title text-balance", hasLongTitleWord && "home-hero-title-long")}>{slide.title}</h1>
@@ -607,7 +606,7 @@ function HomeHero({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f]/92 backdrop-blur-md sm:grid-cols-3">
+      <ul className="relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
         {copy.benefits.map(([title, text], index) => {
           const Icon = benefitIcons[index] ?? Car
           return (
@@ -639,10 +638,10 @@ function WhyBoruch({ locale }: { locale: Locale }) {
   return (
     <section aria-labelledby="why-title" className="border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:items-stretch">
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo order-2 relative min-h-[23rem] overflow-hidden sm:min-h-[32rem] lg:order-none lg:col-span-6 lg:min-h-[34rem]">
-          <Photo id="p46" sizes="(min-width: 1024px) 50vw, 100vw" position="52% 50%" />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo order-2 relative aspect-[4/3] overflow-hidden sm:aspect-[16/11] lg:order-none lg:col-span-6 lg:aspect-[4/5]">
+          <Photo id="p60" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 46vw, 92vw" position="50% 52%" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
-          <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 border-t border-white/12 bg-black/45 px-6 py-5 backdrop-blur-sm">
+          <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-5 px-6 py-5">
             <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/70">BORUCH Myjnia Szczecin</span>
             <span className="h-px w-16 bg-brand" />
           </figcaption>
@@ -664,6 +663,14 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
+  const [activeService, setActiveService] = useState<ServiceSlug>("mycie-zewnatrz")
+  const [previousService, setPreviousService] = useState<ServiceSlug>("mycie-zewnatrz")
+  const [readyService, setReadyService] = useState<ServiceSlug>("mycie-zewnatrz")
+  const selectService = (slug: ServiceSlug) => {
+    if (slug === activeService) return
+    setPreviousService(readyService)
+    setActiveService(slug)
+  }
   const groups = (["myjnia", "detailing"] as const).map((category, groupIndex) => ({
     category,
     title: src.services.groups[groupIndex]?.title ?? category,
@@ -673,11 +680,12 @@ function ServiceMenu({ locale }: { locale: Locale }) {
       return {
         slug: service.slug,
         title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-        icon: serviceIcons[service.slug],
         href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
       }
     }),
   }))
+  const activeItem = groups.flatMap(group => group.items).find(item => item.slug === activeService) ?? groups[0].items[0]
+  const visual = serviceVisuals[activeService]
 
   return (
     <section id="services" aria-labelledby="services-title" className="border-b border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-24">
@@ -695,31 +703,42 @@ function ServiceMenu({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-10 sm:mt-14 sm:gap-12 lg:grid-cols-2 lg:gap-0">
+        <div className="mt-10 grid gap-10 sm:mt-14 lg:grid-cols-12 lg:gap-12">
+        <div className="grid gap-10 sm:grid-cols-2 sm:gap-8 lg:col-span-7 lg:gap-12">
           {groups.map((group, groupIndex) => (
-            <article key={group.category} className={cn("flex flex-col", groupIndex === 0 ? "lg:pr-10 xl:pr-14" : "border-t border-white/10 pt-12 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 xl:pl-14")}>
-              <header className="pb-7">
-                <span className="mb-5 block h-px w-10 bg-brand" aria-hidden="true" />
-                <h3 className="font-display text-[clamp(1.6rem,2.4vw,2.25rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{group.title}</h3>
-                <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/65">{group.description}</p>
+            <article key={group.category} className={cn("min-w-0", groupIndex === 1 && "border-t border-white/10 pt-8 sm:border-t-0 sm:pt-0")}>
+              <header className="border-b border-white/15 pb-6">
+                <h3 className="font-display text-2xl font-bold uppercase leading-tight tracking-wide">{group.title}</h3>
+                <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/65">{group.description}</p>
               </header>
 
-              <div className="grid content-start gap-x-8 xl:grid-cols-2">
+              <div className="grid content-start">
                 {group.items.map((item) => {
-                  const Icon = item.icon
                   return (
-                    <Link prefetch={false} key={item.slug} href={item.href} className="group/item grid min-h-20 grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-t border-white/10 py-4 transition-colors hover:border-brand/45 sm:min-h-24 sm:py-5 lg:min-h-24">
-                      <span className="grid size-9 place-items-center text-brand transition-transform group-hover/item:-translate-y-0.5">
-                        <Icon className="size-5" strokeWidth={1.6} aria-hidden="true" />
-                      </span>
-                      <strong className="min-w-0 [overflow-wrap:anywhere] hyphens-auto font-display text-[clamp(1.1rem,1.55vw,1.35rem)] font-black uppercase leading-[1.2] tracking-0">{item.title}</strong>
-                      <ArrowUpRight className="size-4 text-white/65 transition-colors group-hover/item:text-brand" aria-hidden="true" />
+                    <Link prefetch={false} key={item.slug} href={item.href} onMouseEnter={() => selectService(item.slug)} onFocus={() => selectService(item.slug)} className="group/item flex min-h-16 items-center justify-between gap-5 border-b border-white/10 py-4 transition-colors hover:border-brand/45 focus-visible:border-brand/45">
+                      <strong className="min-w-0 hyphens-auto font-display text-lg font-semibold leading-snug tracking-normal text-white/80 transition-colors group-hover/item:text-white group-focus-visible/item:text-white">{item.title}</strong>
+                      <ArrowUpRight className="size-4 shrink-0 text-white/50 transition-[color,transform] group-hover/item:-translate-y-0.5 group-hover/item:translate-x-0.5 group-hover/item:text-brand group-focus-visible/item:text-brand" aria-hidden="true" />
                     </Link>
                   )
                 })}
               </div>
             </article>
           ))}
+        </div>
+        <div className="lg:col-span-5">
+          <figure className="editorial-photo relative aspect-[16/10] overflow-hidden bg-[#171718] lg:sticky lg:top-28 lg:aspect-[3/4]">
+            {previousService !== activeService && <Photo id={serviceVisuals[previousService].id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={serviceVisuals[previousService].position} />}
+            <div key={activeService} onLoadCapture={() => setReadyService(activeService)} className={cn("absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none", readyService === activeService ? "opacity-100" : "opacity-0")}>
+              <Photo id={visual.id} sizes="(min-width: 1600px) 590px, (min-width: 1024px) 40vw, 92vw" position={visual.position} eager={activeService !== "mycie-zewnatrz"} />
+            </div>
+            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+            <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+              <span className="mb-3 block h-px w-8 bg-brand" aria-hidden="true" />
+              <span className="block text-lg font-semibold leading-snug">{activeItem.title}</span>
+              <span className="mt-2 block text-xs tracking-wide text-white/65">BORUCH Myjnia / PAZIM</span>
+            </figcaption>
+          </figure>
+        </div>
         </div>
       </div>
     </section>
@@ -745,29 +764,29 @@ function WorkShowcase({ locale }: { locale: Locale }) {
           </Link>
         </div>
       </div>
-      <div className="home-shell grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[16rem_16rem]">
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[16/10] lg:col-span-6 lg:row-span-2 lg:aspect-auto">
-          <Photo id="p20" sizes="(min-width: 1024px) 50vw, 100vw" position="50% 58%" className="transition duration-1000 group-hover:scale-[1.025]" />
+      <div className="home-shell grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[16rem_16rem_auto]">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden sm:col-span-2 sm:aspect-[16/10] lg:col-span-8 lg:row-span-2 lg:aspect-auto">
+          <Photo id="p20" sizes="(min-width: 1600px) 970px, (min-width: 1024px) 64vw, 92vw" position="50% 58%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-6 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[0]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
-          <Photo id="p62" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-4 lg:aspect-auto">
+          <Photo id="p62" sizes="(min-width: 1600px) 475px, (min-width: 1024px) 32vw, 46vw" position="50% 58%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[1]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
-          <Photo id="p43" sizes="(min-width: 1024px) 25vw, 50vw" position="50% 65%" className="transition duration-1000 group-hover:scale-[1.025]" />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-4 lg:aspect-auto">
+          <Photo id="p43" sizes="(min-width: 1600px) 475px, (min-width: 1024px) 32vw, 46vw" position="50% 65%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[2]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
-          <Photo id="p46" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-6 lg:aspect-[16/9]">
+          <Photo id="p46" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 48vw, 46vw" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[3]}</figcaption>
         </figure>
-        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-3 lg:aspect-auto">
-          <Photo id="p39" sizes="(min-width: 1024px) 25vw, 50vw" className="transition duration-1000 group-hover:scale-[1.025]" />
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo group relative aspect-[4/3] overflow-hidden lg:col-span-6 lg:aspect-[16/9]">
+          <Photo id="p39" sizes="(min-width: 1600px) 720px, (min-width: 1024px) 48vw, 46vw" position="50% 55%" className="transition-transform duration-1000 group-hover:scale-[1.025]" />
           <div className="absolute inset-0 bg-linear-to-t from-black/72 via-transparent to-transparent" />
           <figcaption className="absolute bottom-0 left-0 p-5 text-[.72rem] font-bold uppercase tracking-[.15em]">{copy.galleryCaptions[4]}</figcaption>
         </figure>
@@ -804,12 +823,12 @@ function Packages({ locale }: { locale: Locale }) {
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
             return (
-              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[radial-gradient(circle_at_88%_8%,rgba(225,38,46,.22),transparent_34%),linear-gradient(145deg,rgba(80,12,16,.36),rgba(255,255,255,.035)_58%)] shadow-[inset_0_0_0_1px_rgba(225,38,46,.34)]")}>
-                {featured && <span className="absolute inset-x-0 top-0 h-[3px] bg-brand shadow-[0_0_24px_rgba(225,38,46,.55)]" aria-hidden="true" />}
+              <article key={pkg.title} data-reveal="" className={cn("relative flex min-h-[28rem] flex-col overflow-hidden border-b border-white/10 px-5 py-7 sm:px-7 lg:border-b-0", featured && "bg-[#1a1a1c]")}>
+                {featured && <span className="absolute inset-x-0 top-0 h-0.5 bg-brand" aria-hidden="true" />}
                 <div>
                   <div className="mb-5 flex items-center justify-between gap-5">
-                    {pkg.popular ? <span className="bg-brand px-3 py-1.5 text-[.72rem] font-bold uppercase tracking-[.16em] shadow-[0_8px_24px_rgba(225,38,46,.2)]">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
-                    <span className={cn("grid size-11 place-items-center border border-white/12 text-brand", featured && "border-brand/50 bg-brand/15")}>
+                    {pkg.popular ? <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-brand">{pkg.popular}</span> : <span className="h-px w-9 bg-brand" aria-hidden="true" />}
+                    <span className="grid size-9 place-items-center text-white/55">
                       <PackageIcon className="size-5" strokeWidth={1.6} aria-hidden="true" />
                     </span>
                   </div>
@@ -819,13 +838,13 @@ function Packages({ locale }: { locale: Locale }) {
                 <div className="mt-5 border-t border-white/10 pt-5">
                   {pkg.includedLabel && <p className="mb-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-[#ef4a50]">{pkg.includedLabel}</p>}
                   <ul className="grid gap-y-2 text-[.875rem] leading-snug text-white/68">
-                    {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" />{item}</li>)}
+                    {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />{item}</li>)}
                   </ul>
                   {pkg.discount && <p className="mt-4 text-[.875rem] leading-relaxed text-white/65">{pkg.discount}</p>}
                 </div>
                 <div className="mt-auto pt-6">
                   {featured && (
-                    <div className="mb-5 border-l-2 border-brand bg-brand/[.07] px-4 py-3.5">
+                    <div className="mb-5 border-l-2 border-brand py-1 pl-4">
                       <strong className="block text-[.72rem] font-bold uppercase tracking-[.13em] text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
                       <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[.72rem] font-semibold tracking-[.025em]">
                         <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 zł</s></span>
@@ -833,14 +852,14 @@ function Packages({ locale }: { locale: Locale }) {
                       </div>
                     </div>
                   )}
-                  <span className="block whitespace-nowrap font-display text-[clamp(1.85rem,2.3vw,2.3rem)] font-black uppercase leading-[1.14] tracking-[.005em]">{pkg.price}</span>
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.85rem,2.3vw,2.3rem)] font-black uppercase leading-[1.14] tracking-[.005em]">{pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}</span>
                   {pkg.note && <span className="mt-3 block text-[.72rem] font-bold uppercase tracking-[.13em] text-white/65">{pkg.note}</span>}
                 </div>
               </article>
             )
           })}
         </div>
-        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}</p>
+        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
       </div>
     </section>
   )
@@ -860,11 +879,10 @@ function SalesPackage({ locale }: { locale: Locale }) {
         <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[18rem] overflow-hidden lg:col-span-5 lg:min-h-[34rem]">
           <Photo id="p23" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 55%" className="scale-[1.02]" />
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/72 via-black/10 to-black/10" />
-          <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/90 px-5 py-4 text-[.72rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
+          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
         </figure>
 
         <div className="relative px-5 py-10 sm:px-9 sm:py-12 lg:col-span-7 lg:border-l lg:border-white/10 lg:p-[clamp(3rem,5vw,5.5rem)]">
-          <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-0 size-72 rounded-full bg-brand/[.08] blur-[90px]" />
           <p className="home-kicker">{copy.label}</p>
           <h2 id="sales-package-title" data-reveal="" className="mt-6 font-display text-[clamp(1.85rem,2.75vw,3rem)] font-black uppercase leading-[1.14] tracking-[-.02em]">{copy.title}</h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/55">{copy.intro}</p>
@@ -904,14 +922,13 @@ function TeamStory({ locale }: { locale: Locale }) {
     <section aria-labelledby="team-title" className="border-y border-white/10 bg-[#111112] py-16 sm:py-20 lg:py-28">
       <div className="home-shell">
         <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative min-h-[23rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[36rem]">
-            <Photo id="team" sizes="(min-width: 1024px) 42vw, 100vw" position="50% 58%" className="scale-[1.03]" />
+          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[3/4] self-start overflow-hidden">
+            <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
             <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/48 via-transparent to-black/10" />
-            <figcaption className="absolute bottom-0 left-0 border-r border-t border-white/10 bg-[#080809]/92 px-5 py-4 text-[.72rem] font-bold uppercase tracking-[.16em] backdrop-blur-sm">BORUCH Myjnia Szczecin</figcaption>
+            <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">BORUCH Myjnia Szczecin</figcaption>
           </figure>
 
           <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-l lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
-            <span className="pointer-events-none absolute -bottom-32 -right-32 size-80 rounded-full bg-brand/[.055] blur-[90px]" aria-hidden="true" />
             <p className="home-kicker">{t.nav.about}</p>
             <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
             <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
@@ -971,18 +988,17 @@ function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false, 
   return (
     <figure
       className={cn(
-        "relative flex flex-col overflow-hidden border p-7 transition-all duration-500 lg:p-9",
+        "relative flex flex-col overflow-hidden border-y p-7 transition-[background-color,border-color] duration-500 lg:p-9",
         mobileCarousel
           ? isActive
-            ? "min-h-[25rem] md:min-h-[23rem] scale-100 border-brand/45 bg-[#151516] opacity-100 shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
-            : "min-h-[25rem] md:min-h-[20rem] border-white/15 bg-[#18181a] shadow-[0_18px_50px_rgba(0,0,0,.28)]"
+            ? "min-h-[25rem] md:min-h-[23rem] scale-100 border-white/18 bg-[#151516] opacity-100"
+            : "min-h-[25rem] md:min-h-[20rem] border-white/12 bg-[#18181a]"
           : isActive
-            ? "min-h-[23rem] border-brand/45 bg-[#151516] shadow-[0_28px_90px_rgba(0,0,0,.34),0_0_0_1px_rgba(218,38,48,.08)]"
+            ? "min-h-[23rem] border-white/18 bg-[#151516]"
             : "hidden min-h-[20rem] border-white/10 bg-white/[.025] md:flex",
       )}
     >
       <span className={cn("absolute left-0 top-0 h-0.5 bg-brand transition-all duration-500", isActive ? "w-20" : "w-10")} aria-hidden="true" />
-      <span className="pointer-events-none absolute -right-2 -top-6 select-none font-serif text-[9rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
       <div className="relative flex items-center justify-between gap-5">
         <div className="flex gap-1 text-brand" role="img" aria-label="5 / 5">
           {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
@@ -1064,7 +1080,6 @@ function Reviews({ locale }: { locale: Locale }) {
 
   return (
     <section ref={sectionRef} aria-labelledby="reviews-title" className="relative overflow-hidden border-b border-white/10 bg-[#0a0a0b] py-16 sm:py-20 lg:py-24">
-      <div aria-hidden="true" className="pointer-events-none absolute -left-52 top-1/2 size-[34rem] -translate-y-1/2 rounded-full bg-brand/[.055] blur-[130px]" />
       <div className="home-shell relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
           <p className="home-kicker">{copy.reviewsLabel}</p>
@@ -1131,10 +1146,10 @@ function Reviews({ locale }: { locale: Locale }) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="review-dialog-title"
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-md sm:items-center sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 sm:items-center sm:p-6"
           onMouseDown={(event) => { if (event.target === event.currentTarget) closeReview() }}
         >
-          <div className="relative max-h-[calc(100dvh-2rem)] w-full overflow-y-auto border-t border-brand/55 bg-[#121213] shadow-[0_32px_120px_rgba(0,0,0,.72)] sm:max-w-3xl sm:border sm:border-white/12">
+          <div className="modal-sheet relative max-h-[90dvh] w-full overflow-y-auto border-t border-brand/55 bg-[#121213] sm:max-w-3xl sm:border sm:border-white/12">
             <span className="absolute inset-x-0 top-0 h-[3px] bg-brand" aria-hidden="true" />
             <button data-review-close type="button" onClick={closeReview} aria-label={reviewDialogCopy[locale].close} className="absolute right-4 top-4 z-10 grid size-11 place-items-center border border-white/12 bg-black/45 text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white sm:right-6 sm:top-6">
               <X className="size-5" aria-hidden="true" />
@@ -1144,10 +1159,9 @@ function Reviews({ locale }: { locale: Locale }) {
                 {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-5 fill-current" aria-hidden="true" />)}
               </div>
               <p className="mt-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-brand">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
-              <h3 id="review-dialog-title" className="mt-4 pr-14 font-display text-[clamp(1.5rem,4.8vw,2.25rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{selectedReview.name}</h3>
+              <h3 id="review-dialog-title" className="mt-4 font-display text-[clamp(1.5rem,4.8vw,2.25rem)] font-bold leading-snug tracking-normal">{selectedReview.name}</h3>
               <div className="my-7 h-px bg-white/10 sm:my-9" />
               <div className="relative max-w-2xl">
-                <span className="pointer-events-none absolute -right-2 -top-12 select-none font-serif text-[8rem] font-black leading-none text-white/[.035]" aria-hidden="true">“</span>
                 <p className="relative text-base font-medium leading-8 text-white/78 sm:text-lg sm:leading-9">„{selectedReview.text}”</p>
               </div>
               <button type="button" onClick={closeReview} className="mt-9 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.15em] text-brand transition-colors hover:text-[#ff676d]">
@@ -1176,9 +1190,9 @@ function HomeFaq({ locale }: { locale: Locale }) {
         <div className="border-t border-white/12 lg:col-span-7 lg:col-start-6">
           {copy.faq.map(([question, answer]) => (
             <details key={question} className="group border-b border-white/12">
-              <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-semibold normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[clamp(1rem,1.25vw,1.18rem)] font-semibold normal-case leading-relaxed tracking-normal transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
                 <span>{question}</span>
-                <span className="grid size-10 shrink-0 place-items-center border border-white/15 text-brand transition-transform group-open:rotate-180">
+                <span className="grid size-6 shrink-0 place-items-center text-brand transition-transform group-open:rotate-180">
                   <ChevronDown className="size-4" aria-hidden="true" />
                 </span>
               </summary>
@@ -1201,13 +1215,12 @@ function Location({ locale }: { locale: Locale }) {
     <section aria-labelledby="location-title" className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-20">
       <div className="home-shell">
         <div className="relative grid overflow-hidden lg:grid-cols-[.42fr_.83fr_.95fr]">
-          <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_55%_88%,rgba(218,38,48,.2),transparent_55%),#0a0a0b] p-8 sm:p-10 lg:min-h-80">
+          <div className="relative flex min-h-40 flex-col justify-between overflow-hidden bg-[#0a0a0b] p-8 sm:p-10 lg:min-h-80">
           <span className="absolute inset-y-0 left-0 w-1.5 bg-brand" aria-hidden="true" />
           <span className="text-[.72rem] font-bold uppercase tracking-[.2em] text-white/58">PAZIM / {t.level}</span>
-          <strong className="font-display text-[clamp(5rem,8vw,7.25rem)] font-black leading-[.8] tracking-[-.03em] text-[#ee343e] drop-shadow-[0_12px_32px_rgba(218,38,48,.2)]">-2</strong>
+          <strong className="font-display text-[clamp(5rem,8vw,7.25rem)] font-black leading-[.9] tracking-normal text-[#ee343e]">-2</strong>
           </div>
-          <div className="relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(135deg,#121213_0%,#101011_68%,#1c0b0e_100%)] p-8 sm:p-10 lg:min-h-80">
-          <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-brand/[.07] blur-[70px]" aria-hidden="true" />
+          <div className="relative flex flex-col justify-between overflow-hidden bg-[#111112] p-8 sm:p-10 lg:min-h-80">
           <div>
             <p className="home-kicker text-[#ef6267]">{slide.kicker}</p>
             <h2 id="location-title" data-reveal="" className="mt-6 font-display text-[clamp(1.8rem,2.5vw,2.65rem)] font-black uppercase leading-[1.14] tracking-[-.015em]">{slide.title} {slide.sub}</h2>
@@ -1227,7 +1240,7 @@ function Location({ locale }: { locale: Locale }) {
             className="absolute inset-0 block h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
           />
           <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/42 via-transparent to-transparent" aria-hidden="true" />
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b]/92 px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md transition-colors hover:bg-brand">
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-0 flex min-h-12 items-center justify-between bg-[#0a0a0b] px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-colors hover:bg-brand">
             {t.openMap}<ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
           </div>

@@ -57,7 +57,7 @@ export function SiteShell({ locale, page, alternates, breadcrumbs, children }: S
       <main id="main" tabIndex={-1} className="relative min-w-0 flex-1">
         {trail.length > 0 && <>
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(trail)) }} />
-          <nav aria-label={locale === "pl" ? "Ścieżka nawigacji" : "Breadcrumb"} className="absolute inset-x-0 top-[calc(var(--header-h)+1.25rem)] z-20">
+          <nav aria-label={{ pl: "Ścieżka nawigacji", en: "Breadcrumb", de: "Seitennavigation", uk: "Навігаційний шлях" }[locale]} className="absolute inset-x-0 top-[calc(var(--header-h)+1.25rem)] z-20">
             <ol className="breadcrumbs shell-wide">{trail.map((item, index) => <li key={item.path}>{index < trail.length - 1 ? <a href={item.path}>{item.name}</a> : <span aria-current="page">{item.name}</span>}</li>)}</ol>
           </nav>
         </>}

@@ -5,10 +5,43 @@ import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { Photo, photoSrc } from "./photo"
 import { contact, localeOrder, routes, sources, ui, type Locale } from "@/lib/content"
-import { formatIndex, getService, serviceGroupTitle, servicePrice, services, type Service, type ServiceSlug } from "@/lib/content/services"
+import { formatIndex, getService, serviceGroupTitle, servicePrice, type Service, type ServiceSlug } from "@/lib/content/services"
 import type { ServiceBlock, ServiceSection as Section, ServiceStep } from "@/lib/content/types"
 import { siteConfig } from "@/lib/site-config"
 import { cn } from "@/lib/utils"
+
+type ServiceFamily = "wash" | "interior" | "finish"
+const interiorServices: ServiceSlug[] = ["czyszczenie-wnetrza", "pranie-tapicerki", "czyszczenie-skor"]
+function serviceFamily(service: Service): ServiceFamily {
+  return interiorServices.includes(service.slug) ? "interior" : service.category === "myjnia" ? "wash" : "finish"
+}
+
+// Presentation only. Offer copy, prices and routing remain in their canonical sources.
+const serviceArtDirection: Partial<Record<ServiceSlug, { heroPosition: string; detailPosition: string }>> = {
+  "mycie-zewnatrz": { heroPosition: "50% 47%", detailPosition: "55% 52%" },
+  "czyszczenie-wnetrza": { heroPosition: "53% 43%", detailPosition: "50% 47%" },
+  "pranie-tapicerki": { heroPosition: "50% 50%", detailPosition: "50% 47%" },
+  "czyszczenie-skor": { heroPosition: "50% 43%", detailPosition: "50% 50%" },
+  "komplet": { heroPosition: "50% 54%", detailPosition: "50% 46%" },
+  "folia-ppf": { heroPosition: "50% 56%", detailPosition: "50% 53%" },
+  "powloka-ceramiczna": { heroPosition: "50% 60%", detailPosition: "50% 58%" },
+  "zmiana-koloru-dechroming": { heroPosition: "50% 57%", detailPosition: "50% 58%" },
+}
+
+const relatedServices: Record<ServiceSlug, [ServiceSlug, ServiceSlug]> = {
+  "mycie-zewnatrz": ["komplet", "woskowanie"],
+  "czyszczenie-wnetrza": ["komplet", "pranie-tapicerki"],
+  komplet: ["mycie-zewnatrz", "czyszczenie-wnetrza"],
+  "pranie-tapicerki": ["czyszczenie-wnetrza", "czyszczenie-skor"],
+  "czyszczenie-skor": ["czyszczenie-wnetrza", "pranie-tapicerki"],
+  woskowanie: ["mycie-zewnatrz", "powloka-ceramiczna"],
+  polerowanie: ["korekta-lakieru", "powloka-ceramiczna"],
+  "korekta-lakieru": ["polerowanie", "powloka-ceramiczna"],
+  "powloka-ceramiczna": ["korekta-lakieru", "folia-ppf"],
+  "folia-ppf": ["powloka-ceramiczna", "zmiana-koloru-dechroming"],
+  "przyciemnianie-szyb-i-lamp": ["folia-ppf", "zmiana-koloru-dechroming"],
+  "zmiana-koloru-dechroming": ["folia-ppf", "przyciemnianie-szyb-i-lamp"],
+}
 
 export function serviceMetadata(slug: ServiceSlug): Metadata {
   const { source } = getService(slug)
@@ -27,6 +60,7 @@ export function serviceMetadata(slug: ServiceSlug): Metadata {
 }
 export function ServicePage({ slug }: { slug: ServiceSlug }) {
   const service = getService(slug)
+  const family = serviceFamily(service)
   const { sections } = service.source
   const breakAfter = Math.min(1, sections.length - 1)
   const alternates = Object.fromEntries(
@@ -55,10 +89,13 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
         <Fragment key={section.heading}>
           <ServiceSection service={service} section={section} id={`section-${i + 1}`} />
           {i === breakAfter && (
-            <div className="shell-wide grid pb-4 lg:grid-cols-12">
-              <div data-reveal="mask" className="frame editorial-photo aspect-[16/10] lg:col-span-9 lg:col-start-4 lg:aspect-[16/8]">
-                <Photo id={service.frames[2]} sizes="(min-width: 1024px) 75vw, 100vw" />
-              </div>
+            <div className="shell-wide grid py-8 lg:grid-cols-12 lg:py-12">
+              <figure className={family === "interior" ? "lg:col-span-8" : family === "wash" ? "lg:col-span-10 lg:col-start-3" : "lg:col-span-12"}>
+                <div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3]", family === "interior" ? "sm:aspect-[3/2]" : "sm:aspect-[16/9]")}>
+                  <Photo id={service.frames[2]} sizes={family === "finish" ? "(min-width: 1600px) 1480px, 92vw" : family === "interior" ? "(min-width: 1600px) 985px, (min-width: 1024px) 61vw, 92vw" : "(min-width: 1600px) 1230px, (min-width: 1024px) 77vw, 92vw"} />
+                </div>
+                <figcaption className="mt-4 flex flex-wrap justify-between gap-3 text-xs leading-relaxed text-white/55"><span>{service.navTitle}</span><span>Boruch Myjnia / PAZIM</span></figcaption>
+              </figure>
             </div>
           )}
         </Fragment>
@@ -72,16 +109,18 @@ function ServiceHero({ service }: { service: Service }) {
   const t = ui.pl
   const price = servicePrice("pl", service.slug)
   const group = serviceGroupTitle("pl", service.slug)
+  const family = serviceFamily(service)
+  const art = serviceArtDirection[service.slug]
 
   return (
-    <section aria-labelledby="service-title" className="page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)">
-      <div className="enter-unmask absolute inset-0"><Photo id={service.hero} priority sizes="100vw" position="50% 60%" /></div>
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.6)_0%,rgba(6,6,7,.6)_48%,rgba(6,6,7,.15)_100%)]" />
+    <section aria-labelledby="service-title" className={cn("page-hero relative isolate flex items-end overflow-hidden border-b border-white/10 pt-(--header-h)", `service-hero-${family}`)}>
+      <div className={cn("enter-unmask absolute inset-0", family === "interior" && "lg:left-1/3")}><Photo id={service.hero} priority sizes={family === "interior" ? "(min-width: 1024px) 67vw, 100vw" : "100vw"} position={art?.heroPosition ?? "50% 56%"} /></div>
+      <div aria-hidden="true" className={family === "interior" ? "absolute inset-0 bg-[linear-gradient(90deg,#080809_0%,rgba(8,8,9,.8)_32%,rgba(8,8,9,.2)_74%,rgba(8,8,9,.12)_100%)]" : "absolute inset-0 bg-[linear-gradient(90deg,rgba(6,6,7,.65)_0%,rgba(6,6,7,.3)_58%,rgba(6,6,7,.08)_100%)]"} />
       <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-[#080809] via-transparent to-[#080809]/45" />
       <div className="shell-wide relative z-10 grid gap-9 pb-14 lg:grid-cols-12 lg:items-end lg:pb-16">
         <div className="lg:col-span-9">
         <p className="eyebrow mb-7">{group}</p>
-        <h1 id="service-title" className="page-hero-title enter-fade type-h1" style={{ "--i": 1 } as React.CSSProperties}>{service.navTitle}</h1>
+        <h1 id="service-title" className="page-hero-title type-h1 max-w-4xl">{service.navTitle}</h1>
           <div className="enter-fade mt-7 flex max-w-2xl flex-col gap-3" style={{ "--i": 2 } as React.CSSProperties}>
             <p className="type-label text-ash">{service.source.headingSub}</p>
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-white/65 first-letter:uppercase">{service.source.tagline}</p>
@@ -98,19 +137,25 @@ function ServiceHero({ service }: { service: Service }) {
 }
 function ServiceIntro({ service }: { service: Service }) {
   const [first, ...rest] = service.source.intro
+  const family = serviceFamily(service)
+  const art = serviceArtDirection[service.slug]
+  const finish = family === "finish"
   return (
     <section aria-label={service.navTitle} className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide grid gap-12 lg:grid-cols-12 lg:gap-8">
-        <div className="flex flex-col gap-10 lg:col-span-7 lg:pt-8">
+        <div className={cn("flex min-w-0 flex-col gap-7", family === "interior" ? "lg:col-span-6 lg:col-start-7 lg:order-2 lg:py-8" : finish ? "lg:col-span-5 lg:col-start-8 lg:order-2 lg:py-8" : "lg:col-span-7 lg:py-8")}>
           <p className="eyebrow">{service.navTitle}</p>
           <p data-reveal="" className="type-lead max-w-3xl text-pretty text-bone/90">{first}</p>
           <div className="flex max-w-2xl flex-col gap-5">
             {rest.map((para, i) => <p key={i} data-reveal="" style={{ "--d": i + 1 } as React.CSSProperties} className="type-body text-pretty text-bone/70">{para}</p>)}
           </div>
         </div>
-        <div className="lg:col-span-4 lg:col-start-9">
-          <div data-reveal="mask" className="frame editorial-photo aspect-[4/3] lg:aspect-[3/4] lg:sticky lg:top-[calc(var(--header-h)+2rem)]"><Photo id={service.frames[0]} sizes="(min-width: 1024px) 33vw, 100vw" /></div>
-        </div>
+        <figure className={cn("min-w-0", family === "interior" ? "lg:col-span-5 lg:order-1" : finish ? "lg:col-span-6 lg:order-1" : "lg:col-span-4 lg:col-start-9")}>
+          <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+            <div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3]", family === "interior" ? "sm:aspect-[4/5]" : finish ? "lg:aspect-[3/4]" : "lg:aspect-[4/5]")}><Photo id={service.frames[0]} sizes={finish ? "(min-width: 1600px) 720px, (min-width: 1024px) 46vw, 92vw" : family === "interior" ? "(min-width: 1600px) 600px, (min-width: 1024px) 38vw, 92vw" : "(min-width: 1600px) 480px, (min-width: 1024px) 30vw, 92vw"} position={art?.detailPosition} /></div>
+            <figcaption className="mt-4 flex flex-wrap justify-between gap-3 text-xs leading-relaxed text-white/55"><span>{service.navTitle}</span><span>Boruch Myjnia</span></figcaption>
+          </div>
+        </figure>
       </div>
     </section>
   )
@@ -120,7 +165,8 @@ function ServiceProcess({ service }: { service: Service }) {
   const t = ui.pl
   const { steps, processTitle } = service.source
   if (steps.length === 0) return null
-  const split = steps.length > 3 ? Math.ceil(steps.length / 2) : steps.length
+  const family = serviceFamily(service)
+  const split = family !== "wash" && steps.length > 3 ? Math.ceil(steps.length / 2) : steps.length
   const before = steps.slice(0, split)
   const after = steps.slice(split)
 
@@ -129,13 +175,14 @@ function ServiceProcess({ service }: { service: Service }) {
       <div className="shell-wide section-lg">
         <div className="mb-12 grid gap-7 lg:mb-16 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-3"><p className="eyebrow">{t.process}</p></div>
-          <div className="lg:col-span-8 lg:col-start-5"><h2 id="process-title" data-reveal="" className="type-h2 max-w-[16ch] text-balance">{processTitle ?? t.process}</h2></div>
+          <div className="lg:col-span-8 lg:col-start-5"><h2 id="process-title" data-reveal="" className="type-h2 max-w-3xl text-pretty">{processTitle ?? t.process}</h2></div>
         </div>
         <StepList steps={before} stepLabel={t.step} />
       </div>
+      {family === "wash" && <div className="shell-wide pb-12 sm:pb-16"><div data-reveal="mask" className="frame editorial-photo aspect-[4/3] sm:aspect-[16/8]"><Photo id={service.frames[1]} sizes="(min-width: 1600px) 1480px, 92vw" /></div></div>}
       {after.length > 0 && (
         <>
-          <div data-reveal="mask" className="frame editorial-photo aspect-[16/10] sm:aspect-[16/9] lg:aspect-[5/2]"><Photo id={service.frames[1]} sizes="100vw" /></div>
+          <div className={family === "interior" ? "shell-wide" : ""}><div data-reveal="mask" className={cn("frame editorial-photo aspect-[4/3] sm:aspect-[16/9]", family === "interior" ? "lg:aspect-[16/8]" : "lg:aspect-[5/2]")}><Photo id={service.frames[1]} sizes={family === "interior" ? "(min-width: 1600px) 1480px, 92vw" : "100vw"} /></div></div>
           <div className="shell-wide section-lg"><StepList steps={after} start={split + 1} stepLabel={t.step} /></div>
         </>
       )}
@@ -202,9 +249,9 @@ function PriceSection({ service, section, id }: { service: Service; section: Sec
   const price = servicePrice("pl", service.slug)
   const linkText = section.blocks.find((block) => block.type === "text")?.text
   return (
-    <section aria-labelledby={id} className="border-b border-white/10 bg-[radial-gradient(circle_at_85%_20%,rgba(213,43,47,.12),transparent_28rem),#101011]">
+    <section aria-labelledby={id} className="border-b border-white/10 bg-[#101011]">
       <div className="shell-wide section-md grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
-        <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="type-h2 text-balance">{section.heading}</h2></div>
+        <div className="flex flex-col gap-6 lg:col-span-6"><p className="eyebrow">{t.priceLabel}</p><h2 id={id} data-reveal="" className="type-h2 text-pretty">Cena usługi: {service.navTitle}</h2></div>
         <div data-reveal="" className="flex min-w-0 flex-col gap-6 lg:col-span-5 lg:col-start-8 lg:items-end lg:text-right">
           <p className={price ? "font-display text-[clamp(1.8rem,3vw,2.8rem)] font-bold leading-relaxed tracking-normal" : "font-display text-[clamp(1.5rem,2.4vw,2.3rem)] font-bold leading-relaxed text-bone/90"}>{price ?? t.individualQuote}</p>
           {linkText && <Link prefetch={false} href={routes.pl.pricing} className="group flex w-fit items-center gap-4 text-bone"><span className="type-label link-draw">{linkText}</span><ArrowRight className="arrow-shift size-5" aria-hidden="true" /></Link>}
@@ -229,8 +276,7 @@ function SummarySection({ section, id }: { section: Section; id: string }) {
 
 function ServiceRelated({ service }: { service: Service }) {
   const t = ui.pl
-  const i = service.index - 1
-  const neighbours = [services[(i - 1 + services.length) % services.length], services[(i + 1) % services.length]]
+  const neighbours = relatedServices[service.slug].map(getService)
   return (
     <section aria-labelledby="related-title" className="section-lg border-b border-white/10 bg-[#0a0a0b]">
       <div className="shell-wide flex flex-col gap-10">
@@ -242,7 +288,7 @@ function ServiceRelated({ service }: { service: Service }) {
           {neighbours.map((item) => (
             <li key={item.slug} className="bg-background">
               <Link prefetch={false} href={`/${item.slug}`} className="group relative flex min-h-56 flex-col justify-between gap-10 overflow-hidden p-6 lg:min-h-72 lg:p-8">
-                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-30 transition-opacity duration-700 group-hover:opacity-50 group-focus-visible:opacity-50"><Photo id={item.hero} sizes="(min-width: 768px) 50vw, 100vw" className="scale-105 transition-transform duration-[1.4s] group-hover:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/20" /></span>
+                <span aria-hidden="true" className="absolute inset-0 -z-0 opacity-65 transition-opacity duration-700 group-hover:opacity-85 group-focus-visible:opacity-85"><Photo id={item.hero} sizes="(min-width: 1600px) 730px, (min-width: 768px) 46vw, 92vw" className="scale-[1.03] transition-transform duration-1000 group-hover:scale-100 group-focus-visible:scale-100" /><span className="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-black/10" /></span>
                 <span className="relative flex items-center justify-between"><span className="type-label text-ash">{item.category === "myjnia" ? "Myjnia" : "Detailing"}</span><ArrowRight className="arrow-shift size-5 text-bone" aria-hidden="true" /></span>
                 <span className="type-h3 relative max-w-full text-balance">{item.navTitle}</span>
               </Link>

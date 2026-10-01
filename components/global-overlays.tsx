@@ -241,15 +241,19 @@ function FloatingContact({ locale, pathname }: { locale: Locale; pathname: strin
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`fixed bottom-3 right-3 z-40 flex min-h-12 items-center gap-3 bg-brand px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white shadow-[0_16px_45px_rgba(0,0,0,.4)] transition-all duration-500 hover:bg-[#b91f27] sm:px-5 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}
+        inert={!visible}
+        aria-hidden={!visible}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className={`fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] right-3 z-40 flex min-h-12 items-center gap-3 border border-white/10 bg-brand px-4 text-[.72rem] font-bold uppercase tracking-[.14em] text-white transition-[transform,opacity,background-color] duration-500 hover:bg-[#b91f27] sm:px-5 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"}`}
       >
         <MessageCircle className="size-4" aria-hidden="true" />
         {t.contactButton}
       </button>
 
       {open && (
-        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="floating-contact-title" className="fixed inset-0 z-[110] flex items-end justify-center bg-black/75 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false) }}>
-          <section className="modal-sheet relative max-h-[90dvh] w-full max-w-lg overflow-y-auto border-t-[3px] border-brand bg-[#111112] p-6 shadow-[0_30px_120px_rgba(0,0,0,.72)] sm:border sm:border-white/12 sm:p-8">
+        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="floating-contact-title" className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 sm:items-center sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false) }}>
+          <section className="modal-sheet relative max-h-[90dvh] w-full max-w-lg overflow-y-auto border-t-[3px] border-brand bg-[#111112] p-6 sm:border sm:border-white/12 sm:p-8">
             <button type="button" onClick={() => setOpen(false)} aria-label={t.closeContact} className="absolute right-4 top-4 grid size-10 place-items-center border border-white/12 bg-black/30 text-white/60 transition-colors hover:border-brand hover:bg-brand hover:text-white">
               <X className="size-5" aria-hidden="true" />
             </button>
@@ -259,7 +263,7 @@ function FloatingContact({ locale, pathname }: { locale: Locale; pathname: strin
             <div className="mt-7 grid gap-2">
               <a href={`${pathname === routes[locale].contact ? routes[locale].contact : routes[locale].home}#wycena`} onClick={() => setOpen(false)} className={optionClass}><MessageCircle className="size-5 text-brand" aria-hidden="true" />{t.form}</a>
               <a href={`mailto:${contact.email}`} className={optionClass}><Mail className="size-5 text-brand" aria-hidden="true" />{t.email}</a>
-              <a href={contact.phoneHref} className={optionClass}><Phone className="size-5 text-brand" aria-hidden="true" />{t.call}: {contact.phone}</a>
+              <a href={contact.phoneHref} className={optionClass}><Phone className="size-5 text-brand" aria-hidden="true" /><span className="min-w-0"><span className="block text-xs font-medium text-white/65">{t.call}</span><span className="mt-0.5 block whitespace-nowrap">{contact.phone}</span></span></a>
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={optionClass}><span className="text-[#61c99a]"><WhatsAppIcon /></span>{t.whatsapp}</a>
             </div>
           </section>
@@ -320,7 +324,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
   }, [])
 
   const closeSettings = useCallback(() => setEditing(false), [])
-  useModalFocus(ready && (consent === null || editing), dialogRef, editing ? closeSettings : undefined)
+  useModalFocus(ready && (consent === null || editing), dialogRef, editing ? closeSettings : undefined, locale)
 
   if (!ready) return null
 
@@ -332,8 +336,8 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
       {process.env.NODE_ENV === "production" && consent === "accepted" ? <Analytics /> : null}
 
       {(firstVisit || editing) && (
-        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
-          <section className="modal-sheet min-h-[68svh] max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-5 shadow-[0_32px_120px_rgba(0,0,0,.75)] sm:min-h-0 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
+        <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/80 p-0 sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
+          <section className="modal-sheet min-h-[68svh] max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-5 sm:min-h-0 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
             <div className="flex items-start gap-4">
               <span className="grid size-11 shrink-0 place-items-center text-brand"><Cookie className="size-7" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
@@ -410,7 +414,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
       )}
 
       {!firstVisit && !editing && (
-        <button type="button" onClick={() => { setDraftConsent(consent ?? "rejected"); setEditing(true) }} aria-label={t.settingsTitle} title={t.settingsTitle} className={`fixed bottom-3 left-3 z-40 grid size-12 place-items-center border border-brand/55 bg-[#0b0b0c] text-brand shadow-[0_14px_40px_rgba(0,0,0,.42)] transition-all duration-500 hover:bg-brand hover:text-white ${showSettingsButton ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}>
+        <button type="button" onClick={() => { setDraftConsent(consent ?? "rejected"); setEditing(true) }} inert={!showSettingsButton} aria-hidden={!showSettingsButton} aria-haspopup="dialog" aria-label={t.settingsTitle} title={t.settingsTitle} className={`fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] left-3 z-40 grid size-12 place-items-center border border-white/20 bg-[#111112] text-brand transition-[transform,opacity,background-color,color] duration-500 hover:bg-brand hover:text-white ${showSettingsButton ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"}`}>
           <Cookie className="size-5" aria-hidden="true" />
         </button>
       )}

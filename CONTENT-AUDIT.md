@@ -1,6 +1,20 @@
 # Audyt treści i wdrożenia
 
-Stan na 30.09.2026.
+Stan na 01.10.2026.
+
+## Końcowe dopracowanie wizualne i techniczne
+
+- Uporządkowano stronę główną i wszystkie szablony podstron. Fotografie, proporcje kolumn i hierarchia tekstu mają różny rytm zależnie od treści, ale wspólną stylistykę czerni, grafitu i czerwonych akcentów.
+- Ograniczono obramowane karty, poświaty i rozmycia. Na stronie głównej indeks usług ma fotograficzny podgląd zmieniany myszą i klawiaturą, a realizacje tworzą kompozycję o zróżnicowanych proporcjach.
+- Cennik otrzymał porównanie trzech wielkości samochodu oraz osobne, tradycyjne tabele pozostałych usług. Zakresy usług można rozwinąć bez wydłużania każdego wiersza.
+- Galeria zachowuje wszystkie 74 unikalne fotografie. Podgląd zdjęć ma płynne przejście, sterowanie klawiaturą i rozpoznawanie kierunku gestu.
+- Poprawiono kadrowanie zdjęcia zespołu, nagłówki hero, stopkę, kontakt i mobilne okna dialogowe. Alex Brush Regular jest stosowany wyłącznie do podpisu Karol Bruch.
+- Sprawdzono 37 adresów w 9 szerokościach: 320, 360, 390, 430, 768, 1024, 1280, 1440 i 1920 px. Końcowa kontrola 333 widoków nie wykazała poziomego przewijania, także przy klasycznym pasku przewijania przeglądarki.
+- W przeglądarce sprawdzono menu, cookies i zmianę języka, floating contact, formularz, FAQ, cennik, galerię oraz ręczne przesuwanie i rozwijanie opinii. Poprawiono utrzymanie focusu po zmianie języka w cookies.
+- Metadane, canonical, hreflang i JSON-LD porównano z poprzednim eksportem. Dane biznesowe, ceny, opinie, trasy oraz mechanizm formularza zostały zachowane.
+- Nie dodano bibliotek ani zależności. Witryna nadal korzysta ze statycznego eksportu Next.js. Node.js jest potrzebny do budowania, nie do serwowania katalogu out. Formularz wymaga osobnego endpointu, opisanego w STATIC-HOSTING.md.
+- Zapisano kopię kodu oraz gotowego poprzedniego eksportu w katalogu .backups, z identyfikatorem 2026-10-01-78ce9de. Kopie nie trafiają do publikowanego serwisu.
+- W tej iteracji nie wykonano ponownego pomiaru PageSpeed, dlatego poprzedni wynik 100/100 nie jest deklarowany jako nowy pomiar.
 
 ## Audyt wejściowy
 
@@ -25,11 +39,11 @@ Stan na 30.09.2026.
 
 ## Zakres przebudowy
 
-- Strona główna została napisana od zera i nie korzysta ze wspólnego nagłówka ani stopki podstron.
-- Nowy home ma poszerzone asymetryczne hero, własną nawigację, sekcję konkretnych korzyści, wierszowy indeks usług, pełną siatkę realizacji, trzy porównywalne pakiety, krótką opowieść o zespole, opinie klientów, FAQ, moduł lokalizacji PAZIM -2, formularz kontaktowy i uproszczoną stopkę.
+- Strona główna ma własny kompletny szablon treści i korzysta ze wspólnego nagłówka, stopki oraz okien dialogowych całego serwisu.
+- Home ma poszerzone asymetryczne hero, sekcję konkretnych korzyści, wierszowy indeks usług z podglądem fotograficznym, siatkę realizacji, trzy porównywalne pakiety, ofertę przygotowania auta do sprzedaży, opowieść o zespole, opinie klientów, FAQ, moduł lokalizacji PAZIM -2, formularz kontaktowy i rozbudowaną stopkę.
 - Usunięto powtórzony manifest o zespole, dekoracyjny moduł -2 z hero oraz ogólne hasła, które nie pomagały wybrać usługi.
 - Zachowano treści źródłowe, fotografie BORUCH, ceny, dane kontaktowe, Booksy i wszystkie odnośniki.
-- Uporządkowano odpowiedzialność stron: home pokazuje ceny tylko trzech głównych pakietów myjni, strona Usługi opisuje ofertę i prowadzi do kart szczegółowych, a pełna lista cen znajduje się wyłącznie w Cenniku.
+- Uporządkowano odpowiedzialność stron: home pokazuje ceny trzech głównych pakietów myjni i oferty przygotowania auta do sprzedaży, strona Usługi opisuje ofertę i prowadzi do kart szczegółowych, a Cennik zbiera pełne porównanie cen.
 - Strona główna nie używa numeracji dekoracyjnej. Wartość -2 oznacza rzeczywisty poziom parkingu PAZIM.
 - Przebudowano `/uslugi`, `/cennik`, `/galeria`, `/o-nas`, `/kontakt` oraz `/booksy`.
 - Ujednolicono wszystkie polskie strony szczegółowych usług.
@@ -123,10 +137,10 @@ Stan na 30.09.2026.
 - Pasek trzech korzyści pod hero strony głównej ma zwarty układ wzorowany na projekcie Golet: niższy pionowy padding, mniejsze odstępy i pełne wykorzystanie szerokości każdej kolumny.
 - Usunięto poziome przewijanie powodowane przez długi nagłówek sekcji na małym ekranie.
 - Cookies, wybór języka i pływający kontakt są montowane globalnie, dlatego działają na stronie głównej, wszystkich podstronach oraz we wszystkich wersjach językowych.
-- Linki do Facebooka i Instagrama korzystają z rozpoznawalnych ikon w hero, obu stopkach, sekcji O nas, podstronie O nas, Kontakcie i Galerii. Z hero usunięto dekoracyjne wskaźniki slajdów, pozostawiając automatyczną zmianę zdjęć.
+- Linki do Facebooka i Instagrama korzystają z rozpoznawalnych ikon w hero, wspólnej stopce, sekcji O nas, podstronie O nas, Kontakcie i Galerii. Z hero usunięto dekoracyjne wskaźniki slajdów, pozostawiając automatyczną zmianę zdjęć.
 - Kontakt i O nas otrzymały nowe układy od zera, a Usługi, Cennik, Galeria, Booksy i wszystkie strony szczegółowe usług zostały dopasowane do systemu strony głównej.
-- Cennik korzysta z tej samej listy danych co strona Usługi i pokazuje wszystkie 11 pozycji w dwóch tradycyjnych tabelach: Myjnia i Detailing.
-- Strona główna zachowuje trzy ceny potrzebne do szybkiego porównania: czyszczenie zewnętrzne, czyszczenie wnętrza i komplet.
+- Cennik korzysta z pełnej listy Booksy i pokazuje 14 pozycji: pakiety myjni, detailing oraz przygotowanie auta do sprzedaży.
+- Strona główna zachowuje trzy ceny potrzebne do szybkiego porównania: czyszczenie zewnętrzne, czyszczenie wnętrza i komplet, oraz osobną ofertę przygotowania auta do sprzedaży.
 - Podstrony mają jedno wspólne wezwanie do kontaktu w stopce. Usunięto powielone sekcje kontaktowe z treści stron.
 
 ## Weryfikacja
@@ -139,7 +153,7 @@ Stan na 30.09.2026.
 - Potwierdzono rozwijanie odpowiedzi w FAQ.
 - Potwierdzono, że nieużywana numeracja nie wróciła do kart ani nagłówków.
 - `tsc --noEmit` kończy się bez błędów.
-- `pnpm build` kończy się poprawnie i generuje 42 statyczne wpisy.
+- `npm run build` kończy się poprawnie i generuje 42 statyczne wpisy. Wykonuje ten sam skrypt projektu co `pnpm build`.
 - `git diff --check` kończy się bez błędów formatowania.
 
 ## Otwarte kwestie właścicielskie
