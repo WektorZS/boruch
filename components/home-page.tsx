@@ -631,7 +631,49 @@ function HomeHero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="home-hero-shell hero-editorial-grid relative z-10">
- 
+  <div
+    key={activeSlide}
+    className={cn(
+      "hero-editorial-copy hero-copy-contrast",
+      activeSlide > 0 && "home-hero-copy-animated",
+    )}
+  >
+    <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+      <span className="h-px w-7 shrink-0 bg-brand" />
+      {slide.label}
+    </p>
+
+    <h1
+      id="hero-title"
+      className={cn(
+        "cinematic-title",
+        hasLongTitleWord && "cinematic-title-long",
+      )}
+    >
+      {slide.title}
+    </h1>
+
+    <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+      {slide.text}
+    </p>
+
+    <div className="mt-9 flex flex-wrap items-center gap-7">
+      <a href="#wycena" className="home-button home-button-red">
+        {t.nav.contact}
+        <ArrowRight className="size-4" aria-hidden="true" />
+      </a>
+
+      <Link
+        prefetch={false}
+        href={routes[locale].services}
+        className="editorial-link"
+      >
+        {t.nav.services}
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </Link>
+    </div>
+  </div>
+
   <div
     className="hero-trust-totem"
     aria-label={copy.reviewsLabel}
