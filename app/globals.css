@@ -2085,7 +2085,36 @@ a.service-index-row:hover { border-color: var(--brand); }
     align-items: center;
     justify-content: flex-start;
   }
-}
+
+
+  .hero-cinema {
+    inset: var(--header-h) 0 auto 0;
+    width: 100%;
+    height: calc(100svh - var(--header-h));
+    clip-path: none;
+  }
+
+  .hero-cinema-shade {
+    background:
+      linear-gradient(
+        0deg,
+        #080809 0%,
+        rgb(8 8 9 / 0.64) 55%,
+        rgb(8 8 9 / 0.34) 100%
+      );
+  }
+
+  .hero-editorial-bottom {
+    position: static;
+    margin-top: 1.4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    row-gap: .5rem;
+  }
 
   .hero-trust-totem {
     position: absolute;
