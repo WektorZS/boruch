@@ -173,7 +173,7 @@ const editorialCopy = {
 const careSteps: Record<Locale, Array<[string, string]>> = {
   pl: [
     ["Dobieramy zakres", "Sprawdzamy stan auta i dobieramy odpowiednie zabiegi, od podstawowej pielęgnacji po ochronę lakieru"],
-    ["Pracujemy nad detalemi", "Dbamy o wnętrze, karoserię i detale, które przy zwykłym myciu często zostają niezauważone."]
+    ["Pracujemy nad detalami", "Dbamy o wnętrze, karoserię i detale, które przy zwykłym myciu często zostają niezauważone."],
     ["Ustalamy dalszą pielęgnację", "Podpowiadamy, jak myć i pielęgnować auto po wykonanej usłudze."],
   ],
   en: [
