@@ -1158,7 +1158,7 @@
 }
 
 .hero-editorial-copy.home-hero-copy-animated {
-  animation: hero-copy-fade 1200ms var(--ease-out) 0ms both;
+  animation: hero-copy-fade 2000ms var(--ease-out) 0ms both;
 }
 
 .enter-rise {
