@@ -172,8 +172,8 @@ const editorialCopy = {
 
 const careSteps: Record<Locale, Array<[string, string]>> = {
   pl: [
-    ["Dobieramy zakres", "Oglądamy auto i ustalamy, czego potrzebuje. Od zwykłego mycia po korektę i ochronę lakieru."],
-    ["Pracujemy nad detalem", "Dobieramy środki do powierzchni. Czyścimy wnętrze, karoserię i miejsca, które łatwo przeoczyć."],
+    ["Dobieramy zakres", "Sprawdzamy stan auta i dobieramy odpowiednie zabiegi, od podstawowej pielęgnacji po ochronę lakieru"],
+    ["Pracujemy nad detalemi", "Dbamy o wnętrze, karoserię i detale, które przy zwykłym myciu często zostają niezauważone."]
     ["Ustalamy dalszą pielęgnację", "Podpowiadamy, jak myć i pielęgnować auto po wykonanej usłudze."],
   ],
   en: [
@@ -287,18 +287,18 @@ const verifiedReviews = [0, 7, 1, 6, 2, 11, 4, 8, 3, 9, 5, 10, 12, 15, 13, 14].m
 const homeCopy = {
   pl: {
     heroSlides: [
-      { label: "Myjnia i detailing w Szczecinie", title: "SPA dla Twojego auta", text: "Ręczna pielęgnacja, która przywraca czystość, połysk i świeżość każdego dnia." },
+      { label: "Myjnia i detailing w Szczecinie", title: "SPA dla Twojego auta", text: "Kompleksowa pielęgnacja wnętrza i nadwozia z dbałością o każdy detal." },
       { label: "Folie ochronne i zmiana koloru", title: "Oklejanie aut", text: "Zabezpieczamy lakier folią PPF i odmieniamy wygląd samochodu bez trwałej ingerencji." },
       { label: "Detailing bez kompromisów", title: "Profesjonalne kosmetyki", text: "Pracujemy na sprawdzonych produktach, które są bezpieczne dla lakieru i wnętrza." },
-      { label: "Plac Rodła 8 / PAZIM", title: "W centrum Szczecina", text: "Znajdziesz nas na poziomie -2 parkingu podziemnego PAZIM." },
+      { label: "Dogodna lokalizacja", title: "W centrum Szczecina", text: "Znajdziesz nas na poziomie -2 parkingu podziemnego PAZIM, pod Radissonem." },
     ],
     whyLabel: "Dlaczego BORUCH",
     whyTitle: "Ręczna pielęgnacja auta od mycia po zabezpieczenie lakieru.",
     whyIntro: "Jedno miejsce, w którym zajmiemy się wyglądem samochodu wewnątrz i na zewnątrz.",
     benefits: [
-      ["Ręczna pielęgnacja", "Każdy etap wykonujemy ręcznie i dobieramy go do stanu auta."],
-      ["Pełny zakres", "Mycie, wnętrze, polerowanie, powłoki ceramiczne i folie PPF."],
-      ["Centrum Szczecina", "Parking podziemny PAZIM, poziom -2 przy placu Rodła."],
+      ["Ręczna pielęgnacja", "Precyzyjna praca ręczna pozwala nam zadbać o miejsca, które łatwo pominąć."],
+      ["Pełny zakres", "Kompleksowa pielęgnacja auta od podstawowego mycia po zaawansowaną ochronę lakieru."],
+      ["Centrum Szczecina", "W samym centrum miasta, zostaw auto i skocz na zakupy do pobliskich galerii"],
     ],
     servicesIntro: "Wybierz podstawową pielęgnację albo pełne zabezpieczenie samochodu.",
     galleryCaptions: ["Korekta lakieru", "Folia PPF", "Detailing wnętrza", "Mycie ręczne", "Zabezpieczenie lakieru"],
@@ -331,18 +331,18 @@ const homeCopy = {
   },
   en: {
     heroSlides: [
-      { label: "Car wash and detailing in Szczecin", title: "A spa for your car", text: "Hands-on care that restores cleanliness, shine and freshness every day." },
-      { label: "Protective films and colour change", title: "Vehicle wrapping", text: "We protect paint with PPF and transform your car without permanent modification." },
-      { label: "Detailing without compromise", title: "Professional products", text: "We use proven products that are safe for your paintwork and interior." },
-      { label: "Plac Rodła 8 / PAZIM", title: "Central Szczecin", text: "You will find us on level -2 of the PAZIM underground car park." },
+    { label: "Car wash and detailing in Szczecin", title: "A spa for your car", text: "Complete interior and exterior care with attention to every detail." },
+    { label: "Protective films and colour change", title: "Vehicle wrapping", text: "We protect the paint with PPF and transform the look of your car without permanent modification." },
+    { label: "Detailing without compromise", title: "Professional car care products", text: "We work with proven products that are safe for both the paintwork and the interior." },
+    { label: "Convenient location", title: "In central Szczecin", text: "You will find us on level -2 of the PAZIM underground car park, beneath the Radisson hotel." },
     ],
     whyLabel: "Why BORUCH",
     whyTitle: "Hands-on car care from washing to paint protection.",
     whyIntro: "One place for complete exterior and interior car care.",
     benefits: [
-      ["Hand care", "Every stage is completed by hand and matched to the condition of your car."],
-      ["Complete service", "Washing, interiors, polishing, ceramic coatings and PPF."],
-      ["Central Szczecin", "PAZIM underground car park, level -2 by Plac Rodła."],
+       ["Hand care", "Precise hands-on work allows us to take care of details that are easy to overlook."],
+    ["Full range", "Complete car care, from a basic wash to advanced paint protection."],
+    ["Central Szczecin", "Right in the city centre — leave your car with us and enjoy the nearby shopping centres while we work."],
     ],
     servicesIntro: "Choose essential care or complete protection for your car.",
     galleryCaptions: ["Paint correction", "PPF protection", "Interior detailing", "Hand wash", "Paint protection"],
@@ -375,18 +375,19 @@ const homeCopy = {
   },
   de: {
     heroSlides: [
-      { label: "Autowäsche und Detailing in Stettin", title: "Wellness für Ihr Auto", text: "Sorgfältige Handarbeit für Sauberkeit, Glanz und Frische im Alltag." },
-      { label: "Schutzfolien und Farbwechsel", title: "Fahrzeugfolierung", text: "Wir schützen den Lack mit PPF und verändern die Optik ohne dauerhaften Eingriff." },
-      { label: "Detailing ohne Kompromisse", title: "Professionelle Produkte", text: "Wir arbeiten mit bewährten Produkten, die Lack und Innenraum schonen." },
-      { label: "Plac Rodła 8 / PAZIM", title: "Im Zentrum von Stettin", text: "Sie finden uns auf Ebene -2 der PAZIM Tiefgarage." },
+       { label: "Autowäsche und Detailing in Stettin", title: "Wellness für Ihr Auto", text: "Umfassende Pflege von Innenraum und Karosserie mit Liebe zum Detail." },
+    { label: "Schutzfolien und Farbwechsel", title: "Fahrzeugfolierung", text: "Wir schützen den Lack mit PPF und verändern die Optik Ihres Fahrzeugs ohne dauerhaften Eingriff." },
+    { label: "Detailing ohne Kompromisse", title: "Professionelle Fahrzeugpflegeprodukte", text: "Wir arbeiten mit bewährten Produkten, die sowohl für den Lack als auch für den Innenraum sicher sind." },
+    { label: "Günstige Lage", title: "Im Zentrum von Stettin", text: "Sie finden uns auf Ebene -2 der PAZIM Tiefgarage, unter dem Radisson Hotel." },
+  ],
     ],
     whyLabel: "Warum BORUCH",
     whyTitle: "Manuelle Fahrzeugpflege von der Wäsche bis zum Lackschutz.",
     whyIntro: "Ein Ort für die komplette Pflege des Fahrzeugs innen und außen.",
     benefits: [
-      ["Handarbeit", "Jeder Schritt wird von Hand und passend zum Fahrzeugzustand ausgeführt."],
-      ["Komplettes Angebot", "Wäsche, Innenraum, Politur, Keramikversiegelung und PPF."],
-      ["Zentrum Stettins", "PAZIM Tiefgarage, Ebene -2 am Plac Rodła."],
+    ["Handarbeit", "Präzise Handarbeit ermöglicht es uns, auch Details zu pflegen, die leicht übersehen werden."],
+    ["Komplettes Angebot", "Umfassende Fahrzeugpflege von der Basiswäsche bis zum hochwertigen Lackschutz."],
+    ["Zentrum Stettins", "Mitten im Stadtzentrum — lassen Sie Ihr Auto bei uns und nutzen Sie die Zeit für einen Besuch in den nahegelegenen Einkaufszentren."],
     ],
     servicesIntro: "Wählen Sie eine Basispflege oder den vollständigen Schutz Ihres Fahrzeugs.",
     galleryCaptions: ["Lackkorrektur", "PPF Schutzfolie", "Innenraumdetailing", "Handwäsche", "Lackschutz"],
@@ -419,18 +420,18 @@ const homeCopy = {
   },
   uk: {
     heroSlides: [
-      { label: "Автомийка та детейлінг у Щецині", title: "SPA для вашого авто", text: "Ручний догляд, що повертає чистоту, блиск і свіжість щодня." },
-      { label: "Захисні плівки та зміна кольору", title: "Обклеювання авто", text: "Захищаємо лак плівкою PPF і змінюємо вигляд авто без постійного втручання." },
-      { label: "Детейлінг без компромісів", title: "Професійна косметика", text: "Використовуємо перевірені засоби, безпечні для лаку та салону." },
-      { label: "Plac Rodła 8 / PAZIM", title: "У центрі Щецина", text: "Ви знайдете нас на рівні -2 підземного паркінгу PAZIM." },
+       { label: "Автомийка та детейлінг у Щецині", title: "SPA для вашого авто", text: "Комплексний догляд за салоном і кузовом з увагою до кожної деталі." },
+    { label: "Захисні плівки та зміна кольору", title: "Обклеювання авто", text: "Захищаємо лак плівкою PPF і змінюємо вигляд автомобіля без постійного втручання." },
+    { label: "Детейлінг без компромісів", title: "Професійна автокосметика", text: "Працюємо з перевіреними засобами, безпечними як для лакофарбового покриття, так і для салону." },
+    { label: "Зручне розташування", title: "У центрі Щецина", text: "Ви знайдете нас на рівні -2 підземного паркінгу PAZIM, під готелем Radisson." },
     ],
     whyLabel: "Чому BORUCH",
     whyTitle: "Ручний догляд за авто від миття до захисту лаку.",
     whyIntro: "Одне місце для повного догляду за автомобілем зовні та всередині.",
     benefits: [
-      ["Ручний догляд", "Кожен етап виконуємо вручну та підбираємо до стану автомобіля."],
-      ["Повний спектр", "Миття, салон, полірування, керамічні покриття та PPF."],
-      ["Центр Щецина", "Підземний паркінг PAZIM, рівень -2 біля Plac Rodła."],
+       ["Ручний догляд", "Точна ручна робота дозволяє нам приділити увагу деталям, які легко залишити непоміченими."],
+    ["Повний спектр", "Комплексний догляд за автомобілем — від базового миття до професійного захисту лакофарбового покриття."],
+    ["Центр Щецина", "У самому центрі міста — залиште авто у нас і скористайтеся часом, щоб відвідати найближчі торгові центри."],
     ],
     servicesIntro: "Оберіть базовий догляд або повний захист автомобіля.",
     galleryCaptions: ["Корекція лаку", "Захисна плівка PPF", "Детейлінг салону", "Ручне миття", "Захист лаку"],
@@ -1639,125 +1640,32 @@ function Packages({ locale }: { locale: Locale }) {
 function SalesPackage({ locale }: { locale: Locale }) {
   const copy = salesPackageCopy[locale]
   const currency = locale === "pl" ? "zł" : "PLN"
-
   const offers = [
-    {
-      title: copy.standard,
-      price: 1000,
-      items: copy.standardItems,
-      featured: false,
-    },
-    {
-      title: copy.premium,
-      price: 1400,
-      items: copy.premiumItems,
-      featured: true,
-    },
+    { title: copy.standard, price: 1000, items: copy.standardItems },
+    { title: copy.premium, price: 1400, items: copy.premiumItems },
   ]
 
   return (
-    <section
-      id="pakiet-sprzedaz"
-      aria-labelledby="sales-package-title"
-      className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]"
-    >
-      <div className="home-shell grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-20">
-        <div className="lg:col-span-4">
+    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
+      <div className="home-shell grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-5">
           <p className="home-kicker">{copy.label}</p>
-
-          <h2
-            id="sales-package-title"
-            data-reveal=""
-            className="editorial-display mt-6"
-          >
-            {copy.title}
-          </h2>
-
-          <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
-            {copy.intro}
-          </p>
-
-          <Link
-            prefetch={false}
-            href={`${routes[locale].pricing}#pakiet-sprzedaz`}
-            className="editorial-link mt-8"
-          >
-            {copy.details}
-            <ArrowRight className="size-4 text-brand" aria-hidden="true" />
-          </Link>
+          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
+          <Link prefetch={false} href={`${routes[locale].pricing}#pakiet-sprzedaz`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
         </div>
-
-        <div className="lg:col-span-8">
-          <div className="border-y border-white/15">
-            {offers.map((offer, index) => (
-              <article
-                key={offer.title}
-                data-reveal=""
-                className={cn(
-                  "relative grid gap-7 py-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:gap-10",
-                  index !== offers.length - 1 && "border-b border-white/12",
-                  offer.featured && "bg-white/2.5",
-                )}
-              >
-                {offer.featured && (
-                  <span
-                    className="absolute inset-y-0 left-0 w-0.5 bg-brand"
-                    aria-hidden="true"
-                  />
-                )}
-
-                <div className={cn(offer.featured && "pl-5 sm:pl-6")}>
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-[.62rem] font-medium tracking-[.16em] text-white/38">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <h3 className="font-display text-xl font-semibold leading-[1.25] tracking-normal text-white sm:text-2xl">
-                      {offer.title}
-                    </h3>
-                  </div>
-
-                  <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">
-                    {offer.items.map((item) => (
-                      <li key={item} className="flex gap-3">
-                        <span
-                          className="mt-[.55em] size-1.5 shrink-0 rounded-full bg-brand"
-                          aria-hidden="true"
-                        />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div
-                  className={cn(
-                    "flex min-w-40 flex-col items-start sm:items-end",
-                    offer.featured && "pl-5 sm:pl-0 sm:pr-6",
-                  )}
-                >
-                  <span className="mb-2 flex items-center gap-2 text-[.68rem] font-medium uppercase tracking-[.12em] text-white/45">
-                    <Clock3 className="size-3.5 text-brand" aria-hidden="true" />
-                    {copy.time}
-                  </span>
-
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-medium text-white/50">
-                      {copy.from}
-                    </span>
-
-                    <strong className="font-display text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-none tracking-tight text-white">
-                      {offer.price}
-                    </strong>
-
-                    <span className="font-display text-base font-semibold text-white/70">
-                      {currency}
-                    </span>
-                  </div>
-                </div>
-              </article>
-            ))}
+        <div className="lg:col-span-7">
+          <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
+            {offers.map((offer) => <article key={offer.title} className="flex flex-col border-b border-white/10 py-7 last:border-b-0 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
+              <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
+              <ul className="mb-7 mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1 shrink-0 bg-brand" aria-hidden="true" />{item}</li>)}</ul>
+              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
+                <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
+                <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
+              </div>
+            </article>)}
           </div>
+
         </div>
       </div>
     </section>
