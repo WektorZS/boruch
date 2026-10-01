@@ -4,6 +4,15 @@ import { useEffect, type RefObject } from "react"
 
 const openModals: HTMLElement[] = []
 let savedOverflow = ""
+const FOCUSABLE_SELECTOR = 'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]'
+
+function focusBoundary(items: NodeListOf<HTMLElement>, fromEnd = false) {
+  const step = fromEnd ? -1 : 1
+  for (let index = fromEnd ? items.length - 1 : 0; index >= 0 && index < items.length; index += step) {
+    const element = items[index]
+    if (!element.closest("[inert]") && element.getClientRects().length) return element
+  }
+}
 
 /** Shared keyboard, focus and background behaviour for the site's modal windows. */
 export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>, onClose?: () => void, contentKey?: string) {
@@ -27,14 +36,14 @@ export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>,
       }
       branch = branch.parentElement
     }
-    const focusable = () => Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]')).filter(el => el.getClientRects().length && !el.closest("[inert]"))
+    const focusable = () => dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
     const onKey = (event: KeyboardEvent) => {
       if (openModals.at(-1) !== dialog) return
       if (event.key === "Escape" && onClose) { event.preventDefault(); onClose() }
       if (event.key !== "Tab") return
       const items = focusable()
-      const first = items[0]
-      const last = items.at(-1)
+      const first = focusBoundary(items)
+      const last = focusBoundary(items, true)
       if (!first || !last) { event.preventDefault(); return }
       if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
         event.preventDefault(); last.focus()
@@ -42,7 +51,7 @@ export function useModalFocus(open: boolean, ref: RefObject<HTMLElement | null>,
         event.preventDefault(); first.focus()
       }
     }
-    const frame = requestAnimationFrame(() => focusable()[0]?.focus({ preventScroll: true }))
+    const frame = requestAnimationFrame(() => focusBoundary(focusable())?.focus({ preventScroll: true }))
     document.addEventListener("keydown", onKey)
     return () => {
       cancelAnimationFrame(frame)

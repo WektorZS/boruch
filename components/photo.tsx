@@ -1,10 +1,11 @@
 import { photos, type PhotoId } from "@/lib/photos"
-import { cn } from "@/lib/utils"
+import { clsx as cn } from "clsx"
 
 // Versioned files can be cached for a year without retaining an older photo after an update.
-const optimizedPhotos: ReadonlySet<PhotoId> = new Set(["p11", "p20", "p39", "p43", "p46", "p52", "p62"])
+const optimizedPhotos: ReadonlySet<PhotoId> = new Set(["p11", "p20", "p39", "p43", "p46", "p52", "p60", "p62"])
 
 function photoSizes(id: PhotoId) {
+  if (id === "p60") return [480, 768, 960, 1280]
   const sizes = photos[id].sizes
   return optimizedPhotos.has(id) ? [...new Set([...sizes, 768, 1280])].filter(size => size <= sizes[sizes.length - 1]).sort((a, b) => a - b) : sizes
 }
@@ -12,7 +13,7 @@ function photoSizes(id: PhotoId) {
 export function photoSrc(id: PhotoId, width?: number, format: "webp" | "avif" = "webp") {
   const sizes = photoSizes(id)
   const size = width ? (sizes.find((s) => s >= width) ?? sizes[sizes.length - 1]) : sizes[sizes.length - 1]
-  const folder = id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
+  const folder = id === "p60" ? "optimized-v2/" : id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
   return `/images/photos/${folder}${id}-${size}.${format}`
 }
 

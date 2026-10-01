@@ -206,8 +206,9 @@ function FloatingContact({ locale, pathname }: { locale: Locale; pathname: strin
 
   useEffect(() => {
     const updateVisibility = () => {
+      if (window.scrollY <= 80) { setVisible(false); return }
       const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 420
-      setVisible(window.scrollY > 80 && !nearBottom)
+      setVisible(!nearBottom)
     }
     updateVisibility()
     window.addEventListener("scroll", updateVisibility, { passive: true })
@@ -304,8 +305,9 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
 
   useEffect(() => {
     const updateVisibility = () => {
+      if (window.scrollY <= 80) { setShowSettingsButton(false); return }
       const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 350
-      setShowSettingsButton(window.scrollY > 80 && !nearBottom)
+      setShowSettingsButton(!nearBottom)
     }
     updateVisibility()
     window.addEventListener("scroll", updateVisibility, { passive: true })

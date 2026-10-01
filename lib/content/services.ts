@@ -49,7 +49,7 @@ export interface Service extends ServiceConfig {
   index: number
 }
 
-export const services: Service[] = serviceConfigs.map((config, i) => ({
+export const services: Service[] = /* @__PURE__ */ serviceConfigs.map((config, i) => ({
   ...config,
   index: i + 1,
   source: servicesSource[config.slug],

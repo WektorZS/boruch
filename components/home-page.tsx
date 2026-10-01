@@ -11,9 +11,9 @@ import { SiteFooter } from "./site-footer"
 import { useModalFocus } from "./use-modal-focus"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { serviceSummary, services, type ServiceSlug } from "@/lib/content/services"
+import { serviceConfigs, serviceSummary, type ServiceSlug } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
-import { cn } from "@/lib/utils"
+import { clsx as cn } from "clsx"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
 
@@ -462,11 +462,12 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <div id="top" lang={localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080809] text-bone">
+      {locale === "pl" && <link rel="preload" href="/fonts/roboto-flex-polish-v2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />}
       <a href="#main" className="fixed left-4 top-4 z-80 -translate-y-24 bg-brand px-4 py-3 text-xs font-bold uppercase tracking-[.16em] transition-transform focus:translate-y-0">
         {t.skip}
       </a>
       <HomeHeader locale={locale} />
-      <main id="main" tabIndex={-1}>
+      <main id="main" className="home-main" tabIndex={-1}>
         <HomeHero locale={locale} />
         <WhyBoruch locale={locale} />
         <ServiceMenu locale={locale} />
@@ -693,12 +694,12 @@ function ServiceMenu({ locale }: { locale: Locale }) {
     category,
     title: src.services.groups[groupIndex]?.title ?? category,
     description: serviceGroupCopy[locale][category],
-    items: services.filter((service) => service.category === category).map((service) => {
+    items: serviceConfigs.filter((service) => service.category === category).map((service) => {
       const summary = serviceSummary(locale, service.slug)
       return {
         slug: service.slug,
         title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
-        description: summary?.text ?? service.source.tagline,
+        description: summary?.text ?? serviceGroupCopy[locale][category],
         href: locale === "pl" ? `/${service.slug}` : routes[locale].services,
       }
     }),
@@ -708,7 +709,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
   const activeGroup = groups.find(group => group.category === category) ?? groups[0]
   const changeCategory = (next: "myjnia" | "detailing") => {
     setCategory(next)
-    selectService(services.find(service => service.category === next)!.slug)
+    selectService(serviceConfigs.find(service => service.category === next)!.slug)
   }
 
   return (
@@ -737,7 +738,7 @@ function ServiceMenu({ locale }: { locale: Locale }) {
             <ol className="hidden border-t border-white/15 lg:block">
               {activeGroup.items.map(item => <li key={item.slug}>
                 <button type="button" onMouseEnter={() => selectService(item.slug)} onFocus={() => selectService(item.slug)} onClick={() => selectService(item.slug)} aria-pressed={activeService === item.slug} className="explorer-service">
-                  <span className="type-index text-xs">{String(services.find(service => service.slug === item.slug)!.index).padStart(2, "0")}</span>
+                  <span className="type-index text-xs">{String(serviceConfigs.findIndex(service => service.slug === item.slug) + 1).padStart(2, "0")}</span>
                   <span>{item.title}</span><ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
                 </button>
               </li>)}
@@ -1066,8 +1067,8 @@ function Reviews({ locale }: { locale: Locale }) {
   const showNextReview = () => desktopEmblaApi?.scrollNext(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 
   return (
-    <section ref={sectionRef} aria-labelledby="reviews-title" className="section-xl relative overflow-hidden bg-[#0a0a0b]">
-      <div className="home-shell relative">
+    <section ref={sectionRef} aria-labelledby="reviews-title" className="home-reviews section-xl relative overflow-hidden bg-[#0a0a0b]">
+      <div className="home-shell home-reviews-content relative">
         <div className="grid gap-7 border-b border-white/10 pb-9 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
           <p className="home-kicker">{copy.reviewsLabel}</p>
@@ -1077,7 +1078,7 @@ function Reviews({ locale }: { locale: Locale }) {
         </div>
 
         <div className="relative mt-6 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-10 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
-          <div ref={desktopEmblaRef} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
+          <div ref={carouselReady ? desktopEmblaRef : undefined} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
             <div className="-ml-3 flex touch-pan-y items-center py-5 md:-ml-5 md:py-8">
               {copy.reviews.map((review, index) => {
                 const isActive = index === activeReview
@@ -1090,7 +1091,7 @@ function Reviews({ locale }: { locale: Locale }) {
                         ? "z-10 scale-[.9] opacity-30 md:origin-right md:scale-[.7] md:opacity-15"
                         : "z-10 scale-[.9] opacity-30 md:origin-left md:scale-[.7] md:opacity-15",
                     )}>
-                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel measure={carouselReady} />
+                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel measure={carouselReady && isActive} />
                     </div>
                   </div>
                 )

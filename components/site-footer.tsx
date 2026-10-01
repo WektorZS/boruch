@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
-import { services } from "@/lib/content/services"
+import { serviceConfigs } from "@/lib/content/services"
 
 const pageOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
 
@@ -58,7 +58,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
         <nav aria-label={t.nav.services} className="lg:col-span-3">
           <p className="mb-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-white/80">{t.nav.services}</p>
           <ul className="grid gap-3 text-sm text-white/58">
-            {footerServices.map((item) => <li key={item.title}><Link prefetch={false} href={locale === "pl" && services.some(service => service.slug === item.slug) ? `/${item.slug}` : routes[locale].services} className="link-draw inline-block max-w-full py-1 hyphens-auto [overflow-wrap:anywhere] transition-colors hover:text-white">{item.title}</Link></li>)}
+            {footerServices.map((item) => <li key={item.title}><Link prefetch={false} href={locale === "pl" && serviceConfigs.some(service => service.slug === item.slug) ? `/${item.slug}` : routes[locale].services} className="link-draw inline-block max-w-full py-1 hyphens-auto [overflow-wrap:anywhere] transition-colors hover:text-white">{item.title}</Link></li>)}
           </ul>
         </nav>
 

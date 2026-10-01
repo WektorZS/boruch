@@ -204,6 +204,18 @@
 
 /* ---------- Layout ---------- */
 
+/* Keep offscreen copy in the HTML, but do not lay out the entire page at startup.
+   The review dialog stays outside its contained content so it remains viewport-fixed. */
+.home-main > section:not(.editorial-hero):not(.home-reviews) {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 900px;
+}
+.home-reviews-content {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 650px;
+}
+#site-menu[data-open='false'] { content-visibility: hidden; }
+
 @utility shell {
   width: 100%;
   max-width: var(--container-main);

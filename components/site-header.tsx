@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { clsx as cn } from "clsx"
 import { useModalFocus } from "./use-modal-focus"
 
 export interface HeaderNavItem {
