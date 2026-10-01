@@ -2155,7 +2155,7 @@ function Location({ locale }: { locale: Locale }) {
               </a>
             </div>
           </div>
-
+x
           <div className="group relative min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
             <iframe
               title={`${t.openMap} - BORUCH Myjnia Szczecin`}
