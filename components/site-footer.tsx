@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
+import { SmartMapLink } from "./smart-map-link"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceConfigs } from "@/lib/content/services"
 
@@ -39,13 +40,34 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
       <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-14 lg:grid-cols-12 lg:gap-8 lg:py-20">
         <div className="col-span-2 lg:col-span-4">
           <p className="max-w-sm text-sm leading-relaxed text-white/65">{footerIntro[locale]}</p>
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="group mt-8 flex max-w-sm items-center gap-5 border-l border-brand pl-5 text-sm leading-relaxed text-white/65 transition-colors hover:text-white">
-            <span className="shrink-0 font-display text-4xl font-bold leading-none text-brand" aria-hidden="true">-2</span>
-            <span>
-              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-bone"><MapPin className="size-3.5" aria-hidden="true" />PAZIM / {t.level} -2</span>
-              <span className="mt-2 block">{src.address.lines[0]}<br />{src.address.lines[3]}</span>
-            </span>
-          </a>
+          <SmartMapLink
+  ariaLabel={t.openMap}
+  className="group mt-8 flex max-w-sm items-center gap-5 border-l border-brand pl-5 text-sm leading-relaxed text-white/65 transition-colors hover:text-white"
+>
+  <span
+    className="shrink-0 font-display text-4xl font-bold leading-none text-brand"
+    aria-hidden="true"
+  >
+    -2
+  </span>
+
+  <span>
+    <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-bone">
+      <MapPin
+        className="size-3.5"
+        aria-hidden="true"
+      />
+
+      PAZIM / {t.level} -2
+    </span>
+
+    <span className="mt-2 block">
+      {src.address.lines[0]}
+      <br />
+      {src.address.lines[3]}
+    </span>
+  </span>
+</SmartMapLink>
           <ul aria-label={t.language} className="mt-7 flex flex-wrap gap-2">
             {localeOrder.map((code) => (
               <li key={code}><Link prefetch={false} href={alternates[code]} hrefLang={localeLabels[code].htmlLang} lang={localeLabels[code].htmlLang} aria-label={`${localeLabels[code].short} - ${localeLabels[code].name}`} aria-current={code === locale ? "true" : undefined} className="grid h-10 min-w-12 place-items-center border border-white/12 px-3 text-[.72rem] font-medium text-white/65 transition-colors hover:border-white/30 hover:text-white aria-[current=true]:border-white/30 aria-[current=true]:bg-white/10 aria-[current=true]:text-bone">{localeLabels[code].short}</Link></li>
