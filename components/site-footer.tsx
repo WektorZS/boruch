@@ -140,11 +140,6 @@ export function SiteFooter({
     </span>
   </span>
 
-  <span className="mb-0.5 hidden text-[.58rem] font-semibold uppercase leading-[1.55] tracking-[.16em] text-white/42 sm:block">
-    Myjnia / Detailing
-    <br />
-    Szczecin / PAZIM
-  </span>
 </Link>
 
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">
