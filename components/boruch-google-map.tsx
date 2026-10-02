@@ -162,41 +162,50 @@ export function BoruchGoogleMap() {
         }
 
         const mapsLibrary =
-          await googleMaps.importLibrary("maps")
+  await googleMaps.importLibrary("maps")
 
-        const markerLibrary =
-          await googleMaps.importLibrary("marker")
+const markerLibrary =
+  await googleMaps.importLibrary("marker")
 
-        if (cancelled) return
+const coreLibrary =
+  await googleMaps.importLibrary("core")
 
-        const Map =
-          mapsLibrary.Map
+if (cancelled) return
 
-        const AdvancedMarkerElement =
-          markerLibrary.AdvancedMarkerElement
+const Map =
+  mapsLibrary.Map
+
+const AdvancedMarkerElement =
+  markerLibrary.AdvancedMarkerElement
+
+const ColorScheme =
+  coreLibrary.ColorScheme
 
         const map = new Map(container, {
-          center: BORUCH_POSITION,
-          zoom: 17.3,
+  center: BORUCH_POSITION,
+  zoom: 17.3,
 
-          mapId: GOOGLE_MAPS_MAP_ID,
+  mapId: GOOGLE_MAPS_MAP_ID,
 
-          disableDefaultUI: true,
+  colorScheme:
+    ColorScheme?.DARK ?? "DARK",
 
-          zoomControl: true,
+  disableDefaultUI: true,
 
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
+  zoomControl: true,
 
-          clickableIcons: false,
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: false,
 
-          gestureHandling: "cooperative",
+  clickableIcons: false,
 
-          keyboardShortcuts: false,
+  gestureHandling: "cooperative",
 
-          backgroundColor: "#0a0a0b",
-        })
+  keyboardShortcuts: false,
+
+  backgroundColor: "#080809",
+})
 
         marker = new AdvancedMarkerElement({
           map,
