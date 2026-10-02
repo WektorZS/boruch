@@ -422,7 +422,7 @@ export function BoruchGoogleMap() {
   onClick={openDirections}
   className="flex min-h-12 w-full items-center justify-between border border-white/10 bg-[#0a0a0b]/95 px-4 text-[10px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-brand/40 hover:text-brand"
 >
-  <span>Otwórz w mapach</span>
+  <span>Wyznacz trasę</span>
 
   <svg
     viewBox="0 0 24 24"
