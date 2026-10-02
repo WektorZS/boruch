@@ -260,12 +260,14 @@ export function BoruchGoogleMap() {
         googleMapRef.current = map
 
         marker = new AdvancedMarkerElement({
-          map,
-          position: BORUCH_POSITION,
-          title: "BORUCH Myjnia Szczecin",
-          content: createBoruchMarker(),
-          zIndex: 1000,
-        })
+  map,
+  position: BORUCH_POSITION,
+  title: "BORUCH Myjnia Szczecin",
+  content: createBoruchMarker(),
+  anchorLeft: "-50%",
+  anchorTop: "-100%",
+  zIndex: 1000,
+})
       } catch (error) {
         console.error(
           "Nie udało się załadować Google Maps:",
