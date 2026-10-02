@@ -261,20 +261,6 @@ export function SiteFooter({
   ))}
 </div>
 
-  <Link
-    prefetch={false}
-    href={routes[locale].pricing}
-    className="group mt-6 inline-flex items-center gap-3 text-[.68rem] font-semibold uppercase tracking-[.15em] text-white/55 transition-colors hover:text-white"
-  >
-    <span className="link-draw">
-      {extras.title}
-    </span>
-
-    <ArrowUpRight
-      className="size-3.5 text-brand"
-      aria-hidden="true"
-    />
-  </Link>
 </nav>
 
           <div className="col-span-2 flex flex-col gap-3 text-sm text-white/58 lg:col-span-3">
