@@ -18,7 +18,7 @@ type PriceItem = {
 const tableCopy = {
   pl: {
     title: "Pełny cennik usług",
-    intro: "Aktualna oferta zgodna z Booksy. Wariant auta, cena początkowa i orientacyjny czas są podane przy każdej usłudze.",
+    intro: "Pełna oferta Boruh Myjniad Wariant auta, cena początkowa i orientacyjny czas są podane przy każdej usłudze.",
     service: "Usługa", scope: "Zakres", variant: "Wariant", price: "Cena od", time: "Szacunkowy czas", from: "od", quote: "Wycena indywidualna", details: "Zobacz szczegóły usługi", scopeFallback: "Dokładny zakres dobierzemy do stanu auta podczas rezerwacji lub oględzin.",
     noticePrice: "Ceny od", noticePriceText: "Podane kwoty dotyczą przeciętnie zabrudzonego auta.",
     noticeTime: "Czas orientacyjny", noticeTimeText: "Rzeczywisty czas zależy od stanu i wielkości samochodu.",
@@ -59,7 +59,7 @@ const tableCopy = {
     noticePrice: "Ціни від", noticePriceText: "Вказані суми стосуються автомобіля із середнім рівнем забруднення.",
     noticeTime: "Орієнтовний час", noticeTimeText: "Фактичний час залежить від стану та розміру автомобіля.",
     noticeCondition: "Сильне забруднення", noticeConditionText: "Якщо потрібно більше роботи, ми підтвердимо вартість до її початку.",
-    coating: "Для авто з додатковим захисним покриттям потрібні інші засоби. До зовнішнього миття додається 20 PLN.",
+    coating: "Для авто з додатковим захисним покриттям потрібні інші засоби. До ��овнішнього миття додається 20 PLN.",
     washTitle: "Миття та салон", washIntro: "Основні пакети з ціною відповідно до розміру автомобіля.",
     detailingTitle: "Догляд і детейлінг", detailingIntro: "Захисні, відновлювальні та стилістичні процедури.",
     saleTitle: "Пакет для продажу", saleIntro: "Комплексна підготовка, яка підвищує привабливість автомобіля перед продажем.",
