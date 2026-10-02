@@ -12,78 +12,95 @@ const BORUCH_POSITION = {
 
 type GoogleMapsWindow = Window & {
   google?: any
-  __boruchGoogleMapsPromise?: Promise<void>
+  __boruchGoogleMapsBootstrap?: boolean
 }
 
-function getGoogleWindow() {
-  return window as GoogleMapsWindow
-}
+function installGoogleMapsBootstrap() {
+  const googleWindow = window as GoogleMapsWindow
 
-function loadGoogleMaps() {
-  const googleWindow = getGoogleWindow()
-
-  if (googleWindow.google?.maps) {
-    return Promise.resolve()
+  if (googleWindow.google?.maps?.importLibrary) {
+    return
   }
 
-  if (googleWindow.__boruchGoogleMapsPromise) {
-    return googleWindow.__boruchGoogleMapsPromise
+  if (googleWindow.__boruchGoogleMapsBootstrap) {
+    return
   }
 
-  googleWindow.__boruchGoogleMapsPromise = new Promise<void>(
-    (resolve, reject) => {
-      const existingScript =
-        document.querySelector<HTMLScriptElement>(
-          'script[data-boruch-google-maps="true"]',
-        )
+  googleWindow.__boruchGoogleMapsBootstrap = true
 
-      if (existingScript) {
-        existingScript.addEventListener(
-          "load",
-          () => resolve(),
-          { once: true },
-        )
+  const g = {
+    key: GOOGLE_MAPS_API_KEY,
+    v: "weekly",
+  }
 
-        existingScript.addEventListener(
-          "error",
-          () =>
-            reject(
-              new Error(
-                "Nie udało się załadować Google Maps.",
-              ),
-            ),
-          { once: true },
-        )
+  const p = "The Google Maps JavaScript API"
+  const c = "google"
+  const l = "importLibrary"
+  const q = "__ib__"
+  const m = document
+  const b = window as any
 
-        return
+  b[c] = b[c] || {}
+
+  const d = b[c].maps || (b[c].maps = {})
+  const r = new Set<string>()
+  const e = new URLSearchParams()
+
+  let h: Promise<void> | undefined
+  let a: HTMLScriptElement
+
+  const u = () =>
+    h ||
+    (h = new Promise<void>(async (resolve, reject) => {
+      a = m.createElement("script")
+
+      e.set("libraries", [...r].join(","))
+
+      for (const key in g) {
+        e.set(
+          key.replace(
+            /[A-Z]/g,
+            (letter) => `_${letter[0].toLowerCase()}`,
+          ),
+          String(g[key as keyof typeof g]),
+        )
       }
 
-      const script = document.createElement("script")
+      e.set("callback", `${c}.maps.${q}`)
 
-      script.src =
-        `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
-          GOOGLE_MAPS_API_KEY,
-        )}&v=weekly&libraries=marker&loading=async`
+      a.src =
+        `https://maps.${c}apis.com/maps/api/js?${e.toString()}`
 
-      script.async = true
-      script.defer = true
-      script.dataset.boruchGoogleMaps = "true"
+      d[q] = resolve
 
-      script.onload = () => resolve()
-
-      script.onerror = () => {
+      a.onerror = () => {
+        h = undefined
         reject(
           new Error(
-            "Nie udało się załadować Google Maps.",
+            `${p} could not load.`,
           ),
         )
       }
 
-      document.head.appendChild(script)
-    },
-  )
+      m.head.appendChild(a)
+    }))
 
-  return googleWindow.__boruchGoogleMapsPromise
+  if (d[l]) {
+    console.warn(
+      `${p} only loads once. Ignoring duplicate bootstrap.`,
+    )
+  } else {
+    d[l] = (
+      library: string,
+      ...args: unknown[]
+    ) => {
+      r.add(library)
+
+      return u().then(() =>
+        d[l](library, ...args),
+      )
+    }
+  }
 }
 
 export function BoruchGoogleMap() {
@@ -94,22 +111,20 @@ export function BoruchGoogleMap() {
 
     if (!container) return
 
+    installGoogleMapsBootstrap()
+
     let marker: any = null
     let cancelled = false
 
     async function initMap() {
       try {
-        await loadGoogleMaps()
+        const googleMaps =
+          (window as GoogleMapsWindow).google?.maps
 
-        const googleWindow = getGoogleWindow()
-        const googleMaps = googleWindow.google?.maps
-
-        if (
-          cancelled ||
-          !googleMaps ||
-          !container
-        ) {
-          return
+        if (!googleMaps?.importLibrary) {
+          throw new Error(
+            "google.maps.importLibrary nie zostało zainstalowane.",
+          )
         }
 
         const mapsLibrary =
@@ -123,11 +138,15 @@ export function BoruchGoogleMap() {
 
         if (cancelled) return
 
-        const Map = mapsLibrary.Map
+        const Map =
+          mapsLibrary.Map
+
         const AdvancedMarkerElement =
           markerLibrary.AdvancedMarkerElement
+
         const PinElement =
           markerLibrary.PinElement
+
         const ColorScheme =
           coreLibrary.ColorScheme
 
