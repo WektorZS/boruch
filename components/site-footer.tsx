@@ -207,7 +207,7 @@ export function SiteFooter({
             {t.nav.services}
           </p>
 
-          <div className="grid gap-x-8 sm:grid-cols-2">
+          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 sm:gap-y-0">
             {footerServiceGroups.map((group) => (
               <div key={group.title}>
                 <p className="mb-3 text-[.65rem] font-semibold uppercase tracking-[.16em] text-white/38">
