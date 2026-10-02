@@ -127,29 +127,29 @@ export function SiteFooter({
 
       <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-12 lg:grid-cols-12 lg:gap-8 lg:py-14">
         <div className="col-span-2 lg:col-span-3">
-          <Link
-            prefetch={false}
-            href={routes[locale].home}
-            aria-label="Boruch Myjnia - Strona główna"
-            className="footer-signature inline-flex"
-          >
-            <span>
-              BORUCH
-              <span className="text-brand">
-                .
-              </span>
-            </span>
+         <Link
+  prefetch={false}
+  href={routes[locale].home}
+  aria-label="Boruch Myjnia - Strona główna"
+  className="group inline-flex w-fit items-end gap-4"
+>
+  <span className="font-display text-[clamp(2.6rem,4vw,4rem)] font-black uppercase leading-[.82] tracking-[-.04em] text-bone transition-colors group-hover:text-white">
+    BORUCH
+    <span className="text-brand">
+      .
+    </span>
+  </span>
 
-            <span>
-              Myjnia / Detailing
-              <br />
-              Szczecin / PAZIM
-            </span>
-          </Link>
+  <span className="mb-0.5 hidden text-[.58rem] font-semibold uppercase leading-[1.55] tracking-[.16em] text-white/42 sm:block">
+    Myjnia / Detailing
+    <br />
+    Szczecin / PAZIM
+  </span>
+</Link>
 
-          <p className="mt-7 max-w-sm text-sm leading-relaxed text-white/65">
-            {footerIntro[locale]}
-          </p>
+          <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">
+  {footerIntro[locale]}
+</p>
 
           <SmartMapLink
             ariaLabel={t.openMap}
