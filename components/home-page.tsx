@@ -1638,18 +1638,10 @@ function WorkShowcase({ locale }: { locale: Locale }) {
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/65 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"
               />
 
-              <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-3 sm:p-4">
                 <span className="font-mono text-[.6rem] font-bold tracking-[.16em] text-white/60">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <span className="grid size-8 place-items-center border border-white/20 bg-black/20 text-white/80 backdrop-blur-sm transition-[border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-brand/70 group-hover:text-white">
-                  <ArrowUpRight
-                    className="size-3.5"
-                    aria-hidden="true"
-                  />
-                </span>
-              </span>
+    {String(index + 1).padStart(2, "0")}
+  </span>
+</span>
             </Link>
           ))}
         </div>
