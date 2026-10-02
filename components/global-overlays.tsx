@@ -341,7 +341,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
 
       {(firstVisit || editing) && (
         <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="cookie-title" className="fixed inset-0 z-[120] flex items-end justify-center bg-black/80 p-0 sm:items-center sm:p-6" onMouseDown={(event) => { if (editing && event.target === event.currentTarget) setEditing(false) }}>
-          <section className="modal-sheet min-h-[68svh] max-h-[85svh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-5 sm:min-h-0 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
+          <section className="modal-sheet max-h-[96dvh] w-full max-w-none overflow-y-auto border-x-0 border-b-0 border-t-[3px] border-t-brand bg-[#111112] p-4 sm:max-h-[92dvh] sm:max-w-2xl sm:border sm:border-white/12 sm:p-8">
             <div className="flex items-start gap-4">
               <span className="grid size-11 shrink-0 place-items-center text-brand"><Cookie className="size-7" aria-hidden="true" /></span>
               <div className="min-w-0 flex-1">
@@ -352,7 +352,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
               {editing && <button type="button" onClick={() => setEditing(false)} aria-label={t.close} className="grid size-10 shrink-0 place-items-center border border-white/12 text-white/58 transition-colors hover:border-brand hover:bg-brand hover:text-white"><X className="size-5" /></button>}
             </div>
 
-            <div className="mt-5 flex flex-col gap-3 border-y border-white/10 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-4 flex flex-col gap-2.5 border-y border-white/10 py-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:py-4">
               <span className="text-[.72rem] font-medium uppercase tracking-[.12em] text-white/65">{t.languageLabel}</span>
               <div className="grid w-full grid-cols-4 gap-2 sm:w-auto sm:gap-1" role="group" aria-label={t.languageLabel}>
                 {localeOrder.map((code) => {
@@ -378,7 +378,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
 
             {!editing && <p className="mt-5 border-l-2 border-brand pl-4 text-xs leading-relaxed text-white/65">{t.cookieOptionalInfo}</p>}
 
-            <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
+            <div className="mt-4 grid gap-2.5 sm:mt-6 sm:grid-cols-2 sm:gap-3">
               <button type="button" onClick={() => editing ? setDraftConsent("rejected") : saveConsent("rejected")} aria-pressed={editing ? draftConsent === "rejected" : undefined} className={choiceClass(editing && draftConsent === "rejected")}>
                 <div className="flex items-center justify-between gap-3 sm:w-full sm:items-start">
                   <span className="grid size-10 shrink-0 place-items-center bg-white/[.06] text-white/55"><ShieldCheck className="size-5" aria-hidden="true" /></span>
@@ -412,7 +412,7 @@ function CookieConsent({ locale, pathname }: { locale: Locale; pathname: string 
                 <Check className="size-4" aria-hidden="true" />{t.save}
               </button>
             )}
-            <p className="mt-5 border-t border-white/10 pt-4 text-center text-[.72rem] leading-relaxed text-white/65 sm:text-[.72rem]">{t.changeAnytime}</p>
+            <p className="mt-4 border-t border-white/10 pt-3 text-center text-[.7rem] leading-relaxed text-white/65 sm:mt-5 sm:pt-4 sm:text-[.72rem]">{t.changeAnytime}</p>
           </section>
         </div>
       )}
