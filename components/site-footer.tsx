@@ -151,11 +151,28 @@ export function SiteFooter({
   const src = sources[locale]
   const t = ui[locale]
 
-  const footerServiceGroups =
-    src.services.groups
+ const footerServiceGroups =
+  src.services.groups.map((group, index) => {
+    if (index !== 0) return group
 
-  const extras =
-    additionalServices[locale]
+    return {
+      ...group,
+      items: [
+        ...group.items,
+        {
+          slug: "pakiet-sprzedaz",
+          title:
+            locale === "pl"
+              ? "Pakiet Sprzedaż"
+              : locale === "en"
+                ? "Sales Package"
+                : locale === "de"
+                  ? "Verkaufspaket"
+                  : "Пакет для продажу",
+        },
+      ],
+    }
+  })
 
   return (
     <footer className="border-t border-white/10 bg-[#080809]">
@@ -302,42 +319,45 @@ export function SiteFooter({
     {t.nav.services}
   </p>
 
-  <div className="grid gap-x-8 sm:grid-cols-2">
-    {footerServiceGroups.map((group) => (
-      <div key={group.title}>
-        <p className="mb-3 text-[.65rem] font-semibold uppercase tracking-[.16em] text-white/38">
-          {group.title}
-        </p>
+ <div className="grid gap-x-8 sm:grid-cols-2">
+  {footerServiceGroups.map((group) => (
+    <div key={group.title}>
+      <p className="mb-3 text-[.65rem] font-semibold uppercase tracking-[.16em] text-white/38">
+        {group.title}
+      </p>
 
-        <ul className="grid gap-1.5 text-sm text-white/58">
-          {group.items.map((item) => {
-            const hasOwnPage =
-              locale === "pl" &&
-              serviceConfigs.some(
-                (service) =>
-                  service.slug === item.slug,
-              )
-
-            return (
-              <li key={item.title}>
-                <Link
-                  prefetch={false}
-                  href={
-                    hasOwnPage
-                      ? `/${item.slug}`
-                      : routes[locale].services
-                  }
-                  className="link-draw inline-block max-w-full py-1 hyphens-auto [overflow-wrap:anywhere] transition-colors hover:text-white"
-                >
-                  {item.title}
-                </Link>
-              </li>
+      <ul className="grid gap-1.5 text-sm text-white/58">
+        {group.items.map((item) => {
+          const hasOwnPage =
+            locale === "pl" &&
+            serviceConfigs.some(
+              (service) =>
+                service.slug === item.slug,
             )
-          })}
-        </ul>
-      </div>
-    ))}
-  </div>
+
+          const href =
+            item.slug === "pakiet-sprzedaz"
+              ? `${routes[locale].pricing}#pakiet-sprzedaz`
+              : hasOwnPage
+                ? `/${item.slug}`
+                : routes[locale].services
+
+          return (
+            <li key={item.title}>
+              <Link
+                prefetch={false}
+                href={href}
+                className="link-draw inline-block max-w-full py-1 hyphens-auto [overflow-wrap:anywhere] transition-colors hover:text-white"
+              >
+                {item.title}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  ))}
+</div>
 
   <Link
     prefetch={false}
