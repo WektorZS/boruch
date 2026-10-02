@@ -2212,7 +2212,7 @@ function Location({ locale }: { locale: Locale }) {
 }
 function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
-
+X
   return (
     <section id="wycena" aria-labelledby="contact-form-title" className="section-xl bg-[#111112]">
       <div className="home-shell">
