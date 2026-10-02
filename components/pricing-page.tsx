@@ -18,7 +18,7 @@ type PriceItem = {
 const tableCopy = {
   pl: {
     title: "Pełny cennik usług",
-    intro: "Aktualna oferta zgodna z Booksy. Wariant auta, cena początkowa i orientacyjny czas są podane przy każdej usłudze.",
+    intro: "Pełna oferta Boruch Myjnia. Cena w zależności od rozmiaru auta i orientacyjny czas wykonania usługi.",
     service: "Usługa", scope: "Zakres", variant: "Wariant", price: "Cena od", time: "Szacunkowy czas", from: "od", quote: "Wycena indywidualna", details: "Zobacz szczegóły usługi", scopeFallback: "Dokładny zakres dobierzemy do stanu auta podczas rezerwacji lub oględzin.",
     noticePrice: "Ceny od", noticePriceText: "Podane kwoty dotyczą przeciętnie zabrudzonego auta.",
     noticeTime: "Czas orientacyjny", noticeTimeText: "Rzeczywisty czas zależy od stanu i wielkości samochodu.",
@@ -59,7 +59,7 @@ const tableCopy = {
     noticePrice: "Ціни від", noticePriceText: "Вказані суми стосуються автомобіля із середнім рівнем забруднення.",
     noticeTime: "Орієнтовний час", noticeTimeText: "Фактичний час залежить від стану та розміру автомобіля.",
     noticeCondition: "Сильне забруднення", noticeConditionText: "Якщо потрібно більше роботи, ми підтвердимо вартість до її початку.",
-    coating: "Для авто з додатковим захисним покриттям потрібні інші засоби. До зовнішнього миття додається 20 PLN.",
+    coating: "Для авто з додатковим захисним покриттям потрібні інші засоби. До ��овнішнього миття додається 20 PLN.",
     washTitle: "Миття та салон", washIntro: "Основні пакети з ціною відповідно до розміру автомобіля.",
     detailingTitle: "Догляд і детейлінг", detailingIntro: "Захисні, відновлювальні та стилістичні процедури.",
     saleTitle: "Пакет для продажу", saleIntro: "Комплексна підготовка, яка підвищує привабливість автомобіля перед продажем.",
@@ -219,7 +219,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
         <div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
-          <div className="min-w-0 lg:col-span-5"><p className="eyebrow mb-7">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1></div>
+         
           <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}</p>
         </div>
       </section>

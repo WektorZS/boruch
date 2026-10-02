@@ -104,7 +104,7 @@ export function SiteFooter({ locale, alternates, showContactCta = true }: { loca
       <div className="border-t border-white/8">
         <div className="shell-wide flex flex-col gap-4 py-5 text-[.72rem] font-semibold uppercase tracking-[.14em] text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <span>© {new Date().getFullYear()} BORUCH MYJNIA</span>
-          <span>Szczecin / Plac Rodła 8 / PAZIM</span>
+          
           <a href="#top" className="group inline-flex min-h-8 w-fit items-center gap-2 text-white/65 transition-colors hover:text-white">{t.backToTop}<ArrowUpRight className="arrow-lift size-4 text-brand" aria-hidden="true" /></a>
         </div>
       </div>
