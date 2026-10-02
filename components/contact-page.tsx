@@ -1,10 +1,9 @@
 import { ArrowRight, CalendarCheck, Mail, Phone } from "lucide-react"
 import { SiteShell } from "./site-shell"
 import { HomeContactForm } from "./home-contact-form"
+import { BoruchGoogleMap } from "./boruch-google-map"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, sources, ui, type Locale } from "@/lib/content"
-
-const MAP_EMBED = "https://www.google.com/maps?q=Plac+Rod%C5%82a+8,+70-419+Szczecin&z=16&output=embed"
 
 const pageCopy = {
   pl: {
@@ -102,17 +101,11 @@ export function ContactPage({ locale }: { locale: Locale }) {
             <address className="mt-7 not-italic text-sm leading-relaxed text-white/70">
               {src.address.lines.map((line) => <span key={line} className="block">{line}</span>)}
             </address>
-            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="editorial-link mt-7 w-fit">{t.openMap}<ArrowRight className="size-4 text-brand" aria-hidden="true" /></a>
+           
           </div>
-          <div className="relative min-h-80 overflow-hidden lg:col-span-7 lg:min-h-96">
-            <iframe
-              src={MAP_EMBED}
-              title={`${t.openMap} - ${src.address.lines.join(", ")}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 h-full w-full border-0 opacity-90 [filter:grayscale(.72)_invert(.92)_sepia(.22)_hue-rotate(305deg)_contrast(1.02)]"
-            />
-          </div>
+         <div className="relative min-h-80 overflow-hidden rounded-sm bg-[#151516] lg:col-span-7 lg:min-h-96">
+  <BoruchGoogleMap />
+</div>
         </div>
       </section>
     </SiteShell>
