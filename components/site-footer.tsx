@@ -125,8 +125,8 @@ export function SiteFooter({
         </div>
       )}
 
-      <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-12 lg:grid-cols-12 lg:gap-8 lg:py-14">
-        <div className="col-span-2 lg:col-span-3">
+      <div className="shell-wide grid grid-cols-2 gap-x-6 gap-y-10 py-12 lg:grid-cols-[minmax(260px,1.05fr)_minmax(130px,.55fr)_minmax(420px,1.55fr)_minmax(240px,.9fr)] lg:gap-x-12 lg:py-14 xl:gap-x-16">
+       <div className="col-span-2 lg:col-span-1">
          <Link
   prefetch={false}
   href={routes[locale].home}
@@ -177,9 +177,9 @@ export function SiteFooter({
         </div>
 
         <nav
-          aria-label={t.navigation}
-          className="lg:col-span-2"
-        >
+  aria-label={t.navigation}
+  className="lg:col-span-1"
+>
           <p className="mb-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-white/80">
             {t.navigation}
           </p>
@@ -200,9 +200,9 @@ export function SiteFooter({
         </nav>
 
         <nav
-          aria-label={t.nav.services}
-          className="col-span-2 lg:col-span-4"
-        >
+  aria-label={t.nav.services}
+  className="col-span-2 lg:col-span-1"
+>
           <p className="mb-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-white/80">
             {t.nav.services}
           </p>
@@ -251,7 +251,7 @@ export function SiteFooter({
           </div>
         </nav>
 
-        <div className="col-span-2 flex flex-col gap-3 text-sm text-white/58 lg:col-span-3">
+        <div className="col-span-2 flex flex-col gap-3 text-sm text-white/58 lg:col-span-1">
           <p className="mb-2 text-[.72rem] font-bold uppercase tracking-[.18em] text-white/80">
             {t.nav.contact}
           </p>
