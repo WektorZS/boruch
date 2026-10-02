@@ -18,7 +18,7 @@ type PriceItem = {
 const tableCopy = {
   pl: {
     title: "Pełny cennik usług",
-    intro: "Pełna oferta Boruh Myjniad Wariant auta, cena początkowa i orientacyjny czas są podane przy każdej usłudze.",
+    intro: "Pełna oferta Boruch Myjnia. Cena w zależności od rozmiaru auta i orientacyjny czas wykonania usługi.",
     service: "Usługa", scope: "Zakres", variant: "Wariant", price: "Cena od", time: "Szacunkowy czas", from: "od", quote: "Wycena indywidualna", details: "Zobacz szczegóły usługi", scopeFallback: "Dokładny zakres dobierzemy do stanu auta podczas rezerwacji lub oględzin.",
     noticePrice: "Ceny od", noticePriceText: "Podane kwoty dotyczą przeciętnie zabrudzonego auta.",
     noticeTime: "Czas orientacyjny", noticeTimeText: "Rzeczywisty czas zależy od stanu i wielkości samochodu.",
@@ -219,7 +219,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
         <div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
-          <div className="min-w-0 lg:col-span-5"><p className="eyebrow mb-7">Boruch Myjnia / Booksy</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1></div>
+         
           <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}</p>
         </div>
       </section>
