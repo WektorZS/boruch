@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { importLibrary, setOptions } from "@googlemaps/js-api-loader"
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyAI4IGu6fbylowQS89deMLRKUnP8kTERiY"
 const GOOGLE_MAPS_MAP_ID = "8ad23a51fb86cfb05286e9ce"
@@ -11,7 +10,63 @@ const BORUCH_POSITION = {
   lng: 14.555602179682984,
 }
 
-let loaderConfigured = false
+declare global {
+  interface Window {
+    google?: typeof google
+    __boruchGoogleMapsPromise?: Promise<void>
+  }
+}
+
+function loadGoogleMaps() {
+  if (window.google?.maps) {
+    return Promise.resolve()
+  }
+
+  if (window.__boruchGoogleMapsPromise) {
+    return window.__boruchGoogleMapsPromise
+  }
+
+  window.__boruchGoogleMapsPromise = new Promise<void>((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      'script[data-boruch-google-maps="true"]',
+    )
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(), {
+        once: true,
+      })
+
+      existingScript.addEventListener(
+        "error",
+        () => reject(new Error("Nie udało się załadować Google Maps.")),
+        { once: true },
+      )
+
+      return
+    }
+
+    const script = document.createElement("script")
+
+    script.src =
+      `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
+        GOOGLE_MAPS_API_KEY,
+      )}&v=weekly&libraries=marker&loading=async`
+
+    script.async = true
+    script.defer = true
+    script.dataset.boruchGoogleMaps = "true"
+
+    script.onload = () => resolve()
+
+    script.onerror = () => {
+      reject(new Error("Nie udało się załadować Google Maps."))
+    }
+
+    document.head.appendChild(script)
+  })
+
+  return window.__boruchGoogleMapsPromise
+}
 
 export function BoruchGoogleMap() {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -21,24 +76,22 @@ export function BoruchGoogleMap() {
 
     if (!container) return
 
-    if (!loaderConfigured) {
-      setOptions({
-        key: GOOGLE_MAPS_API_KEY,
-        v: "weekly",
-      })
-
-      loaderConfigured = true
-    }
-
     let marker: google.maps.marker.AdvancedMarkerElement | null = null
     let cancelled = false
 
     async function initMap() {
       try {
-        const { Map } = await importLibrary("maps")
-        const { ColorScheme } = await importLibrary("core")
+        await loadGoogleMaps()
+
+        if (cancelled || !window.google?.maps) return
+
+        const { Map, ColorScheme } =
+          (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary
+
         const { AdvancedMarkerElement, PinElement } =
-          await importLibrary("marker")
+          (await google.maps.importLibrary(
+            "marker",
+          )) as google.maps.MarkerLibrary
 
         if (cancelled) return
 
@@ -70,9 +123,8 @@ export function BoruchGoogleMap() {
           map,
           position: BORUCH_POSITION,
           title: "BORUCH Myjnia Szczecin",
+          content: pin.element,
         })
-
-        marker.append(pin)
       } catch (error) {
         console.error("Nie udało się załadować Google Maps:", error)
       }
