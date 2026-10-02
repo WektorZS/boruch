@@ -6,8 +6,8 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyAI4IGu6fbylowQS89deMLRKUnP8kTERiY"
 const GOOGLE_MAPS_MAP_ID = "8ad23a51fb86cfb05286e9ce"
 
 const BORUCH_POSITION = {
-  lat: 53.43291636824182,
-  lng: 14.55341617722408,
+  lat: 53.43292196110834,
+  lng: 14.555987074586804,
 }
 
 const GOOGLE_MAPS_URL =
@@ -133,11 +133,11 @@ function createBoruchMarker() {
       </span>
 
       <span class="boruch-map-marker__name">
-        BORUCH
+        Boruh Myjnia
       </span>
 
       <span class="boruch-map-marker__level">
-        MYJNIA · DETAILING · POZIOM -2
+        MYJNIA · DETAIL
       </span>
     </div>
 
@@ -162,13 +162,23 @@ export function BoruchGoogleMap() {
 
     if (!container) return
 
-    installGoogleMapsBootstrap()
-
     let marker: any = null
     let cancelled = false
+    let initialized = false
 
     async function initMap() {
+      if (
+        initialized ||
+        cancelled
+      ) {
+        return
+      }
+
+      initialized = true
+
       try {
+        installGoogleMapsBootstrap()
+
         const googleMaps =
           (window as GoogleMapsWindow).google?.maps
 
@@ -251,10 +261,42 @@ export function BoruchGoogleMap() {
       }
     }
 
-    void initMap()
+    let observer: IntersectionObserver | null = null
+
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const shouldLoad =
+            entries.some(
+              (entry) =>
+                entry.isIntersecting,
+            )
+
+          if (!shouldLoad) {
+            return
+          }
+
+          observer?.disconnect()
+
+          void initMap()
+        },
+        {
+          root: null,
+          rootMargin: "500px 0px",
+          threshold: 0,
+        },
+      )
+
+      observer.observe(container)
+    } else {
+      void initMap()
+    }
 
     return () => {
       cancelled = true
+
+      observer?.disconnect()
+
       googleMapRef.current = null
 
       if (marker) {
@@ -315,12 +357,12 @@ export function BoruchGoogleMap() {
         <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-black/16 to-transparent" />
       </div>
 
-      <div className="absolute right-4 top-4 z-20 flex flex-col overflow-hidden border border-white/10 bg-[#0b0b0c]/95 shadow-2xl backdrop-blur-md">
+      <div className="absolute right-3 top-3 z-20 flex flex-col overflow-hidden border border-white/10 bg-[#0b0b0c]/95 shadow-2xl backdrop-blur-md sm:right-4 sm:top-4">
         <button
           type="button"
           onClick={zoomIn}
           aria-label="Przybliż mapę"
-          className="grid size-11 place-items-center border-b border-white/10 text-xl font-light text-white/85 transition-colors hover:bg-white/8 hover:text-white"
+          className="grid size-9 place-items-center border-b border-white/10 text-lg font-light text-white/85 transition-colors hover:bg-white/8 hover:text-white sm:size-11 sm:text-xl"
         >
           +
         </button>
@@ -329,7 +371,7 @@ export function BoruchGoogleMap() {
           type="button"
           onClick={zoomOut}
           aria-label="Oddal mapę"
-          className="grid size-11 place-items-center border-b border-white/10 text-2xl font-extralight text-white/85 transition-colors hover:bg-white/8 hover:text-white"
+          className="grid size-9 place-items-center border-b border-white/10 text-xl font-extralight text-white/85 transition-colors hover:bg-white/8 hover:text-white sm:size-11 sm:text-2xl"
         >
           −
         </button>
@@ -338,7 +380,7 @@ export function BoruchGoogleMap() {
           type="button"
           onClick={resetMap}
           aria-label="Wycentruj mapę na BORUCH"
-          className="grid size-11 place-items-center text-white/65 transition-colors hover:bg-white/8 hover:text-brand"
+          className="grid size-9 place-items-center text-white/65 transition-colors hover:bg-white/8 hover:text-brand sm:size-11"
         >
           <svg
             viewBox="0 0 24 24"
@@ -346,7 +388,7 @@ export function BoruchGoogleMap() {
             stroke="currentColor"
             strokeWidth="1.7"
             aria-hidden="true"
-            className="size-4"
+            className="size-3.5 sm:size-4"
           >
             <circle cx="12" cy="12" r="3" />
             <path d="M12 2v3" />
@@ -359,38 +401,6 @@ export function BoruchGoogleMap() {
       </div>
 
       <div className="absolute bottom-4 left-4 right-4 z-20 flex flex-col gap-2 sm:right-auto sm:max-w-[360px]">
-        <div className="border border-white/10 bg-[#0a0a0b]/95 px-4 py-3 shadow-2xl backdrop-blur-md">
-          <div className="flex items-start gap-3">
-            <div className="mt-0.5 grid size-8 shrink-0 place-items-center border border-brand/30 bg-brand/10 text-brand">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                aria-hidden="true"
-                className="size-4"
-              >
-                <path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z" />
-                <circle cx="12" cy="10" r="2.2" />
-              </svg>
-            </div>
-
-            <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand">
-                Wjazd do BORUCH
-              </p>
-
-              <p className="mt-1 text-sm font-semibold text-white">
-                Parking podziemny PAZIM
-              </p>
-
-              <p className="mt-0.5 text-xs leading-relaxed text-white/52">
-                Wjedź od Placu Rodła i zjedź na poziom -2.
-              </p>
-            </div>
-          </div>
-        </div>
-
         <a
           href={GOOGLE_MAPS_URL}
           target="_blank"
