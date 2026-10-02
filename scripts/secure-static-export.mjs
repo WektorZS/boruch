@@ -32,22 +32,33 @@ async function securePage(file) {
     const attributes = match[1].replace(/\s+integrity="[^"]*"/g, "")
     html = html.replace(match[0], `<script${attributes} integrity="${digest}">${match[2]}</script>`)
   }
-  const policy = [
-    "default-src 'self'",
-    "base-uri 'none'",
-    "object-src 'none'",
-    `script-src 'self' ${[...hashes].join(" ")}`,
-    "script-src-attr 'none'",
-    // React uses inline style attributes for carousel geometry and transitions.
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
-    "font-src 'self'",
-    "frame-src https://www.google.com",
-    `connect-src ${[...connectOrigins].join(" ")}`,
-    `form-action ${[...connectOrigins].filter((origin) => origin !== "https://vitals.vercel-insights.com").join(" ")}`,
-    "worker-src 'self' blob:",
-    "manifest-src 'self'",
-  ].join("; ")
+ const policy = [
+  "default-src 'self'",
+  "base-uri 'none'",
+  "object-src 'none'",
+
+  `script-src 'self' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com ${[...hashes].join(" ")}`,
+  "script-src-attr 'none'",
+
+  // React uses inline style attributes for carousel geometry and transitions.
+  // Google Maps also injects its own inline styles.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+
+  "img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com",
+
+  "font-src 'self' https://fonts.gstatic.com",
+
+  "frame-src https://*.google.com",
+
+  `connect-src ${[...connectOrigins].join(" ")} https://*.googleapis.com https://*.gstatic.com https://*.google.com data: blob:`,
+
+  `form-action ${[...connectOrigins]
+    .filter((origin) => origin !== "https://vitals.vercel-insights.com")
+    .join(" ")}`,
+
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+].join("; ")
   const meta = `<meta name="boruch-security" http-equiv="Content-Security-Policy" content="${policy}"/>`
   if (!/<meta charSet="utf-8"\s*\/>/i.test(html)) throw new Error(`Missing UTF-8 declaration in ${file}`)
   html = html.replace(/<meta charSet="utf-8"\s*\/>/i, (charset) => charset + meta)
