@@ -33,6 +33,7 @@ import {
 } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
+import { BoruchGoogleMap } from "./boruch-google-map"
 import { SiteHeader } from "./site-header"
 import { SiteFooter } from "./site-footer"
 import { useModalFocus } from "./use-modal-focus"
@@ -51,8 +52,6 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p43", position: "58% 55%" },
   { id: "p46", position: "50% 50%" },
 ]
-
-const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1188.4880132657092!2d14.555602179682984!3d53.43313691416123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e0!3m2!1spl!2spl!4v1790893337748!5m2!1spl!2spl"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
   pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
@@ -2194,17 +2193,9 @@ function Location({ locale }: { locale: Locale }) {
             </a>
           </div>
 
-          <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[34rem] lg:border-l lg:border-white/10 lg:pl-8">
-            <div className="relative h-full min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
-              <iframe
-                title={`${t.openMap} - BORUCH Myjnia Szczecin`}
-                src={mapEmbedUrl}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 block h-full w-full border-0"
-              />
-            </div>
-          </div>
+          <div className="relative min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
+  <BoruchGoogleMap />
+</div>
         </div>
       </div>
     </section>
