@@ -1,4 +1,3 @@
-/// <reference types="google.maps" />
 "use client"
 
 import { useEffect, useRef } from "react"
@@ -11,62 +10,80 @@ const BORUCH_POSITION = {
   lng: 14.555602179682984,
 }
 
-declare global {
-  interface Window {
-    google?: typeof google
-    __boruchGoogleMapsPromise?: Promise<void>
-  }
+type GoogleMapsWindow = Window & {
+  google?: any
+  __boruchGoogleMapsPromise?: Promise<void>
+}
+
+function getGoogleWindow() {
+  return window as GoogleMapsWindow
 }
 
 function loadGoogleMaps() {
-  if (window.google?.maps) {
+  const googleWindow = getGoogleWindow()
+
+  if (googleWindow.google?.maps) {
     return Promise.resolve()
   }
 
-  if (window.__boruchGoogleMapsPromise) {
-    return window.__boruchGoogleMapsPromise
+  if (googleWindow.__boruchGoogleMapsPromise) {
+    return googleWindow.__boruchGoogleMapsPromise
   }
 
-  window.__boruchGoogleMapsPromise = new Promise<void>((resolve, reject) => {
-    const existingScript = document.querySelector<HTMLScriptElement>(
-      'script[data-boruch-google-maps="true"]',
-    )
+  googleWindow.__boruchGoogleMapsPromise = new Promise<void>(
+    (resolve, reject) => {
+      const existingScript =
+        document.querySelector<HTMLScriptElement>(
+          'script[data-boruch-google-maps="true"]',
+        )
 
-    if (existingScript) {
-      existingScript.addEventListener("load", () => resolve(), {
-        once: true,
-      })
+      if (existingScript) {
+        existingScript.addEventListener(
+          "load",
+          () => resolve(),
+          { once: true },
+        )
 
-      existingScript.addEventListener(
-        "error",
-        () => reject(new Error("Nie udało się załadować Google Maps.")),
-        { once: true },
-      )
+        existingScript.addEventListener(
+          "error",
+          () =>
+            reject(
+              new Error(
+                "Nie udało się załadować Google Maps.",
+              ),
+            ),
+          { once: true },
+        )
 
-      return
-    }
+        return
+      }
 
-    const script = document.createElement("script")
+      const script = document.createElement("script")
 
-    script.src =
-      `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
-        GOOGLE_MAPS_API_KEY,
-      )}&v=weekly&libraries=marker&loading=async`
+      script.src =
+        `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
+          GOOGLE_MAPS_API_KEY,
+        )}&v=weekly&libraries=marker&loading=async`
 
-    script.async = true
-    script.defer = true
-    script.dataset.boruchGoogleMaps = "true"
+      script.async = true
+      script.defer = true
+      script.dataset.boruchGoogleMaps = "true"
 
-    script.onload = () => resolve()
+      script.onload = () => resolve()
 
-    script.onerror = () => {
-      reject(new Error("Nie udało się załadować Google Maps."))
-    }
+      script.onerror = () => {
+        reject(
+          new Error(
+            "Nie udało się załadować Google Maps.",
+          ),
+        )
+      }
 
-    document.head.appendChild(script)
-  })
+      document.head.appendChild(script)
+    },
+  )
 
-  return window.__boruchGoogleMapsPromise
+  return googleWindow.__boruchGoogleMapsPromise
 }
 
 export function BoruchGoogleMap() {
@@ -77,24 +94,42 @@ export function BoruchGoogleMap() {
 
     if (!container) return
 
-    let marker: google.maps.marker.AdvancedMarkerElement | null = null
+    let marker: any = null
     let cancelled = false
 
     async function initMap() {
       try {
         await loadGoogleMaps()
 
-        if (cancelled || !window.google?.maps) return
+        const googleWindow = getGoogleWindow()
+        const googleMaps = googleWindow.google?.maps
 
-        const { Map, ColorScheme } =
-          (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary
+        if (
+          cancelled ||
+          !googleMaps ||
+          !container
+        ) {
+          return
+        }
 
-        const { AdvancedMarkerElement, PinElement } =
-          (await google.maps.importLibrary(
-            "marker",
-          )) as google.maps.MarkerLibrary
+        const mapsLibrary =
+          await googleMaps.importLibrary("maps")
+
+        const markerLibrary =
+          await googleMaps.importLibrary("marker")
+
+        const coreLibrary =
+          await googleMaps.importLibrary("core")
 
         if (cancelled) return
+
+        const Map = mapsLibrary.Map
+        const AdvancedMarkerElement =
+          markerLibrary.AdvancedMarkerElement
+        const PinElement =
+          markerLibrary.PinElement
+        const ColorScheme =
+          coreLibrary.ColorScheme
 
         const map = new Map(container, {
           center: BORUCH_POSITION,
@@ -102,7 +137,9 @@ export function BoruchGoogleMap() {
 
           mapId: GOOGLE_MAPS_MAP_ID,
           mapTypeId: "roadmap",
-          colorScheme: ColorScheme.DARK,
+
+          colorScheme:
+            ColorScheme?.DARK ?? "DARK",
 
           disableDefaultUI: true,
           zoomControl: true,
@@ -124,10 +161,13 @@ export function BoruchGoogleMap() {
           map,
           position: BORUCH_POSITION,
           title: "BORUCH Myjnia Szczecin",
-          content: pin.element,
+          content: pin.element ?? pin,
         })
       } catch (error) {
-        console.error("Nie udało się załadować Google Maps:", error)
+        console.error(
+          "Nie udało się załadować Google Maps:",
+          error,
+        )
       }
     }
 
