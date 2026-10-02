@@ -131,12 +131,9 @@ function createBoruchMarker() {
 
   marker.innerHTML = `
     <div class="boruch-map-marker__card">
-      <span class="boruch-map-marker__eyebrow">
-        PLAC RODŁA 8
-      </span>
-
+    
       <span class="boruch-map-marker__name">
-        Boruch Myjnia
+        BORUCH MYJNIA
       </span>
 
       <span class="boruch-map-marker__level">
