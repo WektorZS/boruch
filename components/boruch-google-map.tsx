@@ -161,7 +161,7 @@ export function BoruchGoogleMap() {
           )
         }
 
-        const mapsLibrary =
+       const mapsLibrary =
   await googleMaps.importLibrary("maps")
 
 const markerLibrary =
@@ -175,20 +175,28 @@ if (cancelled) return
 const Map =
   mapsLibrary.Map
 
+const RenderingType =
+  mapsLibrary.RenderingType
+
 const AdvancedMarkerElement =
   markerLibrary.AdvancedMarkerElement
 
 const ColorScheme =
   coreLibrary.ColorScheme
 
-        const map = new Map(container, {
+     const map = new Map(container, {
   center: BORUCH_POSITION,
-  zoom: 17.3,
+  zoom: 17,
 
   mapId: GOOGLE_MAPS_MAP_ID,
 
+  renderingType:
+    RenderingType?.VECTOR ?? "VECTOR",
+
   colorScheme:
     ColorScheme?.DARK ?? "DARK",
+
+  isFractionalZoomEnabled: true,
 
   disableDefaultUI: true,
 
