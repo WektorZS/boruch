@@ -296,9 +296,9 @@ const homeCopy = {
     whyTitle: "Ręczna pielęgnacja auta od mycia po zabezpieczenie lakieru.",
     whyIntro: "Dbamy o samochód kompleksowo - od wnętrza po lakier. Każdy etap wykonujemy ręcznie, zwracając uwagę na detale i dobierając zakres pielęgnacji do konkretnego auta.",
     benefits: [
-      ["Ręczna pielęgnacja", "Precyzyjna praca ręczna pozwala nam zadbać o miejsca, które łatwo pominąć."],
-      ["Pełny zakres", "Kompleksowa pielęgnacja auta od podstawowego mycia po zaawansowaną ochronę lakieru."],
-      ["Centrum Szczecina", "W samym centrum miasta, zostaw auto i skocz na zakupy do pobliskich galerii"],
+      ["Ручний догляд", "Точна ручна робота дозволяє нам приділити увагу деталям, які легко залишити непоміченими."],
+      ["Повний спектр", "Комплексний догляд за автомобілем — від базового миття до професійного захисту лакофарбового покриття."],
+      ["Центр Щецина", "У самому центрі міста — залиште авто у нас і скористайтеся часом, щоб відвідати найближчі торгові центри."],
     ],
     servicesIntro: "Wybierz podstawową pielęgnację albo pełne zabezpieczenie samochodu.",
     galleryCaptions: ["Korekta lakieru", "Folia PPF", "Detailing wnętrza", "Mycie ręczne", "Zabezpieczenie lakieru"],
@@ -314,7 +314,7 @@ Oferujemy również takie usługi jak oklejanie folią PPF, zmiana koloru auta l
 Na liście naszych usług jest również polerowanie, korekta lakieru, aplikacja powłoki ceramicznej czy ręczne woskowanie pojazdu.
 Oprócz miłości do aut łączy nas również przyjaźń i wspaniała atmosfera w zespole, co myślimy jest drugim najważniejszym spoiwem, które wpływa na doskonałą jakość i dokładność wykonania przez nas usług!
 Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi :)`,
-    routeHint: "Wjedź na parking PAZIM i zjedź na poziom -2.",
+    routeHint: "Wjedź na parking PAZIM i zjedź na parking podziemny.",
     reviewsLabel: "Opinie klientów",
     reviewsTitle: "Efekt, do którego chce się wracać.",
     reviewsIntro: "Zobacz, co o efektach naszej pracy mówią klienci, którzy oddali nam swoje samochody.",
@@ -328,21 +328,14 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     faqTitle: "Zanim zostawisz nam auto.",
     faqIntro: "Krótko i konkretnie. Jeśli nie znajdziesz odpowiedzi, zadzwoń lub napisz.",
     faq: [
-      ["Czy muszę zostawić auto na cały dzień?", "To zależy od wybranej usługi. Podstawowe mycie i czyszczenie zajmuje mniej czasu, natomiast detailing, korekta lakieru, powłoka ceramiczna czy oklejanie folią PPF mogą wymagać pozostawienia auta na dłużej."],
-
-["Czy mogę otrzymać wycenę przed wizytą?", "Tak. Przy prostszych usługach cena jest określona w cenniku, a przy detailingu, korekcie lakieru, PPF czy innych pracach indywidualnych wycena zależy od stanu auta i zakresu prac."],
-
-["Czym różni się zwykłe mycie od detailingu?", "Mycie skupia się przede wszystkim na dokładnym oczyszczeniu auta, natomiast detailing obejmuje bardziej precyzyjną pielęgnację, renowację i zabezpieczenie wnętrza lub lakieru."],
-
-["Czy folia PPF chroni lakier przed uszkodzeniami?", "Folia PPF tworzy warstwę ochronną na lakierze i pomaga zabezpieczyć go przed drobnymi zarysowaniami, odpryskami i innymi śladami codziennego użytkowania."],
-
-["Czy korekta lakieru usuwa wszystkie rysy?", "Zakres korekty zależy od stanu i grubości lakieru. Przed wykonaniem usługi oceniamy powierzchnię i dobieramy taki zakres pracy, który pozwoli poprawić wygląd lakieru w bezpieczny sposób."],
-
-["Czy po detailingu dostanę zalecenia dotyczące pielęgnacji auta?", "Tak. Po wykonaniu usługi podpowiadamy, jak myć i pielęgnować samochód, aby jak najdłużej utrzymać uzyskany efekt."],
-
-["Czy zajmujecie się również wnętrzem samochodu?", "Tak. Oferujemy m.in. dokładne odkurzanie, czyszczenie kokpitu i elementów plastikowych, mycie szyb, pranie tapicerki materiałowej oraz czyszczenie i impregnację skór."],
-
-["Czy można zabezpieczyć tylko wybrane elementy auta folią PPF?", "Oferujemy oklejanie całego auta folią PPF lub wybrane elementy karoserii, wnętrza jak i wybranych elementów."],
+      ["Чи потрібно залишати авто на весь день?", "Це залежить від обраної послуги. Базове миття та очищення займає менше часу, тоді як детейлінг, корекція лаку, керамічне покриття або нанесення PPF можуть потребувати більше часу."],
+      ["Чи можу я отримати попередню оцінку вартості?", "Так. Для простіших послуг діють фіксовані ціни з прайсу, а детейлінг, корекція лаку, PPF та інші індивідуальні роботи оцінюються залежно від стану автомобіля та обсягу робіт."],
+      ["Чим відрізняється звичайне миття від детейлінгу?", "Звичайне миття зосереджене насамперед на ретельному очищенні автомобіля, тоді як детейлінг включає більш точний догляд, відновлення та захист салону або лакофарбового покриття."],
+      ["Чи захищає PPF лак від пошкоджень?", "PPF створює захисний шар на лакофарбовому покритті та допомагає захистити його від дрібних подряпин, сколів від каміння та інших слідів щоденної експлуатації."],
+      ["Чи видаляє корекція лаку всі подряпини?", "Обсяг корекції залежить від стану та товщини лакофарбового покриття. Перед виконанням послуги ми оцінюємо поверхню та підбираємо безпечний обсяг робіт, який дозволяє покращити вигляд лаку."],
+      ["Чи отримаю я рекомендації щодо догляду після детейлінгу?", "Так. Після виконання послуги ми підкажемо, як правильно мити та доглядати за автомобілем, щоб результат зберігався якомога довше."],
+      ["Чи займаєтеся ви також салоном автомобіля?", "Так. Ми пропонуємо, зокрема, ретельне прибирання пилососом, очищення панелі приладів і пластикових елементів, миття скла, хімчистку тканинної оббивки, а також очищення й захист шкіри."],
+      ["Чи можна захистити PPF лише окремі елементи автомобіля?", "Так. Ми можемо обклеїти PPF весь автомобіль або лише окремі елементи кузова, салону чи інші вибрані деталі."],
     ],
     contactLabel: "Kontakt i wycena",
     contactTitle: "Opowiedz nam, czego potrzebuje Twoje auto.",
@@ -589,30 +582,6 @@ function HomeHeader({ locale }: { locale: Locale }) {
     phoneHref={contact.phoneHref}
     address={[sources[locale].address.lines[0], `PAZIM ${sources[locale].address.lines[2]}`]}
   />
-}
-
-function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
-  return (
-    <div className={cn("flex w-full items-stretch border-l border-white/14 bg-[#101011] sm:w-auto", className)}>
-      <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">5.0/5</span>
-      <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
-        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
-          <span className="min-w-0 flex-1">
-            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
-            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.booksyReviews}</span>
-          </span>
-          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-        </a>
-        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
-          <span className="min-w-0 flex-1">
-            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
-            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.googleReviews}</span>
-          </span>
-          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-        </a>
-      </span>
-    </div>
-  )
 }
 
 function HomeHero({ locale }: { locale: Locale }) {
@@ -923,9 +892,7 @@ function WhyBoruch({ locale }: { locale: Locale }) {
     >
       <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-20">
         <div className="lg:col-span-5">
-          <p className="home-kicker">
-            {copy.whyLabel}
-          </p>
+          <p className="home-kicker">{copy.whyLabel}</p>
 
           <h2
             id="why-title"
@@ -945,39 +912,30 @@ function WhyBoruch({ locale }: { locale: Locale }) {
             className="editorial-link mt-8 w-fit"
           >
             {t.nav.about}
-            <ArrowUpRight
-              className="size-4 text-brand"
-              aria-hidden="true"
-            />
+            <ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
           </Link>
         </div>
 
-        <ol className="border-t border-white/15 lg:col-span-6 lg:col-start-7">
-          {careSteps[locale].map(([title, text], index) => (
+        <ul className="border-t border-white/15 lg:col-span-6 lg:col-start-7">
+          {careSteps[locale].map(([title, text]) => (
             <li
               key={title}
               data-reveal=""
-              className="group grid grid-cols-[2.25rem_minmax(0,1fr)] gap-5 border-b border-white/15 py-7 sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-7 sm:py-8"
+              className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-5 border-b border-white/15 py-7 sm:gap-7 sm:py-8"
             >
-              <span
-                className="type-label pt-1 text-brand"
-                aria-hidden="true"
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
+              <span className="mt-3 h-px w-4 bg-brand" aria-hidden="true" />
 
               <div className="min-w-0">
                 <h3 className="font-display text-xl font-semibold leading-snug tracking-normal text-white sm:text-2xl">
                   {title}
                 </h3>
-
                 <p className="mt-3 max-w-xl text-base leading-relaxed text-white/58">
                   {text}
                 </p>
               </div>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   )
@@ -1527,10 +1485,7 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
 
-  const projects: Array<{
-    id: PhotoId
-    position: string
-  }> = [
+  const projects: Array<{ id: PhotoId; position: string }> = [
     { id: "p21", position: "50% 58%" },
     { id: "p62", position: "50% 58%" },
     { id: "p29", position: "50% 50%" },
@@ -1542,22 +1497,12 @@ function WorkShowcase({ locale }: { locale: Locale }) {
   ]
 
   return (
-    <section
-      aria-labelledby="work-title"
-      className="section-xl overflow-hidden bg-[#080809]"
-    >
+    <section aria-labelledby="work-title" className="section-xl overflow-hidden bg-[#080809]">
       <div className="home-shell">
         <header className="mb-10 grid gap-7 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div className="lg:col-span-7">
-            <p className="home-kicker">
-              {t.nav.gallery}
-            </p>
-
-            <h2
-              id="work-title"
-              data-reveal=""
-              className="editorial-display mt-6"
-            >
+            <p className="home-kicker">{t.nav.gallery}</p>
+            <h2 id="work-title" data-reveal="" className="editorial-display mt-6">
               {src.home.projectsTitle}
             </h2>
           </div>
@@ -1566,20 +1511,9 @@ function WorkShowcase({ locale }: { locale: Locale }) {
             <p className="text-pretty text-base leading-relaxed text-white/62">
               {src.home.projectsText}
             </p>
-
-            <Link
-              prefetch={false}
-              href={routes[locale].gallery}
-              className="group mt-5 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white"
-            >
-              <span className="border-b border-white/25 pb-1 transition-colors duration-300 group-hover:border-brand">
-                {t.allPhotos}
-              </span>
-
-              <ArrowUpRight
-                className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
+            <Link prefetch={false} href={routes[locale].gallery} className="editorial-link mt-5 w-fit">
+              {t.allPhotos}
+              <ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
             </Link>
           </div>
         </header>
@@ -1591,37 +1525,22 @@ function WorkShowcase({ locale }: { locale: Locale }) {
               prefetch={false}
               href={routes[locale].gallery}
               aria-label={`${t.allPhotos} ${index + 1}`}
-              className="group relative isolate aspect-[4/3] overflow-hidden bg-white/3"
+              className="group relative isolate aspect-[4/3] overflow-hidden bg-white/3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
             >
               <Photo
                 id={project.id}
                 sizes="(min-width: 1280px) 25vw, (min-width: 768px) 25vw, 50vw"
                 position={project.position}
-                className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.045] group-focus-visible:scale-[1.045]"
+                className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.035] group-focus-visible:scale-[1.035]"
               />
-
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-black/12 transition-colors duration-500 group-hover:bg-black/2 group-focus-visible:bg-black/2"
+                className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-500 group-hover:bg-transparent group-focus-visible:bg-transparent"
               />
-
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/65 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+                className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/8 transition-colors duration-300 group-hover:ring-white/16"
               />
-
-              <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-3 sm:p-4">
-                <span className="font-mono text-[.6rem] font-bold tracking-[.16em] text-white/60">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <span className="grid size-8 place-items-center border border-white/20 bg-black/20 text-white/80 backdrop-blur-sm transition-[border-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:border-brand/70 group-hover:text-white">
-                  <ArrowUpRight
-                    className="size-3.5"
-                    aria-hidden="true"
-                  />
-                </span>
-              </span>
             </Link>
           ))}
         </div>
@@ -1685,7 +1604,7 @@ function Packages({ locale }: { locale: Locale }) {
             )
           })}
         </div>
-        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
+        <p className="mt-7 text-xs leading-relaxed text-white/65">{src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
       </div>
     </section>
   )
@@ -1700,26 +1619,64 @@ function SalesPackage({ locale }: { locale: Locale }) {
   ]
 
   return (
-    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
-      <div className="home-shell grid gap-10 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-5">
+    <section
+      id="pakiet-sprzedaz"
+      aria-labelledby="sales-package-title"
+      className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]"
+    >
+      <div className="home-shell grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-20">
+        <div className="lg:col-span-4">
           <p className="home-kicker">{copy.label}</p>
-          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
-          <Link prefetch={false} href={`${routes[locale].pricing}`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">
+            {copy.title}
+          </h2>
+          <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
+            {copy.intro}
+          </p>
+          <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-8 w-fit">
+            {copy.details}
+            <ArrowRight className="size-4 text-brand" aria-hidden="true" />
+          </Link>
         </div>
-        <div className="lg:col-span-7">
-          <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
-            {offers.map((offer) => <article key={offer.title} className="flex flex-col border-b border-white/10 py-7 last:border-b-0 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
-              <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
-              <ul className="mb-7 mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1 shrink-0 bg-brand" aria-hidden="true" />{item}</li>)}</ul>
-              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
-                <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
-                <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
-              </div>
-            </article>)}
-          </div>
 
+        <div className="border-y border-white/15 lg:col-span-8">
+          {offers.map((offer, index) => (
+            <article
+              key={offer.title}
+              className={cn(
+                "grid gap-7 py-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:gap-10",
+                index !== offers.length - 1 && "border-b border-white/12",
+              )}
+            >
+              <div>
+                <h3 className="font-display text-xl font-semibold leading-[1.25] tracking-normal text-white sm:text-2xl">
+                  {offer.title}
+                </h3>
+                <ul className="mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">
+                  {offer.items.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="mt-[.55em] size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex min-w-40 flex-col items-start sm:items-end">
+                <span className="mb-2 flex items-center gap-2 text-[.68rem] font-medium uppercase tracking-[.12em] text-white/45">
+                  <Clock3 className="size-3.5 text-brand" aria-hidden="true" />
+                  {copy.time}
+                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm font-medium text-white/50">{copy.from}</span>
+                  <strong className="font-display text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-none tracking-tight text-white">
+                    {offer.price}
+                  </strong>
+                  <span className="font-display text-base font-semibold text-white/70">{currency}</span>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -1732,40 +1689,50 @@ function TeamStory({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
 
   return (
-    <section aria-labelledby="team-title" className="section-lg border-y border-white/10 bg-[#111112]">
-      <div className="home-shell">
-        <div className="grid lg:grid-cols-[.9fr_1.1fr]">
-          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] self-center overflow-hidden">
-  <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
-  <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">
-    BORUCH Myjnia Szczecin
-  </figcaption>
-</figure>
+    <section aria-labelledby="team-title" className="section-xl bg-[#111112]">
+      <div className="home-shell grid gap-12 lg:grid-cols-[.88fr_1.12fr] lg:items-center lg:gap-16">
+        <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] overflow-hidden">
+          <Photo
+            id="team"
+            sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw"
+            position="50% 52.4%"
+          />
+          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">
+            BORUCH Myjnia Szczecin
+          </figcaption>
+        </figure>
 
-          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
-            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
-            <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
+        <div className="flex flex-col justify-center lg:py-8">
+          <p className="home-kicker">{t.nav.about}</p>
+          <h2 id="team-title" data-reveal="" className="mt-6 max-w-xl text-[clamp(1.9rem,2.7vw,3rem)] font-light leading-[1.08] tracking-[-.02em] text-white">
+            {src.home.teamTitle ?? t.nav.about}
+          </h2>
+          <p className="mt-7 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">
+            {copy.teamTitle}
+          </p>
 
-           <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
-  <p className="whitespace-pre-line">{copy.teamBody}</p>
-            </div>
+          <div className="mt-7 max-w-2xl text-[.95rem] leading-7 text-white/56">
+            <p className="whitespace-pre-line">{copy.teamBody}</p>
+          </div>
 
-            <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
+          <p className="home-signature mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">
+            {src.home.author}
+          </p>
 
-            <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
-              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
-                <FacebookIcon className="size-5" />
-              </a>
-              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
-                <InstagramIcon className="size-5" />
-              </a>
-              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
-                <MapPin className="size-4" aria-hidden="true" />
-              </a>
-              <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
-                {t.nav.about}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
-              </Link>
-            </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
+            <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+              <FacebookIcon className="size-5" />
+            </a>
+            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+              <InstagramIcon className="size-5" />
+            </a>
+            <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+              <MapPin className="size-4" aria-hidden="true" />
+            </a>
+            <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
+              {t.nav.about}
+              <ArrowRight className="size-4 text-brand" aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </div>
@@ -1901,19 +1868,16 @@ function Reviews({ locale }: { locale: Locale }) {
           <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.reviewsIntro}</p>
         </div>
 
-        <div className="relative mt-6 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-10 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+        <div className="relative mt-6 md:mt-10">
           <div ref={carouselReady ? desktopEmblaRef : undefined} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
             <div className="-ml-3 flex touch-pan-y items-center py-5 md:-ml-5 md:py-8">
               {copy.reviews.map((review, index) => {
                 const isActive = index === activeReview
-                const isBefore = (index - activeReview + reviewCount) % reviewCount > reviewCount / 2
-                return (
-                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[98%] pl-3 md:basis-[42%] md:pl-5" inert={!isActive} aria-hidden={!isActive}>
+                                return (
+                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[92%] pl-3 md:basis-[62%] md:pl-5 lg:basis-[52%]" inert={!isActive} aria-hidden={!isActive}>
                     <div className={cn(
                       "relative h-full transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none",
-                      isActive ? "z-20 scale-100 opacity-100" : isBefore
-                        ? "z-10 scale-[.9] opacity-30 md:origin-right md:scale-[.7] md:opacity-15"
-                        : "z-10 scale-[.9] opacity-30 md:origin-left md:scale-[.7] md:opacity-15",
+                      isActive ? "z-20 scale-100 opacity-100" : "z-10 scale-[.96] opacity-35",
                     )}>
                       <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel measure={carouselReady && isActive} />
                     </div>
@@ -2194,14 +2158,14 @@ function Location({ locale }: { locale: Locale }) {
             </a>
           </div>
 
-          <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[34rem] lg:border-l lg:border-white/10 lg:pl-8">
+          <div className="relative min-h-[24rem] overflow-hidden lg:min-h-[34rem]">
             <div className="relative h-full min-h-[24rem] overflow-hidden bg-[#151516] lg:min-h-[34rem]">
               <iframe
                 title={`${t.openMap} - BORUCH Myjnia Szczecin`}
                 src={mapEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 block h-full w-full border-0 opacity-95 [filter:grayscale(.45)_invert(.88)_contrast(1.05)]"
+                className="absolute inset-0 block h-full w-full border-0"
               />
             </div>
           </div>
@@ -2212,32 +2176,58 @@ function Location({ locale }: { locale: Locale }) {
 }
 function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
+  const t = ui[locale]
 
   return (
     <section id="wycena" aria-labelledby="contact-form-title" className="section-xl bg-[#111112]">
       <div className="home-shell">
         <div className="mb-12 grid gap-7 border-b border-white/15 pb-10 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8"><p className="home-kicker">{copy.contactLabel}</p><h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].talk}</h2></div>
-          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.contactIntro}</p>
+          <div className="lg:col-span-8">
+            <p className="home-kicker">{copy.contactLabel}</p>
+            <h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7">
+              {editorialCopy[locale].talk}
+            </h2>
+          </div>
+          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">
+            {copy.contactIntro}
+          </p>
         </div>
+
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
-            <div className="flex flex-col gap-5 pt-6">
+            <div className="flex flex-col items-start gap-6 pt-2">
               <a
-  href={contact.phoneHref}
-  className="inline-flex w-fit items-center gap-3 text-white transition-colors hover:text-[#ef6267]"
->
-  {contact.phone}
-  <ArrowUpRight className="size-5 text-brand" aria-hidden="true" />
-</a>
-              <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
-              <p className="mt-3 max-w-sm text-base leading-relaxed text-white/65">{copy.contactBooksy}</p>
-              <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-2 w-fit">{ui[locale].pricing}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+                href={contact.phoneHref}
+                className="group inline-flex items-center gap-3 font-display text-[clamp(1.8rem,3vw,3rem)] font-semibold leading-none tracking-[-.025em] text-white transition-colors hover:text-[#ef6267]"
+              >
+                {contact.phone}
+                <ArrowUpRight className="size-5 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+              </a>
+
+              <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">
+                {contact.email}
+                <ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
+              </a>
+
+              <p className="mt-2 max-w-sm text-base leading-relaxed text-white/65">
+                {copy.contactBooksy}
+              </p>
+
+              <a
+                href={contact.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="home-button home-button-red mt-1"
+              >
+                {t.book}
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </a>
             </div>
           </div>
-        <div data-reveal="" className="lg:col-span-7">
-          <HomeContactForm locale={locale} />
-        </div>
+
+          <div data-reveal="" className="lg:col-span-7">
+            <HomeContactForm locale={locale} />
+          </div>
         </div>
       </div>
     </section>
