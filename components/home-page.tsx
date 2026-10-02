@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
+import type { MouseEvent } from "react"
 import Link from "next/link"
 import useEmblaCarousel from "embla-carousel-react"
 import {
@@ -44,6 +45,34 @@ import type { PhotoId } from "@/lib/photos"
 import { clsx as cn } from "clsx"
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
+
+const APPLE_MAPS_URL =
+  "https://maps.apple.com/?q=BORUCH%20Myjnia%20Szczecin&ll=53.43292196110834,14.555987074586804"
+
+const mapOpenCopy: Record<Locale, string> = {
+  pl: "Otwórz w mapach",
+  en: "Open in maps",
+  de: "In Karten öffnen",
+  uk: "Відкрити в картах",
+}
+
+function openPreferredMaps(event: MouseEvent<HTMLAnchorElement>) {
+  if (typeof navigator === "undefined") return
+
+  const isIOS =
+    /iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+
+  if (!isIOS) return
+
+  event.preventDefault()
+
+  window.open(
+    APPLE_MAPS_URL,
+    "_blank",
+    "noopener,noreferrer",
+  )
+}
 
 
 const heroPhotos: Array<{ id: PhotoId; position: string }> = [
@@ -1758,7 +1787,14 @@ function TeamStory({ locale }: { locale: Locale }) {
               <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
                 <InstagramIcon className="size-5" />
               </a>
-              <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label={t.openMap} className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+              <a
+                href={contact.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={openPreferredMaps}
+                aria-label={mapOpenCopy[locale]}
+                className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand"
+              >
                 <MapPin className="size-4" aria-hidden="true" />
               </a>
               <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
@@ -2183,9 +2219,10 @@ function Location({ locale }: { locale: Locale }) {
               href={contact.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={openPreferredMaps}
               className="editorial-link mt-9 w-fit"
             >
-              {t.openMap}
+              {mapOpenCopy[locale]}
               <ArrowUpRight
                 className="size-4 text-brand"
                 aria-hidden="true"
