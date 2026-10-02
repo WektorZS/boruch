@@ -6,12 +6,15 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyAI4IGu6fbylowQS89deMLRKUnP8kTERiY"
 const GOOGLE_MAPS_MAP_ID = "8ad23a51fb86cfb05286e9ce"
 
 const BORUCH_POSITION = {
-  lat: 53.43292196110834,
-  lng: 14.555987074586804,
+  lat: 53.43287322323469,
+  lng: 14.556013226121532,
 }
 
 const GOOGLE_MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=BORUCH+Myjnia+R%C4%99czna+Plac+Rod%C5%82a+8+Szczecin"
+
+const APPLE_MAPS_URL =
+  "https://maps.apple.com/?q=BORUCH+Myjnia+Szczecin&ll=53.43292196110834,14.555987074586804"
 
 type GoogleMapsWindow = Window & {
   google?: any
@@ -156,6 +159,19 @@ function createBoruchMarker() {
 export function BoruchGoogleMap() {
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<any>(null)
+
+  function openDirections() {
+    const isAppleDevice =
+      /iPhone|iPad|iPod/i.test(navigator.userAgent)
+
+    window.open(
+      isAppleDevice
+        ? APPLE_MAPS_URL
+        : GOOGLE_MAPS_URL,
+      "_blank",
+      "noopener,noreferrer",
+    )
+  }
 
   useEffect(() => {
     const container = mapRef.current
@@ -401,26 +417,25 @@ export function BoruchGoogleMap() {
       </div>
 
       <div className="absolute bottom-4 left-4 right-4 z-20 flex flex-col gap-2 sm:right-auto sm:max-w-[360px]">
-        <a
-          href={GOOGLE_MAPS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex min-h-12 items-center justify-between border border-white/10 bg-[#0a0a0b]/95 px-4 text-[10px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-brand/40 hover:text-brand"
-        >
-          <span>Otwórz w Mapach Google</span>
+        <button
+  type="button"
+  onClick={openDirections}
+  className="flex min-h-12 w-full items-center justify-between border border-white/10 bg-[#0a0a0b]/95 px-4 text-[10px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-brand/40 hover:text-brand"
+>
+  <span>Otwórz w mapach</span>
 
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            aria-hidden="true"
-            className="size-4"
-          >
-            <path d="M7 17 17 7" />
-            <path d="M8 7h9v9" />
-          </svg>
-        </a>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    aria-hidden="true"
+    className="size-4"
+  >
+    <path d="M7 17 17 7" />
+    <path d="M8 7h9v9" />
+  </svg>
+</button>
       </div>
 
       <style jsx global>{`
