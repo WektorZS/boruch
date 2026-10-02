@@ -6,8 +6,8 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyAI4IGu6fbylowQS89deMLRKUnP8kTERiY"
 const GOOGLE_MAPS_MAP_ID = "8ad23a51fb86cfb05286e9ce"
 
 const BORUCH_POSITION = {
-  lat: 53.43313691416123,
-  lng: 14.555602179682984,
+  lat: 53.43291636824182,
+  lng: 14.55341617722408,
 }
 
 type GoogleMapsWindow = Window & {
@@ -125,11 +125,11 @@ function createBoruchMarker() {
   marker.innerHTML = `
     <div class="boruch-premium-marker__label">
       <span class="boruch-premium-marker__brand">
-        BORUCH
+        Boruch Myjnia
       </span>
 
       <span class="boruch-premium-marker__meta">
-        MYJNIA · DETAILING
+        MYJNIA | DETAILING
       </span>
     </div>
 
