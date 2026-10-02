@@ -40,37 +40,6 @@ const footerIntro: Record<Locale, string> = {
   uk: "Ручна мийка та детейлінг у центрі Щецина. Догляд за салоном, відновлення лаку та захист кузова.",
 }
 
-const additionalServices: Record<
-  Locale,
-  {
-    title: string
-    items: Array<{
-      title: string
-      href: string
-    }>
-  }
-> = {
-  pl: {
-    title: "Pakiety i pielęgnacja dodatkowa",
-    items: [
-      {
-        title: "Niewidzialna wycieraczka",
-        href: `${routes.pl.pricing}#detailing`,
-      },
-      {
-        title: "Serwis powłoki ceramicznej",
-        href: `${routes.pl.pricing}#detailing`,
-      },
-      {
-        title: "Pakiet Sprzedaż Standard",
-        href: `${routes.pl.pricing}#pakiet-sprzedaz`,
-      },
-      {
-        title: "Pakiet Sprzedaż Premium",
-        href: `${routes.pl.pricing}#pakiet-sprzedaz`,
-      },
-    ],
-  },
 
   en: {
     title: "Packages and additional care",
