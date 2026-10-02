@@ -136,11 +136,11 @@ function createBoruchMarker() {
       </span>
 
       <span class="boruch-map-marker__name">
-        Boruh Myjnia
+        Boruch Myjnia
       </span>
 
       <span class="boruch-map-marker__level">
-        MYJNIA · DETAIL
+        MYJNIA · DETAILING
       </span>
     </div>
 
