@@ -12,7 +12,7 @@ import type { ServiceSlug } from "@/lib/content/services"
 
 
 
-type Localized = Record\<Locale, string>
+type Localized = Record<Locale, string>
 
 type PriceVariant = { name?: Localized; price: number | null; minutes: number | null }
 
@@ -130,7 +130,7 @@ const tableCopy = {
 
   },
 
-} satisfies Record\<Locale, Record\<string, string>>
+} satisfies Record<Locale, Record<string, string>>
 
 
 
@@ -142,7 +142,7 @@ const sizeNames = {
 
   large: { pl: "Duże auto", en: "Large car", de: "Großes Auto", uk: "Велике авто" },
 
-} satisfies Record\<string, Localized>
+} satisfies Record<string, Localized>
 
 
 
@@ -276,59 +276,59 @@ function WashMatrix({ locale, scopeFor }: { locale: Locale; scopeFor: (item: Pri
 
   const currency = locale === "pl" ? "zł" : "PLN"
 
-  return \<section id="mycie" aria-labelledby="mycie-title" className="pricing-section border-b border-white/10 py-12 lg:py-14">
+  return <section id="mycie" aria-labelledby="mycie-title" className="pricing-section border-b border-white/10 py-12 lg:py-14">
 
-    \<div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
+    <div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
 
-      \<h3 id="mycie-title" className="editorial-display lg:col-span-7">{copy.washTitle}\</h3>
+      <h3 id="mycie-title" className="editorial-display lg:col-span-7">{copy.washTitle}</h3>
 
-      \<p className="max-w-xl text-base leading-relaxed text-white/65 lg:col-span-5">{copy.washIntro}\</p>
+      <p className="max-w-xl text-base leading-relaxed text-white/65 lg:col-span-5">{copy.washIntro}</p>
 
-    \</div>
+    </div>
 
-    \<table className="pricing-matrix w-full table-fixed border-collapse text-left">
+    <table className="pricing-matrix w-full table-fixed border-collapse text-left">
 
-      \<caption className="sr-only">{copy.washTitle} - {copy.price}, {copy.time}\</caption>
+      <caption className="sr-only">{copy.washTitle} - {copy.price}, {copy.time}</caption>
 
-      \<thead>\<tr className="border-y border-white/15 text-sm font-semibold text-white/65">
+      <thead><tr className="border-y border-white/15 text-sm font-semibold text-white/65">
 
-        \<th scope="col" className="w-[43%] py-4 pr-6">{copy.service}\</th>
+        <th scope="col" className="w-[43%] py-4 pr-6">{copy.service}</th>
 
-        {[sizeNames.small, sizeNames.medium, sizeNames.large].map(size => \<th key={size[locale]} scope="col" className="w-[19%] py-4 text-right">{size[locale]}\</th>)}
+        {[sizeNames.small, sizeNames.medium, sizeNames.large].map(size => <th key={size[locale]} scope="col" className="w-[19%] py-4 text-right">{size[locale]}</th>)}
 
-      \</tr>\</thead>
+      </tr></thead>
 
-      \<tbody>{washItems.map(item => \<Fragment key={item.id}>
+      <tbody>{washItems.map(item => <Fragment key={item.id}>
 
-        \<tr>
+        <tr>
 
-          \<th scope="row" className="py-6 pr-6 font-normal">
+          <th scope="row" className="py-6 pr-6 font-normal">
 
-            \<span className="block font-display text-xl font-bold leading-snug text-white">{item.name[locale]}\</span>
+            <span className="block font-display text-xl font-bold leading-snug text-white">{item.name[locale]}</span>
 
-            \<span className="mt-2 flex items-center gap-2 text-sm text-white/60">\<Clock3 className="size-3.5 text-brand" aria-hidden="true" />\<span className="sr-only">{copy.time}: \</span>{duration(item.variants[0].minutes, locale)}\</span>
+            <span className="mt-2 flex items-center gap-2 text-sm text-white/60"><Clock3 className="size-3.5 text-brand" aria-hidden="true" /><span className="sr-only">{copy.time}: </span>{duration(item.variants[0].minutes, locale)}</span>
 
-            {locale === "pl" && item.slug && \<Link prefetch={false} href={\`/${item.slug}\`} className="group mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white/70 hover:text-white">\<span className="link-draw">{copy.details}\</span>\<ArrowRight className="arrow-shift size-3.5 text-brand" aria-hidden="true" />\</Link>}
+            {locale === "pl" && item.slug && <Link prefetch={false} href={\`/${item.slug}\`} className="group mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white/70 hover:text-white"><span className="link-draw">{copy.details}</span><ArrowRight className="arrow-shift size-3.5 text-brand" aria-hidden="true" /></Link>}
 
-          \</th>
+          </th>
 
-          {item.variants.map((variant, index) => \<td key={index} className="py-6 text-right align-top">
+          {item.variants.map((variant, index) => <td key={index} className="py-6 text-right align-top">
 
-            \<span className="pricing-mobile-label mb-2 text-xs leading-relaxed text-white/65">{variant.name?.[locale]}\</span>
+            <span className="pricing-mobile-label mb-2 text-xs leading-relaxed text-white/65">{variant.name?.[locale]}</span>
 
-            \<span className="block text-lg font-bold leading-relaxed tabular-nums text-white sm:text-xl">\<span className="text-xs font-normal text-white/60">{copy.from}\</span> {variant.price} \<span className="text-sm font-medium">{currency}\</span>\</span>
+            <span className="block text-lg font-bold leading-relaxed tabular-nums text-white sm:text-xl"><span className="text-xs font-normal text-white/60">{copy.from}</span> {variant.price} <span className="text-sm font-medium">{currency}</span></span>
 
-          \</td>)}
+          </td>)}
 
-        \</tr>
+        </tr>
 
-        \<tr className="pricing-scope-row border-b border-white/12">\<td colSpan={4} className="pb-4">\<PriceScope item={item} scope={scopeFor(item)} locale={locale} />\</td>\</tr>
+        <tr className="pricing-scope-row border-b border-white/12"><td colSpan={4} className="pb-4"><PriceScope item={item} scope={scopeFor(item)} locale={locale} /></td></tr>
 
-      \</Fragment>)}\</tbody>
+      </Fragment>)}</tbody>
 
-    \</table>
+    </table>
 
-  \</section>
+  </section>
 
 }
 
@@ -342,35 +342,35 @@ function PriceGroup({ id, title, intro, items, locale, scopeFor }: { id: string;
 
   return (
 
-    \<section id={id} aria-labelledby={id + "-title"} className="pricing-section border-b border-white/10 py-12 last:border-b-0 lg:py-14">
+    <section id={id} aria-labelledby={id + "-title"} className="pricing-section border-b border-white/10 py-12 last:border-b-0 lg:py-14">
 
-      \<div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
+      <div className="mb-8 grid gap-4 lg:grid-cols-12 lg:items-end">
 
-        \<h3 id={id + "-title"} className="editorial-display lg:col-span-7">{title}\</h3>
+        <h3 id={id + "-title"} className="editorial-display lg:col-span-7">{title}</h3>
 
-        \<p className="max-w-xl text-sm leading-relaxed text-white/65 lg:col-span-5">{intro}\</p>
+        <p className="max-w-xl text-sm leading-relaxed text-white/65 lg:col-span-5">{intro}</p>
 
-      \</div>
+      </div>
 
-      \<table className="price-catalog-table block w-full table-fixed border-collapse text-left lg:table">
+      <table className="price-catalog-table block w-full table-fixed border-collapse text-left lg:table">
 
-        \<caption className="sr-only">{title} - {copy.price} / {copy.time}\</caption>
+        <caption className="sr-only">{title} - {copy.price} / {copy.time}</caption>
 
-        \<thead className="sr-only lg:not-sr-only lg:table-header-group">
+        <thead className="sr-only lg:not-sr-only lg:table-header-group">
 
-          \<tr className="border-y border-white/15 text-xs font-semibold text-white/65">
+          <tr className="border-y border-white/15 text-xs font-semibold text-white/65">
 
-            \<th scope="col" className="w-[40%] py-4 pr-6">{copy.service}\</th>
+            <th scope="col" className="w-[40%] py-4 pr-6">{copy.service}</th>
 
-            \<th scope="col" className="w-[35%] py-4 pr-8">{copy.scope}\</th>
+            <th scope="col" className="w-[35%] py-4 pr-8">{copy.scope}</th>
 
-            \<th scope="col" className="w-[25%] py-4 text-right">{copy.price} / {copy.time}\</th>
+            <th scope="col" className="w-[25%] py-4 text-right">{copy.price} / {copy.time}</th>
 
-          \</tr>
+          </tr>
 
-        \</thead>
+        </thead>
 
-        \<tbody className="block lg:table-row-group">
+        <tbody className="block lg:table-row-group">
 
           {items.map(item => {
 
@@ -378,51 +378,51 @@ function PriceGroup({ id, title, intro, items, locale, scopeFor }: { id: string;
 
             const scope = scopeFor?.(item) ?? []
 
-            return \<tr key={item.id} className="grid min-w-0 gap-3 border-b border-white/12 py-6 align-top sm:grid-cols-[minmax(0,1fr)\_minmax(0,.8fr)] sm:gap-x-8 lg:table-row lg:py-0">
+            return <tr key={item.id} className="grid min-w-0 gap-3 border-b border-white/12 py-6 align-top sm:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] sm:gap-x-8 lg:table-row lg:py-0">
 
-              \<th scope="row" className="block min-w-0 font-normal sm:col-start-1 lg:table-cell lg:py-7 lg:pr-8">
+              <th scope="row" className="block min-w-0 font-normal sm:col-start-1 lg:table-cell lg:py-7 lg:pr-8">
 
-                \<span className="block text-pretty font-display text-xl font-bold leading-snug text-white">{item.name[locale]}\</span>
+                <span className="block text-pretty font-display text-xl font-bold leading-snug text-white">{item.name[locale]}</span>
 
-                {href && \<Link prefetch={false} href={href} className="group mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white/70 hover:text-white">\<span className="link-draw">{copy.details}\</span>\<ArrowRight className="arrow-shift size-3.5 text-brand" aria-hidden="true" />\</Link>}
+                {href && <Link prefetch={false} href={href} className="group mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-white/70 hover:text-white"><span className="link-draw">{copy.details}</span><ArrowRight className="arrow-shift size-3.5 text-brand" aria-hidden="true" /></Link>}
 
-              \</th>
+              </th>
 
-              \<td className="block min-w-0 sm:col-start-1 lg:table-cell lg:py-7 lg:pr-8">
+              <td className="block min-w-0 sm:col-start-1 lg:table-cell lg:py-7 lg:pr-8">
 
-                \<PriceScope item={item} scope={scope} locale={locale} />
+                <PriceScope item={item} scope={scope} locale={locale} />
 
-              \</td>
+              </td>
 
-              \<td className="block min-w-0 pt-2 sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:pt-0 lg:table-cell lg:py-7">
+              <td className="block min-w-0 pt-2 sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:pt-0 lg:table-cell lg:py-7">
 
-                \<dl className="divide-y divide-white/10">
+                <dl className="divide-y divide-white/10">
 
-                  {item.variants.map((variant, index) => \<div key={index} className="flex min-w-0 flex-col gap-2 py-3 first:pt-0 sm:items-end sm:text-right">
+                  {item.variants.map((variant, index) => <div key={index} className="flex min-w-0 flex-col gap-2 py-3 first:pt-0 sm:items-end sm:text-right">
 
-                    \<dt className={variant.name ? "text-sm leading-relaxed text-white/75" : "sr-only"}>{variant.name?.[locale] ?? copy.price}\</dt>
+                    <dt className={variant.name ? "text-sm leading-relaxed text-white/75" : "sr-only"}>{variant.name?.[locale] ?? copy.price}</dt>
 
-                    \<dd className="text-lg font-bold leading-relaxed tabular-nums text-white">{variant.price === null ? copy.quote : <>\<span className="text-sm font-normal text-white/60">{copy.from}\</span> {variant.price} \<span className="text-sm font-medium">{currency}\</span>\</>}\</dd>
+                    <dd className="text-lg font-bold leading-relaxed tabular-nums text-white">{variant.price === null ? copy.quote : <><span className="text-sm font-normal text-white/60">{copy.from}</span> {variant.price} <span className="text-sm font-medium">{currency}</span></>}</dd>
 
-                    \<dt className="sr-only">{copy.time}\</dt>
+                    <dt className="sr-only">{copy.time}</dt>
 
-                    \<dd className="flex items-center gap-2 text-sm leading-relaxed text-white/60">\<Clock3 className="size-3.5 text-brand" aria-hidden="true" />{duration(variant.minutes, locale)}\</dd>
+                    <dd className="flex items-center gap-2 text-sm leading-relaxed text-white/60"><Clock3 className="size-3.5 text-brand" aria-hidden="true" />{duration(variant.minutes, locale)}</dd>
 
-                  \</div>)}
+                  </div>)}
 
-                \</dl>
+                </dl>
 
-              \</td>
+              </td>
 
-            \</tr>
+            </tr>
 
           })}
 
-        \</tbody>
+        </tbody>
 
-      \</table>
+      </table>
 
-    \</section>
+    </section>
 
   )
 
@@ -450,61 +450,61 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
   return (
 
-    \<SiteShell locale={locale} page="pricing">
+    <SiteShell locale={locale} page="pricing">
 
 
 
-      \<section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
+      <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
 
-        \<div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
+        <div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
 
-          \<div className="min-w-0 lg:col-span-5">\<p className="eyebrow mb-7">Sprawdź ceny naszych usług\</p>\<h1 id="page-title" className="page-cover-title">{t.nav.pricing}\<span className="text-brand">.\</span>\</h1>\</div>
-
-
+          <div className="min-w-0 lg:col-span-5"><p className="eyebrow mb-7">Sprawdź ceny naszych usług</p><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1></div>
 
 
 
-          \<p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}\</p>
-
-        \</div>
-
-      \</section>
 
 
+          <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}</p>
 
-      \<nav aria-label={copy.title} className="sticky top-(--header-h-compact) z-30 border-b border-white/10 bg-[#101011]">
+        </div>
 
-        \<ul className="shell-wide grid grid-cols-3 gap-3 py-2 sm:flex sm:gap-8">
-
-          {[["mycie", copy.washTitle], ["detailing", copy.detailingTitle], ["pakiet-sprzedaz", copy.saleTitle]].map(([id, label]) => \<li key={id}>\<a href={\`#${id}\`} className="group flex min-h-12 items-center gap-2 text-xs font-semibold leading-relaxed text-white/75 transition-colors hover:text-white sm:text-sm">\<span className="link-draw">{label}\</span>\<ArrowRight className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" />\</a>\</li>)}
-
-        \</ul>
-
-      \</nav>
+      </section>
 
 
 
-      \<section aria-labelledby="price-list-title" className="border-b border-white/10 bg-[#0a0a0b] py-12 sm:py-16 lg:py-20">
+      <nav aria-label={copy.title} className="sticky top-(--header-h-compact) z-30 border-b border-white/10 bg-[#101011]">
 
-        \<div className="shell-wide">
+        <ul className="shell-wide grid grid-cols-3 gap-3 py-2 sm:flex sm:gap-8">
 
-          \<h2 id="price-list-title" className="sr-only">{copy.title}\</h2>
+          {[["mycie", copy.washTitle], ["detailing", copy.detailingTitle], ["pakiet-sprzedaz", copy.saleTitle]].map(([id, label]) => <li key={id}><a href={\`#${id}\`} className="group flex min-h-12 items-center gap-2 text-xs font-semibold leading-relaxed text-white/75 transition-colors hover:text-white sm:text-sm"><span className="link-draw">{label}</span><ArrowRight className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" /></a></li>)}
 
-          \<div className="grid gap-x-10 border-b border-white/10 sm:grid-cols-3">{[[copy.noticePrice, copy.noticePriceText], [copy.noticeTime, copy.noticeTimeText], [copy.noticeCondition, copy.noticeConditionText]].map(([title, text]) => \<div key={title} className="border-b border-white/10 py-5 last:border-b-0 sm:border-b-0 sm:pb-8">\<strong className="text-sm font-semibold text-white/85">{title}\</strong>\<p className="mt-2 max-w-sm text-sm leading-relaxed text-white/65">{text}\</p>\</div>)}\</div>
+        </ul>
 
-          \<WashMatrix locale={locale} scopeFor={washScope} />
+      </nav>
 
-          \<p className="my-6 border-l border-brand py-1 pl-5 text-sm leading-relaxed text-white/65">{copy.coating}\</p>
 
-          \<PriceGroup id="detailing" title={copy.detailingTitle} intro={copy.detailingIntro} items={detailingItems} locale={locale} />
 
-          \<PriceGroup id="pakiet-sprzedaz" title={copy.saleTitle} intro={copy.saleIntro} items={saleItems} locale={locale} />
+      <section aria-labelledby="price-list-title" className="border-b border-white/10 bg-[#0a0a0b] py-12 sm:py-16 lg:py-20">
 
-        \</div>
+        <div className="shell-wide">
 
-      \</section>
+          <h2 id="price-list-title" className="sr-only">{copy.title}</h2>
 
-    \</SiteShell>
+          <div className="grid gap-x-10 border-b border-white/10 sm:grid-cols-3">{[[copy.noticePrice, copy.noticePriceText], [copy.noticeTime, copy.noticeTimeText], [copy.noticeCondition, copy.noticeConditionText]].map(([title, text]) => <div key={title} className="border-b border-white/10 py-5 last:border-b-0 sm:border-b-0 sm:pb-8"><strong className="text-sm font-semibold text-white/85">{title}</strong><p className="mt-2 max-w-sm text-sm leading-relaxed text-white/65">{text}</p></div>)}</div>
+
+          <WashMatrix locale={locale} scopeFor={washScope} />
+
+          <p className="my-6 border-l border-brand py-1 pl-5 text-sm leading-relaxed text-white/65">{copy.coating}</p>
+
+          <PriceGroup id="detailing" title={copy.detailingTitle} intro={copy.detailingIntro} items={detailingItems} locale={locale} />
+
+          <PriceGroup id="pakiet-sprzedaz" title={copy.saleTitle} intro={copy.saleIntro} items={saleItems} locale={locale} />
+
+        </div>
+
+      </section>
+
+    </SiteShell>
 
   )
 
