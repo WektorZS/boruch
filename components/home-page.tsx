@@ -52,7 +52,7 @@ const heroPhotos: Array<{ id: PhotoId; position: string }> = [
   { id: "p46", position: "50% 50%" },
 ]
 
-const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1188.4880132657092!2d14.555602179682984!3d53.43313691416123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e0!3m2!1spl!2spl!4v1790893337748!5m2!1spl!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1188.4880132657092!2d14.555602179682984!3d53.43313691416123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47aa090013a3e941%3A0x340f3074e34ebb22!2sBORUCH%20Myjnia%20R%C4%99czna%20%7C%20Oklejanie%20aut%20%7C%20Pow%C5%82oki%20Ceramiczne%20%7C%20Detailing%20%7C%20CarWash!5e0!3m2!1spl!2spl!4v1790893337748!5m2!1spl!2spl"
 
 const reviewControls: Record<Locale, { previous: string; next: string; select: string }> = {
   pl: { previous: "Poprzednia opinia", next: "Następna opinia", select: "Pokaż opinię" },
