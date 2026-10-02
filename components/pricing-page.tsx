@@ -219,7 +219,9 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="page-title" className="relative border-b border-white/10 bg-[#080809]">
         <div className="shell-wide grid gap-6 pb-12 pt-[calc(var(--header-h)+4rem)] sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
-         
+          <div className="min-w-0 lg:col-span-5"><h1 id="page-title" className="page-cover-title">{t.nav.pricing}<span className="text-brand">.</span></h1></div>
+
+
           <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/65 sm:text-lg lg:col-span-6 lg:col-start-7 lg:pb-2">{copy.intro}</p>
         </div>
       </section>
