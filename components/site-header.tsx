@@ -112,50 +112,85 @@ export function SiteHeader({
     </ul>
   </nav>
 
-  <div className="ml-auto flex items-center gap-5 lg:border-l lg:border-white/15 lg:pl-5 xl:pl-7">
-            <ul aria-label={labels.language} className="hidden items-center gap-1 xl:flex">
-              {languages.map((lang) => (
-                <li key={lang.code}>
-                  <Link prefetch={false}
-                    href={lang.href}
-                    hrefLang={lang.htmlLang}
-                    lang={lang.htmlLang}
-                    aria-label={`${lang.short} - ${lang.name}`}
-                    aria-current={lang.active ? "true" : undefined}
-                    className="relative grid size-8 place-items-center text-[.65rem] font-medium text-white/65 transition-colors hover:text-white aria-[current=true]:border-b aria-[current=true]:border-brand aria-[current=true]:text-white"
-                  >
-                    {lang.short}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+ <div className="shell-wide flex h-(--header-h) items-center transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+  <Wordmark href={homeHref} label={homeLabel} />
 
-            <a
-              href={bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.7rem] font-medium uppercase tracking-[.12em] transition-colors hover:bg-[#aa1921] sm:flex"
-            >
-              {labels.book}
-              <ArrowUpRight className="arrow-lift size-3.5" aria-hidden="true" />
-            </a>
+  <div className="hidden flex-1 justify-center lg:flex">
+    <nav aria-label={labels.navigation}>
+      <ul className="flex items-center gap-7 xl:gap-9">
+        {nav
+          .filter((item) => item.key !== "home")
+          .map((item) => (
+            <li key={item.key}>
+              <Link
+                prefetch={false}
+                href={item.href}
+                aria-current={item.active ? "page" : undefined}
+                className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-medium uppercase tracking-[.12em] text-white/68 hover:text-white aria-[current=page]:text-white"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+      </ul>
+    </nav>
+  </div>
 
-            <button
-              ref={toggleRef}
-              type="button"
-              onClick={() => setOpen(true)}
-              aria-expanded={open}
-              aria-controls="site-menu"
-              className="group flex h-11 items-center gap-3 lg:hidden"
-            >
-              <span className="type-label text-bone">{labels.menu}</span>
-              <span aria-hidden="true" className="flex w-6 flex-col items-end gap-1.5">
-                <span className="h-px w-6 origin-right bg-bone transition-transform duration-300 group-hover:scale-x-75 group-focus-visible:scale-x-75" />
-                <span className="h-px w-6 origin-right scale-x-75 bg-brand transition-transform duration-300 group-hover:scale-x-100 group-focus-visible:scale-x-100" />
-              </span>
-            </button>
-          </div>
-        </div>
+  <div className="ml-auto flex items-center gap-5 lg:ml-0 lg:border-l lg:border-white/15 lg:pl-5 xl:pl-7">
+    <ul
+      aria-label={labels.language}
+      className="hidden items-center gap-1 xl:flex"
+    >
+      {languages.map((lang) => (
+        <li key={lang.code}>
+          <Link
+            prefetch={false}
+            href={lang.href}
+            hrefLang={lang.htmlLang}
+            lang={lang.htmlLang}
+            aria-label={`${lang.short} - ${lang.name}`}
+            aria-current={lang.active ? "true" : undefined}
+            className="relative grid size-8 place-items-center text-[.65rem] font-medium text-white/65 transition-colors hover:text-white aria-[current=true]:border-b aria-[current=true]:border-brand aria-[current=true]:text-white"
+          >
+            {lang.short}
+          </Link>
+        </li>
+      ))}
+    </ul>
+
+    <a
+      href={bookingUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group hidden min-h-11 items-center gap-3 bg-brand px-5 text-[.7rem] font-medium uppercase tracking-[.12em] transition-colors hover:bg-[#aa1921] sm:flex"
+    >
+      {labels.book}
+      <ArrowUpRight
+        className="arrow-lift size-3.5"
+        aria-hidden="true"
+      />
+    </a>
+
+    <button
+      ref={toggleRef}
+      type="button"
+      onClick={() => setOpen(true)}
+      aria-expanded={open}
+      aria-controls="site-menu"
+      className="group flex h-11 items-center gap-3 lg:hidden"
+    >
+      <span className="type-label text-bone">{labels.menu}</span>
+
+      <span
+        aria-hidden="true"
+        className="flex w-6 flex-col items-end gap-1.5"
+      >
+        <span className="h-px w-6 origin-right bg-bone transition-transform duration-300 group-hover:scale-x-75 group-focus-visible:scale-x-75" />
+        <span className="h-px w-6 origin-right scale-x-75 bg-brand transition-transform duration-300 group-hover:scale-x-100 group-focus-visible:scale-x-100" />
+      </span>
+    </button>
+  </div>
+</div>
       </header>
 
       <div
