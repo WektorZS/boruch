@@ -112,7 +112,7 @@ export function SiteHeader({
     </ul>
   </nav>
 
- <div className="shell-wide flex h-(--header-h) items-center transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+  <div className="shell-wide flex h-(--header-h) items-center transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
   <Wordmark href={homeHref} label={homeLabel} />
 
   <div className="hidden flex-1 justify-center lg:flex">
@@ -191,6 +191,7 @@ export function SiteHeader({
     </button>
   </div>
 </div>
+        </div>
       </header>
 
       <div
