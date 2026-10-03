@@ -11,7 +11,7 @@ const galleryCopy = {
     eyebrow: "Boruch Myjnia / Realizacje",
     headline: "Nasza praca. Z bliska.",
     collection: "Kadry z naszej myjni",
-    place: "PAZIM / Szczecin",
+    place: "",
     scroll: "Zobacz realizacje",
     more: "Zobacz więcej zdjęć",
     finalKicker: "Jeszcze więcej kadrów",
@@ -23,7 +23,7 @@ const galleryCopy = {
     eyebrow: "Boruch Myjnia / Our work",
     headline: "Our work. Up close.",
     collection: "From our workshop",
-    place: "PAZIM / Szczecin",
+    place: "",
     scroll: "Explore our work",
     more: "Show more photos",
     finalKicker: "More from our workshop",
@@ -35,7 +35,7 @@ const galleryCopy = {
     eyebrow: "Boruch Myjnia / Unsere Arbeit",
     headline: "Unsere Arbeit. Aus der Nähe.",
     collection: "Aus unserer Werkstatt",
-    place: "PAZIM / Szczecin",
+    place: "",
     scroll: "Unsere Arbeiten ansehen",
     more: "Weitere Fotos anzeigen",
     finalKicker: "Noch mehr Einblicke",
@@ -47,7 +47,7 @@ const galleryCopy = {
     eyebrow: "Boruch Myjnia / Наші роботи",
     headline: "Наша робота. Зблизька.",
     collection: "Кадри з нашої мийки",
-    place: "PAZIM / Щецин",
+    place: "",
     scroll: "Переглянути роботи",
     more: "Показати більше фото",
     finalKicker: "Ще більше кадрів",
@@ -78,6 +78,19 @@ export function GalleryPage({ locale }: { locale: Locale }) {
             <div className="gg-hero-aside">
               <p>{src.gallery.sub}</p>
               <div className="gg-hero-actions">
+                <a
+  href="https://www.facebook.com/p/Boruch-Myjnia-100085246333389/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="gg-social"
+>
+  <span aria-hidden="true">
+    <svg className="gg-social-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M13 22v-9h3l.5-4H13V6.5c0-1.1.3-1.5 1.5-1.5H17V1h-3c-3.3 0-5 2-5 5v3H6v4h3v9h4z" />
+    </svg>
+  </span>
+  Facebook
+</a>
                 <a href="#realizacje" className="gg-link">{copy.scroll}<ArrowRight aria-hidden="true" strokeWidth={1.6} /></a>
                 <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="gg-social">
                   <span aria-hidden="true"><InstagramIcon className="gg-social-icon" /></span>
