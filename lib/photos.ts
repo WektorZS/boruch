@@ -52,7 +52,7 @@ export const photos = {
   "p41": { w: 1284, h: 2778, sizes: [480, 960, 1284], alt: "BMW kombi w hali myjni" },
   "p42": { w: 3024, h: 4032, sizes: [480, 960, 1600], alt: "Czarne BMW serii 3 po myciu" },
   "p43": { w: 4032, h: 3024, sizes: [480, 960, 1600], alt: "Wnętrze Mercedesa Coupé po czyszczeniu" },
-  "p44": { w: 3024, h: 4032, sizes: [480, 960, 1600], alt: "Tylna kanapa po praniu tapicerki materiałowej" },
+  "p44": { w: 3024, h: 4032, sizes: [480, 960, 1600], alt: "Tylna kanapa przed praniem tapicerki materiałowej" },
   "p45": { w: 3024, h: 4032, sizes: [480, 960, 1600], alt: "Materiałowa tapicerka tylnej kanapy po praniu" },
   "p46": { w: 4032, h: 3024, sizes: [480, 960, 1600], alt: "Samochód pokryty aktywną pianą podczas mycia" },
   "p47": { w: 1440, h: 1430, sizes: [480, 960, 1440], alt: "Grafitowe Audi RS3 Limousine - widok z tyłu" },

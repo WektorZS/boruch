@@ -14,11 +14,11 @@ export function photoSrc(id: PhotoId, width?: number, format: "webp" | "avif" = 
   const sizes = photoSizes(id)
   const size = width ? (sizes.find((s) => s >= width) ?? sizes[sizes.length - 1]) : sizes[sizes.length - 1]
   const folder = id === "p60" ? "optimized-v3/" : id === "p11" && format === "avif" && size <= 960 ? "hero-v2/" : optimizedPhotos.has(id) ? "optimized-v1/" : ""
-  return `/images/photos/${folder}${id}-${size}.${format}`
+  return "/images/photos/" + folder + id + "-" + size + "." + format
 }
 
 export function photoSrcSet(id: PhotoId, format: "webp" | "avif" = "webp") {
-  return photoSizes(id).map((size) => `${photoSrc(id, size, format)} ${size}w`).join(", ")
+  return photoSizes(id).map(size => photoSrc(id, size, format) + " " + size + "w").join(", ")
 }
 
 interface PhotoProps {
@@ -33,31 +33,34 @@ interface PhotoProps {
   position?: string
 }
 
-/** Authentic BORUCH photograph rendered as a responsive, static-export friendly <img>. */
+/** Responsive photograph with existing asset paths and a static-export friendly <img>. */
 export function Photo({ id, sizes, className, alt, priority = false, eager = false, position }: PhotoProps) {
   const meta = photos[id]
+
   return (
     <>
-    {priority && optimizedPhotos.has(id) && <link rel="preload" as="image" type="image/avif" href={photoSrc(id, 960, "avif")} imageSrcSet={photoSrcSet(id, "avif")} imageSizes={sizes} fetchPriority="high" />}
-    {/* A full-size block is required for the section's clip-path reveal and lazy-loading bounds. */}
-    <picture className="absolute inset-0 block h-full w-full">
-      {optimizedPhotos.has(id) && <source type="image/avif" srcSet={photoSrcSet(id, "avif")} sizes={sizes} />}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={photoSrc(id, 960)}
-        srcSet={photoSrcSet(id)}
-        sizes={sizes}
-        width={meta.w}
-        height={meta.h}
-        alt={alt ?? meta.alt}
-        loading={priority || eager ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        decoding={priority ? "auto" : "async"}
-        draggable={false}
-        style={position ? { objectPosition: position } : undefined}
-        className={cn("absolute inset-0 h-full w-full object-cover", className)}
-      />
-    </picture>
+      {priority && optimizedPhotos.has(id) && (
+        <link rel="preload" as="image" type="image/avif" href={photoSrc(id, 960, "avif")} imageSrcSet={photoSrcSet(id, "avif")} imageSizes={sizes} fetchPriority="high" />
+      )}
+      <picture className="absolute inset-0 block h-full w-full">
+        {optimizedPhotos.has(id) && <source type="image/avif" srcSet={photoSrcSet(id, "avif")} sizes={sizes} />}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photoSrc(id, 960)}
+          srcSet={photoSrcSet(id)}
+          sizes={sizes}
+          width={meta.w}
+          height={meta.h}
+          alt={alt ?? meta.alt}
+          loading={priority || eager ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding={priority ? "auto" : "async"}
+          draggable={false}
+          style={position ? { objectPosition: position } : undefined}
+          className={cn("absolute inset-0 h-full w-full object-cover", className)}
+        />
+      </picture>
     </>
   )
 }
+
