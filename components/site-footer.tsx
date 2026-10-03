@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import {
   ArrowUpRight,
   Mail,
@@ -130,16 +131,29 @@ export function SiteFooter({
          <Link
   prefetch={false}
   href={routes[locale].home}
-  aria-label="Boruch Myjnia - Strona główna"
-  className="group inline-flex w-fit items-end gap-4"
+  aria-label="Boruch Myjnia & Detailing - Strona główna"
+  className="group inline-flex w-fit items-center gap-3"
 >
-  <span className="font-display text-[clamp(2.6rem,4vw,4rem)] font-black uppercase leading-[.82] tracking-[-.04em] text-bone transition-colors group-hover:text-white">
-    BORUCH
-    <span className="text-brand">
-      .
+  <Image
+    src="/images/logo.webp"
+    alt=""
+    width={82}
+    height={82}
+    className="size-11 shrink-0 object-contain min-[360px]:size-13"
+  />
+
+  <span
+    aria-hidden="true"
+    className="flex translate-y-[3.2px] flex-col items-center leading-none text-center"
+  >
+    <span className="font-outfit whitespace-nowrap text-[1.35rem] font-bold tracking-[-0.02em] text-white">
+      Boruch Myjnia
+    </span>
+
+    <span className="font-outfit mt-1 whitespace-nowrap text-[0.82rem] font-medium tracking-[-0.01em] text-white/90">
+      &amp; detailing
     </span>
   </span>
-
 </Link>
 
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">
