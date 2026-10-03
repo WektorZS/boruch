@@ -1,29 +1,48 @@
 "use client"
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
-import type { CSSProperties, MouseEvent } from "react"
+import type { MouseEvent } from "react"
 import Link from "next/link"
-import { Alex_Brush } from "next/font/google"
 import useEmblaCarousel from "embla-carousel-react"
 import {
-  Armchair, ArrowLeft, ArrowRight, ArrowUpRight, Brush, ChevronDown,
-  CircleDot, Clock3, Droplets, Droplet, Gem, Layers3, Mail, MapPin,
-  PackageCheck, Palette, Pause, Play, Phone, ShieldCheck, Sparkles, Star,
-  SunMedium, WandSparkles, Waves, X, Quote,
+  Armchair,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Brush,
+  Car,
+  ChevronDown,
+  CircleDot,
+  Clock3,
+  Droplets,
+  Droplet,
+  Gem,
+  Layers3,
+  MapPin,
+  PackageCheck,
+  Palette,
+  Pause,
+  Play,
+  Quote,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  SunMedium,
+  WandSparkles,
+  Waves,
+  X,
 } from "lucide-react"
 import { Photo } from "./photo"
 import { HomeContactForm } from "./home-contact-form"
 import { BoruchGoogleMap } from "./boruch-google-map"
 import { SiteHeader } from "./site-header"
 import { SiteFooter } from "./site-footer"
+import { useModalFocus } from "./use-modal-focus"
 import { FacebookIcon, InstagramIcon } from "./social-icons"
 import { contact, localeLabels, localeOrder, routes, sources, ui, type Locale, type PageKey } from "@/lib/content"
 import { serviceConfigs, serviceSummary } from "@/lib/content/services"
 import type { PhotoId } from "@/lib/photos"
 import { clsx as cn } from "clsx"
-
-// This font is applied only to the handwritten signature.
-const signatureFont = Alex_Brush({ weight: "400", style: "normal", subsets: ["latin"], display: "swap", preload: false })
 
 const navOrder: PageKey[] = ["services", "pricing", "gallery", "about", "contact"]
 
@@ -191,12 +210,12 @@ const careSteps: Record<Locale, Array<[string, string]>> = {
   ["We plan further care", "We advise you on how to wash and maintain your car after the service."],
   ],
   de: [
-    ["Wir wählen den passenden Umfang", "Wir prüfen den Zustand Ihres Fahrzeugs und wählen die passenden Maßnahmen - von der Basispflege bis zum Lackschutz."],
+    ["Wir wählen den passenden Umfang", "Wir prüfen den Zustand Ihres Fahrzeugs und wählen die passenden Maßnahmen – von der Basispflege bis zum Lackschutz."],
   ["Wir achten auf die Details", "Wir kümmern uns um Innenraum, Karosserie und Details, die bei einer normalen Wäsche oft übersehen werden."],
   ["Wir planen die weitere Pflege", "Wir beraten Sie, wie Sie Ihr Fahrzeug nach der Behandlung richtig waschen und pflegen."],
   ],
   uk: [
-     ["Підбираємо обсяг робіт", "Оцінюємо стан автомобіля та підбираємо відповідні процедури - від базового догляду до захисту лакофарбового покриття."],
+     ["Підбираємо обсяг робіт", "Оцінюємо стан автомобіля та підбираємо відповідні процедури — від базового догляду до захисту лакофарбового покриття."],
   ["Працюємо над деталями", "Дбаємо про салон, кузов і деталі, які під час звичайного миття часто залишаються непоміченими."],
   ["Плануємо подальший догляд", "Підказуємо, як правильно мити та доглядати за автомобілем після виконаної послуги."],
   ],
@@ -481,13 +500,13 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
     whyIntro: "Одне місце для повного догляду за автомобілем зовні та всередині.",
     benefits: [
     ["Ручний догляд", "Точна ручна робота дозволяє нам подбати навіть про ті місця, які легко пропустити."],
-["Повний комплекс", "Комплексний догляд за автомобілем - від базового миття до професійного захисту лакофарбового покриття."],
-["Центр Щецина", "Ми знаходимося в самому центрі міста - залиште автомобіль у нас і скористайтеся часом на покупки в сусідніх торгових центрах."],
+["Повний комплекс", "Комплексний догляд за автомобілем — від базового миття до професійного захисту лакофарбового покриття."],
+["Центр Щецина", "Ми знаходимося в самому центрі міста — залиште автомобіль у нас і скористайтеся часом на покупки в сусідніх торгових центрах."],
     ],
     servicesIntro: "Оберіть базовий догляд або повний захист автомобіля.",
     galleryCaptions: ["Корекція лаку", "Захисна плівка PPF", "Детейлінг салону", "Ручне миття", "Захист лаку"],
     teamTitle: "За кожним автомобілем стоїть конкретна команда.",
-    teamBody: "BORUCH виріс із любові до чистих і доглянутих автомобілів. Працюємо уважно, без поспіху та відповідаємо за результат.",
+    teamBody: "BORUCH виріс із любові до чистих і доглянутих автомобілів. Працюємо уважно, без поспіху та від��овідаємо за результат.",
     routeHint: "Заїдьте на паркінг PAZIM і спустіться на рівень -2.",
     reviewsLabel: "Відгуки клієнтів",
     reviewsTitle: "Результат, за яким хочеться повернутися.",
@@ -544,8 +563,471 @@ Zapraszamy Cię do nas i mamy nadzieję, że zadowolony.. wrócisz w nasze progi
   contactBooksy: string
 }>
 
+export function HomePage({ locale }: { locale: Locale }) {
+  const t = ui[locale]
 
-const serviceExplorerCopy = {
+  return (
+    <div id="top" lang={localeLabels[locale].htmlLang} className="home-root min-h-dvh bg-[#080809] text-bone">
+      {locale === "pl" && <link rel="preload" href="/fonts/roboto-flex-polish-v2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />}
+      <a href="#main" className="fixed left-4 top-4 z-80 -translate-y-24 bg-brand px-4 py-3 text-xs font-bold uppercase tracking-[.16em] transition-transform focus:translate-y-0">
+        {t.skip}
+      </a>
+      <HomeHeader locale={locale} />
+      <main id="main" className="home-main" tabIndex={-1}>
+        <HomeHero locale={locale} />
+        <WhyBoruch locale={locale} />
+        <ServiceMenu locale={locale} />
+        <WorkShowcase locale={locale} />
+        <Packages locale={locale} />
+        <SalesPackage locale={locale} />
+        <Reviews locale={locale} />
+        <TeamStory locale={locale} />
+        <HomeFaq locale={locale} />
+        <Location locale={locale} />
+        <ContactSection locale={locale} />
+      </main>
+      <HomeFooter locale={locale} />
+    </div>
+  )
+}
+
+function HomeHeader({ locale }: { locale: Locale }) {
+  const t = ui[locale]
+  return <SiteHeader
+    homeHref={routes[locale].home}
+    homeLabel={t.nav.home}
+    nav={[{ key: "home", label: t.nav.home, href: routes[locale].home, active: true }, ...navOrder.map(key => ({ key, label: t.nav[key], href: routes[locale][key], active: false }))]}
+    languages={localeOrder.map(code => ({ code, short: localeLabels[code].short, name: localeLabels[code].name, htmlLang: localeLabels[code].htmlLang, href: routes[code].home, active: code === locale }))}
+    labels={{ book: t.book, menu: t.menu, close: t.close, language: t.language, navigation: t.navigation, level: t.level }}
+    bookingUrl={contact.bookingUrl}
+    phone={contact.phone}
+    phoneHref={contact.phoneHref}
+    address={[sources[locale].address.lines[0], `PAZIM ${sources[locale].address.lines[2]}`]}
+  />
+}
+
+function HeroRatings({ copy, className }: { copy: (typeof homeCopy)[Locale]; className?: string }) {
+  return (
+    <div className={cn("flex w-full items-stretch border-l border-white/14 bg-[#101011] sm:w-auto", className)}>
+      <span className="grid min-h-16 min-w-20 place-items-center border-r border-[#238965]/75 bg-[#176b4f]/15 px-3 font-display text-xl font-black tracking-[.01em] text-[#75c9a9] sm:min-h-20 sm:min-w-24 sm:text-2xl">5.0/5</span>
+      <span className="flex min-w-0 flex-1 flex-col justify-center divide-y divide-white/10 sm:flex-none">
+        <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:min-w-56 sm:px-5">
+          <span className="min-w-0 flex-1">
+            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Booksy</strong>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.booksyReviews}</span>
+          </span>
+          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </a>
+        <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex min-h-8 items-center gap-3 px-4 py-2 transition-colors hover:bg-white/[.06] sm:px-5">
+          <span className="min-w-0 flex-1">
+            <strong className="block text-[.72rem] font-bold uppercase tracking-[.14em] text-white">Google</strong>
+            <span className="mt-0.5 block text-[.72rem] text-white/65">5.0 / 5 - {copy.googleReviews}</span>
+          </span>
+          <ArrowUpRight className="size-3.5 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </a>
+      </span>
+    </div>
+  )
+}
+
+function HomeHero({ locale }: { locale: Locale }) {
+  const t = ui[locale]
+  const copy = homeCopy[locale]
+  const benefitIcons = [Sparkles, ShieldCheck, MapPin]
+
+  const [activeImageSlide, setActiveImageSlide] = useState(0)
+  const [activeTextSlide, setActiveTextSlide] = useState(0)
+  const [loadedSlides, setLoadedSlides] = useState([0])
+  const [imageTransitionsReady, setImageTransitionsReady] = useState(false)
+  const [textTransitionsReady, setTextTransitionsReady] = useState(false)
+  const [heroVisible, setHeroVisible] = useState(true)
+  const [heroPaused, setHeroPaused] = useState(false)
+
+  const heroRef = useRef<HTMLElement>(null)
+
+  const slide = copy.heroSlides[activeTextSlide]
+  const hasLongTitleWord = slide.title
+    .split(/\s+/)
+    .some((word) => word.length >= 12)
+
+  useEffect(() => {
+    const hero = heroRef.current
+    if (!hero) return
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroVisible(entry.isIntersecting)
+    })
+
+    const onVisibility = () => {
+      setHeroPaused(document.hidden)
+    }
+
+    observer.observe(hero)
+    document.addEventListener("visibilitychange", onVisibility)
+
+    return () => {
+      observer.disconnect()
+      document.removeEventListener("visibilitychange", onVisibility)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (activeTextSlide === activeImageSlide) return
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    const textChange = window.setTimeout(
+      () => {
+        setTextTransitionsReady(true)
+        setActiveTextSlide(activeImageSlide)
+      },
+      reduceMotion ? 0 : 280,
+    )
+
+    return () => {
+      window.clearTimeout(textChange)
+    }
+  }, [activeImageSlide, activeTextSlide])
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    if (!heroVisible || heroPaused || reduceMotion) return
+
+    const next = (activeImageSlide + 1) % copy.heroSlides.length
+
+    const preload = window.setTimeout(() => {
+      setImageTransitionsReady(true)
+      setLoadedSlides((current) =>
+        current.includes(next) ? current : [...current, next],
+      )
+    }, 3500)
+
+    const advance = window.setTimeout(() => {
+      setImageTransitionsReady(true)
+      setLoadedSlides((current) =>
+        current.includes(next) ? current : [...current, next],
+      )
+      setActiveImageSlide(next)
+    }, 5000)
+
+    return () => {
+      window.clearTimeout(preload)
+      window.clearTimeout(advance)
+    }
+  }, [
+    activeImageSlide,
+    copy.heroSlides.length,
+    heroVisible,
+    heroPaused,
+  ])
+
+  return (
+    <>
+      <section
+        ref={heroRef}
+        onFocusCapture={() => setHeroPaused(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setHeroPaused(document.hidden)
+          }
+        }}
+        aria-labelledby="hero-title"
+        className="editorial-hero relative isolate bg-[#080809] pt-(--header-h)"
+      >
+        <div className="hero-cinema" aria-hidden="true">
+          {heroPhotos.map(
+            (photo, index) =>
+              loadedSlides.includes(index) && (
+                <div
+                  key={photo.id}
+                  className={cn(
+                    "absolute inset-0",
+                    imageTransitionsReady &&
+                      "transition-opacity duration-[1600ms] ease-in-out motion-reduce:transition-none",
+                    index === activeImageSlide
+                      ? "opacity-100"
+                      : "opacity-0",
+                  )}
+                >
+                  <Photo
+                    id={photo.id}
+                    priority={index === 0}
+                    sizes="(min-width: 1024px) 66vw, (min-width: 640px) 82vw, 100vw"
+                    position={photo.position}
+                    className="home-hero-photo saturate-[.88] contrast-[1.04]"
+                  />
+                </div>
+              ),
+          )}
+
+          <div className="hero-cinema-shade absolute inset-0" />
+        </div>
+
+        <div className="home-hero-shell hero-editorial-grid relative z-10">
+          <div
+            key={activeTextSlide}
+            className={cn(
+              "hero-editorial-copy hero-copy-contrast",
+              textTransitionsReady && "home-hero-copy-animated",
+            )}
+            style={
+              textTransitionsReady
+                ? { animationDelay: "0ms" }
+                : undefined
+            }
+          >
+            <p className="mb-8 flex items-center gap-3 text-[.72rem] font-medium uppercase tracking-[.16em] text-white/82">
+              <span className="h-px w-7 shrink-0 bg-brand" />
+              {slide.label}
+            </p>
+
+            <h1
+              id="hero-title"
+              className={cn(
+                "cinematic-title",
+                hasLongTitleWord && "cinematic-title-long",
+              )}
+            >
+              {slide.title}
+            </h1>
+
+            <p className="mt-7 max-w-[32rem] text-pretty text-base leading-relaxed text-white/78 sm:text-lg">
+              {slide.text}
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-7">
+              <a
+                href="#wycena"
+                className="home-button home-button-red"
+              >
+                {t.nav.contact}
+                <ArrowRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </a>
+
+              <Link
+                prefetch={false}
+                href={routes[locale].services}
+                className="editorial-link"
+              >
+                {t.nav.services}
+                <ArrowUpRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          </div>
+
+          <div
+  className="hero-trust-totem"
+  aria-label={copy.reviewsLabel}
+>
+  <div className="hero-editorial-bottom sm:hidden">
+   <div className="flex items-center justify-center text-white">
+  <span className="mr-2 text-[.72rem] font-bold uppercase tracking-[.13em] text-white">
+    {followCopy[locale]}
+  </span>
+
+  <div className="flex items-center gap-0.5">
+    <a
+      href={contact.facebook}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+    >
+      <FacebookIcon className="size-5" />
+    </a>
+
+    <a
+      href={contact.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      className="grid size-10 place-items-center text-white transition-colors hover:text-brand"
+    >
+      <InstagramIcon className="size-5" />
+    </a>
+  </div>
+</div>
+  </div>
+
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">
+      Opinie Booksy
+    </span>
+
+    <strong className="hero-trust-score">
+      5.0
+    </strong>
+
+    <span className="hero-trust-meta">
+      {copy.booksyReviews}
+    </span>
+  </div>
+
+  <div className="hero-trust-divider" />
+
+  <div className="hero-trust-item">
+    <span className="hero-trust-kicker">
+      Opinie Google
+    </span>
+
+    <strong className="hero-trust-score">
+      5.0
+    </strong>
+
+    <span className="hero-trust-meta">
+      {copy.googleReviews}
+    </span>
+  </div>
+</div>
+
+      </div>
+
+        <ul className="hero-benefits relative z-10 grid border-y border-white/10 bg-[#0e0e0f] sm:grid-cols-3">
+          {copy.benefits.map(([title, text], index) => {
+            const Icon = benefitIcons[index] ?? Car
+
+            return (
+              <li
+                key={title}
+                className="flex min-h-20 items-center justify-center border-b border-white/10 px-6 py-3.5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-7 sm:last:border-r-0 lg:px-10"
+              >
+                <div className="flex w-full max-w-sm items-center justify-center gap-4">
+                  <Icon
+                    className="size-5 shrink-0 text-brand"
+                    aria-hidden="true"
+                  />
+
+                  <div className="flex min-w-0 flex-col gap-1.5">
+                    <strong className="text-[.72rem] font-bold uppercase tracking-[.14em] text-white/88">
+                      {title}
+                    </strong>
+
+                    <span className="text-[.8rem] leading-snug text-white/65">
+                      {text}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    </>
+  )
+}
+
+function WhyBoruch({ locale }: { locale: Locale }) {
+  const copy = homeCopy[locale]
+  const t = ui[locale]
+
+  return (
+    <section
+      aria-labelledby="why-title"
+      className="section-xl overflow-hidden bg-[#080809]"
+    >
+      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-20">
+        <div className="lg:col-span-5">
+          <p className="home-kicker">
+            {copy.whyLabel}
+          </p>
+
+          <h2
+            id="why-title"
+            data-reveal=""
+            className="editorial-display mt-7 max-w-[11ch]"
+          >
+            {editorialCopy[locale].why}
+          </h2>
+
+          <p className="mt-7 max-w-md text-base leading-relaxed text-white/62">
+            {copy.whyIntro}
+          </p>
+
+          <Link
+            prefetch={false}
+            href={routes[locale].about}
+            className="editorial-link mt-8 w-fit"
+          >
+            {t.nav.about}
+            <ArrowUpRight
+              className="size-4 text-brand"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
+
+        <ol className="border-t border-white/15 lg:col-span-6 lg:col-start-7">
+          {careSteps[locale].map(([title, text], index) => (
+            <li
+              key={title}
+              data-reveal=""
+              className="group grid grid-cols-[2.25rem_minmax(0,1fr)] gap-5 border-b border-white/15 py-7 sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-7 sm:py-8"
+            >
+              <span
+                className="type-label pt-1 text-brand"
+                aria-hidden="true"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <div className="min-w-0">
+                <h3 className="font-display text-xl font-semibold leading-snug tracking-normal text-white sm:text-2xl">
+                  {title}
+                </h3>
+
+                <p className="mt-3 max-w-xl text-base leading-relaxed text-white/58">
+                  {text}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+function serviceMenuIcon(
+  slug: string,
+  _title: string,
+  category: "myjnia" | "detailing",
+) {
+  const icons = {
+    "mycie-zewnatrz": Droplet,
+    "czyszczenie-wnetrza": Armchair,
+    komplet: PackageCheck,
+    "pranie-tapicerki": Waves,
+    "czyszczenie-skor": Brush,
+    woskowanie: Sparkles,
+    polerowanie: CircleDot,
+    "korekta-lakieru": WandSparkles,
+    "powloka-ceramiczna": ShieldCheck,
+    "folia-ppf": Layers3,
+    "przyciemnianie-szyb-i-lamp": SunMedium,
+    "zmiana-koloru-dechroming": Palette,
+  } as const
+
+  return (
+    icons[slug as keyof typeof icons] ??
+    (category === "myjnia" ? Droplets : Gem)
+  )
+}
+
+function ServiceMenu({ locale }: { locale: Locale }) {
+  const accordionId = useId()
+  const t = ui[locale]
+  const copy = {
     pl: {
       eyebrow: "Usługi",
       title: "Od mycia po ochronę lakieru.",
@@ -610,506 +1092,544 @@ contact: "Zapytaj o swoje auto",
       adviceText: "Розкажіть про авто й бажаний результат. Допоможемо підібрати обсяг робіт.",
       contact: "Запитати про своє авто",
     },
-  } satisfies Record<Locale, Record<string, string>>
+  }[locale]
 
-/**
- * Standalone replacement for the supplied home-page.tsx.
- * No server actions, API routes or runtime image optimizer are introduced.
- * Existing Photo, map, form, header and footer contracts are kept.
- */
-export function HomePage({ locale }: { locale: Locale }) {
-  return (
-    <div id="top" lang={localeLabels[locale].htmlLang} className="hp-rebuild">
-      <style>{homeStyles}</style>
-      {locale === "pl" && <link rel="preload" href="/fonts/roboto-flex-polish-v2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />}
-      <a href="#main" className="hp-skip">{ui[locale].skip}</a>
-      <HomeHeader locale={locale} />
-      <main id="main" tabIndex={-1} className="hp-main">
-        <HomeHero locale={locale} />
-        <HomeServices locale={locale} />
-        <HomePortfolio locale={locale} />
-        <HomeCare locale={locale} />
-        <HomePackages locale={locale} />
-        <HomeTeam locale={locale} />
-        <HomeReviews locale={locale} />
-        <HomeFaq locale={locale} />
-        <HomeLocation locale={locale} />
-        <HomeContact locale={locale} />
-      </main>
-      <HomeFooter locale={locale} />
-    </div>
-  )
-}
-
-function useReducedMotion() {
-  // Start conservatively: automatic motion is enabled only after reading the preference.
-  const [reduced, setReduced] = useState(true)
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const update = () => setReduced(media.matches)
-    update()
-    media.addEventListener("change", update)
-    return () => media.removeEventListener("change", update)
-  }, [])
-  return reduced
-}
-
-function SocialLinks({ locale, label = false }: { locale: Locale; label?: boolean }) {
-  return (
-    <div className="hp-socials">
-      {label && <span className="hp-caption">{followCopy[locale]}</span>}
-      <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="hp-icon-button" aria-label="Facebook - BORUCH Myjnia">
-        <span aria-hidden="true"><FacebookIcon className="size-5" /></span>
-      </a>
-      <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="hp-icon-button" aria-label="Instagram - BORUCH Myjnia">
-        <span aria-hidden="true"><InstagramIcon className="size-5" /></span>
-      </a>
-    </div>
-  )
-}
-
-function Ratings({ locale, className }: { locale: Locale; className?: string }) {
-  const copy = homeCopy[locale]
-  // These are the supplied platform ratings, not a calculated joint rating.
-  return (
-    <div className={cn("hp-ratings", className)}>
-      {[
-        { name: "Booksy", href: contact.bookingUrl, count: copy.booksyReviews },
-        { name: "Google", href: contact.mapsUrl, count: copy.googleReviews },
-      ].map((rating) => (
-        <a key={rating.name} href={rating.href} target="_blank" rel="noopener noreferrer" className="hp-rating">
-          <span className="hp-rating-score">5.0<span>/5</span></span>
-          <span className="hp-rating-source"><strong>{rating.name}</strong><span>{rating.count}</span></span>
-          <ArrowUpRight aria-hidden="true" />
-        </a>
-      ))}
-    </div>
-  )
-}
-
-function HomeHero({ locale }: { locale: Locale }) {
-  const copy = homeCopy[locale]
-  const t = ui[locale]
-  const motion = editorialCopy[locale]
-  const reducedMotion = useReducedMotion()
-  const heroRef = useRef<HTMLElement>(null)
-  const aliveRef = useRef(true)
-  const decodingRef = useRef(new Set<number>())
-  const [active, setActive] = useState(0)
-  const [requested, setRequested] = useState(0)
-  const [mounted, setMounted] = useState<number[]>([0])
-  const [ready, setReady] = useState<number[]>([])
-  const [failed, setFailed] = useState<number[]>([])
-  const [userPaused, setUserPaused] = useState(false)
-  const [focused, setFocused] = useState(false)
-  const [inView, setInView] = useState(true)
-  const [pageVisible, setPageVisible] = useState(true)
-  const [announcement, setAnnouncement] = useState("")
-  const slide = copy.heroSlides[active]
-  const total = Math.min(copy.heroSlides.length, heroPhotos.length)
-
-  useEffect(() => {
-    aliveRef.current = true
-    const updateVisibility = () => setPageVisible(!document.hidden)
-    updateVisibility()
-    document.addEventListener("visibilitychange", updateVisibility)
-    const observer = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: .12 },
-    )
-    if (heroRef.current) observer?.observe(heroRef.current)
-    return () => {
-      aliveRef.current = false
-      observer?.disconnect()
-      document.removeEventListener("visibilitychange", updateVisibility)
-    }
-  }, [])
-
-  const markReady = useCallback((index: number, img: HTMLImageElement) => {
-    if (!img.complete || img.naturalWidth === 0 || decodingRef.current.has(index)) return
-    decodingRef.current.add(index)
-    const finish = () => {
-      decodingRef.current.delete(index)
-      if (aliveRef.current && img.naturalWidth > 0) {
-        setReady((current) => current.includes(index) ? current : [...current, index])
-      }
-    }
-    if (typeof img.decode === "function") void img.decode().then(finish, finish)
-    else finish()
-  }, [])
-
-  // Covers images already loaded from cache before the load handler was attached.
-  useEffect(() => {
-    heroRef.current?.querySelectorAll<HTMLImageElement>("[data-hero-photo] img").forEach((img) => {
-      const index = Number(img.closest("[data-hero-photo]")?.getAttribute("data-hero-photo"))
-      if (Number.isFinite(index)) markReady(index, img)
-    })
-  }, [mounted, markReady])
-
-  useEffect(() => {
-    if (ready.includes(requested)) setActive(requested)
-  }, [ready, requested])
-
-  const adjacent = useCallback((direction: number) => {
-    for (let step = 1; step < total; step++) {
-      const candidate = (active + direction * step + total * 2) % total
-      if (!failed.includes(candidate)) return candidate
-    }
-    return active
-  }, [active, failed, total])
-
-  const prepare = useCallback((index: number) => {
-    setMounted((current) => current.includes(index) ? current : [...current, index])
-  }, [])
-
-  const requestSlide = useCallback((index: number, manual = false) => {
-    prepare(index)
-    setRequested(index)
-    if (manual) setAnnouncement(copy.heroSlides[index].title)
-  }, [prepare, copy.heroSlides])
-
-  const automatic = !reducedMotion && !userPaused && !focused && inView && pageVisible && requested === active
-
-  useEffect(() => {
-    if (!automatic || total < 2) return
-    const next = adjacent(1)
-    if (next === active) return
-    const warm = window.setTimeout(() => prepare(next), 4300)
-    const advance = window.setTimeout(() => requestSlide(next), 8000)
-    return () => { window.clearTimeout(warm); window.clearTimeout(advance) }
-  }, [automatic, active, total, adjacent, prepare, requestSlide])
-
-  const longestWord = Math.max(...slide.title.split(/\s+/).map((word) => word.length))
-  const titleStyle = { "--hp-word-factor": Math.min(10.5, Math.max(7.8, longestWord * .67)) } as CSSProperties
-  const benefitsIcons = [Sparkles, ShieldCheck, MapPin]
+  const groups = (["myjnia", "detailing"] as const).map((category) => ({
+    category,
+    title: category === "myjnia" ? copy.wash : copy.detailing,
+    description: category === "myjnia" ? copy.washDescription : copy.detailingDescription,
+    Icon: category === "myjnia" ? Droplets : Gem,
+    items: serviceConfigs
+      .filter((service) => service.category === category)
+      .map((service) => {
+        const summary = serviceSummary(locale, service.slug)
+        return {
+          slug: service.slug,
+          title: locale === "pl" ? service.navTitle : (summary?.title ?? service.navTitle),
+          description: summary?.text ?? serviceGroupCopy[locale][category],
+          href: locale === "pl" ? "/" + service.slug : routes[locale].services,
+          Icon: serviceMenuIcon(service.slug, service.navTitle, category),
+        }
+      }),
+  })).filter((group) => group.items.length > 0)
 
   return (
-    <>
-      <div className="hp-opening">
-        <section
-          ref={heroRef}
-          className="hp-hero"
-          aria-labelledby="hp-hero-title"
-          aria-roledescription={{ pl: "pokaz slajdów", en: "slideshow", de: "Diashow", uk: "слайд-шоу" }[locale]}
-          onFocusCapture={() => setFocused(true)}
-          onBlurCapture={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false)
-          }}
-        >
-          <div className="hp-hero-images" aria-hidden="true">
-            {mounted.map((index) => (
-              <div
-                key={index}
-                data-hero-photo={index}
-                className={cn("hp-hero-image", index === active && "is-active")}
-                onLoadCapture={(event) => {
-                  if (event.target instanceof HTMLImageElement) markReady(index, event.target)
-                }}
-                onErrorCapture={() => {
-                  setFailed((current) => current.includes(index) ? current : [...current, index])
-                  setRequested((current) => current === index ? active : current)
-                }}
-              >
-                <Photo
-                  id={heroPhotos[index].id}
-                  priority={index === 0}
-                  eager={index !== 0}
-                  sizes="(min-width: 900px) 75vw, 100vw"
-                  position={heroPhotos[index].position}
-                  alt=""
-                />
-              </div>
-            ))}
+    <section id="services" aria-labelledby="services-title" className="service-rebuild">
+      <div className="home-shell sr-shell">
+        <header className="sr-header">
+          <div>
+            <p className="sr-eyebrow"><span aria-hidden="true" />{copy.eyebrow}</p>
+            <h2 id="services-title" className="sr-title">{copy.title}</h2>
           </div>
-          <div className="hp-hero-shade" aria-hidden="true" />
-          <div className="hp-shell hp-hero-inner">
-            <div className="hp-hero-copy">
-              <p className="hp-eyebrow hp-hero-eyebrow">{slide.label}</p>
-              <h1 id="hp-hero-title" style={titleStyle}>{slide.title}</h1>
-              <p className="hp-hero-description">{slide.text}</p>
-              <div className="hp-hero-actions">
-                <a href="#wycena" className="hp-button hp-button-primary">{t.nav.contact}<ArrowRight aria-hidden="true" /></a>
-                <a href="#services" className="hp-button hp-button-secondary">{t.nav.services}<ArrowRight aria-hidden="true" /></a>
-              </div>
-            </div>
-            <div className="hp-hero-footer">
-              <div className="hp-hero-tools">
-                <SocialLinks locale={locale} label />
-                <div className="hp-hero-controls">
-                  <button type="button" className="hp-icon-button" aria-label={motion.previous} onClick={() => requestSlide(adjacent(-1), true)}><ArrowLeft aria-hidden="true" /></button>
-                  <button
-                    type="button"
-                    className="hp-icon-button"
-                    aria-label={userPaused || reducedMotion ? motion.play : motion.pause}
-                    aria-pressed={userPaused || reducedMotion}
-                    disabled={reducedMotion}
-                    onClick={() => {
-                      setUserPaused((current) => !current)
-                      // An explicit resume is allowed even while the control keeps keyboard focus.
-                      if (userPaused) setFocused(false)
-                    }}
-                  >{userPaused || reducedMotion ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}</button>
-                  <button type="button" className="hp-icon-button" aria-label={motion.next} onClick={() => requestSlide(adjacent(1), true)}><ArrowRight aria-hidden="true" /></button>
-                </div>
-              </div>
-              <Ratings locale={locale} className="hp-hero-ratings" />
-            </div>
-          </div>
-          <p className="hp-sr-only" aria-live="polite">{announcement}</p>
-        </section>
-        <div className="hp-benefits">
-          <div className="hp-shell hp-benefits-grid">
-            {copy.benefits.map(([title, text], index) => {
-              const Icon = benefitsIcons[index] ?? Sparkles
-              return (
-                <div key={title} className="hp-benefit">
-                  <Icon aria-hidden="true" />
-                  <div><h2>{title}</h2><p>{text}</p></div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-      <div className="hp-mobile-ratings hp-shell"><Ratings locale={locale} /></div>
-    </>
-  )
-}
-
-function serviceMenuIcon(slug: string, category: "myjnia" | "detailing") {
-  const icons: Record<string, typeof Droplet> = {
-    "mycie-zewnatrz": Droplet,
-    "czyszczenie-wnetrza": Armchair,
-    komplet: PackageCheck,
-    "pranie-tapicerki": Waves,
-    "czyszczenie-skor": Brush,
-    woskowanie: Sparkles,
-    polerowanie: CircleDot,
-    "korekta-lakieru": WandSparkles,
-    "powloka-ceramiczna": ShieldCheck,
-    "folia-ppf": Layers3,
-    "przyciemnianie-szyb-i-lamp": SunMedium,
-    "zmiana-koloru-dechroming": Palette,
-  }
-  return icons[slug] ?? (category === "myjnia" ? Droplets : Gem)
-}
-
-function servicePhoto(slug: string): { id: PhotoId; position: string } {
-  if (["czyszczenie-wnetrza", "pranie-tapicerki", "czyszczenie-skor"].includes(slug)) return { id: "p62", position: "50% 58%" }
-  if (["folia-ppf", "zmiana-koloru-dechroming", "przyciemnianie-szyb-i-lamp"].includes(slug)) return { id: "p52", position: "55% 60%" }
-  if (["korekta-lakieru", "polerowanie", "powloka-ceramiczna"].includes(slug)) return { id: "p39", position: "50% 55%" }
-  return { id: "p29", position: "50% 58%" }
-}
-
-/** Keep the current photograph visible while the next one loads and decodes. */
-function ServicePhoto({ photo }: { photo: { id: PhotoId; position: string } }) {
-  const [visible, setVisible] = useState(photo.id)
-  const [mounted, setMounted] = useState<Array<{ id: PhotoId; position: string }>>([photo])
-  const [loaded, setLoaded] = useState<PhotoId[]>([])
-  const wanted = useRef(photo.id)
-  const alive = useRef(true)
-  const host = useRef<HTMLDivElement>(null)
-  wanted.current = photo.id
-
-  useEffect(() => {
-    alive.current = true
-    return () => { alive.current = false }
-  }, [])
-
-  useEffect(() => {
-    setMounted((current) => current.some((item) => item.id === photo.id) ? current : [...current, photo])
-    if (loaded.includes(photo.id)) setVisible(photo.id)
-  }, [photo.id, photo.position, loaded])
-
-  const ready = useCallback((id: PhotoId, img: HTMLImageElement) => {
-    if (!img.complete || !img.naturalWidth) return
-    const finish = () => {
-      if (!alive.current || !img.naturalWidth) return
-      setLoaded((current) => current.includes(id) ? current : [...current, id])
-      if (wanted.current === id) setVisible(id)
-    }
-    if (typeof img.decode === "function") void img.decode().then(finish, finish)
-    else finish()
-  }, [])
-
-  useEffect(() => {
-    host.current?.querySelectorAll<HTMLImageElement>("[data-service-photo] img").forEach((img) => {
-      const id = img.closest("[data-service-photo]")?.getAttribute("data-service-photo") as PhotoId | null
-      if (id) ready(id, img)
-    })
-  }, [mounted, ready])
-
-  return (
-    <div ref={host} className="hp-service-photo hp-photo-frame" aria-hidden="true">
-      {mounted.map((item, index) => (
-        <div
-          key={item.id}
-          data-service-photo={item.id}
-          className={cn("hp-service-image", visible === item.id && "is-active")}
-          onLoadCapture={(event) => {
-            if (event.target instanceof HTMLImageElement) ready(item.id, event.target)
-          }}
-        >
-          <Photo id={item.id} alt="" eager={index !== 0} sizes="(min-width: 1400px) 460px, (min-width: 900px) 35vw, 100vw" position={item.position} />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function HomeServices({ locale }: { locale: Locale }) {
-  const copy = serviceExplorerCopy[locale]
-  const [selectedSlug, setSelectedSlug] = useState(serviceConfigs[0]?.slug ?? "")
-  const id = useId()
-  const categories = ["myjnia", "detailing"] as const
-  const selected = serviceConfigs.find((item) => item.slug === selectedSlug) ?? serviceConfigs[0]
-  const summary = selected ? serviceSummary(locale, selected.slug) : null
-  const titleFor = (item: (typeof serviceConfigs)[number]) => locale === "pl" ? item.navTitle : serviceSummary(locale, item.slug)?.title ?? item.navTitle
-  const hrefFor = (slug: string) => locale === "pl" ? "/" + slug : routes[locale].services
-
-  return (
-    <section id="services" className="hp-section hp-services" aria-labelledby="hp-services-title">
-      <div className="hp-shell">
-        <header className="hp-section-head">
-          <div><p className="hp-eyebrow">{copy.eyebrow}</p><h2 id="hp-services-title" className="hp-heading">{copy.title}</h2></div>
-          <p className="hp-body">{homeCopy[locale].servicesIntro}</p>
+          <p className="sr-intro">{copy.intro}</p>
         </header>
-        <div className="hp-services-desktop">
-          <div className="hp-service-groups">
-            {categories.map((category) => {
-              const items = serviceConfigs.filter((item) => item.category === category)
-              if (!items.length) return null
-              return (
-                <div key={category} className="hp-service-group">
-                  <h3>{category === "myjnia" ? copy.wash : copy.detailing}</h3>
-                  <p className="hp-service-group-description">{category === "myjnia" ? copy.washDescription : copy.detailingDescription}</p>
-                  <ul>
-                    {items.map((item) => {
-                      const Icon = serviceMenuIcon(item.slug, category)
-                      const isActive = selected?.slug === item.slug
-                      return (
-                        <li key={item.slug}>
-                          <button
-                            type="button"
-                            className={cn("hp-service-choice", isActive && "is-active")}
-                            aria-pressed={isActive}
-                            aria-controls={id + "-preview"}
-                            onMouseEnter={() => setSelectedSlug(item.slug)}
-                            onClick={() => setSelectedSlug(item.slug)}
-                          >
-                            <Icon aria-hidden="true" /><span>{titleFor(item)}</span><ArrowUpRight aria-hidden="true" className="hp-service-choice-arrow" />
-                          </button>
-                        </li>
-                      )
-                    })}
-                  </ul>
+
+        <div className="sr-columns">
+          {groups.map((group) => (
+            <article
+              key={group.category}
+              className="sr-group"
+              aria-labelledby={accordionId + "-" + group.category}
+            >
+              <header className="sr-group-header">
+                <div className="sr-group-heading">
+                  <group.Icon className="sr-group-icon" aria-hidden="true" strokeWidth={1.4} />
+                  <h3 id={accordionId + "-" + group.category} className="sr-group-title">
+                    {group.title}
+                  </h3>
                 </div>
-              )
-            })}
-          </div>
-          {selected && (
-            <div id={id + "-preview"} className="hp-service-preview">
-              <ServicePhoto photo={servicePhoto(selected.slug)} />
-              <div className="hp-service-preview-copy">
-                <p className="hp-caption">{selected.category === "myjnia" ? copy.wash : copy.detailing}</p>
-                <h3>{titleFor(selected)}</h3>
-                <p className="hp-body">{summary?.text ?? serviceGroupCopy[locale][selected.category]}</p>
-                <Link prefetch={false} href={hrefFor(selected.slug)} className="hp-link">{copy.details}<ArrowRight aria-hidden="true" /></Link>
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="hp-services-mobile">
-          {categories.map((category) => {
-            const items = serviceConfigs.filter((item) => item.category === category)
-            if (!items.length) return null
-            return (
-              <div key={category} className="hp-service-group">
-                <h3>{category === "myjnia" ? copy.wash : copy.detailing}</h3>
-                <p className="hp-service-group-description">{category === "myjnia" ? copy.washDescription : copy.detailingDescription}</p>
-                <div>
-                  {items.map((item) => {
-                    const Icon = serviceMenuIcon(item.slug, category)
-                    return (
-                      <details key={item.slug} name={id + "-" + category} className="hp-service-detail">
-                        <summary><Icon aria-hidden="true" /><span>{titleFor(item)}</span><ChevronDown aria-hidden="true" /></summary>
-                        <div className="hp-service-detail-body">
-                          <p className="hp-body">{serviceSummary(locale, item.slug)?.text ?? serviceGroupCopy[locale][category]}</p>
-                          <Link prefetch={false} href={hrefFor(item.slug)} className="hp-link">{copy.details}<ArrowRight aria-hidden="true" /></Link>
+                <p className="sr-group-description">{group.description}</p>
+              </header>
+
+          
+              <ul className="sr-list" role="list">
+                {group.items.map((item) => (
+                  <li key={item.slug}>
+                    <details className="sr-item" name={accordionId + "-" + group.category + "-services"}>
+                      <summary className="sr-summary">
+                        <span className="sr-service-icon" aria-hidden="true">
+                          <item.Icon strokeWidth={1.5} />
+                        </span>
+                        <span className="sr-service-title">
+                          {item.title}
+                          <span className="sr-accessible"> - {copy.expand}</span>
+                        </span>
+                        <ChevronDown className="sr-chevron" aria-hidden="true" strokeWidth={1.6} />
+                      </summary>
+                      <div className="sr-detail">
+                        <div className="sr-detail-inner">
+                          <p className="sr-service-description">{item.description}</p>
+                          <Link prefetch={false} href={item.href} className="sr-link sr-service-link">
+                            {copy.details}
+                            <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+                            <span className="sr-accessible">: {item.title}</span>
+                          </Link>
                         </div>
-                      </details>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+                      </div>
+                    </details>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
-        <div className="hp-services-footer">
-          <Link prefetch={false} href={routes[locale].services} className="hp-link">{copy.allServices}<ArrowRight aria-hidden="true" /></Link>
-          <Link prefetch={false} href={routes[locale].pricing} className="hp-link">{copy.pricing}<ArrowRight aria-hidden="true" /></Link>
-        </div>
+
+        <footer className="sr-footer">
+          <div className="sr-advice">
+            <span className="sr-advice-marker" aria-hidden="true"><Car strokeWidth={1.5} /></span>
+            <div>
+              <p className="sr-advice-title">{copy.advice}</p>
+              <p className="sr-advice-text">{copy.adviceText}</p>
+            </div>
+          </div>
+         <div className="sr-footer-links">
+  <Link
+    prefetch={false}
+    href={routes[locale].services}
+    className="sr-link"
+  >
+    {copy.allServices}
+    <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+  </Link>
+
+  <Link
+    prefetch={false}
+    href={routes[locale].pricing}
+    className="sr-link"
+  >
+    {copy.pricing}
+    <ArrowUpRight aria-hidden="true" strokeWidth={1.6} />
+  </Link>
+
+  <a href="#wycena" className="sr-contact-link">
+    {copy.contact}
+    <ArrowRight aria-hidden="true" strokeWidth={1.6} />
+  </a>
+</div>
+        </footer>
       </div>
+
+      <style>{`
+        .service-rebuild {
+          --sr-accent: var(--color-brand, #d52b32);
+          --sr-ink: #f3f1ed;
+          --sr-muted: #a4a4a8;
+          --sr-line: rgba(255,255,255,.13);
+          --sr-ease: cubic-bezier(.22,.61,.36,1);
+          background: #111112;
+          color: var(--sr-ink);
+          padding-block: clamp(3.5rem, 6vw, 6rem);
+          scroll-margin-top: calc(var(--header-h, 5rem) + 1rem);
+          isolation: isolate;
+        }
+        .service-rebuild *, .service-rebuild *::before, .service-rebuild *::after {
+          box-sizing: border-box;
+        }
+        .service-rebuild :is(h2,h3,p,ul) { margin: 0; }
+        .service-rebuild .sr-shell { min-width: 0; }
+        .service-rebuild .sr-header {
+          display: grid;
+          grid-template-columns: minmax(0,1.5fr) minmax(0,1fr);
+          align-items: end;
+          gap: 2rem 4rem;
+          padding-bottom: clamp(2rem,4vw,3.25rem);
+        }
+        .service-rebuild .sr-eyebrow {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+          font-size: .75rem;
+          font-weight: 600;
+          line-height: 1.5;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          color: #b9b9bc;
+        }
+        .service-rebuild .sr-eyebrow > span {
+          width: 1.75rem;
+          height: 1px;
+          background: var(--sr-accent);
+        }
+        .service-rebuild .sr-title {
+          max-width: 25ch;
+          margin-top: 1.25rem;
+          font-family: inherit;
+          font-size: clamp(1.875rem,3.5vw,3.25rem);
+          font-weight: 600;
+          line-height: 1.16;
+          letter-spacing: -.025em;
+          text-transform: none;
+          text-wrap: balance;
+          overflow-wrap: anywhere;
+          color: var(--sr-ink);
+        }
+        .service-rebuild .sr-intro {
+          max-width: 38ch;
+          font-size: 1rem;
+          line-height: 1.75;
+          font-weight: 400;
+          letter-spacing: normal;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-columns {
+          display: grid;
+          grid-template-columns: repeat(2,minmax(0,1fr));
+          gap: clamp(2rem,5vw,5rem);
+          gap: 0 clamp(2rem,5vw,5rem);
+        }
+        .service-rebuild .sr-group {
+          min-width: 0;
+        
+        }
+        .service-rebuild .sr-group:only-child { grid-column: 1 / -1; }
+        @supports (grid-template-rows:subgrid) {
+          .service-rebuild .sr-group {
+            display: grid;
+            grid-template-rows: subgrid;
+            grid-row: span 2;
+          }
+          .service-rebuild .sr-list { align-self: start; }
+        }
+        .service-rebuild .sr-group-header {
+          padding-block: 1.75rem;
+          min-height: 9rem;
+        }
+        .service-rebuild .sr-group-heading {
+          display: flex;
+          align-items: center;
+          gap: .875rem;
+        }
+        .service-rebuild .sr-group-icon {
+          width: 1.75rem;
+          height: 1.75rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-group-title {
+          font-family: inherit;
+          font-size: clamp(1.5rem,2.1vw,2rem);
+          line-height: 1.25;
+          font-weight: 600;
+          letter-spacing: -.02em;
+          text-transform: none;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-group-description {
+          margin-top: .875rem;
+          max-width: 46ch;
+          font-size: .9375rem;
+          line-height: 1.7;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-list {
+          padding: 0;
+          list-style: none;
+          border-top: 1px solid var(--sr-line);
+        }
+        .service-rebuild .sr-list > li { border-bottom: 1px solid var(--sr-line); }
+        .service-rebuild .sr-item { min-width: 0; }
+        .service-rebuild .sr-summary {
+          display: grid;
+          grid-template-columns: 2rem minmax(0,1fr) 1.125rem;
+          align-items: center;
+          gap: 1rem;
+          min-height: 5rem;
+          padding: 1.125rem .25rem;
+          cursor: pointer;
+          list-style: none;
+          color: #dfdfe1;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-summary::-webkit-details-marker { display: none; }
+        .service-rebuild .sr-summary::marker { content: ""; }
+        .service-rebuild .sr-service-icon {
+          display: grid;
+          place-items: center;
+          width: 2rem;
+          height: 2rem;
+          color: #939397;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-service-icon > svg { width: 1.375rem; height: 1.375rem; }
+        .service-rebuild .sr-service-title {
+          font-size: clamp(1rem,1.1vw,1.125rem);
+          line-height: 1.5;
+          font-weight: 500;
+          letter-spacing: -.005em;
+          text-transform: none;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-chevron {
+          width: 1.125rem;
+          height: 1.125rem;
+          color: #939397;
+          transition: transform 220ms var(--sr-ease), color 180ms ease;
+        }
+        .service-rebuild .sr-item[open] .sr-summary { color: var(--sr-ink); }
+        .service-rebuild .sr-item[open] :is(.sr-service-icon,.sr-chevron) {
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-item[open] .sr-chevron { transform: rotate(180deg); }
+        .service-rebuild .sr-detail { padding: 0 2.375rem 1.5rem 3.25rem; }
+        .service-rebuild .sr-item[open] .sr-detail-inner {
+          animation: sr-service-reveal 220ms var(--sr-ease) both;
+        }
+        .service-rebuild .sr-service-description {
+          max-width: 52ch;
+          font-size: .9375rem;
+          line-height: 1.8;
+          font-weight: 400;
+          letter-spacing: normal;
+          color: #b8b8bc;
+          overflow-wrap: anywhere;
+        }
+        .service-rebuild .sr-link {
+          display: inline-flex;
+          align-items: center;
+          gap: .625rem;
+          width: fit-content;
+          min-height: 2.75rem;
+          color: var(--sr-ink);
+          font-size: .875rem;
+          font-weight: 500;
+          line-height: 1.5;
+          letter-spacing: normal;
+          text-transform: none;
+          text-decoration: none;
+          transition: color 180ms ease;
+        }
+        .service-rebuild .sr-link > svg {
+          width: 1rem;
+          height: 1rem;
+          flex: none;
+          color: var(--sr-accent);
+          transition: transform 220ms var(--sr-ease);
+        }
+        .service-rebuild .sr-service-link { margin-top: .75rem; }
+        .service-rebuild .sr-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem 3rem;
+          border-top: 1px solid var(--sr-line);
+          margin-top: clamp(2.5rem,4vw,4rem);
+          padding-top: 1.75rem;
+        }
+        .service-rebuild .sr-advice {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          max-width: 32rem;
+        }
+        .service-rebuild .sr-advice-marker {
+          display: grid;
+          place-items: center;
+          width: 2rem;
+          height: 2rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild .sr-advice-marker > svg { width: 1.5rem; height: 1.5rem; }
+        .service-rebuild .sr-advice-title {
+          font-size: 1rem;
+          font-weight: 500;
+          line-height: 1.6;
+          letter-spacing: normal;
+          color: #dfdfe1;
+        }
+        .service-rebuild .sr-advice-text {
+          margin-top: .375rem;
+          font-size: .875rem;
+          line-height: 1.75;
+          color: var(--sr-muted);
+        }
+        .service-rebuild .sr-footer-links {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1.25rem 1.75rem;
+          flex: none;
+        }
+        .service-rebuild .sr-contact-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.25rem;
+          min-height: 3rem;
+          padding: .75rem 1rem;
+          border: 1px solid rgba(255,255,255,.28);
+          background: transparent;
+          color: var(--sr-ink);
+          font-size: .875rem;
+          line-height: 1.5;
+          font-weight: 500;
+          letter-spacing: normal;
+          text-transform: none;
+          text-decoration: none;
+          transition: border-color 180ms ease, background-color 180ms ease;
+        }
+        .service-rebuild .sr-contact-link > svg {
+          width: 1rem;
+          height: 1rem;
+          flex: none;
+          color: var(--sr-accent);
+        }
+        .service-rebuild :is(.sr-summary,.sr-link,.sr-contact-link):focus-visible {
+          outline: 2px solid var(--sr-ink);
+          outline-offset: 4px;
+        }
+        .service-rebuild .sr-accessible {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+          padding: 0;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+          border: 0;
+        }
+        @media (hover:hover) {
+          .service-rebuild .sr-summary:hover { color: #fff; }
+          .service-rebuild .sr-summary:hover .sr-service-icon { color: var(--sr-accent); }
+          .service-rebuild .sr-link:hover { color: #fff; text-decoration: underline; text-underline-offset: .3em; }
+          .service-rebuild .sr-link:hover > svg { transform: translate(2px,-2px); }
+          .service-rebuild .sr-contact-link:hover {
+            border-color: var(--sr-accent);
+            background: rgba(255,255,255,.035);
+          }
+        }
+        @media (max-width:1100px) {
+          .service-rebuild .sr-footer { align-items: flex-start; }
+          .service-rebuild .sr-footer-links {
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 0 1 auto;
+          }
+        }
+        @media (max-width:900px) {
+          .service-rebuild .sr-header { grid-template-columns: 1fr; gap: 1.25rem; }
+          .service-rebuild .sr-intro { max-width: 54ch; }
+          .service-rebuild .sr-columns { grid-template-columns: 1fr; gap: 2.5rem; }
+          .service-rebuild .sr-group { display: block; grid-row: auto; }
+          .service-rebuild .sr-group-header { min-height: 0; padding-block: 1.5rem; }
+          .service-rebuild .sr-summary { min-height: 4.5rem; }
+          .service-rebuild .sr-footer { flex-direction: column; gap: 1.25rem; }
+          .service-rebuild .sr-footer-links { flex-direction: row; gap: .75rem 1.5rem; }
+        }
+        @media (max-width:420px) {
+          .service-rebuild .sr-summary { grid-template-columns: 1.75rem minmax(0,1fr) 1rem; gap: .75rem; }
+          .service-rebuild .sr-detail { padding-left: 2.75rem; padding-right: .25rem; }
+          .service-rebuild .sr-contact-link { width: 100%; }
+          .service-rebuild .sr-footer-links { width: 100%; }
+        }
+        @keyframes sr-service-reveal {
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion:reduce) {
+          .service-rebuild *, .service-rebuild *::before, .service-rebuild *::after {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }
 
-function HomeHeader({ locale }: { locale: Locale }) {
-  const t = ui[locale]
-  return <SiteHeader
-    homeHref={routes[locale].home}
-    homeLabel={t.nav.home}
-    nav={[{ key: "home", label: t.nav.home, href: routes[locale].home, active: true }, ...navOrder.map(key => ({ key, label: t.nav[key], href: routes[locale][key], active: false }))]}
-    languages={localeOrder.map(code => ({ code, short: localeLabels[code].short, name: localeLabels[code].name, htmlLang: localeLabels[code].htmlLang, href: routes[code].home, active: code === locale }))}
-    labels={{ book: t.book, menu: t.menu, close: t.close, language: t.language, navigation: t.navigation, level: t.level }}
-    bookingUrl={contact.bookingUrl}
-    phone={contact.phone}
-    phoneHref={contact.phoneHref}
-    address={[sources[locale].address.lines[0], `PAZIM ${sources[locale].address.lines[2]}`]}
-  />
-}
-
-
-function HomePortfolio({ locale }: { locale: Locale }) {
+function WorkShowcase({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const projects: Array<{ id: PhotoId; position: string }> = [
+
+  const projects: Array<{
+    id: PhotoId
+    position: string
+  }> = [
     { id: "p21", position: "50% 58%" },
     { id: "p62", position: "50% 58%" },
+    { id: "p29", position: "50% 50%" },
     { id: "p39", position: "50% 55%" },
+    { id: "p52", position: "50% 55%" },
+    { id: "p46", position: "50% 52%" },
+    { id: "p58", position: "50% 55%" },
+    { id: "p11", position: "50% 55%" },
   ]
 
   return (
-    <section className="hp-section hp-portfolio" aria-labelledby="hp-portfolio-title">
-      <div className="hp-shell">
-        <header className="hp-section-head">
-          <div>
-            <p className="hp-eyebrow">{t.nav.gallery}</p>
-            <h2 id="hp-portfolio-title" className="hp-heading">{src.home.projectsTitle}</h2>
+    <section
+      aria-labelledby="work-title"
+      className="section-xl overflow-hidden bg-[#080809]"
+    >
+      <div className="home-shell">
+        <header className="mb-10 grid gap-7 lg:grid-cols-12 lg:items-end lg:gap-10">
+          <div className="lg:col-span-7">
+            <p className="home-kicker">
+              {t.nav.gallery}
+            </p>
+
+            <h2
+              id="work-title"
+              data-reveal=""
+              className="editorial-display mt-6"
+            >
+              {src.home.projectsTitle}
+            </h2>
           </div>
-          <div>
-            <p className="hp-body">{src.home.projectsText}</p>
-            <Link prefetch={false} href={routes[locale].gallery} className="hp-link">
-              {t.allPhotos}<ArrowUpRight aria-hidden="true" />
+
+          <div className="max-w-md lg:col-span-4 lg:col-start-9">
+            <p className="text-pretty text-base leading-relaxed text-white/62">
+              {src.home.projectsText}
+            </p>
+
+            <Link
+              prefetch={false}
+              href={routes[locale].gallery}
+              className="group mt-5 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.16em] text-white"
+            >
+              <span className="border-b border-white/25 pb-1 transition-colors duration-300 group-hover:border-brand">
+                {t.allPhotos}
+              </span>
+
+              <ArrowUpRight
+                className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
             </Link>
           </div>
         </header>
 
-        <div className="hp-portfolio-grid">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4 lg:gap-4">
           {projects.map((project, index) => (
             <Link
               key={project.id}
               prefetch={false}
               href={routes[locale].gallery}
               aria-label={`${t.allPhotos} ${index + 1}`}
-              className={`hp-photo-frame hp-portfolio-photo hp-portfolio-photo-${index + 1}`}
+              className="group relative isolate aspect-[4/3] overflow-hidden bg-white/3"
             >
               <Photo
                 id={project.id}
-                sizes={index === 0 ? "(min-width: 1400px) 700px, (min-width: 900px) 54vw, 100vw" : "(min-width: 1400px) 540px, (min-width: 900px) 41vw, 100vw"}
+                sizes="(min-width: 1280px) 25vw, (min-width: 768px) 25vw, 50vw"
                 position={project.position}
+                className="transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.045] group-focus-visible:scale-[1.045]"
               />
-              <span className="hp-portfolio-open" aria-hidden="true"><ArrowUpRight /></span>
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-black/12 transition-colors duration-500 group-hover:bg-black/2 group-focus-visible:bg-black/2"
+              />
+
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/65 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+              />
+
+             <span className="absolute inset-x-0 bottom-0 flex items-center p-3 sm:p-4">
+  <span className="font-mono text-[.6rem] font-bold tracking-[.16em] text-white/60">
+    {String(index + 1).padStart(2, "0")}
+  </span>
+</span>
             </Link>
           ))}
         </div>
@@ -1118,165 +1638,149 @@ function HomePortfolio({ locale }: { locale: Locale }) {
   )
 }
 
-function HomeCare({ locale }: { locale: Locale }) {
-  const copy = homeCopy[locale]
-
-  return (
-    <section className="hp-section hp-care" aria-labelledby="hp-care-title">
-      <div className="hp-shell">
-        <header className="hp-section-head">
-          <div>
-            <p className="hp-eyebrow">{copy.whyLabel}</p>
-            <h2 id="hp-care-title" className="hp-heading">{editorialCopy[locale].why}</h2>
-          </div>
-          <div>
-            <p className="hp-body">{copy.whyIntro}</p>
-            <Link prefetch={false} href={routes[locale].about} className="hp-link">
-              {ui[locale].nav.about}<ArrowUpRight aria-hidden="true" />
-            </Link>
-          </div>
-        </header>
-
-        <ol className="hp-care-steps">
-          {careSteps[locale].map(([title, text]) => (
-            <li key={title} className="hp-care-step">
-              <span className="hp-care-mark" aria-hidden="true" />
-              <h3>{title}</h3>
-              <p className="hp-body">{text}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  )
-}
-
-function HomePackages({ locale }: { locale: Locale }) {
+function Packages({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
-  const sale = salesPackageCopy[locale]
-  const currency = locale === "pl" ? "zł" : "PLN"
-  const offers = [
-    { title: sale.standard, price: 1000, items: sale.standardItems },
-    { title: sale.premium, price: 1400, items: sale.premiumItems },
-  ]
+  const packageOrder = [1, 0, 2]
 
   return (
-    <section className="hp-section hp-packages" aria-labelledby="hp-packages-title">
-      <div className="hp-shell">
-        <header className="hp-section-head">
-          <div>
-            <p className="hp-eyebrow">{t.pricing}</p>
-            <h2 id="hp-packages-title" className="hp-heading">{src.home.packagesTitle}</h2>
-          </div>
-          <div className="hp-packages-header-link">
-            <Link prefetch={false} href={routes[locale].pricing} className="hp-link">
-              {{ pl: "Pełny cennik", en: "Full price list", de: "Vollständige Preisliste", uk: "Повний прайс" }[locale]}
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </div>
-        </header>
+    <section aria-labelledby="packages-title" className="section-xl bg-[#101011]">
+      <div className="home-shell">
+  <div className="grid gap-7 pb-7 lg:grid-cols-12 lg:items-end">
+  <div className="lg:col-span-7">
+    <p className="home-kicker">{t.pricing}</p>
+    <h2 id="packages-title" data-reveal="" className="editorial-display mt-6">{src.home.packagesTitle}</h2>
+  </div>
+  <Link prefetch={false} href={routes[locale].pricing} className="editorial-link lg:col-span-4 lg:col-start-9 lg:justify-self-end">
+    {{ pl: "Pełny cennik", en: "Full price list", de: "Vollständige Preisliste", uk: "Повний прайс" }[locale]}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+  </Link>
+</div>
 
-        <div className="hp-packages-grid">
-          {[1, 0, 2].map((index) => {
+        <div className="mt-8">
+          {packageOrder.map(index => {
             const pkg = src.pricing.packages[index]
             if (!pkg) return null
             const featured = Boolean(pkg.popular)
-            const priceMatches = pkg.price?.match(/\d[\d \u00a0]*(?:[.,]\d{1,2})?\s*(?:zł|PLN)/gi) ?? []
-            const advertisedPrice = priceMatches.length === 1
-              ? Number(priceMatches[0].replace(/(?:zł|PLN)/i, "").replace(/[\s\u00a0]/g, "").replace(",", "."))
-              : null
-            const showComparison = featured && advertisedPrice !== null && advertisedPrice < 240
-
             return (
-              <article key={pkg.title} className={`hp-package${featured ? " hp-package-featured" : ""}`}>
-                <div className="hp-package-intro">
-                  {pkg.popular && <p className="hp-package-popular">{pkg.popular}</p>}
-                  <h3>{pkg.title}</h3>
-                  <p className="hp-body">{pkg.tagline}</p>
+              <article key={pkg.title} data-reveal="" className={cn("editorial-price-row", featured && "editorial-price-featured")}>
+                <div>
+                  {pkg.popular && <span className="mb-3 block text-xs font-medium uppercase tracking-[.16em] text-brand">{pkg.popular}</span>}
+                  <h3 className="max-w-full font-display text-[clamp(1.4rem,1.8vw,1.85rem)] font-semibold leading-[1.25] tracking-normal">{pkg.title}</h3>
+                  <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/65">{pkg.tagline}</p>
                 </div>
-                <div className="hp-package-scope">
-                  <p className="hp-package-scope-label">{editorialCopy[locale].scope}</p>
-                  <ul>{pkg.items.map((item) => <li key={item}>{item}</li>)}</ul>
-                  {pkg.discount && <p className="hp-package-discount">{pkg.discount}</p>}
+                <div>
+                  <p className="mb-4 text-[.65rem] font-medium uppercase tracking-[.14em] text-white/50">{editorialCopy[locale].scope}</p>
+                  <ul className="package-scope text-sm leading-relaxed text-white/75">
+                    {pkg.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.45em] size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />{item}</li>)}
+                  </ul>
+                  {pkg.discount && <p className="mt-4 text-[.875rem] leading-relaxed text-white/65">{pkg.discount}</p>}
                 </div>
-                <div className="hp-package-bottom">
-                  {showComparison && (
-                    <div className="hp-package-comparison">
-                      <p>{packageSaleCopy[locale].title}</p>
-                      <span>{packageSaleCopy[locale].without} <s>240 {currency}</s></span>
-                      <strong className="hp-package-saving">
-                        {{ pl: "Taniej o", en: "Save", de: "Sie sparen", uk: "Економія" }[locale]} {240 - (advertisedPrice ?? 240)} {currency}
-                      </strong>
+                <div className="package-price">
+                  {featured && (
+                    <div className="mb-5">
+                      <strong className="block text-xs font-semibold text-[#ff686e]">{packageSaleCopy[locale].title}</strong>
+                      <div className="mt-2 flex flex-col gap-1 text-sm">
+                        <span className="text-white/62">{packageSaleCopy[locale].without} <s className="ml-1 text-white/78 decoration-brand decoration-2">240 {locale === "pl" ? "zł" : "PLN"}</s></span>
+                      </div>
                     </div>
                   )}
-                  <p className="hp-package-price">{pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}</p>
-                  {pkg.note && <p className="hp-package-note">{pkg.note}</p>}
+                  <span className="block whitespace-nowrap font-display text-[clamp(1.9rem,2.5vw,2.5rem)] font-semibold leading-[1.14] tracking-normal">
+  {pkg.price?.replace(/(\d)\s*(zł|PLN)/g, "$1 $2")}
+</span>
+                  {pkg.note && <span className="mt-3 block text-xs leading-relaxed text-white/60">{pkg.note}</span>}
                 </div>
               </article>
             )
           })}
         </div>
+        <p className="mt-7 text-xs leading-relaxed text-white/65">* {src.pricing.packagesNote}<span className="mt-2 block">{packageSaleCopy[locale].sizeNote}</span></p>
+      </div>
+    </section>
+  )
+}
 
-        <div className="hp-packages-notes">
-          <p>* {src.pricing.packagesNote}</p>
-          <p>{packageSaleCopy[locale].sizeNote}</p>
+function SalesPackage({ locale }: { locale: Locale }) {
+  const copy = salesPackageCopy[locale]
+  const currency = locale === "pl" ? "zł" : "PLN"
+  const offers = [
+    { title: copy.standard, price: 1000, items: copy.standardItems },
+    { title: copy.premium, price: 1400, items: copy.premiumItems },
+  ]
+
+  return (
+    <section id="pakiet-sprzedaz" aria-labelledby="sales-package-title" className="section-lg scroll-mt-24 border-b border-white/10 bg-[#080809]">
+      <div className="home-shell grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-5">
+          <p className="home-kicker">{copy.label}</p>
+          <h2 id="sales-package-title" data-reveal="" className="editorial-display mt-6">{copy.title}</h2>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">{copy.intro}</p>
+          <Link prefetch={false} href={`${routes[locale].pricing}`} className="editorial-link mt-7">{copy.details}<ArrowRight className="size-4" aria-hidden="true" /></Link>
         </div>
+        <div className="lg:col-span-7">
+          <div className="grid border-y border-white/15 sm:grid-cols-2 sm:divide-x sm:divide-white/15">
+            {offers.map((offer) => <article key={offer.title} className="flex flex-col border-b border-white/10 py-7 last:border-b-0 sm:border-b-0 sm:px-7 sm:first:pl-0 sm:last:pr-0">
+              <h3 className="font-display text-xl font-semibold leading-[1.3] tracking-normal">{offer.title}</h3>
+              <ul className="mb-7 mt-5 grid gap-2.5 text-sm leading-relaxed text-white/65">{offer.items.map((item) => <li key={item} className="flex gap-2.5"><span className="mt-[.55em] size-1 shrink-0 bg-brand" aria-hidden="true" />{item}</li>)}</ul>
+              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-white/10 pt-5">
+                <strong className="font-display text-2xl font-black uppercase tracking-[.01em]">{copy.from} {offer.price} {currency}</strong>
+                <span className="flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.12em] text-white/65"><Clock3 className="size-3.5 text-brand" />{copy.time}</span>
+              </div>
+            </article>)}
+          </div>
 
-        <div id="pakiet-sprzedaz" className="hp-sales" aria-labelledby="hp-sales-title">
-          <div className="hp-sales-intro">
-            <p className="hp-eyebrow">{sale.label}</p>
-            <h3 id="hp-sales-title">{sale.title}</h3>
-            <p className="hp-body">{sale.intro}</p>
-            <Link prefetch={false} href={routes[locale].pricing} className="hp-link">
-              {sale.details}<ArrowRight aria-hidden="true" />
-            </Link>
-          </div>
-          <div className="hp-sales-offers">
-            {offers.map((offer) => (
-              <article key={offer.title} className="hp-sales-offer">
-                <h4>{offer.title}</h4>
-                <ul>{offer.items.map((item) => <li key={item}>{item}</li>)}</ul>
-                <div className="hp-sales-price-line">
-                  <p className="hp-package-price">{sale.from} {offer.price} {currency}</p>
-                  <p className="hp-sales-time"><Clock3 aria-hidden="true" />{sale.time}</p>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
       </div>
     </section>
   )
 }
 
-function HomeTeam({ locale }: { locale: Locale }) {
+function TeamStory({ locale }: { locale: Locale }) {
   const src = sources[locale]
   const t = ui[locale]
   const copy = homeCopy[locale]
-  const title = src.home.teamTitle ?? copy.teamTitle
-  const teaser = copy.teamBody.split(/\r?\n\s*\r?\n/)[0].trim()
 
   return (
-    <section className="hp-section hp-team" aria-labelledby="hp-team-title">
-      <div className="hp-shell hp-team-layout">
-        <figure className="hp-team-figure">
-          <div className="hp-photo-frame hp-team-photo">
-            <Photo id="team" sizes="(min-width: 1400px) 560px, (min-width: 900px) 42vw, 100vw" position="50% 52.4%" />
-          </div>
-          <figcaption className="hp-caption">BORUCH Myjnia Szczecin</figcaption>
-        </figure>
-        <div className="hp-team-copy">
-          <p className="hp-eyebrow">{t.nav.about}</p>
-          <h2 id="hp-team-title" className="hp-heading">{title}</h2>
-          {copy.teamTitle !== title && <p className="hp-team-lead">{copy.teamTitle}</p>}
-          <p className="hp-body hp-team-teaser">{teaser}</p>
-          <p className={`hp-team-signature ${signatureFont.className}`}>{src.home.author}</p>
-          <div className="hp-team-links">
-            <Link prefetch={false} href={routes[locale].about} className="hp-link">
-              {t.nav.about}<ArrowUpRight aria-hidden="true" />
-            </Link>
-            <SocialLinks locale={locale} />
+    <section aria-labelledby="team-title" className="section-lg border-y border-white/10 bg-[#111112]">
+      <div className="home-shell">
+        <div className="grid lg:grid-cols-[.9fr_1.1fr]">
+          <figure data-reveal="mask" className="home-photo-panel editorial-photo relative aspect-[4/5] self-center overflow-hidden">
+  <Photo id="team" sizes="(min-width: 1600px) 580px, (min-width: 1024px) 42vw, 92vw" position="50% 52.4%" />
+  <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/75 to-transparent px-6 pb-5 pt-12 text-[.72rem] font-bold uppercase tracking-[.16em] text-white/85">
+    BORUCH Myjnia Szczecin
+  </figcaption>
+</figure>
+
+          <div className="relative flex flex-col justify-center overflow-hidden border-t border-white/10 p-6 sm:p-12 lg:border-t-0 lg:p-[clamp(3rem,5vw,5.5rem)]">
+            <h2 id="team-title" data-reveal="" className="mt-6 text-[clamp(1.8rem,2.4vw,2.6rem)] font-light leading-[1.12] tracking-[-.015em] text-white">{src.home.teamTitle ?? t.nav.about}</h2>
+            <p className="mt-8 max-w-2xl border-l border-brand pl-5 text-lg font-medium leading-relaxed text-white/78">{copy.teamTitle}</p>
+
+           <div className="mt-7 max-w-2xl space-y-5 text-[.95rem] leading-7 text-white/56">
+  <p className="whitespace-pre-line">{copy.teamBody}</p>
+            </div>
+
+            <p className="home-signature relative mt-9 text-[clamp(3.25rem,4vw,3.75rem)] leading-[1.2] text-white">{src.home.author}</p>
+
+            <div className="relative mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-7">
+              <a href={contact.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+                <FacebookIcon className="size-5" />
+              </a>
+              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand">
+                <InstagramIcon className="size-5" />
+              </a>
+              <a
+                href={contact.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={openPreferredMaps}
+                aria-label={mapOpenCopy[locale]}
+                className="grid size-11 place-items-center text-white/75 transition-colors hover:text-brand"
+              >
+                <MapPin className="size-4" aria-hidden="true" />
+              </a>
+              <Link prefetch={false} href={routes[locale].about} className="ml-auto inline-flex min-h-11 items-center gap-3 px-2 text-[.72rem] font-bold uppercase tracking-[.15em] text-white transition-colors hover:text-[#ef6267]">
+                {t.nav.about}<ArrowRight className="size-4 text-brand" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -1284,302 +1788,317 @@ function HomeTeam({ locale }: { locale: Locale }) {
   )
 }
 
-
-type HomeReviewCardProps = {
-  review: VerifiedReview
-  locale: Locale
-  isActive: boolean
-  isInteractive: boolean
-  onOpen: (opener: HTMLButtonElement) => void
-}
-
-function HomeReviewCard({ review, locale, isActive, isInteractive, onOpen }: HomeReviewCardProps) {
-  const textRef = useRef<HTMLQuoteElement>(null)
-  const [isTruncated, setIsTruncated] = useState(review.text.length > 180)
+function ReviewCard({ review, isActive, locale, onOpen, mobileCarousel = false, measure = true }: { review: VerifiedReview; isActive: boolean; locale: Locale; onOpen: () => void; mobileCarousel?: boolean; measure?: boolean }) {
+  const visibleTextRef = useRef<HTMLQuoteElement>(null)
+  const fullTextRef = useRef<HTMLParagraphElement>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
 
   useEffect(() => {
-    if (!isActive) return
-    const text = textRef.current
-    if (!text) return
-    let cancelled = false
-    let frame = 0
-    const measure = () => {
-      if (cancelled) return
-      setIsTruncated(text.scrollHeight > text.clientHeight + 1)
-    }
-    const scheduleMeasure = () => {
-      if (cancelled) return
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(measure)
-    }
-    scheduleMeasure()
-    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleMeasure)
-    observer?.observe(text)
-    if (!observer) window.addEventListener("resize", scheduleMeasure)
-    void document.fonts?.ready.then(scheduleMeasure)
+    if (!measure) return
+    const visibleText = visibleTextRef.current
+    const fullText = fullTextRef.current
+    if (!visibleText || !fullText) return
+
+    const checkTruncation = () => setIsTruncated(fullText.getBoundingClientRect().height > visibleText.getBoundingClientRect().height + 2)
+    const frame = requestAnimationFrame(checkTruncation)
+    const observer = new ResizeObserver(checkTruncation)
+    observer.observe(visibleText)
+    observer.observe(fullText)
+    window.addEventListener("resize", checkTruncation)
+
     return () => {
-      cancelled = true
       cancelAnimationFrame(frame)
-      observer?.disconnect()
-      if (!observer) window.removeEventListener("resize", scheduleMeasure)
+      observer.disconnect()
+      window.removeEventListener("resize", checkTruncation)
     }
-  }, [isActive, review.text])
+  }, [review.text, isActive, measure])
 
   return (
-    <figure className="hp-review-card">
-      <div className="hp-review-card-top">
-        <span className="hp-review-stars" role="img" aria-label="5 / 5">
-          {Array.from({ length: 5 }, (_, index) => <Star key={index} aria-hidden="true" />)}
-        </span>
-        <span className="hp-review-source">{review.source}</span>
+    <figure
+      className={cn(
+        "editorial-quote relative flex flex-col overflow-hidden p-6 transition-opacity duration-500 lg:p-9",
+        mobileCarousel
+          ? isActive
+            ? "min-h-[25rem] md:min-h-[23rem] scale-100 opacity-100"
+            : "min-h-[25rem] md:min-h-[20rem]"
+          : isActive
+            ? "min-h-[23rem]"
+            : "hidden min-h-[20rem] md:flex",
+      )}
+    >
+      <div className="relative flex items-center justify-between gap-5">
+        <div className="flex gap-1 text-brand" role="img" aria-label="5 / 5">
+          {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-4 fill-current" aria-hidden="true" />)}
+        </div>
+        <span className="text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source}</span>
       </div>
-      <div className="hp-review-quote-wrap">
-        <blockquote ref={textRef} lang="pl" className="hp-review-quote">„{review.text}”</blockquote>
+      <Quote className="mt-8 size-9 text-brand" strokeWidth={1} aria-hidden="true" />
+      <div className="relative mt-5 pb-9">
+        <blockquote ref={visibleTextRef} className={cn(mobileCarousel ? "line-clamp-5 md:line-clamp-3" : "line-clamp-3", "font-display font-normal leading-[1.5]", isActive ? "text-xl text-white/90 sm:text-[1.6rem]" : "text-lg text-white/64")}>„{review.text}”</blockquote>
+        {measure && <p ref={fullTextRef} aria-hidden="true" className={cn("pointer-events-none invisible absolute left-0 top-0 w-full font-display font-normal leading-[1.5]", isActive ? "text-xl sm:text-[1.6rem]" : "text-lg")}>„{review.text}”</p>}
         {isTruncated && (
-          <button
-            type="button"
-            className="hp-review-more hp-link"
-            tabIndex={isInteractive ? 0 : -1}
-            aria-haspopup="dialog"
-            onClick={(event) => onOpen(event.currentTarget)}
-          >
+          <button type="button" onClick={onOpen} className="group/more mt-4 inline-flex items-center gap-2 text-[.72rem] font-bold uppercase tracking-[.14em] text-brand transition-colors hover:text-[#ff676d]">
             {reviewDialogCopy[locale].more}
-            <ArrowRight aria-hidden="true" />
-            <span className="hp-sr-only">: {review.name}</span>
+            <ArrowRight className="size-3.5 transition-transform group-hover/more:translate-x-1" aria-hidden="true" />
           </button>
         )}
       </div>
-      <figcaption className="hp-review-author">
-        <strong lang="pl">{review.name}</strong>
-        <span>{review.source} / BORUCH Myjnia Szczecin</span>
+      <figcaption className="mt-auto flex flex-col gap-1 border-t border-white/15 pt-6">
+        <strong className="text-base font-semibold tracking-normal text-white/88">{review.name}</strong>
+        <span className="mt-1.5 block text-[.72rem] font-bold uppercase tracking-[.16em] text-white/65">{review.source} / BORUCH Myjnia Szczecin</span>
       </figcaption>
     </figure>
   )
 }
 
-function HomeReviews({ locale }: { locale: Locale }) {
+function Reviews({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
-  const reducedMotion = useReducedMotion()
   const sectionRef = useRef<HTMLElement>(null)
-  const dialogRef = useRef<HTMLDialogElement>(null)
-  const openerRef = useRef<HTMLButtonElement | null>(null)
-  const backdropPointerRef = useRef(false)
   const [carouselReady, setCarouselReady] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
-  const [focusedReview, setFocusedReview] = useState<number | null>(null)
   const [selectedReview, setSelectedReview] = useState<VerifiedReview | null>(null)
-  const dialogId = useId()
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    active: carouselReady,
-    align: "center",
-    loop: true,
-    skipSnaps: false,
-    duration: reducedMotion ? 0 : 32,
-    watchDrag: (_api, event) => {
-      const target = event.target
-      return !(target instanceof Element && target.closest("button, a, input, textarea, select"))
-    },
-  })
-  const carouselDescription = { pl: "karuzela opinii", en: "reviews carousel", de: "Bewertungskarussell", uk: "карусель відгуків" }[locale]
+  const openerRef = useRef<HTMLElement | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const [desktopEmblaRef, desktopEmblaApi] = useEmblaCarousel({ active: carouselReady, align: "center", loop: true, skipSnaps: false, duration: 32 })
+  const reviewCount = copy.reviews.length
+  const openReview = (review: VerifiedReview) => {
+    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    setSelectedReview(review)
+  }
+
+  const closeReview = useCallback(() => {
+    setSelectedReview(null)
+    requestAnimationFrame(() => openerRef.current?.focus())
+  }, [])
+
+  useModalFocus(Boolean(selectedReview), dialogRef, closeReview)
 
   useEffect(() => {
     const section = sectionRef.current
-    if (!section || typeof IntersectionObserver === "undefined") {
+    if (!section || !("IntersectionObserver" in window)) {
       setCarouselReady(true)
       return
     }
+    // Keep carousel layout measurements out of the hero's initial rendering work.
     const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return
-      setCarouselReady(true)
-      observer.disconnect()
-    }, { rootMargin: "300px 0px" })
+      if (entry.isIntersecting) {
+        setCarouselReady(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: "400px 0px" })
     observer.observe(section)
     return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
-    if (!emblaApi) return
-    const update = () => setActiveReview(emblaApi.selectedScrollSnap())
-    update()
-    emblaApi.on("select", update)
-    emblaApi.on("reInit", update)
+    if (!desktopEmblaApi) return
+    const updateActiveReview = () => setActiveReview(desktopEmblaApi.selectedScrollSnap())
+    updateActiveReview()
+    desktopEmblaApi.on("select", updateActiveReview)
+    desktopEmblaApi.on("reInit", updateActiveReview)
     return () => {
-      emblaApi.off("select", update)
-      emblaApi.off("reInit", update)
+      desktopEmblaApi.off("select", updateActiveReview)
+      desktopEmblaApi.off("reInit", updateActiveReview)
     }
-  }, [emblaApi])
+  }, [desktopEmblaApi])
 
-  useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog || !selectedReview) return
-    const body = document.body
-    const previousOverflow = body.style.overflow
-    const previousPadding = body.style.paddingRight
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    if (scrollbarWidth > 0) {
-      body.style.paddingRight = `${parseFloat(getComputedStyle(body).paddingRight) + scrollbarWidth}px`
-    }
-    body.style.overflow = "hidden"
-    dialog.scrollTop = 0
-    if (!dialog.open) dialog.showModal()
-    return () => {
-      body.style.overflow = previousOverflow
-      body.style.paddingRight = previousPadding
-    }
-  }, [selectedReview])
-
-  const closeReview = useCallback(() => {
-    const dialog = dialogRef.current
-    if (dialog?.open) dialog.close()
-    else setSelectedReview(null)
-  }, [])
-
-  const onDialogClosed = useCallback(() => {
-    backdropPointerRef.current = false
-    setSelectedReview(null)
-    const opener = openerRef.current
-    requestAnimationFrame(() => {
-      if (opener?.isConnected) opener.focus({ preventScroll: true })
-    })
-  }, [])
+  const showPreviousReview = () => desktopEmblaApi?.scrollPrev(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  const showNextReview = () => desktopEmblaApi?.scrollNext(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
 
   return (
-    <section ref={sectionRef} className="hp-section hp-reviews" aria-labelledby="hp-reviews-title">
-      <div className="hp-shell">
-        <div className="hp-section-head">
-          <div>
-            <p className="hp-eyebrow">{copy.reviewsLabel}</p>
-            <h2 id="hp-reviews-title" className="hp-heading">{copy.reviewsTitle}</h2>
+    <section ref={sectionRef} aria-labelledby="reviews-title" className="home-reviews section-xl relative overflow-hidden bg-[#0a0a0b]">
+      <div className="home-shell home-reviews-content relative">
+        <div className="grid gap-7 border-b border-white/10 pb-9 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+          <p className="home-kicker">{copy.reviewsLabel}</p>
+          <h2 id="reviews-title" data-reveal="" className="editorial-display mt-7 max-w-[25ch]">{copy.reviewsTitle}</h2>
           </div>
-          <p className="hp-body">{copy.reviewsIntro}</p>
+          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.reviewsIntro}</p>
         </div>
 
-        <div
-          ref={carouselReady ? emblaRef : undefined}
-          className="hp-reviews-viewport"
-          role="region"
-          aria-roledescription={carouselDescription}
-          aria-label={copy.reviewsLabel}
-        >
-          <div className="hp-reviews-track">
-            {copy.reviews.map((review, index) => {
-              const isActive = index === activeReview
-              const isInteractive = isActive || focusedReview === index
-              return (
-                <div
-                  key={`${review.source}-${review.name}`}
-                  className={cn("hp-review-slide", isActive && "is-active")}
-                  inert={!isInteractive}
-                  aria-hidden={!isInteractive}
-                  onFocusCapture={() => setFocusedReview(index)}
-                  onBlurCapture={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                      setFocusedReview((current) => current === index ? null : current)
-                    }
-                  }}
-                >
-                  <HomeReviewCard
-                    review={review}
-                    locale={locale}
-                    isActive={isActive}
-                    isInteractive={isInteractive}
-                    onOpen={(opener) => {
-                      openerRef.current = opener
-                      setSelectedReview(review)
-                    }}
-                  />
-                </div>
-              )
-            })}
+        <div className="relative mt-6 [mask-image:linear-gradient(to_right,transparent_0%,black_4%,black_96%,transparent_100%)] md:mt-10 md:[mask-image:linear-gradient(to_right,transparent_0%,black_7%,black_93%,transparent_100%)]">
+          <div ref={carouselReady ? desktopEmblaRef : undefined} className="cursor-grab overflow-hidden active:cursor-grabbing" role="region" aria-roledescription="carousel" aria-label={copy.reviewsLabel}>
+            <div className="-ml-3 flex touch-pan-y items-center py-5 md:-ml-5 md:py-8">
+              {copy.reviews.map((review, index) => {
+                const isActive = index === activeReview
+                const isBefore = (index - activeReview + reviewCount) % reviewCount > reviewCount / 2
+                return (
+                  <div key={`${review.source}-${review.name}`} className="min-w-0 shrink-0 basis-[98%] pl-3 md:basis-[42%] md:pl-5" inert={!isActive} aria-hidden={!isActive}>
+                    <div className={cn(
+                      "relative h-full transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none",
+                      isActive ? "z-20 scale-100 opacity-100" : isBefore
+                        ? "z-10 scale-[.9] opacity-30 md:origin-right md:scale-[.7] md:opacity-15"
+                        : "z-10 scale-[.9] opacity-30 md:origin-left md:scale-[.7] md:opacity-15",
+                    )}>
+                      <ReviewCard review={review} isActive={isActive} locale={locale} onOpen={() => openReview(review)} mobileCarousel measure={carouselReady && isActive} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
+        <p className="mt-2 text-center text-[.72rem] font-bold uppercase tracking-[.14em] text-white/65 md:hidden">{copy.reviewsSwipe}</p>
 
-        <div className="hp-review-controls">
-          <button type="button" className="hp-icon-button" disabled={!emblaApi} aria-label={reviewControls[locale].previous} onClick={() => emblaApi?.scrollPrev(reducedMotion)}>
-            <ArrowLeft aria-hidden="true" />
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <button type="button" onClick={showPreviousReview} aria-label={reviewControls[locale].previous} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <ArrowLeft className="size-4" aria-hidden="true" />
           </button>
-          <span className="hp-review-indicator" aria-hidden="true"><span /><span /><span /></span>
-          <button type="button" className="hp-icon-button" disabled={!emblaApi} aria-label={reviewControls[locale].next} onClick={() => emblaApi?.scrollNext(reducedMotion)}>
-            <ArrowRight aria-hidden="true" />
+          <div className="flex min-w-28 items-center justify-center gap-2" aria-live="polite">
+            <span className="sr-only">{copy.reviews[activeReview].name}</span>
+            <span className="h-px w-5 bg-white/18" aria-hidden="true" />
+            <span className="h-0.5 w-10 bg-brand" aria-hidden="true" />
+            <span className="h-px w-5 bg-white/18" aria-hidden="true" />
+          </div>
+          <button type="button" onClick={showNextReview} aria-label={reviewControls[locale].next} className="grid size-11 place-items-center border border-white/14 bg-white/[.035] text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white">
+            <ArrowRight className="size-4" aria-hidden="true" />
           </button>
-          <p className="hp-sr-only" aria-live="polite" aria-atomic="true">{copy.reviews[activeReview]?.name}, {copy.reviews[activeReview]?.source}</p>
         </div>
-        <Ratings locale={locale} className="hp-reviews-ratings" />
+
+        <div className="mx-auto mt-8 grid max-w-3xl gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
+          <a href={contact.bookingUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">5.0/5</span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Booksy</strong><span className="mt-1 block text-xs text-white/65">{copy.booksyReviews}</span></span>
+            <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
+          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer"  className="group flex items-center gap-4 border border-white/10 bg-[#111112] p-4 transition-colors hover:border-brand/55">
+            <span className="grid h-12 min-w-16 shrink-0 place-items-center border border-[#238965]/75 bg-[#176b4f]/15 px-2 font-display text-base font-black text-[#75c9a9]">5.0/5</span>
+            <span className="min-w-0 flex-1"><strong className="block text-sm font-bold text-white">Google</strong><span className="mt-1 block text-xs text-white/65">{copy.googleReviews}</span></span>
+            <ArrowUpRight className="size-4 text-brand transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
+        </div>
       </div>
 
-      <dialog
-        ref={dialogRef}
-        className="hp-review-dialog"
-        aria-labelledby={`${dialogId}-title`}
-        aria-describedby={`${dialogId}-text`}
-        onClose={onDialogClosed}
-        onCancel={(event) => { event.preventDefault(); closeReview() }}
-        onPointerDown={(event) => {
-          const box = event.currentTarget.getBoundingClientRect()
-          backdropPointerRef.current = event.target === event.currentTarget && (
-            event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom
-          )
-        }}
-        onPointerUp={(event) => {
-          const startedOutside = backdropPointerRef.current
-          backdropPointerRef.current = false
-          if (!startedOutside || event.target !== event.currentTarget) return
-          const box = event.currentTarget.getBoundingClientRect()
-          if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeReview()
-        }}
-        onPointerCancel={() => { backdropPointerRef.current = false }}
-      >
-        {selectedReview && (
-          <div className="hp-review-dialog-body">
-            <button autoFocus type="button" className="hp-icon-button hp-review-dialog-close" aria-label={reviewDialogCopy[locale].close} onClick={closeReview}><X aria-hidden="true" /></button>
-            <div className="hp-review-stars" role="img" aria-label="5 / 5">
-              {Array.from({ length: 5 }, (_, index) => <Star key={index} aria-hidden="true" />)}
+      {selectedReview && (
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="review-dialog-title"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 sm:items-center sm:p-6"
+          onMouseDown={(event) => { if (event.target === event.currentTarget) closeReview() }}
+        >
+          <div className="modal-sheet relative max-h-[90dvh] w-full overflow-y-auto border-t border-brand/55 bg-[#121213] sm:max-w-3xl sm:border sm:border-white/12">
+            <span className="absolute inset-x-0 top-0 h-[3px] bg-brand" aria-hidden="true" />
+            <button data-review-close type="button" onClick={closeReview} aria-label={reviewDialogCopy[locale].close} className="absolute right-4 top-4 z-10 grid size-11 place-items-center border border-white/12 bg-black/45 text-white/70 transition-colors hover:border-brand hover:bg-brand hover:text-white sm:right-6 sm:top-6">
+              <X className="size-5" aria-hidden="true" />
+            </button>
+            <div className="p-6 sm:p-10 lg:p-12">
+              <div className="flex gap-1 text-brand" aria-label="5 / 5">
+                {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="size-5 fill-current" aria-hidden="true" />)}
+              </div>
+              <p className="mt-5 text-[.72rem] font-bold uppercase tracking-[.18em] text-brand">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
+              <h3 id="review-dialog-title" className="mt-4 font-display text-[clamp(1.5rem,4.8vw,2.25rem)] font-bold leading-snug tracking-normal">{selectedReview.name}</h3>
+              <div className="my-7 h-px bg-white/10 sm:my-9" />
+              <div className="relative max-w-2xl">
+                <p className="relative text-base font-medium leading-8 text-white/78 sm:text-lg sm:leading-9">„{selectedReview.text}”</p>
+              </div>
+              <button type="button" onClick={closeReview} className="mt-9 inline-flex items-center gap-3 text-[.72rem] font-bold uppercase tracking-[.15em] text-brand transition-colors hover:text-[#ff676d]">
+                {reviewDialogCopy[locale].close}<X className="size-4" aria-hidden="true" />
+              </button>
             </div>
-            <p className="hp-review-dialog-label">{reviewDialogCopy[locale].label} - {selectedReview.source}</p>
-            <h3 id={`${dialogId}-title`} lang="pl">{selectedReview.name}</h3>
-            <Quote className="hp-review-dialog-mark" aria-hidden="true" />
-            <blockquote id={`${dialogId}-text`} lang="pl">„{selectedReview.text}”</blockquote>
-            <button type="button" className="hp-link hp-review-dialog-bottom-close" onClick={closeReview}>{reviewDialogCopy[locale].close}<X aria-hidden="true" /></button>
           </div>
-        )}
-      </dialog>
+        </div>
+      )}
     </section>
   )
 }
 
-
-
 function HomeFaq({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
-  const [expanded, setExpanded] = useState(false)
-  const id = useId()
-  const labels = {
-    pl: { more: "Więcej pytań", less: "Pokaż mniej" },
-    en: { more: "More questions", less: "Show less" },
-    de: { more: "Weitere Fragen", less: "Weniger anzeigen" },
-    uk: { more: "Більше запитань", less: "Показати менше" },
+  const [showAll, setShowAll] = useState(false)
+
+  const visibleFaq = showAll ? copy.faq : copy.faq.slice(0, 4)
+
+  const moreLabel = {
+    pl: "Więcej pytań",
+    en: "More questions",
+    de: "Weitere Fragen",
+    uk: "Більше запитань",
+  }[locale]
+
+  const lessLabel = {
+    pl: "Pokaż mniej",
+    en: "Show less",
+    de: "Weniger anzeigen",
+    uk: "Показати менше",
   }[locale]
 
   return (
-    <section className="hp-section hp-faq" aria-labelledby="hp-faq-title">
-      <div className="hp-shell hp-faq-layout">
-        <div>
-          <p className="hp-eyebrow">{copy.faqLabel}</p>
-          <h2 id="hp-faq-title" className="hp-heading">{copy.faqTitle}</h2>
-          <p className="hp-body">{copy.faqIntro}</p>
+    <section
+      aria-labelledby="faq-title"
+      className="section-lg border-b border-white/10 bg-[#111112]"
+    >
+      <div className="home-shell grid gap-14 lg:grid-cols-12 lg:gap-20">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+            <p className="home-kicker">{copy.faqLabel}</p>
+
+            <h2
+              id="faq-title"
+              data-reveal=""
+              className="editorial-display mt-7"
+            >
+              {copy.faqTitle}
+            </h2>
+
+            <p className="mt-7 max-w-sm text-base leading-relaxed text-white/62">
+              {copy.faqIntro}
+            </p>
+          </div>
         </div>
-        <div>
-          <div id={id + "-questions"} className="hp-faq-list">
-            {copy.faq.map(([question, answer], index) => (
-              <details key={question} name={id + "-faq"} hidden={!expanded && index >= 4}>
-                <summary><span>{question}</span><ChevronDown aria-hidden="true" /></summary>
-                <p className="hp-body">{answer}</p>
+
+        <div className="lg:col-span-7 lg:col-start-6">
+          <div className="border-t border-white/14">
+            {visibleFaq.map(([question, answer]) => (
+             <details
+  key={question}
+  name="home-faq"
+  className="group relative border-b border-white/12"
+>
+                <summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-6 text-left transition-colors hover:text-[#ef6267] [&::-webkit-details-marker]:hidden">
+                  <span className="min-w-0 flex-1 text-[clamp(1rem,1.2vw,1.16rem)] font-medium normal-case leading-relaxed tracking-normal text-white transition-colors group-open:text-white">
+                    {question}
+                  </span>
+
+                  <span className="grid size-8 shrink-0 place-items-center text-brand transition-transform duration-300 group-open:rotate-180">
+                    <ChevronDown
+                      className="size-4"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </summary>
+
+                <div className="pb-7 pr-10 sm:pr-14">
+  <div className="max-w-2xl border-l border-brand/55 pl-5">
+    <p className="text-[.95rem] leading-7 text-white/58">
+      {answer}
+    </p>
+  </div>
+</div>
               </details>
             ))}
           </div>
+
           {copy.faq.length > 4 && (
-            <button type="button" className="hp-link hp-faq-more" aria-expanded={expanded} aria-controls={id + "-questions"} onClick={() => setExpanded((current) => !current)}>
-              {expanded ? labels.less : labels.more}<ChevronDown className={expanded ? "is-expanded" : ""} aria-hidden="true" />
+            <button
+              type="button"
+              onClick={() => setShowAll((current) => !current)}
+              aria-expanded={showAll}
+              className="group mx-auto mt-8 flex min-h-14 flex-col items-center justify-center gap-2 text-[.7rem] font-bold uppercase tracking-[.15em] text-white/55 transition-colors hover:text-white"
+            >
+              <span>
+                {showAll ? lessLabel : moreLabel}
+              </span>
+
+              <ChevronDown
+                className={`size-5 text-brand transition-transform duration-300 ${
+                  showAll
+                    ? "rotate-180"
+                    : "animate-bounce"
+                }`}
+                aria-hidden="true"
+              />
             </button>
           )}
         </div>
@@ -1588,54 +2107,145 @@ function HomeFaq({ locale }: { locale: Locale }) {
   )
 }
 
-function HomeLocation({ locale }: { locale: Locale }) {
+function Location({ locale }: { locale: Locale }) {
   const src = sources[locale]
-  const labels = {
-    pl: { title: "W centrum Szczecina.", label: "Lokalizacja", level: "Poziom parkingu" },
-    en: { title: "In central Szczecin.", label: "Location", level: "Parking level" },
-    de: { title: "Im Zentrum von Stettin.", label: "Standort", level: "Parkebene" },
-    uk: { title: "У центрі Щецина.", label: "Розташування", level: "Рівень паркінгу" },
+  const t = ui[locale]
+  const slide = src.slides[3]
+  const copy = homeCopy[locale]
+
+  const locationTitle = {
+    pl: "W centrum Szczecina",
+    en: "In central Szczecin",
+    de: "Im Zentrum von Szczecin",
+    uk: "У центрі Щецина",
+  }[locale]
+
+  const levelLabel = {
+    pl: "Poziom parkingu",
+    en: "Parking level",
+    de: "Parkebene",
+    uk: "Рівень паркінгу",
+  }[locale]
+
+  const routeLabel = {
+    pl: "Jak do nas trafić",
+    en: "How to find us",
+    de: "So finden Sie uns",
+    uk: "Як нас знайти",
   }[locale]
 
   return (
-    <section className="hp-section hp-location" aria-labelledby="hp-location-title">
-      <div className="hp-shell hp-location-layout">
-        <div>
-          <p className="hp-eyebrow">{labels.label}</p>
-          <h2 id="hp-location-title" className="hp-heading">{labels.title}</h2>
-          <p className="hp-body">{homeCopy[locale].routeHint}</p>
-          <div className="hp-location-information">
-            <div className="hp-location-level"><span className="hp-caption">{labels.level}</span><strong>-2 <span>PAZIM</span></strong></div>
-            <address>{src.address.lines.map((line) => <span key={line}>{line}</span>)}</address>
+    <section
+      aria-labelledby="location-title"
+      className="border-y border-white/10 bg-[#0e0e0f] py-16 lg:py-24"
+    >
+      <div className="home-shell">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,.78fr)_minmax(0,1.22fr)] lg:items-stretch lg:gap-16">
+          <div className="flex flex-col justify-center">
+            <p className="home-kicker text-[#ef6267]">
+              {slide.kicker}
+            </p>
+
+            <h2
+              id="location-title"
+              data-reveal=""
+              className="mt-7 max-w-lg font-display text-[clamp(2.4rem,3.8vw,4.4rem)] font-semibold leading-[1.02] tracking-[-.03em] text-white"
+            >
+              {locationTitle}
+            </h2>
+
+            <p className="mt-6 max-w-md text-base leading-relaxed text-white/62">
+              {copy.routeHint}
+            </p>
+
+            <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
+              <div>
+                <span className="block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                  {levelLabel}
+                </span>
+
+                <div className="mt-3 flex items-end gap-3">
+                  <strong className="font-display text-[clamp(3.6rem,5vw,5.25rem)] font-semibold leading-none tracking-[-.04em] text-brand">
+                    -2
+                  </strong>
+
+                  <span className="pb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/55">
+                    PAZIM
+                  </span>
+                </div>
+              </div>
+
+              <address className="flex items-start gap-4 not-italic">
+                <MapPin
+                  className="mt-1 size-4 shrink-0 text-brand"
+                  aria-hidden="true"
+                />
+
+                <div>
+                  <span className="mb-2 block text-[.65rem] font-medium uppercase tracking-[.16em] text-white/42">
+                    {routeLabel}
+                  </span>
+
+                  <span className="flex flex-col text-sm leading-relaxed text-white/72">
+                    {src.address.lines.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </span>
+                </div>
+              </address>
+            </div>
+
+            <a
+              href={contact.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={openPreferredMaps}
+              className="editorial-link mt-9 w-fit"
+            >
+              {mapOpenCopy[locale]}
+              <ArrowUpRight
+                className="size-4 text-brand"
+                aria-hidden="true"
+              />
+            </a>
           </div>
-          <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" onClick={openPreferredMaps} className="hp-link">
-            {mapOpenCopy[locale]}<ArrowUpRight aria-hidden="true" />
-          </a>
+
+          <div className="relative min-h-[24rem] overflow-hidden rounded-sm bg-[#151516] lg:min-h-[34rem]">
+  <BoruchGoogleMap />
+</div>
         </div>
-        <div className="hp-location-map"><BoruchGoogleMap /></div>
       </div>
     </section>
   )
 }
-
-function HomeContact({ locale }: { locale: Locale }) {
+function ContactSection({ locale }: { locale: Locale }) {
   const copy = homeCopy[locale]
+
   return (
-    <section id="wycena" className="hp-section hp-contact" aria-labelledby="hp-contact-title">
-      <div className="hp-shell">
-        <header className="hp-section-head">
-          <div><p className="hp-eyebrow">{copy.contactLabel}</p><h2 id="hp-contact-title" className="hp-heading">{editorialCopy[locale].talk}</h2></div>
-          <p className="hp-body">{copy.contactIntro}</p>
-        </header>
-        <div className="hp-contact-layout">
-          <div className="hp-contact-direct">
-            <p className="hp-contact-prompt">{copy.contactDirect}</p>
-            <a href={contact.phoneHref} className="hp-contact-phone"><Phone aria-hidden="true" />{contact.phone}</a>
-            <a href={"mailto:" + contact.email} className="hp-contact-email"><Mail aria-hidden="true" /><span>{contact.email}</span></a>
-            <p className="hp-body">{copy.contactBooksy}</p>
-            <SocialLinks locale={locale} label />
+    <section id="wycena" aria-labelledby="contact-form-title" className="section-xl bg-[#111112]">
+      <div className="home-shell">
+        <div className="mb-12 grid gap-7 border-b border-white/15 pb-10 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8"><p className="home-kicker">{copy.contactLabel}</p><h2 id="contact-form-title" data-reveal="" className="editorial-display mt-7">{editorialCopy[locale].talk}</h2></div>
+          <p className="max-w-md text-base leading-relaxed text-white/65 lg:col-span-4">{copy.contactIntro}</p>
+        </div>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
+          <div className="lg:col-span-5">
+            <div className="flex flex-col gap-5 pt-6">
+              <a
+  href={contact.phoneHref}
+  className="inline-flex w-fit items-center gap-3 text-white transition-colors hover:text-[#ef6267]"
+>
+  {contact.phone}
+  <ArrowUpRight className="size-5 text-brand" aria-hidden="true" />
+</a>
+              <a href={`mailto:${contact.email}`} className="editorial-link w-fit break-all">{contact.email}<ArrowUpRight className="size-4 text-brand" aria-hidden="true" /></a>
+              <p className="mt-3 max-w-sm text-base leading-relaxed text-white/65">{copy.contactBooksy}</p>
+              <Link prefetch={false} href={routes[locale].pricing} className="editorial-link mt-2 w-fit">{ui[locale].pricing}<ArrowRight className="size-4" aria-hidden="true" /></Link>
+            </div>
           </div>
-          <div className="hp-contact-form"><HomeContactForm locale={locale} /></div>
+        <div data-reveal="" className="lg:col-span-7">
+          <HomeContactForm locale={locale} />
+        </div>
         </div>
       </div>
     </section>
@@ -1645,657 +2255,4 @@ function HomeContact({ locale }: { locale: Locale }) {
 function HomeFooter({ locale }: { locale: Locale }) {
   return <SiteFooter locale={locale} alternates={Object.fromEntries(localeOrder.map(code => [code, routes[code].home])) as Record<Locale, string>} showContactCta={false} />
 }
-
-const homeStyles = `
-/* Scoped layout: no global resets or changes to shared header/footer/forms. */
-.hp-rebuild {
-  --hp-bg: #09090b;
-  --hp-surface: #111113;
-  --hp-ink: #f5f2ed;
-  --hp-muted: #b7b5b3;
-  --hp-accent: #df3039;
-  --hp-line: rgb(245 242 237 / .14);
-  --hp-ease: cubic-bezier(.22, .7, .22, 1);
-  min-height: 100dvh;
-  background: var(--hp-bg);
-  color: var(--hp-ink);
-}
-.hp-rebuild .hp-main { padding-top: var(--header-h, 96px); outline: none; }
-.hp-rebuild .hp-main *, .hp-rebuild .hp-main *::before, .hp-rebuild .hp-main *::after { box-sizing: border-box; }
-.hp-rebuild .hp-main :is(h1,h2,h3,h4,p,figure,blockquote) { text-transform: none; }
-.hp-rebuild .hp-main :is(h1,h2,h3,h4) { text-wrap: pretty; overflow-wrap: anywhere; }
-.hp-rebuild .hp-main :is(a,button,summary):focus-visible { outline: 2px solid var(--hp-ink); outline-offset: 5px; }
-.hp-rebuild .hp-main :is(a,button) { -webkit-tap-highlight-color: transparent; }
-.hp-rebuild .hp-shell { width: calc(100% - 96px); max-width: 1320px; margin-inline: auto; min-width: 0; }
-.hp-rebuild .hp-section { padding-block: clamp(60px, 6.5vw, 100px); }
-.hp-rebuild :is(#services,#wycena,#pakiet-sprzedaz,#hp-reviews-title) { scroll-margin-top: calc(var(--header-h, 96px) + 24px); }
-.hp-rebuild .hp-section-head {
-  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr);
-  align-items: end; gap: 48px; margin: 0 0 40px;
-}
-.hp-rebuild .hp-section-head > *, .hp-rebuild .hp-faq-layout > *, .hp-rebuild .hp-location-layout > *, .hp-rebuild .hp-contact-layout > * { min-width: 0; }
-.hp-rebuild .hp-eyebrow {
-  display: flex; align-items: center; gap: 12px; margin: 0 0 20px;
-  color: var(--hp-muted); font-size: 11px; font-weight: 600; line-height: 1.7;
-  letter-spacing: .13em; text-transform: uppercase !important;
-}
-.hp-rebuild .hp-eyebrow::before { content: ""; flex: 0 0 25px; height: 1px; background: var(--hp-accent); }
-.hp-rebuild .hp-heading {
-  margin: 0; max-width: 24ch; color: var(--hp-ink);
-  font-size: clamp(30px, 3.3vw, 46px); font-weight: 500;
-  line-height: 1.24; letter-spacing: -.018em;
-}
-.hp-rebuild .hp-body { margin: 0; color: var(--hp-muted); font-size: 16px; line-height: 1.85; text-wrap: pretty; overflow-wrap: anywhere; }
-.hp-rebuild .hp-caption { color: var(--hp-muted); font-size: 11px; font-weight: 500; line-height: 1.7; letter-spacing: .08em; }
-.hp-rebuild .hp-link {
-  display: inline-flex; width: fit-content; min-height: 44px; align-items: center; gap: 12px;
-  margin-top: 20px; padding: 2px 0; border: 0; background: transparent;
-  color: var(--hp-ink); font: inherit; font-size: 14px; font-weight: 500; line-height: 1.5;
-  letter-spacing: normal; text-align: left; text-decoration: none; cursor: pointer;
-  transition: color 180ms ease;
-}
-.hp-rebuild .hp-link svg { flex: 0 0 17px; width: 17px; height: 17px; color: var(--hp-accent); transition: transform 220ms var(--hp-ease); }
-.hp-rebuild .hp-link:hover { color: #f0787f; }
-.hp-rebuild .hp-link:hover svg { transform: translateX(3px); }
-.hp-rebuild .hp-icon-button {
-  display: inline-grid; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; place-items: center;
-  border: 1px solid var(--hp-line); border-radius: 0; background: transparent;
-  color: var(--hp-ink); cursor: pointer; transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
-}
-.hp-rebuild .hp-icon-button svg { width: 18px; height: 18px; }
-.hp-rebuild .hp-icon-button:hover { border-color: #f0787f; color: #f0787f; background: rgb(255 255 255 / .03); }
-.hp-rebuild .hp-icon-button:disabled { opacity: .4; cursor: default; }
-.hp-rebuild .hp-button {
-  display: inline-flex; align-items: center; justify-content: center; min-height: 52px; gap: 26px;
-  padding: 14px 23px; border: 1px solid var(--hp-line); border-radius: 0;
-  font-size: 13px; line-height: 1.5; font-weight: 600; text-decoration: none;
-  transition: background-color 180ms ease, border-color 180ms ease;
-}
-.hp-rebuild .hp-button svg { width: 18px; height: 18px; flex-shrink: 0; }
-.hp-rebuild .hp-button-primary { background: #c42730; border-color: #c42730; color: #fff; }
-.hp-rebuild .hp-button-primary:hover { background: #ad2029; border-color: #ad2029; }
-.hp-rebuild .hp-button-secondary { background: rgb(9 9 11 / .7); color: var(--hp-ink); }
-.hp-rebuild .hp-button-secondary:hover { background: #1c1c1f; border-color: rgb(255 255 255 / .4); }
-.hp-rebuild .hp-skip {
-  position: fixed; z-index: 10000; top: 12px; left: 12px; transform: translateY(-150%);
-  padding: 12px 18px; background: #c42730; color: white; text-decoration: none; font-size: 14px;
-}
-.hp-rebuild .hp-skip:focus { transform: none; }
-.hp-rebuild .hp-sr-only {
-  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-.hp-rebuild .hp-photo-frame { position: relative; overflow: hidden; background: #17171a; clip-path: polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px)); }
-.hp-rebuild .hp-photo-frame img { transition: transform 650ms var(--hp-ease); }
-@media (hover: hover) {
-  .hp-rebuild a.hp-photo-frame:hover img { transform: scale(1.025); }
-}
-/* Opening screen: dark left reading area, generous photography on the right. */
-.hp-rebuild .hp-opening { display: flex; flex-direction: column; min-height: calc(100svh - var(--header-h, 96px)); }
-.hp-rebuild .hp-hero { position: relative; display: flex; flex: 1; min-height: min(640px, calc(100svh - var(--header-h, 96px) - 120px)); overflow: hidden; background: #09090b; isolation: isolate; }
-.hp-rebuild .hp-hero-images { position: absolute; z-index: -2; inset: 0 0 0 24%; }
-.hp-rebuild .hp-hero-image { position: absolute; inset: 0; opacity: 0; transition: opacity 800ms var(--hp-ease); }
-.hp-rebuild .hp-hero-image.is-active { opacity: 1; }
-.hp-rebuild .hp-hero-shade {
-  position: absolute; z-index: -1; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg,#09090b 0%,rgb(9 9 11 / .94) 19%,rgb(9 9 11 / .65) 42%,rgb(9 9 11 / .14) 75%),linear-gradient(0deg,rgb(9 9 11 / .7),transparent 35%);
-}
-.hp-rebuild .hp-hero-inner { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-block: clamp(56px, 7vh, 96px) 32px; }
-.hp-rebuild .hp-hero-copy { max-width: 760px; margin-block: auto; }
-.hp-rebuild .hp-hero-eyebrow { color: #ef8a90; }
-.hp-rebuild .hp-hero h1 { margin: 0; max-width: 18ch; color: var(--hp-ink); font-size: clamp(52px, 5.7vw, 84px); font-weight: 600; letter-spacing: -.025em; line-height: 1.14; }
-.hp-rebuild .hp-hero-description { max-width: 47ch; margin: 26px 0 0; color: #d1cecb; font-size: 17px; line-height: 1.8; text-wrap: pretty; }
-.hp-rebuild .hp-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.hp-rebuild .hp-hero-footer { display: flex; align-items: end; justify-content: space-between; gap: 32px; }
-.hp-rebuild .hp-hero-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; }
-.hp-rebuild .hp-socials { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-.hp-rebuild .hp-socials > .hp-caption { margin-right: 9px; }
-.hp-rebuild .hp-socials .hp-icon-button { border-color: transparent; }
-.hp-rebuild .hp-socials .hp-icon-button:hover { border-color: var(--hp-line); }
-.hp-rebuild .hp-hero-controls { display: flex; gap: 6px; }
-.hp-rebuild .hp-ratings { display: flex; align-items: center; justify-content: center; gap: 32px; }
-.hp-rebuild .hp-rating { display: flex; align-items: center; gap: 12px; min-height: 56px; color: var(--hp-ink); text-decoration: none; }
-.hp-rebuild .hp-rating-score { color: #8ad4b5; font-size: 25px; font-weight: 500; letter-spacing: .015em; white-space: nowrap; }
-.hp-rebuild .hp-rating-score > span { padding-left: 2px; font-size: 15px; color: #b1d8c8; }
-.hp-rebuild .hp-rating-source { display: grid; gap: 4px; }
-.hp-rebuild .hp-rating-source strong { font-size: 12px; line-height: 1.4; font-weight: 600; }
-.hp-rebuild .hp-rating-source > span { font-size: 11px; color: var(--hp-muted); line-height: 1.5; }
-.hp-rebuild .hp-rating > svg { width: 14px; height: 14px; color: var(--hp-accent); }
-.hp-rebuild .hp-rating:hover .hp-rating-source strong { text-decoration: underline; text-underline-offset: 5px; }
-.hp-rebuild .hp-benefits { border-block: 1px solid var(--hp-line); background: var(--hp-surface); }
-.hp-rebuild .hp-benefits-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
-.hp-rebuild .hp-benefit { display: flex; min-width: 0; align-items: center; gap: 17px; padding: 22px 24px; }
-.hp-rebuild .hp-benefit:first-child { padding-left: 0; }
-.hp-rebuild .hp-benefit:last-child { padding-right: 0; }
-.hp-rebuild .hp-benefit + .hp-benefit { border-left: 1px solid var(--hp-line); }
-.hp-rebuild .hp-benefit > svg { width: 19px; height: 19px; flex: 0 0 19px; color: var(--hp-accent); }
-.hp-rebuild .hp-benefit h2 { margin: 0 0 5px; font-size: 13px; font-weight: 600; line-height: 1.6; letter-spacing: .015em; }
-.hp-rebuild .hp-benefit p { margin: 0; color: var(--hp-muted); font-size: 12px; line-height: 1.65; text-wrap: pretty; }
-.hp-rebuild .hp-mobile-ratings { display: none; }
-/* Services: two compact directories and a genuinely useful photograph/description preview. */
-.hp-rebuild .hp-services { background: var(--hp-surface); }
-.hp-rebuild .hp-services-desktop { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,.75fr); gap: 48px; align-items: start; }
-.hp-rebuild .hp-service-groups { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 30px; }
-.hp-rebuild .hp-service-group { min-width: 0; }
-.hp-rebuild .hp-service-group h3 { margin: 0 0 10px; font-size: 24px; font-weight: 500; line-height: 1.3; letter-spacing: -.01em; }
-.hp-rebuild .hp-service-group-description { min-height: 65px; margin: 0 0 20px; color: var(--hp-muted); font-size: 13px; line-height: 1.75; }
-.hp-rebuild .hp-service-group ul { padding: 0; margin: 0; border-top: 1px solid var(--hp-line); list-style: none; }
-.hp-rebuild .hp-service-choice {
-  position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 70px;
-  padding: 14px 4px; border: 0; border-bottom: 1px solid var(--hp-line); background: transparent;
-  color: #cccac7; font: inherit; font-size: 14px; font-weight: 500; line-height: 1.5; text-align: left; cursor: pointer;
-  transition: color 180ms ease, background-color 180ms ease;
-}
-.hp-rebuild .hp-service-choice > svg:first-child { flex: 0 0 18px; width: 18px; height: 18px; color: var(--hp-accent); }
-.hp-rebuild .hp-service-choice > span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
-.hp-rebuild .hp-service-choice-arrow { flex: 0 0 14px; width: 14px; height: 14px; opacity: .35; }
-.hp-rebuild .hp-service-choice:is(:hover,:focus-visible,.is-active) { color: var(--hp-ink); background: rgb(255 255 255 / .035); }
-.hp-rebuild .hp-service-choice.is-active::before { content: ""; position: absolute; left: -10px; top: 24px; bottom: 24px; width: 2px; background: var(--hp-accent); }
-.hp-rebuild .hp-service-choice.is-active .hp-service-choice-arrow { opacity: 1; color: var(--hp-accent); }
-.hp-rebuild .hp-service-preview { min-width: 0; }
-.hp-rebuild .hp-service-photo { aspect-ratio: 4 / 3; }
-.hp-rebuild .hp-service-image { position: absolute; inset: 0; opacity: 0; transition: opacity 550ms var(--hp-ease); }
-.hp-rebuild .hp-service-image.is-active { opacity: 1; }
-.hp-rebuild .hp-service-preview-copy { padding-top: 22px; }
-.hp-rebuild .hp-service-preview-copy > .hp-caption { margin: 0 0 9px; }
-.hp-rebuild .hp-service-preview h3 { margin: 0 0 12px; font-size: 25px; font-weight: 500; line-height: 1.35; }
-.hp-rebuild .hp-service-preview .hp-body { font-size: 14px; line-height: 1.8; }
-.hp-rebuild .hp-services-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 32px; padding-top: 24px; }
-.hp-rebuild .hp-services-mobile { display: none; }
-/* Practical information and a single, calm contact finale. */
-.hp-rebuild .hp-faq { background: var(--hp-surface); border-block: 1px solid var(--hp-line); }
-.hp-rebuild .hp-faq-layout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.4fr); gap: 80px; }
-.hp-rebuild .hp-faq-layout > div:first-child .hp-body { margin-top: 24px; max-width: 42ch; }
-.hp-rebuild .hp-faq-list { border-top: 1px solid var(--hp-line); }
-.hp-rebuild .hp-faq-list details { border-bottom: 1px solid var(--hp-line); }
-.hp-rebuild :is(.hp-faq-list,.hp-service-detail) summary { display: flex; align-items: center; gap: 18px; min-height: 70px; padding-block: 20px; list-style: none; cursor: pointer; }
-.hp-rebuild :is(.hp-faq-list,.hp-service-detail) summary::-webkit-details-marker { display: none; }
-.hp-rebuild :is(.hp-faq-list,.hp-service-detail) summary > span { min-width: 0; flex: 1; font-size: 16px; line-height: 1.6; }
-.hp-rebuild :is(.hp-faq-list,.hp-service-detail) summary > svg:last-child { width: 18px; height: 18px; flex: 0 0 18px; color: var(--hp-accent); transition: transform 220ms var(--hp-ease); }
-.hp-rebuild :is(.hp-faq-list details[open],.hp-service-detail[open]) summary > svg:last-child { transform: rotate(180deg); }
-.hp-rebuild .hp-faq-list details > .hp-body { padding: 0 34px 26px 0; font-size: 15px; }
-.hp-rebuild .hp-faq-more .is-expanded { transform: rotate(180deg); }
-.hp-rebuild .hp-location-layout { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); align-items: center; gap: 64px; }
-.hp-rebuild .hp-location .hp-body { max-width: 42ch; margin-top: 20px; }
-.hp-rebuild .hp-location-information { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; margin-top: 26px; }
-.hp-rebuild .hp-location-level { display: grid; gap: 10px; }
-.hp-rebuild .hp-location-level strong { color: var(--hp-accent); font-size: 48px; font-weight: 500; line-height: 1.1; }
-.hp-rebuild .hp-location-level strong > span { color: var(--hp-muted); font-size: 12px; letter-spacing: .05em; }
-.hp-rebuild .hp-location address { display: grid; color: var(--hp-muted); font-style: normal; font-size: 14px; line-height: 1.8; }
-.hp-rebuild .hp-location-map { position: relative; min-width: 0; height: 360px; overflow: hidden; background: #151518; }
-.hp-rebuild .hp-contact { background: var(--hp-surface); border-top: 1px solid var(--hp-line); }
-.hp-rebuild .hp-contact > .hp-shell > .hp-section-head { padding-bottom: 34px; border-bottom: 1px solid var(--hp-line); }
-.hp-rebuild .hp-contact .hp-heading { max-width: 23ch; }
-.hp-rebuild .hp-contact-layout { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 80px; }
-.hp-rebuild .hp-contact-direct { display: flex; flex-direction: column; align-items: start; gap: 23px; }
-.hp-rebuild .hp-contact-prompt { margin: 0; color: var(--hp-muted); font-size: 14px; line-height: 1.8; }
-.hp-rebuild .hp-contact-phone { display: flex; align-items: center; gap: 12px; min-height: 44px; color: var(--hp-ink); font-size: clamp(21px,2vw,28px); font-weight: 500; line-height: 1.5; letter-spacing: .01em; text-decoration: none; overflow-wrap: anywhere; }
-.hp-rebuild .hp-contact-email { display: flex; align-items: center; gap: 12px; min-height: 44px; color: var(--hp-ink); font-size: 15px; line-height: 1.5; text-decoration: none; }
-.hp-rebuild .hp-contact-email > span { min-width: 0; overflow-wrap: anywhere; }
-.hp-rebuild :is(.hp-contact-phone,.hp-contact-email) svg { width: 17px; height: 17px; flex: 0 0 17px; color: var(--hp-accent); }
-.hp-rebuild :is(.hp-contact-phone,.hp-contact-email):hover { color: #f0787f; }
-.hp-rebuild .hp-contact-direct .hp-body { max-width: 36ch; }
-.hp-rebuild .hp-contact-form { min-width: 0; }
-@media (max-width: 1199px) {
-  .hp-rebuild .hp-shell { width: calc(100% - 64px); }
-  .hp-rebuild .hp-services-desktop { gap: 32px; grid-template-columns: minmax(0,1.4fr) minmax(0,.8fr); }
-  .hp-rebuild .hp-service-groups { gap: 20px; }
-  .hp-rebuild .hp-hero-footer { align-items: start; gap: 24px; }
-  .hp-rebuild .hp-hero-tools { flex-direction: column; align-items: start; gap: 12px; }
-  .hp-rebuild .hp-ratings { gap: 24px; }
-  .hp-rebuild .hp-hero-ratings { padding-top: 4px; }
-  .hp-rebuild .hp-benefit { padding-inline: 20px; }
-  .hp-rebuild .hp-faq-layout, .hp-rebuild .hp-location-layout, .hp-rebuild .hp-contact-layout { gap: 40px; }
-}
-@media (max-width: 899px) {
-  .hp-rebuild .hp-shell { width: calc(100% - 40px); }
-  .hp-rebuild .hp-main { padding-top: var(--header-h, 80px); }
-  .hp-rebuild .hp-opening { min-height: 0; }
-  .hp-rebuild .hp-hero { min-height: calc(100svh - var(--header-h, 80px)); }
-  .hp-rebuild .hp-hero-images { inset: 0; }
-  .hp-rebuild .hp-hero-shade { background: linear-gradient(90deg,rgb(9 9 11 / .72),rgb(9 9 11 / .18)),linear-gradient(0deg,rgb(9 9 11 / .94),rgb(9 9 11 / .45) 52%,rgb(9 9 11 / .18)); }
-  .hp-rebuild .hp-hero-inner { padding-block: 48px 24px; gap: 42px; }
-  .hp-rebuild .hp-hero-copy { max-width: 650px; }
-  .hp-rebuild .hp-hero h1 { max-width: 20ch; font-size: min(clamp(38px,8vw,64px),calc((100vw - 40px) / var(--hp-word-factor))); line-height: 1.2; hyphens: auto; }
-  .hp-rebuild .hp-hero-description { font-size: 16px; max-width: 44ch; }
-  .hp-rebuild .hp-hero-tools { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
-  .hp-rebuild .hp-hero-ratings { display: none; }
-  .hp-rebuild .hp-benefits-grid { grid-template-columns: minmax(0,1fr); }
-  .hp-rebuild .hp-benefit, .hp-rebuild .hp-benefit:first-child, .hp-rebuild .hp-benefit:last-child { padding: 18px 0; }
-  .hp-rebuild .hp-benefit + .hp-benefit { border-left: 0; border-top: 1px solid var(--hp-line); }
-  .hp-rebuild .hp-benefit h2 { font-size: 13px; }
-  .hp-rebuild .hp-benefit p { font-size: 13px; }
-  .hp-rebuild .hp-mobile-ratings { display: block; padding-block: 22px; }
-  .hp-rebuild .hp-mobile-ratings .hp-ratings { justify-content: start; flex-wrap: wrap; }
-  .hp-rebuild .hp-section-head, .hp-rebuild .hp-faq-layout, .hp-rebuild .hp-location-layout, .hp-rebuild .hp-contact-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .hp-rebuild .hp-section-head { margin-bottom: 30px; }
-  .hp-rebuild .hp-heading { max-width: 25ch; font-size: clamp(29px,5vw,40px); }
-  .hp-rebuild .hp-services-desktop { display: none; }
-  .hp-rebuild .hp-services-mobile { display: grid; grid-template-columns: minmax(0,1fr); gap: 36px; }
-  .hp-rebuild .hp-service-group-description { min-height: 0; max-width: 50ch; margin-bottom: 16px; }
-  .hp-rebuild .hp-service-detail { border-bottom: 1px solid var(--hp-line); }
-  .hp-rebuild .hp-service-detail:first-child { border-top: 1px solid var(--hp-line); }
-  .hp-rebuild .hp-service-detail summary { gap: 12px; min-height: 64px; padding-block: 16px; }
-  .hp-rebuild .hp-service-detail summary > svg:first-child { width: 18px; height: 18px; flex: 0 0 18px; color: var(--hp-accent); }
-  .hp-rebuild .hp-service-detail summary > span { font-size: 15px; }
-  .hp-rebuild .hp-service-detail-body { padding: 0 0 22px 30px; }
-  .hp-rebuild .hp-service-detail-body .hp-body { font-size: 14px; }
-  .hp-rebuild .hp-faq-list summary { padding-block: 18px; }
-  .hp-rebuild .hp-location-layout { gap: 32px; }
-  .hp-rebuild .hp-location-map { height: 320px; }
-  .hp-rebuild .hp-contact-layout { gap: 36px; }
-  .hp-rebuild .hp-contact-direct { gap: 16px; }
-}
-@media (max-width: 600px) {
-  .hp-rebuild .hp-shell { width: calc(100% - 32px); }
-  .hp-rebuild .hp-section { padding-block: 56px; }
-  .hp-rebuild .hp-body { font-size: 15px; line-height: 1.8; }
-  .hp-rebuild .hp-eyebrow { margin-bottom: 17px; font-size: 10px; letter-spacing: .1em; }
-  .hp-rebuild .hp-hero h1 { font-size: min(clamp(36px,10.5vw,52px),calc((100vw - 32px) / var(--hp-word-factor))); font-weight: 600; letter-spacing: -.015em; }
-  .hp-rebuild .hp-hero-inner { padding-block: 36px 22px; }
-  .hp-rebuild .hp-hero-description { margin-top: 20px; font-size: 15px; }
-  .hp-rebuild .hp-hero-actions { margin-top: 26px; }
-  .hp-rebuild .hp-hero-tools { gap: 16px; align-items: end; }
-  .hp-rebuild .hp-hero-tools .hp-socials { max-width: 144px; gap: 4px; }
-  .hp-rebuild .hp-hero-tools .hp-socials .hp-caption { flex-basis: 100%; }
-  .hp-rebuild .hp-hero-controls { gap: 3px; }
-  .hp-rebuild .hp-hero-controls .hp-icon-button { width: 40px; height: 44px; flex-basis: 40px; }
-  .hp-rebuild .hp-hero-footer { gap: 0; }
-  .hp-rebuild .hp-button { min-height: 50px; padding-inline: 20px; gap: 19px; }
-  .hp-rebuild .hp-mobile-ratings .hp-ratings { justify-content: space-between; gap: 14px; }
-  .hp-rebuild .hp-rating { gap: 8px; }
-  .hp-rebuild .hp-rating-score { font-size: 22px; }
-  .hp-rebuild .hp-rating-source > span { font-size: 11px; }
-  .hp-rebuild .hp-rating > svg { display: none; }
-  .hp-rebuild .hp-faq-layout { gap: 30px; }
-  .hp-rebuild .hp-location-map { height: 300px; }
-  .hp-rebuild .hp-location-information { gap: 24px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hp-rebuild .hp-main *, .hp-rebuild .hp-main *::before, .hp-rebuild .hp-main *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  .hp-rebuild .hp-link:hover svg, .hp-rebuild a.hp-photo-frame:hover img { transform: none; }
-}
-.hp-rebuild .hp-portfolio-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  gap: 20px;
-  align-items: stretch;
-}
-.hp-rebuild .hp-portfolio-photo {
-  display: block;
-  min-width: 0;
-  aspect-ratio: 16 / 10;
-}
-.hp-rebuild .hp-portfolio-photo-1 {
-  grid-row: 1 / span 2;
-  aspect-ratio: auto;
-}
-.hp-rebuild .hp-portfolio-open {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  background: #111;
-  color: #fff;
-  transition: background-color 180ms ease;
-}
-.hp-rebuild .hp-portfolio-open svg { width: 19px; height: 19px; }
-.hp-rebuild .hp-portfolio-photo:hover .hp-portfolio-open,
-.hp-rebuild .hp-portfolio-photo:focus-visible .hp-portfolio-open { background: #d52b32; }
-.hp-rebuild .hp-care { border-block: 1px solid rgba(255,255,255,.12); }
-.hp-rebuild .hp-care-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 44px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.hp-rebuild .hp-care-step { min-width: 0; }
-.hp-rebuild .hp-care-mark {
-  display: block;
-  width: 24px;
-  height: 2px;
-  margin-bottom: 20px;
-  background: #d52b32;
-}
-.hp-rebuild .hp-care-step h3 {
-  margin: 0 0 14px;
-  color: #f4f2ef;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-.hp-rebuild .hp-care-step .hp-body { margin: 0; }
-.hp-rebuild .hp-packages-header-link { align-self: end; justify-self: end; }
-.hp-rebuild .hp-packages-header-link .hp-link { margin-top: 0; }
-.hp-rebuild .hp-packages-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-block: 1px solid rgba(255,255,255,.18);
-}
-.hp-rebuild .hp-package {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 28px;
-  padding: 32px;
-}
-.hp-rebuild .hp-package:first-child { padding-left: 0; }
-.hp-rebuild .hp-package:last-child { padding-right: 0; }
-.hp-rebuild .hp-package + .hp-package { border-left: 1px solid rgba(255,255,255,.14); }
-.hp-rebuild .hp-package-intro { min-width: 0; }
-.hp-rebuild .hp-package-popular {
-  margin: 0 0 12px;
-  color: #ef6a70;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.5;
-}
-.hp-rebuild .hp-package h3 {
-  margin: 0 0 12px;
-  color: #f4f2ef;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-.hp-rebuild .hp-package-featured h3 { color: #ef6a70; }
-.hp-rebuild .hp-package-intro .hp-body { margin: 0; font-size: 14px; }
-.hp-rebuild .hp-package-scope-label {
-  margin: 0 0 12px;
-  color: rgba(255,255,255,.55);
-  font-size: 12px;
-  line-height: 1.5;
-}
-.hp-rebuild .hp-package-scope ul,
-.hp-rebuild .hp-sales-offer ul {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0 0 0 18px;
-  color: rgba(255,255,255,.75);
-  font-size: 14px;
-  line-height: 1.6;
-  list-style: disc;
-}
-.hp-rebuild .hp-package-scope li,
-.hp-rebuild .hp-sales-offer li { min-width: 0; padding-left: 3px; overflow-wrap: anywhere; }
-.hp-rebuild .hp-package-scope li::marker,
-.hp-rebuild .hp-sales-offer li::marker { color: #d52b32; font-size: 10px; }
-.hp-rebuild .hp-package-discount {
-  margin: 16px 0 0;
-  color: rgba(255,255,255,.65);
-  font-size: 14px;
-  line-height: 1.6;
-}
-.hp-rebuild .hp-package-bottom { min-width: 0; margin-top: auto; padding-top: 4px; }
-.hp-rebuild .hp-package-comparison { margin-bottom: 16px; font-size: 14px; line-height: 1.6; }
-.hp-rebuild .hp-package-saving { display: block; margin-top: 5px; font-weight: 500; color: #ef8a90; }
-.hp-rebuild .hp-package-comparison p { margin: 0 0 4px; color: #ef6a70; }
-.hp-rebuild .hp-package-comparison span { color: rgba(255,255,255,.58); }
-.hp-rebuild .hp-package-comparison s { margin-left: 4px; text-decoration-color: #d52b32; }
-.hp-rebuild .hp-package-price {
-  margin: 0;
-  color: #f4f2ef;
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -.02em;
-  overflow-wrap: anywhere;
-}
-.hp-rebuild .hp-package-note,
-.hp-rebuild .hp-packages-notes {
-  color: rgba(255,255,255,.58);
-  font-size: 12px;
-  line-height: 1.7;
-}
-.hp-rebuild .hp-package-note { margin: 10px 0 0; }
-.hp-rebuild .hp-packages-notes { max-width: 1000px; margin-top: 24px; }
-.hp-rebuild .hp-packages-notes p { margin: 0 0 5px; }
-.hp-rebuild .hp-sales {
-  display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.6fr);
-  gap: 48px;
-  margin-top: 56px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(255,255,255,.14);
-  scroll-margin-top: 100px;
-}
-.hp-rebuild .hp-sales-intro { min-width: 0; }
-.hp-rebuild .hp-sales-intro h3 {
-  margin: 14px 0 18px;
-  color: #f4f2ef;
-  font-size: 28px;
-  font-weight: 500;
-  line-height: 1.25;
-}
-.hp-rebuild .hp-sales-intro .hp-body { font-size: 14px; }
-.hp-rebuild .hp-sales-offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.hp-rebuild .hp-sales-offer { display: flex; min-width: 0; flex-direction: column; padding-right: 28px; }
-.hp-rebuild .hp-sales-offer + .hp-sales-offer { padding-left: 28px; padding-right: 0; border-left: 1px solid rgba(255,255,255,.14); }
-.hp-rebuild .hp-sales-offer h4 {
-  margin: 0 0 20px;
-  color: #f4f2ef;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-.hp-rebuild .hp-sales-price-line { margin-top: auto; padding-top: 24px; }
-.hp-rebuild .hp-sales-time { display: flex; align-items: center; gap: 7px; margin: 8px 0 0; color: rgba(255,255,255,.58); font-size: 12px; line-height: 1.5; }
-.hp-rebuild .hp-sales-time svg { width: 14px; height: 14px; flex-shrink: 0; color: #d52b32; }
-.hp-rebuild .hp-team { border-top: 1px solid rgba(255,255,255,.12); }
-.hp-rebuild .hp-team-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: center; gap: 80px; }
-.hp-rebuild .hp-team-figure { min-width: 0; margin: 0; }
-.hp-rebuild .hp-team-photo { aspect-ratio: 4 / 5; }
-.hp-rebuild .hp-team-figure .hp-caption { margin-top: 14px; }
-.hp-rebuild .hp-team-copy { min-width: 0; }
-.hp-rebuild .hp-team-lead { margin: 24px 0 0; color: rgba(255,255,255,.87); font-size: 20px; font-weight: 400; line-height: 1.5; }
-.hp-rebuild .hp-team-teaser { margin-top: 20px; white-space: pre-line; }
-.hp-rebuild .hp-team-signature { margin: 24px 0 16px; color: #f4f2ef; font-size: 48px; font-weight: 400; line-height: 1.3; }
-.hp-rebuild .hp-team-links { display: flex; align-items: center; flex-wrap: wrap; gap: 20px 32px; margin-top: 24px; }
-.hp-rebuild .hp-team-links .hp-link { margin-top: 0; }
-@media (max-width: 1199px) {
-  .hp-rebuild .hp-package { padding-inline: 24px; }
-  .hp-rebuild .hp-sales { gap: 32px; }
-  .hp-rebuild .hp-sales-offer { padding-right: 20px; }
-  .hp-rebuild .hp-sales-offer + .hp-sales-offer { padding-left: 20px; }
-  .hp-rebuild .hp-team-layout { gap: 48px; }
-}
-@media (max-width: 899px) {
-  .hp-rebuild .hp-portfolio-grid,
-  .hp-rebuild .hp-care-steps,
-  .hp-rebuild .hp-packages-grid,
-  .hp-rebuild .hp-sales,
-  .hp-rebuild .hp-sales-offers,
-  .hp-rebuild .hp-team-layout { grid-template-columns: minmax(0, 1fr); }
-  .hp-rebuild .hp-portfolio-grid { gap: 18px; }
-  .hp-rebuild .hp-portfolio-photo,
-  .hp-rebuild .hp-portfolio-photo-1 { grid-row: auto; aspect-ratio: 4 / 3; }
-  .hp-rebuild .hp-care-steps { gap: 28px; }
-  .hp-rebuild .hp-care-mark { margin-bottom: 14px; }
-  .hp-rebuild .hp-packages-header-link { justify-self: start; }
-  .hp-rebuild .hp-package,
-  .hp-rebuild .hp-package:first-child,
-  .hp-rebuild .hp-package:last-child { gap: 22px; padding: 28px 0; }
-  .hp-rebuild .hp-package + .hp-package { border-left: 0; border-top: 1px solid rgba(255,255,255,.14); }
-  .hp-rebuild .hp-package-bottom { margin-top: 0; }
-  .hp-rebuild .hp-sales { gap: 28px; margin-top: 40px; padding-top: 32px; }
-  .hp-rebuild .hp-sales-offer,
-  .hp-rebuild .hp-sales-offer + .hp-sales-offer { padding: 24px 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.14); }
-  .hp-rebuild .hp-sales-offer:first-child { padding-top: 0; border-top: 0; }
-  .hp-rebuild .hp-sales-price-line { padding-top: 20px; }
-  .hp-rebuild .hp-team-layout { gap: 32px; }
-  .hp-rebuild .hp-team-figure { width: 100%; max-width: 560px; }
-  .hp-rebuild .hp-team-signature { font-size: 44px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hp-rebuild .hp-portfolio-open { transition: none; }
-}
-
-.hp-rebuild .hp-reviews {
-  overflow: hidden;
-  background: #0b0b0d;
-}
-.hp-rebuild .hp-reviews-viewport {
-  margin-top: clamp(28px, 4vw, 48px);
-  overflow: hidden;
-  touch-action: pan-y pinch-zoom;
-  cursor: grab;
-}
-.hp-rebuild .hp-reviews-viewport:active { cursor: grabbing; }
-.hp-rebuild .hp-reviews-track {
-  display: flex;
-  align-items: stretch;
-  gap: 24px;
-  touch-action: pan-y pinch-zoom;
-}
-.hp-rebuild .hp-review-slide {
-  flex: 0 0 46%;
-  min-width: 0;
-  opacity: .22;
-  transition: opacity 360ms ease;
-}
-.hp-rebuild .hp-review-slide.is-active,
-.hp-rebuild .hp-review-slide:focus-within { opacity: 1; }
-.hp-rebuild .hp-review-card {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  box-sizing: border-box;
-  height: 370px;
-  margin: 0;
-  padding: 30px;
-  border: 1px solid var(--hp-line);
-  background: #121215;
-  color: var(--hp-ink);
-}
-.hp-rebuild .hp-review-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.hp-rebuild .hp-review-stars {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--hp-accent);
-}
-.hp-rebuild .hp-review-stars svg { width: 15px; height: 15px; fill: currentColor; }
-.hp-rebuild .hp-review-source {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.5;
-  letter-spacing: .1em;
-  color: var(--hp-muted);
-  text-transform: uppercase;
-}
-.hp-rebuild .hp-review-quote-wrap { margin-top: 30px; }
-.hp-rebuild .hp-review-quote {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  margin: 0;
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -.015em;
-  overflow-wrap: anywhere;
-}
-.hp-rebuild .hp-review-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 40px;
-  margin-top: 8px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--hp-ink);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: normal;
-  text-align: left;
-  cursor: pointer;
-}
-.hp-rebuild .hp-review-more svg { width: 15px; height: 15px; color: var(--hp-accent); }
-.hp-rebuild .hp-review-author {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  margin-top: auto;
-  padding-top: 22px;
-  border-top: 1px solid var(--hp-line);
-}
-.hp-rebuild .hp-review-author strong { font-size: 16px; font-weight: 600; line-height: 1.35; }
-.hp-rebuild .hp-review-author > span { font-size: 11px; line-height: 1.5; letter-spacing: .015em; color: var(--hp-muted); }
-.hp-rebuild .hp-review-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 26px;
-}
-.hp-rebuild .hp-review-controls button:disabled { opacity: .4; cursor: default; }
-.hp-rebuild .hp-review-indicator { display: flex; align-items: center; gap: 8px; }
-.hp-rebuild .hp-review-indicator > span { display: block; width: 18px; height: 1px; background: var(--hp-line); }
-.hp-rebuild .hp-review-indicator > span:nth-child(2) { width: 34px; height: 2px; background: var(--hp-accent); }
-.hp-rebuild .hp-reviews-ratings {
-  margin-top: 34px;
-  padding-top: 30px;
-  border-top: 1px solid var(--hp-line);
-}
-.hp-rebuild .hp-review-dialog {
-  box-sizing: border-box;
-  width: min(720px, calc(100% - 32px));
-  max-width: 720px;
-  max-height: 85vh;
-  max-height: 85dvh;
-  margin: auto;
-  padding: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 1px solid var(--hp-line);
-  border-top: 3px solid var(--hp-accent);
-  border-radius: 0;
-  background: #141417;
-  color: var(--hp-ink);
-}
-.hp-rebuild .hp-review-dialog::backdrop { background: rgb(0 0 0 / .8); }
-.hp-rebuild .hp-review-dialog-body { position: relative; padding: clamp(26px, 5vw, 46px); }
-.hp-rebuild .hp-review-dialog-close { position: absolute; top: 16px; right: 16px; }
-.hp-rebuild .hp-review-dialog-label { margin: 26px 50px 12px 0; font-size: 12px; line-height: 1.5; color: var(--hp-muted); }
-.hp-rebuild .hp-review-dialog h3 { margin: 0 48px 0 0; font-size: clamp(25px, 4vw, 34px); font-weight: 600; line-height: 1.2; letter-spacing: -.02em; }
-.hp-rebuild .hp-review-dialog-mark { display: block; width: 28px; height: 28px; margin-top: 28px; color: var(--hp-accent); }
-.hp-rebuild .hp-review-dialog blockquote { margin: 20px 0 0; font-size: 18px; line-height: 1.8; overflow-wrap: anywhere; }
-.hp-rebuild .hp-review-dialog-bottom-close { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 24px; border: 0; padding: 0; background: transparent; color: var(--hp-ink); font: inherit; font-size: 14px; cursor: pointer; }
-.hp-rebuild .hp-review-dialog-bottom-close svg { width: 16px; height: 16px; color: var(--hp-accent); }
-.hp-rebuild :is(.hp-review-more, .hp-review-dialog-bottom-close):focus-visible { outline: 2px solid var(--hp-ink); outline-offset: 5px; }
-@media (max-width: 900px) {
-  .hp-rebuild .hp-review-slide { flex-basis: 64%; }
-  .hp-rebuild .hp-review-card { padding: 26px; }
-  .hp-rebuild .hp-review-quote { font-size: 20px; }
-}
-@media (max-width: 600px) {
-  .hp-rebuild .hp-reviews-track { gap: 16px; }
-  .hp-rebuild .hp-review-slide { flex-basis: 100%; }
-  .hp-rebuild .hp-review-card { height: 390px; padding: 24px; }
-  .hp-rebuild .hp-review-quote-wrap { margin-top: 26px; }
-  .hp-rebuild .hp-review-quote { -webkit-line-clamp: 5; font-size: 18px; letter-spacing: -.01em; }
-  .hp-rebuild .hp-review-author { padding-top: 20px; }
-  .hp-rebuild .hp-review-dialog-body { padding: 26px 24px; }
-  .hp-rebuild .hp-review-dialog blockquote { font-size: 17px; line-height: 1.75; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hp-rebuild .hp-review-slide { transition: none; }
-}
-
-`
 
