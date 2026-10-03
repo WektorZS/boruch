@@ -206,7 +206,7 @@ export function SiteHeader({
                     "translate-y-4 opacity-0 group-data-[open=true]/menu:translate-y-0 group-data-[open=true]/menu:opacity-100",
                   )}
                 >
-                  <span className="min-w-0 font-display text-[clamp(1.65rem,6.8vw,2.8rem)] font-extrabold uppercase leading-[1.15] tracking-normal text-bone/85 [font-stretch:75%] [font-variation-settings:'wdth'_75] transition-colors group-hover:text-bone group-focus-visible:text-bone group-aria-[current=page]:text-bone">
+                  <span className="min-w-0 font-display text-[1.35rem] sm:text-[1.5rem] font-extrabold uppercase leading-[1.15] tracking-normal text-bone/85 [font-stretch:75%] [font-variation-settings:'wdth'_75] transition-colors group-hover:text-bone group-focus-visible:text-bone group-aria-[current=page]:text-bone">
                     {item.label}
                   </span>
                   <span aria-hidden="true" className="h-px w-8 shrink-0 origin-right bg-line transition-[background-color,transform] group-hover:scale-x-125 group-hover:bg-brand group-focus-visible:bg-brand group-aria-[current=page]:bg-brand" />
