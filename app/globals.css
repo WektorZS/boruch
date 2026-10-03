@@ -904,6 +904,10 @@
 
 /* Reveal: only hidden when JS is running (html.js), so no-JS visitors always see content. */
 
+.font-outfit {
+  font-family: var(--font-outfit), sans-serif;
+}
+
 .js [data-reveal] {
 
   opacity: 0;

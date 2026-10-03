@@ -277,13 +277,15 @@ function Wordmark({
         aria-hidden="true"
         className="flex flex-col leading-none"
       >
-        <span className="whitespace-nowrap font-display text-[1.45rem] font-black tracking-[-0.025em] text-bone min-[360px]:text-[1.6rem] [font-stretch:80%] [font-variation-settings:'wdth'_80]">
-          Boruch Myjnia
-        </span>
+       <span aria-hidden="true" className="flex flex-col leading-none">
+  <span className="font-outfit whitespace-nowrap text-[1.55rem] font-bold tracking-[-0.02em] text-white">
+    Boruch Myjnia
+  </span>
 
-        <span className="mt-1.5 whitespace-nowrap text-[.68rem] font-semibold tracking-[.18em] text-white/72 min-[360px]:text-[.75rem]">
-          &amp; Detailing
-        </span>
+  <span className="font-outfit mt-1 whitespace-nowrap text-[0.95rem] font-semibold tracking-[-0.01em] text-white">
+    &amp; detailing
+  </span>
+</span>
       </span>
     </Link>
   )
