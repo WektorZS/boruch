@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 import { clsx as cn } from "clsx"
 import { useModalFocus } from "./use-modal-focus"
+import Image from "next/image"
 
 export interface HeaderNavItem {
   key: string
@@ -257,29 +258,31 @@ function Wordmark({
       prefetch={false}
       href={href}
       onClick={onClick}
-      aria-label={`Boruch Myjnia / Detailing - ${label}`}
+      aria-label={`Boruch Myjnia & Detailing - ${label}`}
       className={cn(
         "group flex shrink-0 items-center gap-3",
         className,
       )}
     >
-      <span
-        aria-hidden="true"
-        className="grid size-11 place-items-center bg-brand font-display text-[2rem] font-black uppercase leading-none text-bone min-[360px]:size-13 [font-stretch:75%] [font-variation-settings:'wdth'_75]"
-      >
-        B
-      </span>
+      <Image
+        src="/images/logo.webp"
+        alt=""
+        width={82}
+        height={82}
+        priority
+        className="size-11 shrink-0 object-contain min-[360px]:size-13"
+      />
 
       <span
         aria-hidden="true"
         className="flex flex-col leading-none"
       >
-        <span className="font-display text-[1.65rem] font-black uppercase tracking-[-0.025em] text-bone [font-stretch:80%] [font-variation-settings:'wdth'_80]">
-          Boruch
+        <span className="whitespace-nowrap font-display text-[1.45rem] font-black uppercase tracking-[-0.025em] text-bone min-[360px]:text-[1.6rem] [font-stretch:80%] [font-variation-settings:'wdth'_80]">
+          Boruch Myjnia
         </span>
 
-        <span className="mt-1.5 whitespace-nowrap text-[.68rem] font-semibold uppercase tracking-[.17em] text-white/72 min-[360px]:text-[.75rem]">
-          Myjnia / detailing
+        <span className="mt-1.5 whitespace-nowrap text-[.68rem] font-semibold uppercase tracking-[.18em] text-white/72 min-[360px]:text-[.75rem]">
+          &amp; Detailing
         </span>
       </span>
     </Link>
