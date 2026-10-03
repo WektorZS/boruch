@@ -277,7 +277,7 @@ function Wordmark({
         aria-hidden="true"
         className="flex flex-col leading-none"
       >
-<span aria-hidden="true" className="flex flex-col items-center leading-none text-center">
+ <span aria-hidden="true" className="flex flex-col items-center leading-none text-center">
   <span className="font-outfit whitespace-nowrap text-[1.28rem] font-bold tracking-[-0.02em] text-white">
     Boruch Myjnia
   </span>
@@ -286,6 +286,7 @@ function Wordmark({
     &amp; detailing
   </span>
 </span>
+      </span>
     </Link>
   )
 }
