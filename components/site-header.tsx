@@ -87,32 +87,7 @@ export function SiteHeader({
           "data-[scrolled=true]:bg-ink-2",
         )}
       >
-        <div className="shell-wide flex h-(--header-h) items-center gap-4 transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
-  <Wordmark href={homeHref} label={homeLabel} />
-
-  <nav
-    aria-label={labels.navigation}
-    className="hidden lg:ml-12 lg:mr-auto lg:block xl:ml-20 2xl:ml-28"
-  >
-    <ul className="flex items-center gap-5 xl:gap-8">
-      {nav
-        .filter((item) => item.key !== "home")
-        .map((item) => (
-          <li key={item.key}>
-            <Link
-              prefetch={false}
-              href={item.href}
-              aria-current={item.active ? "page" : undefined}
-              className="home-nav-link inline-flex min-h-10 items-center text-[.72rem] font-medium uppercase tracking-[.12em] text-white/68 hover:text-white aria-[current=page]:text-white"
-            >
-              {item.label}
-            </Link>
-          </li>
-        ))}
-    </ul>
-  </nav>
-
-  <div className="shell-wide flex h-(--header-h) items-center transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
+       <div className="shell-wide flex h-(--header-h) items-center transition-[height] duration-300 ease-(--ease-out) group-data-[scrolled=true]/header:h-(--header-h-compact)">
   <Wordmark href={homeHref} label={homeLabel} />
 
   <div className="hidden flex-1 justify-center lg:flex">
@@ -191,7 +166,6 @@ export function SiteHeader({
     </button>
   </div>
 </div>
-        </div>
       </header>
 
       <div
